@@ -1,0 +1,3 @@
+[submodule "Config/Style"]
+	path = Config/Style
+	url = ssh://rmitfs:22/tfs/Messerli%20Main/MesserliOne/_git/Style

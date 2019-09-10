@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <RootNamespace>Messerli.ProjectGenerator</RootNamespace>
+    <LangVersion>8.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <NullableContextOptions>enable</NullableContextOptions>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CommandLine\CommandLine.csproj" />
+    <ProjectReference Include="..\NativeProjects\NativeProjects.csproj" />
+    <ProjectReference Include="..\OneCoreProjects\OneCoreProjects.csproj" />
+    <ProjectReference Include="..\ProjectAbstractions\ProjectAbstractions.csproj" />
+    <ProjectReference Include="..\TfsClient\TfsClient.csproj" />
+  </ItemGroup>
+  <Import Project="..\Config\Shared.targets" />
+  <Import Project="..\.paket\Paket.Restore.targets" />
+</Project>
