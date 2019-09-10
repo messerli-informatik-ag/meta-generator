@@ -2,24 +2,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <RootNamespace>Messerli.OneCoreProjects</RootNamespace>
-    <LangVersion>8.0</LangVersion>
+    <RootNamespace>Messerli.{{ProjectName}}</RootNamespace>
+    <LangVersion>{{LangVersion}}</LangVersion>
     <Nullable>enable</Nullable>
     <NullableContextOptions>enable</NullableContextOptions>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
-  <ItemGroup>
-    <None Remove="templates\Shared.targets.template" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CommandLineAbstractions\CommandLineAbstractions.csproj" />
-    <ProjectReference Include="..\ProjectAbstractions\ProjectAbstractions.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="templates\Shared.targets.template" />
-  </ItemGroup>
+
   <Import Project="..\Config\Shared.targets" />
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>

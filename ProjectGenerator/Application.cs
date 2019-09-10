@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
+using System.Linq;
 using Messerli.CommandLineAbstractions;
 using Messerli.ProjectAbstractions;
 
@@ -11,34 +12,48 @@ namespace Messerli.ProjectGenerator
     {
         private readonly IConsoleWriter _consoleWriter;
         private readonly IEnumerable<IProjectGenerator> _projectGenerators;
+        private readonly RootCommand _rootCommand;
 
         public Application(IConsoleWriter consoleWriter, IEnumerable<IProjectGenerator> projectGenerators)
         {
             _consoleWriter = consoleWriter;
             _projectGenerators = projectGenerators;
+
+            _rootCommand = SetupRootCommand();
+            SetupProjectCommand();
         }
 
         public int Run(string[] args)
         {
+            return _rootCommand.Invoke(args);
+        }
+
+        private RootCommand SetupRootCommand()
+        {
             var rootCommand = new RootCommand
             {
-                new Option("--project-type", "Give the project-type")
-                {
-                    Argument = new Argument<string?>(defaultValue: () => null),
-                },
+                Description = "This is the Messerli Project generator",
+                Handler = CommandHandler.Create<string>(ExecuteWizard),
             };
 
-            rootCommand.Description = "This is the Messerli Project generator";
-            rootCommand.Handler = CommandHandler.Create<string>(HandleX);
+            var projectTypeOption = new Option("--project-type", "Give the project-type")
+            {
+                Argument = new Argument<string?>(defaultValue: () => null),
+            };
 
+            rootCommand.AddOption(projectTypeOption);
+
+            return rootCommand;
+        }
+
+        private void SetupProjectCommand()
+        {
             var projectsCommand = new Command("projects", "List all projects")
             {
                 Handler = CommandHandler.Create(ListProjects),
             };
 
-            rootCommand.AddCommand(projectsCommand);
-
-            return rootCommand.Invoke(args);
+            _rootCommand.AddCommand(projectsCommand);
         }
 
         private void ListProjects()
@@ -51,9 +66,21 @@ namespace Messerli.ProjectGenerator
             }
         }
 
-        private static void HandleX(string projectType)
+        private void ExecuteWizard(string projectType)
         {
-            Console.WriteLine($"The value for --int-option is: {projectType}");
+            _consoleWriter.WriteLine("Welcome to the project generator wizard: ");
+
+            var projectTypeGenerator = _projectGenerators
+                .FirstOrDefault(generator => generator.ShortName == projectType);
+
+            if (projectTypeGenerator == null)
+            {
+                _consoleWriter.WriteLine("Bad projectype");
+            }
+            else
+            {
+                projectTypeGenerator.Generate();
+            }
         }
     }
 }
