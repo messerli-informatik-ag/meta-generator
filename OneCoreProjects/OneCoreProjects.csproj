@@ -20,6 +20,5 @@
   <ItemGroup>
     <EmbeddedResource Include="templates\Shared.targets.template" />
   </ItemGroup>
-  <Import Project="..\Config\Shared.targets" />
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>

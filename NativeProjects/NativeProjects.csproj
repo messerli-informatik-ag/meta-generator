@@ -14,6 +14,5 @@
     <ProjectReference Include="..\CommandLineAbstractions\CommandLineAbstractions.csproj" />
     <ProjectReference Include="..\ProjectAbstractions\ProjectAbstractions.csproj" />
   </ItemGroup>
-  <Import Project="..\Config\Shared.targets" />
   <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
