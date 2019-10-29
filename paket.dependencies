@@ -4,6 +4,7 @@ source https://www.nuget.org/api/v2
 
 nuget Autofac ~> 4.8
 nuget Funcky ~> 1.2.0
+nuget Stubble.Core  ~> 1.4.0
 nuget IDisposableAnalyzers ~> 2.1.2
 nuget JetBrains.Annotations ~> 2018.3.0
 nuget Microsoft.NETCore.App ~> 2.2.6

@@ -5,6 +5,7 @@ using Messerli.NativeProjects;
 using Messerli.OneCoreProjects;
 using Messerli.ProjectAbstractions;
 using Messerli.TfsClient;
+using Stubble.Core.Builders;
 
 namespace Messerli.ProjectGenerator
 {
@@ -18,9 +19,11 @@ namespace Messerli.ProjectGenerator
 
             builder.RegisterType<SystemConsoleWriter>().As<IConsoleWriter>();
             builder.RegisterType<SystemConsoleReader>().As<IConsoleReader>();
+            builder.RegisterType<UserInputProvider>().As<IUserInputProvider>().SingleInstance();
 
             builder.RegisterType<ConsoleClient>().As<IClient>();
             builder.RegisterType<FileGenerator>().As<IFileGenerator>();
+            builder.RegisterType<StubbleBuilder>().AsSelf();
 
             builder.RegisterModule<NativeProjectsModule>();
             builder.RegisterModule<OneCoreProjectsModule>();

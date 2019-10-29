@@ -3,7 +3,7 @@ using Messerli.ProjectAbstractions;
 
 namespace Messerli.OneCoreProjects
 {
-    public class OneCoreProjectsModule : Autofac.Module
+    public class OneCoreProjectsModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {

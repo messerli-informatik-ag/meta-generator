@@ -2,3 +2,4 @@ Autofac
 System.CommandLine.Experimental
 StyleCop.Analyzers
 IDisposableAnalyzers
+Stubble.Core

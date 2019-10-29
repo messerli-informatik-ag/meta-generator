@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Linq;
@@ -12,12 +11,14 @@ namespace Messerli.ProjectGenerator
     {
         private readonly IConsoleWriter _consoleWriter;
         private readonly IEnumerable<IProjectGenerator> _projectGenerators;
+        private readonly IUserInputProvider _userInputProvider;
         private readonly RootCommand _rootCommand;
 
-        public Application(IConsoleWriter consoleWriter, IEnumerable<IProjectGenerator> projectGenerators)
+        public Application(IConsoleWriter consoleWriter, IEnumerable<IProjectGenerator> projectGenerators, IUserInputProvider userInputProvider)
         {
             _consoleWriter = consoleWriter;
             _projectGenerators = projectGenerators;
+            _userInputProvider = userInputProvider;
 
             _rootCommand = SetupRootCommand();
             SetupProjectCommand();
@@ -48,7 +49,7 @@ namespace Messerli.ProjectGenerator
 
         private void SetupProjectCommand()
         {
-            var projectsCommand = new Command("projects", "List all projects")
+            var projectsCommand = new Command("projects", "List all project types")
             {
                 Handler = CommandHandler.Create(ListProjects),
             };
@@ -79,6 +80,8 @@ namespace Messerli.ProjectGenerator
             }
             else
             {
+                projectTypeGenerator.Register();
+                _userInputProvider.AskUser();
                 projectTypeGenerator.Generate();
             }
         }

@@ -16,6 +16,11 @@ namespace Messerli.NativeProjects
 
         public string ShortName => "native.test";
 
+        public void Register()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void Generate()
         {
             _consoleWriter.WriteLine("Generate a native (C++) test project");

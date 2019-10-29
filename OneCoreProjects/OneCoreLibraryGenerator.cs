@@ -1,5 +1,7 @@
-﻿using Messerli.CommandLineAbstractions;
+﻿using System.IO;
+using Messerli.CommandLineAbstractions;
 using Messerli.ProjectAbstractions;
+using static Messerli.CommandLineAbstractions.UserInputDescription;
 
 namespace Messerli.OneCoreProjects
 {
@@ -10,16 +12,23 @@ namespace Messerli.OneCoreProjects
 
         private readonly IConsoleWriter _consoleWriter;
         private readonly IFileGenerator _fileGenerator;
+        private readonly IUserInputProvider _userInputProvider;
 
-        public OneCoreLibraryGenerator(IConsoleWriter consoleWriter, IFileGenerator fileGenerator)
+        public OneCoreLibraryGenerator(IConsoleWriter consoleWriter, IFileGenerator fileGenerator, IUserInputProvider userInputProvider)
         {
             _consoleWriter = consoleWriter;
             _fileGenerator = fileGenerator;
+            _userInputProvider = userInputProvider;
         }
 
         public string Name => "Create One.Core library project";
 
         public string ShortName => "one.core.library";
+
+        public void Register()
+        {
+            _userInputProvider.RegisterVariable(new UserInputDescription("ProjectName", AlwaysNeeded));
+        }
 
         public void Generate()
         {
@@ -27,8 +36,10 @@ namespace Messerli.OneCoreProjects
 
             _consoleWriter.WriteLine("Generate a C# library for the One.Core project");
 
-            _fileGenerator.FromTemplate(SharedTargetTemplate, @"Config/Shared.targets");
-            _fileGenerator.FromTemplate(ProjectTemplate, $"{projectName}/{projectName}.csproj");
+            _consoleWriter.WriteLine($"ProjectName: {_userInputProvider.Value("ProjectName")}");
+
+            _fileGenerator.FromTemplate(SharedTargetTemplate, Path.Combine("Config", "Shared.targets"));
+            _fileGenerator.FromTemplate(ProjectTemplate, Path.Combine(projectName, $"{projectName}.csproj"));
         }
     }
 }

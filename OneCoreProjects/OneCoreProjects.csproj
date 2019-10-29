@@ -11,6 +11,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="templates\project.csproj.template" />
     <None Remove="templates\Shared.targets.template" />
   </ItemGroup>
   <ItemGroup>
@@ -18,6 +19,7 @@
     <ProjectReference Include="..\ProjectAbstractions\ProjectAbstractions.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="templates\project.csproj.template" />
     <EmbeddedResource Include="templates\Shared.targets.template" />
   </ItemGroup>
   <Import Project="..\.paket\Paket.Restore.targets" />
