@@ -5,7 +5,7 @@ namespace Messerli.CommandLineAbstractions
 {
     public class UserInputDescription
     {
-        public UserInputDescription(string variableName, Func<bool> isNeededPredicate)
+        internal UserInputDescription(string variableName, Func<bool> isNeededPredicate)
         {
             IsNeeded = new Lazy<bool>(isNeededPredicate);
             VariableName = variableName;

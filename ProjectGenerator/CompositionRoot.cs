@@ -20,6 +20,7 @@ namespace Messerli.ProjectGenerator
             builder.RegisterType<SystemConsoleWriter>().As<IConsoleWriter>();
             builder.RegisterType<SystemConsoleReader>().As<IConsoleReader>();
             builder.RegisterType<UserInputProvider>().As<IUserInputProvider>().SingleInstance();
+            builder.RegisterType<UserInputDescriptionBuilder>().AsSelf();
 
             builder.RegisterType<ConsoleClient>().As<IClient>();
             builder.RegisterType<FileGenerator>().As<IFileGenerator>();

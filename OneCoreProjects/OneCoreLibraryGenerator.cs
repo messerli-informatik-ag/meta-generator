@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Messerli.CommandLineAbstractions;
 using Messerli.ProjectAbstractions;
 using static Messerli.CommandLineAbstractions.UserInputDescription;
@@ -13,12 +14,14 @@ namespace Messerli.OneCoreProjects
         private readonly IConsoleWriter _consoleWriter;
         private readonly IFileGenerator _fileGenerator;
         private readonly IUserInputProvider _userInputProvider;
+        private readonly Func<UserInputDescriptionBuilder> _newInputDescriptionBuilder;
 
-        public OneCoreLibraryGenerator(IConsoleWriter consoleWriter, IFileGenerator fileGenerator, IUserInputProvider userInputProvider)
+        public OneCoreLibraryGenerator(IConsoleWriter consoleWriter, IFileGenerator fileGenerator, IUserInputProvider userInputProvider, Func<UserInputDescriptionBuilder> newInputDescriptionBuilder)
         {
             _consoleWriter = consoleWriter;
             _fileGenerator = fileGenerator;
             _userInputProvider = userInputProvider;
+            _newInputDescriptionBuilder = newInputDescriptionBuilder;
         }
 
         public string Name => "Create One.Core library project";
@@ -27,7 +30,11 @@ namespace Messerli.OneCoreProjects
 
         public void Register()
         {
-            _userInputProvider.RegisterVariable(new UserInputDescription("ProjectName", AlwaysNeeded));
+            var builder = _newInputDescriptionBuilder();
+
+            builder.SetVariableName("ProjectName");
+
+            _userInputProvider.RegisterVariable(builder.Build());
         }
 
         public void Generate()
