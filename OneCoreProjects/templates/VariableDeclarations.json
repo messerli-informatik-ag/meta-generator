@@ -1,0 +1,76 @@
+[
+  {
+    "Description": "The Project Name is used for things...",
+    "Question": "Please give the project a descriptive name:",
+    "Name": "ProjectName",
+    "Type": 0
+  },
+  {
+    "Description": "SomeDescription",
+    "Name": "LangVersion",
+    "SelectionValues": [
+      {
+        "Value": "ISO-1",
+        "Description": "The compiler accepts only syntax that is included in ISO/IEC 23270:2003 C# (1.0/1.2)"
+      },
+      {
+        "Value": "ISO-2",
+        "Description": "The compiler accepts only syntax that is included in ISO/IEC 23270:2006 C# (2.0)"
+      },
+      {
+        "Value": "3",
+        "Description": "The compiler accepts only syntax that is included in C# 3.0 or lower."
+      },
+      {
+        "Value": "4",
+        "Description": "The compiler accepts only syntax that is included in C# 4.0 or lower."
+      },
+      {
+        "Value": "5",
+        "Description": "The compiler accepts only syntax that is included in C# 5.0 or lower."
+      },
+      {
+        "Value": "6",
+        "Description": "The compiler accepts only syntax that is included in C# 6.0 or lower."
+      },
+      {
+        "Value": "7",
+        "Description": "The compiler accepts only syntax that is included in C# 7.0 or lower."
+      },
+      {
+        "Value": "7.1",
+        "Description": "The compiler accepts only syntax that is included in C# 7.1 or lower."
+      },
+      {
+        "Value": "7.2",
+        "Description": "The compiler accepts only syntax that is included in C# 7.2 or lower."
+      },
+      {
+        "Value": "7.3",
+        "Description": "The compiler accepts only syntax that is included in C# 7.3 or lower."
+      },
+      {
+        "Value": "8.0",
+        "Description": "The compiler accepts only syntax that is included in C# 8.0 or lower."
+      },
+      {
+        "Value": "latestMajor",
+        "Description": "The compiler accepts syntax from the latest released major version of the compiler."
+      },
+      {
+        "Value": "latest",
+        "Description": "The compiler accepts syntax from the latest released version of the compiler (including minor version)."
+      },
+      {
+        "Value": "preview",
+        "Description": "The compiler accepts all valid language syntax from the latest preview version."
+      }
+    ],
+    "Type": 4
+  },
+  {
+    "Description": "Whatever...",
+    "Name": "LifeTime",
+    "Type": 0
+  }
+]

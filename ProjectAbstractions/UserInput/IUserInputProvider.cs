@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace Messerli.CommandLineAbstractions
+namespace Messerli.ProjectAbstractions.UserInput
 {
     public interface IUserInputProvider
     {
         string Value(string variableName);
 
-        void RegisterVariable(UserInputDescription description);
+        void RegisterVariablesFromTemplate(string templateName);
 
         void AskUser();
 

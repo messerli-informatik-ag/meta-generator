@@ -1,9 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Linq;
 using Messerli.CommandLineAbstractions;
 using Messerli.ProjectAbstractions;
+using Messerli.ProjectAbstractions.Json;
+using Messerli.ProjectAbstractions.UserInput;
+using Messerli.ProjectGenerator.UserInput;
 
 namespace Messerli.ProjectGenerator
 {
@@ -12,13 +16,25 @@ namespace Messerli.ProjectGenerator
         private readonly IConsoleWriter _consoleWriter;
         private readonly IEnumerable<IProjectGenerator> _projectGenerators;
         private readonly IUserInputProvider _userInputProvider;
+        private readonly IExecutingPluginAssemblyProvider _assemblyProvider;
         private readonly RootCommand _rootCommand;
+        private readonly SelectionRequester _selectionRequester;
+        private readonly Func<UserInputDescriptionBuilder> _newNewUserInputDescriptionBuilder;
 
-        public Application(IConsoleWriter consoleWriter, IEnumerable<IProjectGenerator> projectGenerators, IUserInputProvider userInputProvider)
+        public Application(
+            IConsoleWriter consoleWriter,
+            IEnumerable<IProjectGenerator> projectGenerators,
+            IUserInputProvider userInputProvider,
+            IExecutingPluginAssemblyProvider assemblyProvider,
+            SelectionRequester selectionRequester,
+            Func<UserInputDescriptionBuilder> newUserInputDescriptionBuilder)
         {
             _consoleWriter = consoleWriter;
             _projectGenerators = projectGenerators;
             _userInputProvider = userInputProvider;
+            _assemblyProvider = assemblyProvider;
+            _selectionRequester = selectionRequester;
+            _newNewUserInputDescriptionBuilder = newUserInputDescriptionBuilder;
 
             _rootCommand = SetupRootCommand();
             SetupProjectCommand();
@@ -70,20 +86,46 @@ namespace Messerli.ProjectGenerator
         private void ExecuteWizard(string projectType)
         {
             _consoleWriter.WriteLine("Welcome to the project generator wizard: ");
+            _consoleWriter.WriteLine(string.Empty);
 
-            var projectTypeGenerator = _projectGenerators
-                .FirstOrDefault(generator => generator.ShortName == projectType);
+            var projectGenerator = _projectGenerators
+                .FirstOrDefault(generator => generator.ShortName == projectType)
+                ?? _selectionRequester
+                    .RequestValue(ToSelection(_projectGenerators))
+                    .AndThen(shortName => _projectGenerators
+                        .FirstOrDefault(generator => generator.ShortName == shortName))
+                    .OrElse(NullProjectGenerator.Instance);
 
-            if (projectTypeGenerator == null)
-            {
-                _consoleWriter.WriteLine("Bad projectype");
-            }
-            else
-            {
-                projectTypeGenerator.Register();
-                _userInputProvider.AskUser();
-                projectTypeGenerator.Generate();
-            }
+            ExecuteProjectGenerator(projectGenerator);
+        }
+
+        private IUserInputDescription ToSelection(IEnumerable<IProjectGenerator> projectGenerators)
+        {
+            var builder = _newNewUserInputDescriptionBuilder();
+
+            builder.SetVariableName("ProjectType");
+            builder.SetVariableDescription("The type of the project");
+            builder.SetVariableType(VariableType.Selection);
+            builder.SetVariableQuestion("What kind of project do you want to generate? Please select from the following options.");
+            builder.SetSelectionValues(ToSelectionValues(projectGenerators));
+
+            return builder.Build();
+        }
+
+        private List<SelectionValue> ToSelectionValues(IEnumerable<IProjectGenerator> projectGenerators)
+        {
+            return projectGenerators
+                .Select(projectGenerator => new SelectionValue { Value = projectGenerator.ShortName, Description = projectGenerator.Name })
+                .ToList();
+        }
+
+        private void ExecuteProjectGenerator(IProjectGenerator projectTypeGenerator)
+        {
+            _assemblyProvider.PluginAssembly = projectTypeGenerator.GetType().Assembly;
+
+            projectTypeGenerator.Register();
+            _userInputProvider.AskUser();
+            projectTypeGenerator.Generate();
         }
     }
 }

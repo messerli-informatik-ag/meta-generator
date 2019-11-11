@@ -1,8 +1,7 @@
 {
   "profiles": {
     "ProjectGenerator": {
-      "commandName": "Project",
-      "commandLineArgs": "--project-type one.core.library"
+      "commandName": "Project"
     }
   }
 }

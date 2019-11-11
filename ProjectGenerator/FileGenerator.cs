@@ -1,10 +1,7 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using Funcky.Monads;
-using Messerli.CommandLineAbstractions;
+﻿using System.IO;
+using System.Threading.Tasks;
 using Messerli.ProjectAbstractions;
+using Messerli.ProjectAbstractions.UserInput;
 using Stubble.Core.Builders;
 using Stubble.Core.Settings;
 
@@ -14,20 +11,26 @@ namespace Messerli.ProjectGenerator
     {
         private readonly IProjectInformationProvider _projectInformationProvider;
         private readonly IUserInputProvider _userInputProvider;
+        private readonly ITemplateLoader _templateLoader;
         private readonly StubbleBuilder _stubbleBuilder;
 
-        public FileGenerator(IProjectInformationProvider projectInformationProvider, IUserInputProvider userInputProvider, StubbleBuilder stubbleBuilder)
+        public FileGenerator(
+            IProjectInformationProvider projectInformationProvider,
+            IUserInputProvider userInputProvider,
+            ITemplateLoader templateLoader,
+            StubbleBuilder stubbleBuilder)
         {
             _projectInformationProvider = projectInformationProvider;
             _userInputProvider = userInputProvider;
+            _templateLoader = templateLoader;
             _stubbleBuilder = stubbleBuilder;
         }
 
-        public void FromTemplate(string templateName, string relativePath)
+        public async Task FromTemplate(string templateName, string relativePath)
         {
             CreateMissingDirectories(AbsolutePath(relativePath));
 
-            File.WriteAllText(AbsolutePath(relativePath), OutputFromTemplate(templateName));
+            await File.WriteAllTextAsync(AbsolutePath(relativePath), await OutputFromTemplate(templateName));
         }
 
         private string AbsolutePath(string relativePath)
@@ -35,13 +38,13 @@ namespace Messerli.ProjectGenerator
             return Path.Combine(_projectInformationProvider.DestinationPath, relativePath);
         }
 
-        private string OutputFromTemplate(string templateName)
+        private async Task<string> OutputFromTemplate(string templateName)
         {
             var stubble = _stubbleBuilder
                 .Configure(StubbleBuilderSettings)
                 .Build();
 
-            return stubble.Render(GetTemplate(templateName, Assembly.GetCallingAssembly()), _userInputProvider.View(), TemplateRenderSettings());
+            return await stubble.RenderAsync(_templateLoader.GetTemplate(templateName), _userInputProvider.View(), TemplateRenderSettings());
         }
 
         private static void StubbleBuilderSettings(RendererSettingsBuilder settings)
@@ -56,39 +59,6 @@ namespace Messerli.ProjectGenerator
                 ThrowOnDataMiss = true,
                 SkipHtmlEncoding = true,
             };
-        }
-
-        private static string GetTemplate(string templateName, Assembly assembly)
-        {
-            if (assembly.GetManifestResourceNames().Contains(templateName))
-            {
-                return ReadTemplate1(templateName, assembly).Match(
-                    none: () => throw new NotImplementedException(),
-                    some: s => s);
-            }
-
-            throw new Exception($"There is no template resource with the name {templateName}");
-        }
-
-        private static Option<string> ReadTemplate1(string templateName, Assembly assembly)
-        {
-            using (var templateStream = assembly.GetManifestResourceStream(templateName))
-            {
-                if (templateStream != null)
-                {
-                    return Option.Some(ReadTemplate(templateStream));
-                }
-            }
-
-            return Option<string>.None();
-        }
-
-        private static string ReadTemplate(Stream templateStream)
-        {
-            using (StreamReader reader = new StreamReader(templateStream))
-            {
-                return reader.ReadToEnd();
-            }
         }
 
         private void CreateMissingDirectories(string path)
