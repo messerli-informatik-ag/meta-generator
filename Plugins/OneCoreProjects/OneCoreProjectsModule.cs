@@ -7,7 +7,7 @@ namespace Messerli.OneCoreProjects
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<OneCoreLibraryGenerator>().As<IProjectGenerator>();
+            builder.RegisterType<OneCoreProjectsGenerator>().As<IProjectGenerator>();
             builder.RegisterType<ProjectInformationProvider>().As<IProjectInformationProvider>();
         }
     }

@@ -4,7 +4,7 @@ using Messerli.ProjectAbstractions.UserInput;
 
 namespace Messerli.NativeProjects
 {
-    public class NativeTestProjectGenerator : IProjectGenerator
+    public class NativeProjectsGenerator : IProjectGenerator
     {
         private const string VariableDeclarations = "Messerli.NativeProjects.templates.VariableDeclarations.json";
 
@@ -12,7 +12,7 @@ namespace Messerli.NativeProjects
         private readonly IFileGenerator _fileGenerator;
         private readonly IUserInputProvider _userInputProvider;
 
-        public NativeTestProjectGenerator(IConsoleWriter consoleWriter, IFileGenerator fileGenerator, IUserInputProvider userInputProvider)
+        public NativeProjectsGenerator(IConsoleWriter consoleWriter, IFileGenerator fileGenerator, IUserInputProvider userInputProvider)
         {
             _consoleWriter = consoleWriter;
             _fileGenerator = fileGenerator;

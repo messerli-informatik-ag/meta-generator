@@ -7,7 +7,7 @@ using Messerli.ProjectAbstractions.UserInput;
 
 namespace Messerli.OneCoreProjects
 {
-    public class OneCoreLibraryGenerator : IProjectGenerator
+    public class OneCoreProjectsGenerator : IProjectGenerator
     {
         private const string VariableDeclarations = "Messerli.OneCoreProjects.templates.VariableDeclarations.json";
         private const string SharedTargetTemplate = "Messerli.OneCoreProjects.templates.Shared.targets.template";
@@ -18,7 +18,7 @@ namespace Messerli.OneCoreProjects
         private readonly IFileGenerator _fileGenerator;
         private readonly IUserInputProvider _userInputProvider;
 
-        public OneCoreLibraryGenerator(IConsoleWriter consoleWriter, IFileGenerator fileGenerator, IUserInputProvider userInputProvider)
+        public OneCoreProjectsGenerator(IConsoleWriter consoleWriter, IFileGenerator fileGenerator, IUserInputProvider userInputProvider)
         {
             _consoleWriter = consoleWriter;
             _fileGenerator = fileGenerator;

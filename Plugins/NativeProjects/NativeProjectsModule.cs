@@ -7,7 +7,7 @@ namespace Messerli.NativeProjects
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<NativeTestProjectGenerator>().As<IProjectGenerator>();
+            builder.RegisterType<NativeProjectsGenerator>().As<IProjectGenerator>();
         }
     }
 }
