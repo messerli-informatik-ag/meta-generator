@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
+using Messerli.CommandLineAbstractions;
 using Messerli.ProjectAbstractions;
 using Messerli.ProjectAbstractions.UserInput;
 using Stubble.Core.Builders;
@@ -13,22 +14,27 @@ namespace Messerli.ProjectGenerator
         private readonly IUserInputProvider _userInputProvider;
         private readonly ITemplateLoader _templateLoader;
         private readonly StubbleBuilder _stubbleBuilder;
+        private readonly IConsoleWriter _consoleWriter;
 
         public FileGenerator(
             IProjectInformationProvider projectInformationProvider,
             IUserInputProvider userInputProvider,
             ITemplateLoader templateLoader,
-            StubbleBuilder stubbleBuilder)
+            StubbleBuilder stubbleBuilder,
+            IConsoleWriter consoleWriter)
         {
             _projectInformationProvider = projectInformationProvider;
             _userInputProvider = userInputProvider;
             _templateLoader = templateLoader;
             _stubbleBuilder = stubbleBuilder;
+            _consoleWriter = consoleWriter;
         }
 
         public async Task FromTemplate(string templateName, string relativePath)
         {
             CreateMissingDirectories(AbsolutePath(relativePath));
+
+            _consoleWriter.WriteLine($"Generate file from template '{templateName}' in '{AbsolutePath(relativePath)}'");
 
             await File.WriteAllTextAsync(AbsolutePath(relativePath), await OutputFromTemplate(templateName));
         }
