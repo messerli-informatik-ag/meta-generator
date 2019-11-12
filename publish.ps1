@@ -9,3 +9,6 @@ Copy-Item "Plugins\NativeProjects\bin\Release\netstandard2.1\win-x64\publish\Nat
 
 &dotnet publish Plugins/OneCoreProjects/OneCoreProjects.csproj --configuration Release --runtime win-x64
 Copy-Item "Plugins\OneCoreProjects\bin\Release\netstandard2.1\win-x64\publish\OneCoreProjects.dll" -Destination "publish\plugins"
+
+&dotnet publish Plugins/ProjectGeneratorPluginProjects/ProjectGeneratorPluginProjects.csproj --configuration Release --runtime win-x64
+Copy-Item "Plugins\ProjectGeneratorPluginProjects\bin\Release\netstandard2.1\win-x64\publish\ProjectGeneratorPluginProjects.dll" -Destination "publish\plugins"
