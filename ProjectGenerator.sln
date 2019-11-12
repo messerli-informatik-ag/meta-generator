@@ -9,15 +9,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectGenerator.Test", "Pr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TfsClient", "TfsClient\TfsClient.csproj", "{5E6FF452-50F7-415F-A75A-0E73F0824775}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneCoreProjects", "Plugins\OneCoreProjects\OneCoreProjects.csproj", "{8EF2BDEE-A5E8-47D0-9699-AC0FF3476BCA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneCoreProjects", "Plugins\OneCoreProjects\OneCoreProjects.csproj", "{8EF2BDEE-A5E8-47D0-9699-AC0FF3476BCA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NativeProjects", "Plugins\NativeProjects\NativeProjects.csproj", "{C18DFEC0-1842-429D-A42A-4A4AF9D8C754}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeProjects", "Plugins\NativeProjects\NativeProjects.csproj", "{C18DFEC0-1842-429D-A42A-4A4AF9D8C754}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLine", "CommandLine\CommandLine.csproj", "{5A010D37-9783-473E-82CF-3A9851B0C030}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandLine", "CommandLine\CommandLine.csproj", "{5A010D37-9783-473E-82CF-3A9851B0C030}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLineAbstractions", "CommandLineAbstractions\CommandLineAbstractions.csproj", "{4F05AE06-C918-4576-9427-F15EC6663755}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandLineAbstractions", "CommandLineAbstractions\CommandLineAbstractions.csproj", "{4F05AE06-C918-4576-9427-F15EC6663755}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectAbstractions", "ProjectAbstractions\ProjectAbstractions.csproj", "{0FFED16E-FCE2-4183-8D45-CDD4794FBCA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectAbstractions", "ProjectAbstractions\ProjectAbstractions.csproj", "{0FFED16E-FCE2-4183-8D45-CDD4794FBCA0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{20C9369F-5188-445E-9A81-837709067EA5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -60,6 +62,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8EF2BDEE-A5E8-47D0-9699-AC0FF3476BCA} = {20C9369F-5188-445E-9A81-837709067EA5}
+		{C18DFEC0-1842-429D-A42A-4A4AF9D8C754} = {20C9369F-5188-445E-9A81-837709067EA5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E1DAC9D9-5C44-443C-9697-0BC57D1F0914}
