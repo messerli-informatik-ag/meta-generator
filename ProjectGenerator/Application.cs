@@ -82,7 +82,7 @@ namespace Messerli.ProjectGenerator
             {
                 foreach (var projectGenerator in _projectGenerators)
                 {
-                    _consoleWriter.WriteLine($"* {projectGenerator.ShortName}");
+                    _consoleWriter.WriteLine($"* {projectGenerator.ShortName} ({projectGenerator.Name})");
                 }
             }
             else
