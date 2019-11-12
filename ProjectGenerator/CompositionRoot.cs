@@ -37,7 +37,15 @@ namespace Messerli.ProjectGenerator
 
             builder.RegisterType<StringRequester>();
             builder.RegisterType<BoolRequester>();
+            builder.RegisterType<IntegerRequester>();
+            builder.RegisterType<DoubleRequester>();
             builder.RegisterType<SelectionRequester>();
+            builder.RegisterType<PathRequester>();
+            builder.RegisterType<ExistingPathRequester>();
+            builder.RegisterType<DateRequester>();
+            builder.RegisterType<DateTimeRequester>();
+            builder.RegisterType<TimeRequester>();
+
             builder.Register(VariableRequesterFactory).As<IVariableRequester>();
 
             RegisterPlugins(builder);
