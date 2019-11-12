@@ -31,6 +31,7 @@ namespace Messerli.ProjectGenerator
 
             builder.RegisterType<ConsoleClient>().As<IClient>();
             builder.RegisterType<FileGenerator>().As<IFileGenerator>();
+            builder.RegisterType<FileManipulator>().As<IFileManipulator>();
             builder.RegisterType<StubbleBuilder>().AsSelf();
 
             builder.RegisterType<ExecutingPluginAssemblyProvider>().As<IExecutingPluginAssemblyProvider>().SingleInstance();

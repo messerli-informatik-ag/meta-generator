@@ -1,8 +1,14 @@
 [
   {
     "Description": "unused",
-    "Question": "Please give the project a descriptive name:",
+    "Question": "Enter the name of the project file name (no spaces, must end with 'Projects') -> 'YourTypeProjects.csproj'",
     "Name": "ProjectName",
     "Type": 0
+  },
+  {
+    "Description": "unused",
+    "Question": "Enter the full path of the ProjectGenerator repository (the directory must have a file called 'ProjectGenerator.sln'",
+    "Name": "ProjectGeneratorPath",
+    "Type": 6
   }
 ]

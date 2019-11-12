@@ -11,14 +11,26 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="templates\generator.source.template" />
+    <None Remove="templates\module.source.template" />
+    <None Remove="templates\paket.template" />
+    <None Remove="templates\plugin.csproj.template" />
+    <None Remove="templates\publish.template" />
+    <None Remove="templates\VariableDeclarations.json" />
+    <None Remove="templates\VariableDeclarations.json.template" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\CommandLineAbstractions\CommandLineAbstractions.csproj" />
     <ProjectReference Include="..\..\ProjectAbstractions\ProjectAbstractions.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="templates\publish.template" />
+    <EmbeddedResource Include="templates\paket.template" />
+    <EmbeddedResource Include="templates\generator.source.template" />
+    <EmbeddedResource Include="templates\module.source.template" />
+    <EmbeddedResource Include="templates\plugin.csproj.template" />
+    <EmbeddedResource Include="templates\VariableDeclarations.json.template" />
     <EmbeddedResource Include="templates\VariableDeclarations.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="templates\" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

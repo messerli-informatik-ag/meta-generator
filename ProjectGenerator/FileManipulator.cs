@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Messerli.CommandLineAbstractions;
 using Messerli.ProjectAbstractions;
@@ -8,14 +9,14 @@ using Stubble.Core.Settings;
 
 namespace Messerli.ProjectGenerator
 {
-    public class FileGenerator : IFileGenerator
+    public class FileManipulator : IFileManipulator
     {
         private readonly IUserInputProvider _userInputProvider;
         private readonly ITemplateLoader _templateLoader;
         private readonly StubbleBuilder _stubbleBuilder;
         private readonly IConsoleWriter _consoleWriter;
 
-        public FileGenerator(
+        public FileManipulator(
             IUserInputProvider userInputProvider,
             ITemplateLoader templateLoader,
             StubbleBuilder stubbleBuilder,
@@ -27,13 +28,19 @@ namespace Messerli.ProjectGenerator
             _consoleWriter = consoleWriter;
         }
 
-        public async Task FromTemplate(string templateName, string path)
+        public async Task AppendTemplate(string templateName, string filePath)
         {
-            CreateMissingDirectories(path);
+            _consoleWriter.WriteLine($"Append template '{templateName}' to '{filePath}'");
 
-            _consoleWriter.WriteLine($"Generate file from template '{templateName}' in '{path}'");
+            if (File.Exists(filePath) == false)
+            {
+                throw new Exception($"cannot append to file '{filePath}' it does not exist.");
+            }
 
-            await File.WriteAllTextAsync(path, await OutputFromTemplate(templateName));
+            using (var sw = File.AppendText(filePath))
+            {
+                await sw.WriteAsync(await OutputFromTemplate(templateName));
+            }
         }
 
         private async Task<string> OutputFromTemplate(string templateName)
@@ -57,16 +64,6 @@ namespace Messerli.ProjectGenerator
                 ThrowOnDataMiss = true,
                 SkipHtmlEncoding = true,
             };
-        }
-
-        private void CreateMissingDirectories(string path)
-        {
-            var folder = Path.GetDirectoryName(path);
-
-            if (Directory.Exists(folder) == false)
-            {
-                Directory.CreateDirectory(folder);
-            }
         }
     }
 }

@@ -1,0 +1,3 @@
+
+&dotnet publish Plugins/{{ProjectName}}/{{ProjectName}}.csproj --configuration Release --runtime win-x64
+Copy-Item "Plugins\{{ProjectName}}\bin\Release\netstandard2.1\win-x64\publish\{{ProjectName}}.dll" -Destination "publish\plugins"
