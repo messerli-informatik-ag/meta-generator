@@ -9,9 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectGenerator.Test", "Pr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TfsClient", "TfsClient\TfsClient.csproj", "{5E6FF452-50F7-415F-A75A-0E73F0824775}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneCoreProjects", "OneCoreProjects\OneCoreProjects.csproj", "{8EF2BDEE-A5E8-47D0-9699-AC0FF3476BCA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneCoreProjects", "Plugins\OneCoreProjects\OneCoreProjects.csproj", "{8EF2BDEE-A5E8-47D0-9699-AC0FF3476BCA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NativeProjects", "NativeProjects\NativeProjects.csproj", "{C18DFEC0-1842-429D-A42A-4A4AF9D8C754}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NativeProjects", "Plugins\NativeProjects\NativeProjects.csproj", "{C18DFEC0-1842-429D-A42A-4A4AF9D8C754}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLine", "CommandLine\CommandLine.csproj", "{5A010D37-9783-473E-82CF-3A9851B0C030}"
 EndProject

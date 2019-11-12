@@ -13,8 +13,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommandLine\CommandLine.csproj" />
-    <ProjectReference Include="..\NativeProjects\NativeProjects.csproj" />
-    <ProjectReference Include="..\OneCoreProjects\OneCoreProjects.csproj" />
     <ProjectReference Include="..\ProjectAbstractions\ProjectAbstractions.csproj" />
     <ProjectReference Include="..\TfsClient\TfsClient.csproj" />
   </ItemGroup>

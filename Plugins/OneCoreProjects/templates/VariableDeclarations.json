@@ -1,6 +1,6 @@
 [
   {
-    "Description": "The Project Name is used for things...",
+    "Description": "unused",
     "Question": "Please give the project a descriptive name:",
     "Name": "ProjectName",
     "Type": 0
@@ -70,7 +70,7 @@
   },
   {
     "Description": "Whatever...",
-    "Name": "LifeTime",
-    "Type": 0
+    "Name": "BoolVariable",
+    "Type": 1
   }
 ]

@@ -75,11 +75,19 @@ namespace Messerli.ProjectGenerator
 
         private void ListProjects()
         {
-            _consoleWriter.WriteLine($"Available project types");
+            _consoleWriter.WriteLine("Available project types");
+            _consoleWriter.WriteLine(string.Empty);
 
-            foreach (var projectGenerator in _projectGenerators)
+            if (_projectGenerators.Any())
             {
-                _consoleWriter.WriteLine($"* {projectGenerator.ShortName}");
+                foreach (var projectGenerator in _projectGenerators)
+                {
+                    _consoleWriter.WriteLine($"* {projectGenerator.ShortName}");
+                }
+            }
+            else
+            {
+                _consoleWriter.WriteLine("No generator plugins found.");
             }
         }
 

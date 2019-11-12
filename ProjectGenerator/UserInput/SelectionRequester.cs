@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Funcky.Extensions;
 using Funcky.Monads;
 using Messerli.CommandLineAbstractions;
@@ -19,23 +20,41 @@ namespace Messerli.ProjectGenerator.UserInput
 
         public Option<string> RequestValue(IUserInputDescription variable)
         {
+            CheckForMissingOptions(variable);
+
             WriteQuestion(variable);
             WriteOptions(variable);
 
-            return RetryRequestValue(variable);
+            return QueryValueFromUser(variable);
         }
 
-        private Option<string> RetryRequestValue(IUserInputDescription variable)
+        private static void CheckForMissingOptions(IUserInputDescription variable)
         {
-            var maybeValue = _consoleReader.ReadLine().TryParseInt();
-            if (IsValuePossible(variable, maybeValue))
+            if (variable.VariableSelectionValues.Any() == false)
             {
-                return maybeValue.AndThen(index => variable.VariableSelectionValues[FromHumandIndex(index)].Value!);
+                throw new Exception("There are no options to chose from...");
             }
+        }
 
+        private Option<string> QueryValueFromUser(IUserInputDescription variable)
+        {
+            return QueryOptionValue(variable).Match(() => RetryQueryValueFromUser(variable), Option.Some);
+        }
+
+        private Option<string> RetryQueryValueFromUser(IUserInputDescription variable)
+        {
             _consoleWriter.WriteLine($"Please select from the possible options between 1 and {ToHumandIndex(variable.VariableSelectionValues.Count - 1)}");
 
-            return RetryRequestValue(variable);
+            return QueryValueFromUser(variable);
+        }
+
+        private Option<string> QueryOptionValue(IUserInputDescription variable)
+        {
+            var maybeValue = _consoleReader.ReadLine().TryParseInt();
+
+            return IsValuePossible(variable, maybeValue)
+                ? maybeValue.AndThen(index => variable.VariableSelectionValues[FromHumandIndex(index)].Value!)
+                : Option<string>.None();
         }
 
         private static bool IsValuePossible(IUserInputDescription variable, Option<int> maybeValue)

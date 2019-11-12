@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using Autofac;
 using Autofac.Core;
 using Messerli.CommandLine;
 using Messerli.CommandLineAbstractions;
-using Messerli.NativeProjects;
-using Messerli.OneCoreProjects;
 using Messerli.ProjectAbstractions;
 using Messerli.ProjectAbstractions.UserInput;
 using Messerli.ProjectGenerator.UserInput;
 using Messerli.TfsClient;
 using Stubble.Core.Builders;
-using UserInputDescriptionBuilder = Messerli.ProjectGenerator.UserInput.UserInputDescriptionBuilder;
+using static Messerli.ProjectGenerator.ExecutableInformation;
 
 namespace Messerli.ProjectGenerator
 {
@@ -33,9 +33,6 @@ namespace Messerli.ProjectGenerator
             builder.RegisterType<FileGenerator>().As<IFileGenerator>();
             builder.RegisterType<StubbleBuilder>().AsSelf();
 
-            builder.RegisterModule<NativeProjectsModule>();
-            builder.RegisterModule<OneCoreProjectsModule>();
-
             builder.RegisterType<ExecutingPluginAssemblyProvider>().As<IExecutingPluginAssemblyProvider>().SingleInstance();
 
             builder.RegisterType<StringRequester>();
@@ -43,7 +40,22 @@ namespace Messerli.ProjectGenerator
             builder.RegisterType<SelectionRequester>();
             builder.Register(VariableRequesterFactory).As<IVariableRequester>();
 
+            RegisterPlugins(builder);
+
             return builder.Build();
+        }
+
+        private void RegisterPlugins(ContainerBuilder builder)
+        {
+            GetExecutableDirectory().Match(
+                () => throw new Exception("Failed to get directory of executable."),
+                executablePath =>
+                {
+                    foreach (var path in Directory.GetFiles(Path.Combine(executablePath, "plugins"), "*Projects.dll"))
+                    {
+                        var registrar = builder.RegisterAssemblyModules(Assembly.LoadFile(path));
+                    }
+                });
         }
 
         private static IVariableRequester VariableRequesterFactory(IComponentContext context, IEnumerable<Parameter> paremeter)
