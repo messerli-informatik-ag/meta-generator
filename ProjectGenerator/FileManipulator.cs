@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Messerli.CommandLineAbstractions;
 using Messerli.ProjectAbstractions;
 using Messerli.ProjectAbstractions.UserInput;
+using Messerli.VsSolution;
+using Messerli.VsSolution.Model;
 using Stubble.Core.Builders;
 using Stubble.Core.Settings;
 
@@ -14,17 +16,20 @@ namespace Messerli.ProjectGenerator
         private readonly IUserInputProvider _userInputProvider;
         private readonly ITemplateLoader _templateLoader;
         private readonly StubbleBuilder _stubbleBuilder;
+        private readonly ISolutionLoader _solutionParser;
         private readonly IConsoleWriter _consoleWriter;
 
         public FileManipulator(
             IUserInputProvider userInputProvider,
             ITemplateLoader templateLoader,
             StubbleBuilder stubbleBuilder,
+            ISolutionLoader solutionParser,
             IConsoleWriter consoleWriter)
         {
             _userInputProvider = userInputProvider;
             _templateLoader = templateLoader;
             _stubbleBuilder = stubbleBuilder;
+            _solutionParser = solutionParser;
             _consoleWriter = consoleWriter;
         }
 
@@ -41,6 +46,16 @@ namespace Messerli.ProjectGenerator
             {
                 await sw.WriteAsync(await OutputFromTemplate(templateName));
             }
+        }
+
+        public async Task AddProjectToSolution(string? solutionFolder, string projectName, string projectPath, string solutionPath)
+        {
+            var solution = await _solutionParser.Load(solutionPath);
+            var newProject = new Project(projectName, projectPath, ProjectType.DotNetStandard);
+
+            solution.Projects.Add(newProject);
+
+            await _solutionParser.Store(solutionPath, solution);
         }
 
         private async Task<string> OutputFromTemplate(string templateName)

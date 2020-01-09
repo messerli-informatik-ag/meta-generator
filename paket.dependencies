@@ -14,3 +14,4 @@ nuget StyleCop.Analyzers ~> 1.1.118
 nuget System.CommandLine.Experimental ~> 0.3.0-alpha.19405.1
 nuget xunit ~> 2.4.1
 nuget xunit.runner.visualstudio ~> 2.4.1
+nuget apophis.Lexer ~> 1.2.0

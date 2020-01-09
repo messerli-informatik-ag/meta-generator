@@ -10,6 +10,7 @@ using Messerli.ProjectAbstractions;
 using Messerli.ProjectAbstractions.UserInput;
 using Messerli.ProjectGenerator.UserInput;
 using Messerli.TfsClient;
+using Messerli.VsSolution;
 using Stubble.Core.Builders;
 using static Messerli.ProjectGenerator.ExecutableInformation;
 
@@ -48,6 +49,8 @@ namespace Messerli.ProjectGenerator
             builder.RegisterType<TimeRequester>();
 
             builder.Register(VariableRequesterFactory).As<IVariableRequester>();
+
+            builder.RegisterType<SolutionLoader>().As<ISolutionLoader>();
 
             RegisterPlugins(builder);
 

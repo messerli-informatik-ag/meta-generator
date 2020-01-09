@@ -62,6 +62,7 @@ namespace Messerli.ProjectGeneratorPluginProjects
                 _fileGenerator.FromTemplate(VariableDeclarationsTemplate, Path.Combine(GetPluginPath(), "templates", "VariableDeclarations.json")),
                 _fileGenerator.FromTemplate(PaketReferencesTemplate, Path.Combine(GetPluginPath(), "templates", "VariableDeclarations.json")),
                 _fileManipulator.AppendTemplate(PublishScript, Path.Combine(GetSolutionPath(), "publish.ps1")),
+                _fileManipulator.AddProjectToSolution("Plugins", ProjectName, Path.Combine(GetPluginPath(), $"{_userInputProvider.Value(ProjectName)}.csproj"), Path.Combine(GetSolutionPath(), "ProjectGenerator.sln")),
             };
 
             Task.WaitAll(tasks.ToArray());
