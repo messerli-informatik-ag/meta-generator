@@ -11,17 +11,31 @@ namespace Messerli.VsSolution.Parser.GlobalSection
     {
         public void Parse(TokenWalker tokenWalker, Solution solution)
         {
-            throw new NotImplementedException();
+            while (tokenWalker.NextIs<EndGlobalSectionToken>() == false)
+            {
+                tokenWalker.ConsumeAllWhiteSpace();
+                var child = tokenWalker.ConsumeGuid();
+                tokenWalker.ConsumeAllWhiteSpace();
+                tokenWalker.Consume<AssignToken>();
+                tokenWalker.ConsumeAllWhiteSpace();
+                var parent = tokenWalker.ConsumeGuid();
+                tokenWalker.ConsumeAllWhiteSpace();
+
+                solution.ProjectNesting.Add(new NestedProject(parent, child));
+            }
         }
 
         public void Serialize(Solution solution, StringBuilder result)
         {
-            throw new NotImplementedException();
+            foreach (var nestedProject in solution.ProjectNesting)
+            {
+                result.AppendLine($"\t\t{nestedProject.Child.SolutionFormat()} = {nestedProject.Parent.SolutionFormat()}");
+            }
         }
 
         public bool Exists(Solution solution)
         {
-            return false;
+            return solution.ProjectNesting.Any();
         }
     }
 }

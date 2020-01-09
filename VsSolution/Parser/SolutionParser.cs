@@ -47,7 +47,35 @@ namespace Messerli.VsSolution.Parser
         private void Parse(TokenWalker tokenWalker, Solution solution)
         {
             _headerParser.Parse(tokenWalker, solution);
-            _projectParser.Parse(tokenWalker, solution);
+            ParseProjects(tokenWalker, solution);
+            ParseGlobalSections(tokenWalker, solution);
+
+            // any whitespace left...
+            tokenWalker.ConsumeAllWhiteSpace();
+
+            // Verify that we are at the end of the file
+            tokenWalker.Consume<EpsilonToken>();
+        }
+
+        private void ParseProjects(TokenWalker tokenWalker, Solution solution)
+        {
+            while (tokenWalker.NextIs<BeginProjectToken>())
+            {
+                _projectParser.Parse(tokenWalker, solution);
+            }
+        }
+
+        private void ParseGlobalSections(TokenWalker tokenWalker, Solution solution)
+        {
+            tokenWalker.Consume<BeginGlobalToken>();
+
+            tokenWalker.ConsumeAllWhiteSpace();
+            while (tokenWalker.NextIs<BeginGlobalSectionToken>())
+            {
+                _globalSectionParser.Parse(tokenWalker, solution);
+            }
+
+            tokenWalker.Consume<EndGlobalToken>();
         }
     }
 }

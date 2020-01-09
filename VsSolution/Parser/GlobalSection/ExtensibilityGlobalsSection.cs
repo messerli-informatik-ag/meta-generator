@@ -25,7 +25,7 @@ namespace Messerli.VsSolution.Parser.GlobalSection
 
         public void Serialize(Solution solution, StringBuilder result)
         {
-            result.AppendLine($"\t{SolutionGuidKey} = {solution.Guid.SolutionFormat()}");
+            result.AppendLine($"\t\t{SolutionGuidKey} = {solution.Guid.SolutionFormat()}");
         }
 
         public bool Exists(Solution solution)

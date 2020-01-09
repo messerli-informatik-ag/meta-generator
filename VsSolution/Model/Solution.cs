@@ -7,6 +7,9 @@ namespace Messerli.VsSolution.Model
 {
     public class Solution
     {
+        private const string ActiveConfiguration = "ActiveCfg";
+        private const string BuildZero = "Build.0";
+
         public int FormatVersion { get; set; }
 
         public Version VisualStudioVersion { get; set; } = new Version();
@@ -19,9 +22,24 @@ namespace Messerli.VsSolution.Model
 
         public List<PlatformConfiguration> Platforms { get; } = new List<PlatformConfiguration>();
 
+        public List<SolutionProperty> Properties { get; } = new List<SolutionProperty>();
+
+        public List<NestedProject> ProjectNesting { get; } = new List<NestedProject>();
+
         public void AddProject(string projectName, string projectPath, ProjectType projectType)
         {
-            Projects.Add(new Project(projectName, projectPath, projectType));
+            var project = new Project(projectName, projectPath, projectType);
+
+            foreach (var platform in Platforms)
+            {
+                project.Configuration[platform] = new List<PlatformConfiguration>
+                {
+                    new PlatformConfiguration(ActiveConfiguration, platform.Config),
+                    new PlatformConfiguration(BuildZero, platform.Config),
+                };
+            }
+
+            Projects.Add(project);
         }
     }
 }

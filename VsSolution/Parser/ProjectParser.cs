@@ -12,17 +12,14 @@ namespace Messerli.VsSolution.Parser
 
         internal void Parse(TokenWalker tokenWalker, Solution solution)
         {
-            while (tokenWalker.NextIs<BeginProjectToken>())
-            {
-                tokenWalker.Consume<BeginProjectToken>();
+            tokenWalker.Consume<BeginProjectToken>();
 
-                var project = ParseProject(tokenWalker);
-                ParseProjectSection(tokenWalker, project);
-                solution.Projects.Add(project);
+            var project = ParseProject(tokenWalker);
+            ParseProjectSection(tokenWalker, project);
+            solution.Projects.Add(project);
 
-                tokenWalker.Consume<EndProjectToken>();
-                tokenWalker.Consume<NewLineToken>();
-            }
+            tokenWalker.Consume<EndProjectToken>();
+            tokenWalker.Consume<NewLineToken>();
         }
 
         private void CheckLoadingOrder(string loadingOrder)

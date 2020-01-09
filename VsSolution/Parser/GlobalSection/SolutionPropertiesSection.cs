@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 using apophis.Lexer;
 using Messerli.VsSolution.Model;
@@ -11,17 +10,28 @@ namespace Messerli.VsSolution.Parser.GlobalSection
     {
         public void Parse(TokenWalker tokenWalker, Solution solution)
         {
-            throw new NotImplementedException();
+            while (tokenWalker.NextIs<EndGlobalSectionToken>() == false)
+            {
+                var property = tokenWalker.ConsumeBareString();
+                tokenWalker.Consume<AssignToken>();
+                var propertyValue = tokenWalker.ConsumeBareString();
+                tokenWalker.ConsumeAllWhiteSpace();
+
+                solution.Properties.Add(new SolutionProperty(property, propertyValue));
+            }
         }
 
         public void Serialize(Solution solution, StringBuilder result)
         {
-            throw new NotImplementedException();
+            foreach (var property in solution.Properties)
+            {
+                result.AppendLine($"\t\t{property.Property} = {property.PropertyValue}");
+            }
         }
 
         public bool Exists(Solution solution)
         {
-            return false;
+            return solution.Properties.Any();
         }
     }
 }
