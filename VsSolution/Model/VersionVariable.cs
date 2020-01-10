@@ -2,7 +2,7 @@
 
 namespace Messerli.VsSolution.Model
 {
-    public class VersionVariable
+    internal class VersionVariable
     {
         public VersionVariable(string name, Version value)
         {

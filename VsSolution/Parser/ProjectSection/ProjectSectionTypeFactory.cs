@@ -2,7 +2,7 @@
 
 namespace Messerli.VsSolution.Parser.ProjectSection
 {
-    public static class ProjectSectionTypeFactory
+    internal static class ProjectSectionTypeFactory
     {
         public static IProjectSection Create(ProjectSectionType sectionType)
         {

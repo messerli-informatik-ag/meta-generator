@@ -2,7 +2,7 @@
 
 namespace Messerli.VsSolution.Token
 {
-    public class EndProjectSectionToken : IToken
+    internal class EndProjectSectionToken : IToken
     {
         public override string ToString()
         {

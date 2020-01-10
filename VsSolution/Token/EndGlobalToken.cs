@@ -2,7 +2,7 @@
 
 namespace Messerli.VsSolution.Token
 {
-    public class EndGlobalToken : IToken
+    internal class EndGlobalToken : IToken
     {
         public override string ToString()
         {

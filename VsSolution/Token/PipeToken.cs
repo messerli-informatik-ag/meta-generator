@@ -2,7 +2,7 @@
 
 namespace Messerli.VsSolution.Token
 {
-    public class PipeToken : IToken
+    internal class PipeToken : IToken
     {
         public override string ToString()
         {

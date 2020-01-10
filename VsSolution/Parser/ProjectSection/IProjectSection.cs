@@ -4,7 +4,7 @@ using Messerli.VsSolution.Model;
 
 namespace Messerli.VsSolution.Parser.ProjectSection
 {
-    public interface IProjectSection
+    internal interface IProjectSection
     {
         void Parse(TokenWalker tokenWalker, Project project);
 

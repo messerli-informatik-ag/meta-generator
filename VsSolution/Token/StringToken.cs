@@ -2,7 +2,7 @@
 
 namespace Messerli.VsSolution.Token
 {
-    public class StringToken : IToken
+    internal class StringToken : IToken
     {
         public StringToken(string quotedString)
         {

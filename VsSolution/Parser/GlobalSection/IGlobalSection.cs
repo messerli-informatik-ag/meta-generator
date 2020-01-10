@@ -4,7 +4,7 @@ using Messerli.VsSolution.Model;
 
 namespace Messerli.VsSolution.Parser.GlobalSection
 {
-    public interface IGlobalSection
+    internal interface IGlobalSection
     {
         void Parse(TokenWalker tokenWalker, Solution solution);
 

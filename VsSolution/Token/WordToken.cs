@@ -2,7 +2,7 @@
 
 namespace Messerli.VsSolution.Token
 {
-    public class WordToken : IToken
+    internal class WordToken : IToken
     {
         public WordToken(string word)
         {

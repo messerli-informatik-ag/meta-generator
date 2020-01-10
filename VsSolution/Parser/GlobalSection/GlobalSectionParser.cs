@@ -5,7 +5,7 @@ using Messerli.VsSolution.Token;
 
 namespace Messerli.VsSolution.Parser.GlobalSection
 {
-    public class GlobalSectionParser
+    internal class GlobalSectionParser
     {
         public void Parse(TokenWalker tokenWalker, Solution solution)
         {

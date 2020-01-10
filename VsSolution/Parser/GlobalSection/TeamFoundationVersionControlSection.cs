@@ -6,7 +6,7 @@ using Messerli.VsSolution.Token;
 
 namespace Messerli.VsSolution.Parser.GlobalSection
 {
-    public class TeamFoundationVersionControlSection : IGlobalSection
+    internal class TeamFoundationVersionControlSection : IGlobalSection
     {
         public void Parse(TokenWalker tokenWalker, Solution solution)
         {

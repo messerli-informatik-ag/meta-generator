@@ -2,7 +2,7 @@
 
 namespace Messerli.VsSolution.Token
 {
-    public class PathSeperatorToken : IToken
+    internal class PathSeperatorToken : IToken
     {
         public override string ToString()
         {

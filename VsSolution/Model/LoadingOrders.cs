@@ -2,7 +2,7 @@
 
 namespace Messerli.VsSolution.Model
 {
-    public class LoadingOrders
+    internal class LoadingOrders
     {
         private static readonly HashSet<string> ValidSolutionLoadingOrders = new HashSet<string> { "preSolution", "postSolution" };
         private static readonly HashSet<string> ValidProjectLoadingOrders = new HashSet<string> { "preProject", "postProject" };

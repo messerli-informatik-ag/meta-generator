@@ -2,7 +2,7 @@
 
 namespace Messerli.VsSolution.Token
 {
-    public class CommaToken : IToken
+    internal class CommaToken : IToken
     {
         public override string ToString()
         {

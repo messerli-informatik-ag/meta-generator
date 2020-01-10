@@ -2,7 +2,7 @@
 
 namespace Messerli.VsSolution.Token
 {
-    public class EpsilonToken : IToken
+    internal class EpsilonToken : IToken
     {
     }
 }

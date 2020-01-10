@@ -3,7 +3,7 @@ using Messerli.VsSolution.Model;
 
 namespace Messerli.VsSolution.Parser.GlobalSection
 {
-    public static class GlobalSectionTypeFactory
+    internal static class GlobalSectionTypeFactory
     {
         public static IGlobalSection Create(GlobalSectionType sectionType)
         {

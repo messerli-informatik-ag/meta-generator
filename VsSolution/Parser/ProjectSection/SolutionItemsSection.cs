@@ -6,7 +6,7 @@ using Messerli.VsSolution.Token;
 
 namespace Messerli.VsSolution.Parser.ProjectSection
 {
-    public class SolutionItemsSection : IProjectSection
+    internal class SolutionItemsSection : IProjectSection
     {
         public void Parse(TokenWalker tokenWalker, Project project)
         {

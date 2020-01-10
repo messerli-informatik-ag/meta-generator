@@ -5,7 +5,7 @@ using Messerli.VsSolution.Token;
 
 namespace Messerli.VsSolution.Parser
 {
-    public class HeaderParser
+    internal class HeaderParser
     {
         private readonly VariableParser _variableParser;
 

@@ -5,7 +5,7 @@ using Messerli.VsSolution.Token;
 
 namespace Messerli.VsSolution.Parser
 {
-    public class VariableParser
+    internal class VariableParser
     {
         public VersionVariable ParseVersion(TokenWalker tokenWalker)
         {

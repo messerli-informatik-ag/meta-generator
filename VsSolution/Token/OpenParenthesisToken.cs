@@ -2,7 +2,7 @@
 
 namespace Messerli.VsSolution.Token
 {
-    public class OpenParenthesisToken : IToken
+    internal class OpenParenthesisToken : IToken
     {
         public override string ToString()
         {
