@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -60,12 +61,18 @@ namespace Messerli.ProjectGeneratorPluginProjects
                 _fileGenerator.FromTemplate(GeneratorFileTemplate, Path.Combine(GetPluginPath(), $"{_userInputProvider.Value(ProjectName)}Generator.cs")),
                 _fileGenerator.FromTemplate(ModuleFileTemplate, Path.Combine(GetPluginPath(), $"{_userInputProvider.Value(ProjectName)}Module.cs")),
                 _fileGenerator.FromTemplate(VariableDeclarationsTemplate, Path.Combine(GetPluginPath(), "templates", "VariableDeclarations.json")),
-                _fileGenerator.FromTemplate(PaketReferencesTemplate, Path.Combine(GetPluginPath(), "templates", "VariableDeclarations.json")),
+                _fileGenerator.FromTemplate(PaketReferencesTemplate, Path.Combine(GetPluginPath(), "paket.references")),
                 _fileManipulator.AppendTemplate(PublishScript, Path.Combine(GetSolutionPath(), "publish.ps1")),
                 _fileManipulator.AddProjectToSolution("Plugins", ProjectName, Path.Combine(GetPluginPath(), $"{_userInputProvider.Value(ProjectName)}.csproj"), Path.Combine(GetSolutionPath(), "ProjectGenerator.sln")),
             };
 
+            Stopwatch stopWatch = new Stopwatch();
+            stopWatch.Start();
+
             Task.WaitAll(tasks.ToArray());
+
+            stopWatch.Stop();
+            _consoleWriter.WriteLine($"Created in {stopWatch.ElapsedMilliseconds}ms.");
         }
 
         private void ValidateUserInput()

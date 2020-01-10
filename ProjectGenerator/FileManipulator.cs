@@ -42,7 +42,7 @@ namespace Messerli.ProjectGenerator
                 throw new Exception($"cannot append to file '{filePath}' it does not exist.");
             }
 
-            using (var sw = File.AppendText(filePath))
+            await using (var sw = File.AppendText(filePath))
             {
                 await sw.WriteAsync(await OutputFromTemplate(templateName));
             }
@@ -53,6 +53,11 @@ namespace Messerli.ProjectGenerator
             var solution = await _solutionParser.Load(solutionPath);
 
             solution.AddProject(projectName, projectPath, ProjectType.Identifier.CSharpSdk);
+
+            if (solutionFolder != null)
+            {
+                solution.AddNestedProject(solutionFolder, projectName);
+            }
 
             await _solutionParser.Store(solutionPath, solution);
         }

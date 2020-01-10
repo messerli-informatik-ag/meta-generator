@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Messerli.VsSolution.Model
 {
@@ -40,6 +41,14 @@ namespace Messerli.VsSolution.Model
             }
 
             Projects.Add(project);
+        }
+
+        public void AddNestedProject(string folderName, string projectName)
+        {
+            var folder = Projects.First(p => p.ProjectName == folderName);
+            var project = Projects.First(p => p.ProjectName == projectName);
+
+            ProjectNesting.Add(new NestedProject(folder.ProjectGuid, project.ProjectGuid));
         }
     }
 }

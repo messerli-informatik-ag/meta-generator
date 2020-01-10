@@ -1,4 +1,4 @@
-using Autofac;
+﻿using Autofac;
 using Messerli.ProjectAbstractions;
 
 namespace Messerli.{{ProjectName}}
