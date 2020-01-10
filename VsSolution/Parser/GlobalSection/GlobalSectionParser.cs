@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using apophis.Lexer;
 using Messerli.VsSolution.Model;
 using Messerli.VsSolution.Token;
@@ -8,8 +7,6 @@ namespace Messerli.VsSolution.Parser.GlobalSection
 {
     public class GlobalSectionParser
     {
-        private readonly HashSet<string> _possibleLoadingOrders = new HashSet<string> { "preSolution", "postSolution" };
-
         public void Parse(TokenWalker tokenWalker, Solution solution)
         {
             tokenWalker.Consume<BeginGlobalSectionToken>();
@@ -31,7 +28,7 @@ namespace Messerli.VsSolution.Parser.GlobalSection
 
         private void CheckLoadingOrder(string loadingOrder)
         {
-            if (_possibleLoadingOrders.Contains(loadingOrder) == false)
+            if (LoadingOrders.IsValidSolutionLoadingOrder(loadingOrder) == false)
             {
                 throw new ParseException($"Unknown loading Order '{loadingOrder}'");
             }

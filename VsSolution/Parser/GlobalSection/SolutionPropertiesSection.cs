@@ -12,12 +12,9 @@ namespace Messerli.VsSolution.Parser.GlobalSection
         {
             while (tokenWalker.NextIs<EndGlobalSectionToken>() == false)
             {
-                var property = tokenWalker.ConsumeBareString();
-                tokenWalker.Consume<AssignToken>();
-                var propertyValue = tokenWalker.ConsumeBareString();
-                tokenWalker.ConsumeAllWhiteSpace();
+                var property = tokenWalker.ConsumeVariable();
 
-                solution.Properties.Add(new SolutionProperty(property, propertyValue));
+                solution.Properties.Add(new SolutionProperty(property.Key, property.Value));
             }
         }
 

@@ -14,16 +14,9 @@ namespace Messerli.VsSolution.Parser.GlobalSection
         {
             while (tokenWalker.NextIs<EndGlobalSectionToken>() == false)
             {
-                tokenWalker.ConsumeAllWhiteSpace();
-                var project = ConsumeProject(tokenWalker, solution);
-                tokenWalker.Consume<DotToken>();
-                var platformAndConfig = tokenWalker.ConsumeBareString();
-                tokenWalker.ConsumeAllWhiteSpace();
-                tokenWalker.Consume<AssignToken>();
-                var configValue = tokenWalker.ConsumeBareString();
-                tokenWalker.ConsumeAllWhiteSpace();
+                var config = tokenWalker.ConsumeVariable();
 
-                SetProjectConfiguration(project, ExtractPlatform(solution, platformAndConfig), ExtractConfig(platformAndConfig), configValue);
+                SetProjectConfiguration(ExtractProject(config.Key, solution), ExtractPlatform(config.Key, solution), ExtractConfig(config.Key), config.Value);
             }
         }
 
@@ -46,23 +39,23 @@ namespace Messerli.VsSolution.Parser.GlobalSection
             return solution.Projects.Any() && solution.Platforms.Any();
         }
 
-        private string ExtractConfig(string platformAndOption)
+        private Project ExtractProject(string configKey, Solution solution)
         {
-            return string.Join(".", platformAndOption.Split(".").Skip(1));
-        }
-
-        private PlatformConfiguration ExtractPlatform(Solution solution, string platformAndOption)
-        {
-            var platformKey = platformAndOption.Split(".").First();
-
-            return solution.Platforms.First(p => p.Config == platformKey);
-        }
-
-        private static Project ConsumeProject(TokenWalker tokenWalker, Solution solution)
-        {
-            var projectGuid = tokenWalker.ConsumeGuid();
+            var projectGuid = Guid.Parse(configKey.Split(".").First());
 
             return solution.Projects.First(p => p.ProjectGuid == projectGuid);
+        }
+
+        private string ExtractConfig(string configKey)
+        {
+            return string.Join(".", configKey.Split(".").Skip(2));
+        }
+
+        private PlatformConfiguration ExtractPlatform(string configKey, Solution solution)
+        {
+            var platformKey = configKey.Split(".").Skip(1).First();
+
+            return solution.Platforms.First(p => p.Config == platformKey);
         }
 
         private void SetProjectConfiguration(Project project, PlatformConfiguration platformConfiguration, string configName, string configValue)

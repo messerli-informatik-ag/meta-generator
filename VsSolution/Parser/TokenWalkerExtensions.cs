@@ -54,32 +54,21 @@ namespace Messerli.VsSolution.Parser
             return lexem.Token switch
             {
                 WordToken word => word.Word,
-                QuoteToken _ => QuotedString(tokenWalker),
+                StringToken quotedString => quotedString.String,
                 _ => throw new ParseException($"Next token to be expected a \" or string but it was: {lexem.Token}")
             };
         }
 
-        public static KeyValuePair<string, string> ConsumeBareVariable(this TokenWalker tokenWalker)
-        {
-            var key = tokenWalker.ConsumeBareString();
-            tokenWalker.Consume<AssignToken>();
-            var value = tokenWalker.ConsumeBareString();
-            tokenWalker.Consume<NewLineToken>();
-
-            return new KeyValuePair<string, string>(key, value);
-        }
-
-        public static string ConsumeBareString(this TokenWalker tokenWalker)
+        public static KeyValuePair<string, string> ConsumeVariable(this TokenWalker tokenWalker)
         {
             tokenWalker.ConsumeAllWhiteSpace();
+            var key = tokenWalker.ConsumeWord();
+            tokenWalker.Consume<AssignToken>();
+            tokenWalker.ConsumeAllWhiteSpace();
+            var value = tokenWalker.ConsumeWord();
+            tokenWalker.ConsumeAllWhiteSpace();
 
-            var result = new StringBuilder();
-            while (BareStringEndCharacters.Contains(tokenWalker.Peek().Token.GetType()) == false)
-            {
-                result.Append(tokenWalker.Pop().Token);
-            }
-
-            return result.ToString().TrimEnd();
+            return new KeyValuePair<string, string>(key, value);
         }
 
         public static Guid ConsumeGuid(this TokenWalker tokenWalker)
@@ -89,8 +78,8 @@ namespace Messerli.VsSolution.Parser
 
             return lexem.Token switch
             {
-                GuidToken guid => guid.Guid,
-                QuoteToken _ => QuotedGuid(tokenWalker),
+                StringToken guid => Guid.Parse(guid.String),
+                WordToken guid => Guid.Parse(guid.Word),
                 _ => throw new ParseException($"Next token to be expected a \" or Guid  but it was: {lexem.Token}")
             };
         }
@@ -101,29 +90,6 @@ namespace Messerli.VsSolution.Parser
             {
                 tokenWalker.Pop();
             }
-        }
-
-        private static string QuotedString(TokenWalker tokenWalker)
-        {
-            var result = new StringBuilder();
-
-            while (!tokenWalker.NextIs<QuoteToken>())
-            {
-                result.Append(tokenWalker.Pop().Token);
-            }
-
-            tokenWalker.Consume<QuoteToken>();
-
-            return result.ToString();
-        }
-
-        private static Guid QuotedGuid(TokenWalker tokenWalker)
-        {
-            var result = tokenWalker.ConsumeGuid();
-
-            tokenWalker.Consume<QuoteToken>();
-
-            return result;
         }
     }
 }

@@ -8,8 +8,6 @@ namespace Messerli.VsSolution.Parser
 {
     public class ProjectParser
     {
-        private readonly HashSet<string> _possibleLoadingOrders = new HashSet<string> { "preProject", "postProject" };
-
         internal void Parse(TokenWalker tokenWalker, Solution solution)
         {
             tokenWalker.Consume<BeginProjectToken>();
@@ -24,7 +22,7 @@ namespace Messerli.VsSolution.Parser
 
         private void CheckLoadingOrder(string loadingOrder)
         {
-            if (_possibleLoadingOrders.Contains(loadingOrder) == false)
+            if (LoadingOrders.IsValidProjectLoadingOrder(loadingOrder) == false)
             {
                 throw new ParseException($"Unknown loading Order '{loadingOrder}'");
             }
@@ -46,6 +44,7 @@ namespace Messerli.VsSolution.Parser
 
                 tokenWalker.ConsumeAllWhiteSpace();
                 CheckLoadingOrder(tokenWalker.ConsumeWord());
+                tokenWalker.Consume<NewLineToken>();
 
                 ParseConfigurations(sectionType, tokenWalker, project);
 
@@ -67,7 +66,7 @@ namespace Messerli.VsSolution.Parser
         {
             while (tokenWalker.NextIs<EndProjectSectionToken>() == false)
             {
-                var variable = tokenWalker.ConsumeBareVariable();
+                var variable = tokenWalker.ConsumeVariable();
                 tokenWalker.ConsumeAllWhiteSpace();
 
                 project.SolutionItems.Add(new SolutionItem(variable.Key, variable.Value));

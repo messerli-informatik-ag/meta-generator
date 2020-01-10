@@ -12,7 +12,7 @@ namespace Messerli.VsSolution.Parser.GlobalSection
         {
             while (tokenWalker.NextIs<EndGlobalSectionToken>() == false)
             {
-                var variable = tokenWalker.ConsumeBareVariable();
+                var variable = tokenWalker.ConsumeVariable();
                 solution.Platforms.Add(new PlatformConfiguration(variable.Key, variable.Value));
                 tokenWalker.ConsumeAllWhiteSpace();
             }

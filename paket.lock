@@ -1,7 +1,7 @@
 RESTRICTION: || (== netcoreapp3.0) (== netstandard2.1)
 NUGET
   remote: https://www.nuget.org/api/v2
-    apophis.Lexer (1.2)
+    apophis.Lexer (1.3)
       Funcky (>= 1.1)
     Autofac (4.9.4)
     Castle.Core (4.4)
