@@ -12,6 +12,3 @@ Copy-Item "Plugins\OneCoreProjects\bin\Release\netstandard2.1\win-x64\publish\On
 
 &dotnet publish Plugins/ProjectGeneratorPluginProjects/ProjectGeneratorPluginProjects.csproj --configuration Release --runtime win-x64
 Copy-Item "Plugins\ProjectGeneratorPluginProjects\bin\Release\netstandard2.1\win-x64\publish\ProjectGeneratorPluginProjects.dll" -Destination "publish\plugins"
-
-&dotnet publish Plugins/FluffyProjects/FluffyProjects.csproj --configuration Release --runtime win-x64
-Copy-Item "Plugins\FluffyProjects\bin\Release\netstandard2.1\win-x64\publish\FluffyProjects.dll" -Destination "publish\plugins"
