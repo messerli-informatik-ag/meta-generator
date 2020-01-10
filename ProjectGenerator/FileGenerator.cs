@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using Messerli.CommandLineAbstractions;
 using Messerli.ProjectAbstractions;
@@ -33,7 +34,7 @@ namespace Messerli.ProjectGenerator
 
             _consoleWriter.WriteLine($"Generate file from template '{templateName}' in '{path}'");
 
-            await File.WriteAllTextAsync(path, await OutputFromTemplate(templateName));
+            await File.WriteAllTextAsync(path, await OutputFromTemplate(templateName), Encoding.UTF8);
         }
 
         private async Task<string> OutputFromTemplate(string templateName)
