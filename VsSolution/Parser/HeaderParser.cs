@@ -14,18 +14,18 @@ namespace Messerli.VsSolution.Parser
             _variableParser = variableParser;
         }
 
-        public void Parse(TokenWalker walker, Solution solution)
+        public void Parse(TokenWalker tokenWalker, Solution solution)
         {
-            ParseFormatVersion(walker, solution);
-            ParseVersionComment(walker);
+            ParseFormatVersion(tokenWalker, solution);
+            ParseVersionComment(tokenWalker);
 
-            solution.VisualStudioVersion = ParseVariable(walker, "VisualStudioVersion");
-            solution.MinimumVisualStudioVersion = ParseVariable(walker, "MinimumVisualStudioVersion");
+            solution.VisualStudioVersion = ParseVariable(tokenWalker, "VisualStudioVersion");
+            solution.MinimumVisualStudioVersion = ParseVariable(tokenWalker, "MinimumVisualStudioVersion");
         }
 
-        private Version ParseVariable(TokenWalker walker, string variableName)
+        private Version ParseVariable(TokenWalker tokenWalker, string variableName)
         {
-            var variable = _variableParser.ParseVersion(walker);
+            var variable = _variableParser.ParseVersion(tokenWalker);
 
             if (variable.Name != variableName)
             {
@@ -35,36 +35,37 @@ namespace Messerli.VsSolution.Parser
             return variable.Value;
         }
 
-        private static void ParseVersionComment(TokenWalker walker)
+        private static void ParseVersionComment(TokenWalker tokenWalker)
         {
-            walker.Consume<HashToken>();
+            // we treat this as a comment and ignore anything in this line.
+            tokenWalker.Consume<HashToken>();
 
-            walker.ConsumeWord("Visual");
-            walker.ConsumeWord("Studio");
-            walker.ConsumeWord("Version");
+            while (!tokenWalker.NextIs<NewLineToken>())
+            {
+                tokenWalker.Pop();
+            }
 
-            walker.ConsumeNumber(); // should be Major Version
-            walker.Consume<NewLineToken>();
+            tokenWalker.Consume<NewLineToken>();
         }
 
-        private static void ParseFormatVersion(TokenWalker walker, Solution solution)
+        private static void ParseFormatVersion(TokenWalker tokenWalker, Solution solution)
         {
-            walker.ConsumeWord("Microsoft");
-            walker.ConsumeWord("Visual");
-            walker.ConsumeWord("Studio");
-            walker.ConsumeWord("Solution");
-            walker.ConsumeWord("File");
+            tokenWalker.ConsumeWord("Microsoft");
+            tokenWalker.ConsumeWord("Visual");
+            tokenWalker.ConsumeWord("Studio");
+            tokenWalker.ConsumeWord("Solution");
+            tokenWalker.ConsumeWord("File");
 
-            walker.Consume<CommaToken>();
+            tokenWalker.Consume<CommaToken>();
 
-            walker.ConsumeWord("Format");
-            walker.ConsumeWord("Version");
+            tokenWalker.ConsumeWord("Format");
+            tokenWalker.ConsumeWord("Version");
 
-            solution.FormatVersion = walker.ConsumeNumber();
-            walker.Consume<DotToken>();
+            solution.FormatVersion = tokenWalker.ConsumeNumber();
+            tokenWalker.Consume<DotToken>();
 
-            walker.ConsumeNumber(); // should be 00
-            walker.Consume<NewLineToken>();
+            tokenWalker.ConsumeNumber(); // should be 00
+            tokenWalker.Consume<NewLineToken>();
         }
     }
 }

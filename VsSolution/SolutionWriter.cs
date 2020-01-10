@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Messerli.VsSolution.Model;
 using Messerli.VsSolution.Parser.GlobalSection;
+using Messerli.VsSolution.Parser.ProjectSection;
 
 namespace Messerli.VsSolution
 {
@@ -35,6 +36,7 @@ namespace Messerli.VsSolution
             WriteGlobalSection(GlobalSectionType.SolutionProperties, solution, result, "preSolution");
             WriteGlobalSection(GlobalSectionType.NestedProjects, solution, result, "preSolution");
             WriteGlobalSection(GlobalSectionType.ExtensibilityGlobals, solution, result, "postSolution");
+            WriteGlobalSection(GlobalSectionType.TeamFoundationVersionControl, solution, result, "preSolution");
 
             result.AppendLine("EndGlobal");
 
@@ -44,6 +46,7 @@ namespace Messerli.VsSolution
         private void WriteGlobalSection(GlobalSectionType sectionType, Solution solution, StringBuilder result, string loadingOrder)
         {
             var globalSection = GlobalSectionTypeFactory.Create(sectionType);
+
             if (globalSection.Exists(solution))
             {
                 result.AppendLine($"\tGlobalSection({sectionType}) = {loadingOrder}");
@@ -56,26 +59,26 @@ namespace Messerli.VsSolution
 
         private void Serialize(Project project, StringBuilder result)
         {
-            result.AppendLine($"Project(\"{project.TypeGuid.SolutionFormat()}\") = \"{project.ProjectName}\", \"{project.ProjectPath}\", \"{project.ProjectGuid.SolutionFormat()}\"");
+            result.AppendLine($"Project(\"{project.ProjectType.Guid.SolutionFormat()}\") = \"{project.ProjectName}\", \"{project.ProjectPath}\", \"{project.ProjectGuid.SolutionFormat()}\"");
 
-            if (project.SolutionItems.Any())
-            {
-                WriteSolutionItems(project.SolutionItems, result);
-            }
+            WriteProjectSection(ProjectSectionType.SolutionItems, project, result, "preProject");
+            WriteProjectSection(ProjectSectionType.ProjectDependencies, project, result, "postProject");
 
             result.AppendLine("EndProject");
         }
 
-        private static void WriteSolutionItems(List<SolutionItem> solutionItems, StringBuilder result)
+        private void WriteProjectSection(ProjectSectionType sectionType, Project project, StringBuilder result, string loadingOrder)
         {
-            result.AppendLine("\tProjectSection(SolutionItems) = preProject");
+            var projectSection = ProjectSectionTypeFactory.Create(sectionType);
 
-            foreach (var solutionItem in solutionItems)
+            if (projectSection.Exists(project))
             {
-                result.AppendLine($"\t\t{solutionItem.Name} = {solutionItem.Value}");
-            }
+                result.AppendLine($"\tProjectSection({sectionType}) = {loadingOrder}");
 
-            result.AppendLine("\tEndProjectSection");
+                projectSection.Serialize(project, result);
+
+                result.AppendLine("\tEndProjectSection");
+            }
         }
     }
 }

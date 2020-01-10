@@ -2,6 +2,7 @@
 using Messerli.VsSolution.Lexer;
 using Messerli.VsSolution.Model;
 using Messerli.VsSolution.Parser.GlobalSection;
+using Messerli.VsSolution.Parser.ProjectSection;
 using Messerli.VsSolution.Token;
 
 namespace Messerli.VsSolution.Parser

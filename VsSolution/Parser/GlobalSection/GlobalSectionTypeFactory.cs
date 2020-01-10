@@ -14,6 +14,7 @@ namespace Messerli.VsSolution.Parser.GlobalSection
                 GlobalSectionType.SolutionProperties => new SolutionPropertiesSection(),
                 GlobalSectionType.NestedProjects => new NestedProjectsSection(),
                 GlobalSectionType.ExtensibilityGlobals => new ExtensibilityGlobalsSection(),
+                GlobalSectionType.TeamFoundationVersionControl => new TeamFoundationVersionControlSection(),
                 _ => throw new Exception($"Unknown global section type : {sectionType}")
             };
         }

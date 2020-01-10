@@ -51,9 +51,8 @@ namespace Messerli.ProjectGenerator
         public async Task AddProjectToSolution(string? solutionFolder, string projectName, string projectPath, string solutionPath)
         {
             var solution = await _solutionParser.Load(solutionPath);
-            var newProject = new Project(projectName, projectPath, ProjectType.DotNetStandard);
 
-            solution.Projects.Add(newProject);
+            solution.AddProject(projectName, projectPath, ProjectType.Identifier.CSharpSdk);
 
             await _solutionParser.Store(solutionPath, solution);
         }

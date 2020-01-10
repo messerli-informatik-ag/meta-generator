@@ -7,21 +7,21 @@ namespace Messerli.VsSolution.Parser
 {
     public class VariableParser
     {
-        public VersionVariable ParseVersion(TokenWalker walker)
+        public VersionVariable ParseVersion(TokenWalker tokenWalker)
         {
-            var variableName = walker.ConsumeWord();
+            var variableName = tokenWalker.ConsumeWord();
 
-            walker.ConsumeAllWhiteSpace();
-            walker.Consume<AssignToken>();
+            tokenWalker.ConsumeAllWhiteSpace();
+            tokenWalker.Consume<AssignToken>();
 
-            var major = walker.ConsumeNumber();
-            walker.Consume<DotToken>();
-            var minor = walker.ConsumeNumber();
-            walker.Consume<DotToken>();
-            var build = walker.ConsumeNumber();
-            walker.Consume<DotToken>();
-            var revision = walker.ConsumeNumber();
-            walker.Consume<NewLineToken>();
+            var major = tokenWalker.ConsumeNumber();
+            tokenWalker.Consume<DotToken>();
+            var minor = tokenWalker.ConsumeNumber();
+            tokenWalker.Consume<DotToken>();
+            var build = tokenWalker.ConsumeNumber();
+            tokenWalker.Consume<DotToken>();
+            var revision = tokenWalker.ConsumeNumber();
+            tokenWalker.Consume<NewLineToken>();
 
             return new VersionVariable(variableName, new Version(major, minor, build, revision));
         }

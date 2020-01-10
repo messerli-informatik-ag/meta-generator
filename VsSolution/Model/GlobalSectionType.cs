@@ -7,5 +7,6 @@
         SolutionProperties,
         NestedProjects,
         ExtensibilityGlobals,
+        TeamFoundationVersionControl,
     }
 }

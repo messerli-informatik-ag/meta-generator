@@ -20,7 +20,7 @@ namespace Messerli.VsSolution.Parser.GlobalSection
             tokenWalker.ConsumeAllWhiteSpace();
             CheckLoadingOrder(tokenWalker.ConsumeWord());
 
-            ParseConfigurations(sectionType, tokenWalker, solution);
+            ParseGlobalSection(sectionType, tokenWalker, solution);
 
             tokenWalker.Consume<EndGlobalSectionToken>();
             tokenWalker.ConsumeAllWhiteSpace();
@@ -34,7 +34,7 @@ namespace Messerli.VsSolution.Parser.GlobalSection
             }
         }
 
-        private void ParseConfigurations(GlobalSectionType sectionType, TokenWalker tokenWalker, Solution solution)
+        private void ParseGlobalSection(GlobalSectionType sectionType, TokenWalker tokenWalker, Solution solution)
         {
             var globalSection = GlobalSectionTypeFactory.Create(sectionType);
 

@@ -26,7 +26,9 @@ namespace Messerli.VsSolution.Model
 
         public List<NestedProject> ProjectNesting { get; } = new List<NestedProject>();
 
-        public void AddProject(string projectName, string projectPath, ProjectType projectType)
+        public List<TfsControlProperty> TfsControlProperties { get; } = new List<TfsControlProperty>();
+
+        public void AddProject(string projectName, string projectPath, ProjectType.Identifier projectType)
         {
             var project = new Project(projectName, projectPath, projectType);
 
