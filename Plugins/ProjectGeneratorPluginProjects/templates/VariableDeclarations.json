@@ -7,7 +7,13 @@
   },
   {
     "Description": "unused",
-    "Question": "Enter the full path of the ProjectGenerator repository (the directory must have a file called 'ProjectGenerator.sln'",
+    "Question": "Enter a description of what your plugin will be generating",
+    "Name": "ProjectDescription",
+    "Type": 0
+  },
+  {
+    "Description": "unused",
+    "Question": "Enter the full path of the ProjectGenerator repository (the directory must have a file called 'ProjectGenerator.sln')",
     "Name": "ProjectGeneratorPath",
     "Type": 6
   }

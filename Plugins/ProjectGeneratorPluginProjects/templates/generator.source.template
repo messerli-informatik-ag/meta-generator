@@ -22,9 +22,9 @@ namespace Messerli.{{ProjectName}}
             _userInputProvider = userInputProvider;
         }
 
-        public string Name => "Create a plugin for the project generator. (new project type)";
+        public string Name => "{{ProjectDescription}}";
 
-        public string ShortName => "project-generator.plugin";
+        public string ShortName => "give.me.a.name";
 
         public void Register()
         {
@@ -35,7 +35,7 @@ namespace Messerli.{{ProjectName}}
         {
             var projectName = _userInputProvider.Value(ProjectName);
 
-            _consoleWriter.WriteLine($"Creating the plugin '{projectName}' for the project generator.");
+            _consoleWriter.WriteLine($"Creating ... '{projectName}' ...");
 
             var tasks = new List<Task>
             {

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using LibGit2Sharp;
 using Messerli.CommandLineAbstractions;
 using Messerli.ProjectAbstractions;
 using Messerli.ProjectAbstractions.UserInput;
@@ -73,6 +74,11 @@ namespace Messerli.ProjectGeneratorPluginProjects
 
             stopWatch.Stop();
             _consoleWriter.WriteLine($"Created in {stopWatch.ElapsedMilliseconds}ms.");
+
+            using (var repo = new Repository(GetSolutionPath()))
+            {
+                Commands.Stage(repo, Path.Combine("Plugins", _userInputProvider.Value(ProjectName), "*"));
+            }
         }
 
         private void ValidateUserInput()
