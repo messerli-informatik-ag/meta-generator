@@ -20,5 +20,9 @@ namespace Messerli.ProjectAbstractions
         public void Generate()
         {
         }
+
+        public void PostGenerate()
+        {
+        }
     }
 }

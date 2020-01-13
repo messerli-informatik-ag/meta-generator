@@ -43,5 +43,9 @@ namespace Messerli.{{ProjectName}}
 
             Task.WaitAll(tasks.ToArray());
         }
+
+        public void PostGenerate()
+        {
+        }
     }
 }

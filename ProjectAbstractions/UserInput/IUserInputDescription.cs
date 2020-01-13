@@ -20,5 +20,7 @@ namespace Messerli.ProjectAbstractions.UserInput
         Option<string> Value { get; set; }
 
         Lazy<bool> IsNeeded { get; }
+
+        List<IValidation> Validations { get; }
     }
 }

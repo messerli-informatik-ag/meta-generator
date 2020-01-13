@@ -17,6 +17,7 @@ namespace Messerli.ProjectGenerator.UserInput
             VariableName = variableName;
             IsNeeded = new Lazy<bool>(isNeededPredicate);
             VariableSelectionValues = variableSelectionValues ?? new List<SelectionValue>();
+            Validations = new List<IValidation>();
         }
 
         public List<SelectionValue> VariableSelectionValues { get; set; }
@@ -32,6 +33,8 @@ namespace Messerli.ProjectGenerator.UserInput
         public Option<string> Value { get; set; }
 
         public Lazy<bool> IsNeeded { get; }
+
+        public List<IValidation> Validations { get; }
 
         public static Func<bool> AlwaysNeeded { get; } = () => true;
     }

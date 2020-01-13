@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization.Json;
 using Funcky.Extensions;
-using Messerli.CommandLineAbstractions;
 using Messerli.ProjectAbstractions.Json;
 using Messerli.ProjectAbstractions.UserInput;
 
@@ -56,6 +55,11 @@ namespace Messerli.ProjectGenerator.UserInput
             return _knownUserInputs
                 .Select(kv => kv.Value)
                 .ToDictionary(v => v.VariableName, v => v.Value.OrElse("BAD VALUE!"));
+        }
+
+        public void AddValidation(string variableName, IValidation validation)
+        {
+            _knownUserInputs[variableName].Validations.Add(validation);
         }
 
         public string Value(string variableName)

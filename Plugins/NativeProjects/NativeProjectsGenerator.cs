@@ -32,5 +32,9 @@ namespace Messerli.NativeProjects
         {
             _consoleWriter.WriteLine("Generate a native (C++) test project");
         }
+
+        public void PostGenerate()
+        {
+        }
     }
 }

@@ -15,5 +15,10 @@
         /// Generate the project.
         /// </summary>
         void Generate();
+
+        /// <summary>
+        /// Steps which are necessary after the file generation. (adding files to repository, cleanup ...)
+        /// </summary>
+        void PostGenerate();
     }
 }

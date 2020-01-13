@@ -49,5 +49,9 @@ namespace Messerli.OneCoreProjects
 
             Task.WaitAll(tasks.ToArray());
         }
+
+        public void PostGenerate()
+        {
+        }
     }
 }

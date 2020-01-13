@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
+using System.Diagnostics;
 using System.Linq;
 using Messerli.CommandLineAbstractions;
 using Messerli.ProjectAbstractions;
@@ -131,9 +132,23 @@ namespace Messerli.ProjectGenerator
         {
             _assemblyProvider.PluginAssembly = projectTypeGenerator.GetType().Assembly;
 
-            projectTypeGenerator.Register();
+            MeasureTime(projectTypeGenerator.Register, "Registration");
+
             _userInputProvider.AskUser();
-            projectTypeGenerator.Generate();
+
+            MeasureTime(projectTypeGenerator.Generate, "Generation");
+            MeasureTime(() => projectTypeGenerator.PostGenerate(), "Cleanup");
+        }
+
+        private void MeasureTime(Action action, string eventName)
+        {
+            Stopwatch stopWatch = new Stopwatch();
+
+            stopWatch.Start();
+            action();
+            stopWatch.Stop();
+
+            _consoleWriter.WriteLine($"{eventName}: {stopWatch.ElapsedMilliseconds}ms");
         }
     }
 }

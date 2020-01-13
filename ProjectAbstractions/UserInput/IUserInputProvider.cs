@@ -11,5 +11,7 @@ namespace Messerli.ProjectAbstractions.UserInput
         void AskUser();
 
         Dictionary<string, string> View();
+
+        void AddValidation(string variableName, IValidation validation);
     }
 }
