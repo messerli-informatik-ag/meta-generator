@@ -63,9 +63,15 @@ namespace Messerli.ProjectGenerator
                 () => throw new Exception("Failed to get directory of executable."),
                 executablePath =>
                 {
-                    foreach (var path in Directory.GetFiles(Path.Combine(executablePath, "plugins"), "*Projects.dll"))
+                    var pluginsPath = Path.Combine(executablePath, "plugins");
+                    foreach (var pluginPath in Directory.GetDirectories(pluginsPath, "*"))
                     {
-                        var registrar = builder.RegisterAssemblyModules(Assembly.LoadFile(path));
+                        var pluginName = Path.GetRelativePath(pluginsPath, pluginPath);
+                        var pluginDllPath = Path.Combine(pluginPath, $"{pluginName}.dll");
+                        PluginLoadContext loadContext = new PluginLoadContext(pluginDllPath);
+
+                        var assembly = loadContext.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(pluginDllPath)));
+                        var registrar = builder.RegisterAssemblyModules(assembly);
                     }
                 });
         }

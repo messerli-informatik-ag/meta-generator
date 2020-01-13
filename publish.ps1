@@ -1,14 +1,11 @@
-&dotnet publish ProjectGenerator/ProjectGenerator.csproj --configuration Release --runtime win-x64 --output publish /p:PublishSingleFile=true
+&dotnet publish ProjectGenerator/ProjectGenerator.csproj --configuration Debug --runtime win-x64 --output publish
 
 New-Item -Path "publish" -Name "plugins" -ItemType "directory" -Force
 
 #Plugins
 
-&dotnet publish Plugins/NativeProjects/NativeProjects.csproj --configuration Release --runtime win-x64
-Copy-Item "Plugins\NativeProjects\bin\Release\netstandard2.1\win-x64\publish\NativeProjects.dll" -Destination "publish\plugins"
+&dotnet publish Plugins/NativeProjects/NativeProjects.csproj --configuration Debug --runtime win-x64 --output "publish\plugins\NativeProjects"
 
-&dotnet publish Plugins/OneCoreProjects/OneCoreProjects.csproj --configuration Release --runtime win-x64
-Copy-Item "Plugins\OneCoreProjects\bin\Release\netstandard2.1\win-x64\publish\OneCoreProjects.dll" -Destination "publish\plugins"
+&dotnet publish Plugins/OneCoreProjects/OneCoreProjects.csproj --configuration Debug --runtime win-x64 --output "publish\plugins\OneCoreProjects"
 
-&dotnet publish Plugins/ProjectGeneratorPluginProjects/ProjectGeneratorPluginProjects.csproj --configuration Release --runtime win-x64
-Copy-Item "Plugins\ProjectGeneratorPluginProjects\bin\Release\netstandard2.1\win-x64\publish\ProjectGeneratorPluginProjects.dll" -Destination "publish\plugins"
+&dotnet publish Plugins/ProjectGeneratorPluginProjects/ProjectGeneratorPluginProjects.csproj --configuration Debug --runtime win-x64 --output "publish\plugins\ProjectGeneratorPluginProjects"
