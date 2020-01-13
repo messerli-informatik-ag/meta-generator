@@ -28,13 +28,13 @@ namespace Messerli.ProjectGenerator
             _consoleWriter = consoleWriter;
         }
 
-        public async Task FromTemplate(string templateName, string path)
+        public async Task FromTemplate(string templateName, string path, Encoding encoding)
         {
             CreateMissingDirectories(path);
 
             _consoleWriter.WriteLine($"Generate file from template '{templateName}' in '{path}'");
 
-            await File.WriteAllTextAsync(path, await OutputFromTemplate(templateName), Encoding.UTF8);
+            await File.WriteAllTextAsync(path, await OutputFromTemplate(templateName), encoding);
         }
 
         private async Task<string> OutputFromTemplate(string templateName)

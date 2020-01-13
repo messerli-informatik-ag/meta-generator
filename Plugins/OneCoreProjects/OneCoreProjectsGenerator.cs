@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using Messerli.CommandLineAbstractions;
 using Messerli.ProjectAbstractions;
@@ -42,8 +43,8 @@ namespace Messerli.OneCoreProjects
 
             var tasks = new List<Task>
             {
-                _fileGenerator.FromTemplate(SharedTargetTemplate, Path.Combine("Config", "Shared.targets")),
-                _fileGenerator.FromTemplate(ProjectTemplate, Path.Combine(projectName, $"{projectName}.csproj")),
+                _fileGenerator.FromTemplate(SharedTargetTemplate, Path.Combine("Config", "Shared.targets"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(ProjectTemplate, Path.Combine(projectName, $"{projectName}.csproj"), Encoding.UTF8),
             };
 
             Task.WaitAll(tasks.ToArray());

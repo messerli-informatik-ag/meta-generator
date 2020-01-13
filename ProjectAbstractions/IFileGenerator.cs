@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Text;
+using System.Threading.Tasks;
 
 namespace Messerli.ProjectAbstractions
 {
     public interface IFileGenerator
     {
-        Task FromTemplate(string templatename, string destinationPath);
+        Task FromTemplate(string templatename, string destinationPath, Encoding encoding);
     }
 }
