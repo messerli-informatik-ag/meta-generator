@@ -20,8 +20,8 @@ namespace Messerli.ProjectGenerator
             if (_assemblyProvider.PluginAssembly.GetManifestResourceNames().Contains(templateName))
             {
                 return FindTemplate(templateName).Match(
-                    none: () => throw new NotImplementedException(),
-                    some: s => s);
+                    () => throw new NotImplementedException(),
+                    s => s);
             }
 
             throw new Exception($"There is no template resource with the name {templateName}");
@@ -49,7 +49,7 @@ namespace Messerli.ProjectGenerator
 
         private string ReadTemplate(Stream templateStream)
         {
-            using (StreamReader reader = new StreamReader(templateStream))
+            using (var reader = new StreamReader(templateStream))
             {
                 return reader.ReadToEnd();
             }

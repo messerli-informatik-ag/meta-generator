@@ -136,12 +136,12 @@ namespace Messerli.ProjectGenerator
             _userInputProvider.AskUser();
 
             MeasureTime(projectTypeGenerator.Generate, "Generation");
-            MeasureTime(() => projectTypeGenerator.PostGenerate(), "Cleanup");
+            MeasureTime(projectTypeGenerator.PostGenerate, "Cleanup");
         }
 
         private void MeasureTime(Action action, string eventName)
         {
-            Stopwatch stopWatch = new Stopwatch();
+            var stopWatch = new Stopwatch();
 
             stopWatch.Start();
             action();
