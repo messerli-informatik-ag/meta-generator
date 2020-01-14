@@ -1,7 +1,7 @@
 [
   {
     "Description": "unused",
-    "Question": "Enter the name of the project file name (no spaces, must end with 'Projects') -> 'YourTypeProjects.csproj'",
+    "Question": "Enter the name of the project file name (no spaces) -> 'YourProjectPlugin.csproj'",
     "Name": "ProjectName",
     "Type": 0
   },

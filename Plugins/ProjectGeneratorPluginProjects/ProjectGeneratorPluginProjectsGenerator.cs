@@ -52,7 +52,6 @@ namespace Messerli.ProjectGeneratorPluginProjects
             _userInputProvider.RegisterVariablesFromTemplate(VariableDeclarations);
 
             _userInputProvider.AddValidation(ProjectName, Validations.ValuePresent);
-            _userInputProvider.AddValidation(ProjectName, new SimpleValidation(projectName => projectName.EndsWith("Projects"), "ProjectName does not end with 'Projects'"));
             _userInputProvider.AddValidation(ProjectName, new SimpleValidation(projectName => projectName.Any(c => char.IsWhiteSpace(c) == false), "ProjectName contains whitespace"));
             _userInputProvider.AddValidation(ProjectGeneratorPath, new SimpleValidation(path => File.Exists(Path.Combine(path, "ProjectGenerator.sln")), "No ProjectGenerator.sln found at location."));
             _userInputProvider.AddValidation(ProjectDescription, Validations.ValuePresent);
