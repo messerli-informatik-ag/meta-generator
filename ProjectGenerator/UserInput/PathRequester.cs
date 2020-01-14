@@ -1,39 +1,31 @@
-﻿using System;
+﻿using System.Linq;
 using Funcky.Monads;
-using Messerli.CommandLineAbstractions;
 using Messerli.ProjectAbstractions.UserInput;
 
 namespace Messerli.ProjectGenerator.UserInput
 {
     public class PathRequester : IVariableRequester
     {
-        private readonly IConsoleReader _consoleReader;
-        private readonly IConsoleWriter _consoleWriter;
+        private readonly IValidatedUserInput _validatedUserInput;
 
-        public PathRequester(IConsoleReader consoleReader, IConsoleWriter consoleWriter)
+        public PathRequester(IValidatedUserInput validatedUserInput)
         {
-            _consoleReader = consoleReader;
-            _consoleWriter = consoleWriter;
+            _validatedUserInput = validatedUserInput;
         }
 
         public Option<string> RequestValue(IUserInputDescription variable)
         {
-            WriteQuestion(variable);
+            _validatedUserInput.WriteQuestion(variable, "Please enter a valid path for '{0}':");
 
-            return QueryValueFromUser(variable);
+            return QueryValueFromUser(variable)
+                .AndThen(v => v);
         }
 
         private Option<string> QueryValueFromUser(IUserInputDescription variable)
         {
-            return Option.Some(_consoleReader.ReadLine());
-        }
-
-        private void WriteQuestion(IUserInputDescription variable)
-        {
-            var question = variable.VariableQuestion
-                           ?? $"Please enter a valid path'{variable.VariableName}':";
-
-            _consoleWriter.WriteLine(question);
+            return _validatedUserInput
+                .GetValidatedValue(variable, Enumerable.Empty<IValidation>())
+                .Match(() => QueryValueFromUser(variable), Option.Some);
         }
     }
 }

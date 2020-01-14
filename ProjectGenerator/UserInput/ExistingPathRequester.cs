@@ -1,60 +1,41 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using Funcky.Monads;
-using Messerli.CommandLineAbstractions;
 using Messerli.ProjectAbstractions.UserInput;
 
 namespace Messerli.ProjectGenerator.UserInput
 {
     public class ExistingPathRequester : IVariableRequester
     {
-        private readonly IConsoleReader _consoleReader;
-        private readonly IConsoleWriter _consoleWriter;
+        private readonly IValidatedUserInput _validatedUserInput;
 
-        public ExistingPathRequester(IConsoleReader consoleReader, IConsoleWriter consoleWriter)
+        public ExistingPathRequester(IValidatedUserInput validatedUserInput)
         {
-            _consoleReader = consoleReader;
-            _consoleWriter = consoleWriter;
+            _validatedUserInput = validatedUserInput;
         }
 
         public Option<string> RequestValue(IUserInputDescription variable)
         {
-            WriteQuestion(variable);
+            _validatedUserInput.WriteQuestion(variable, "Please enter a valid path which already exists '{0}':");
 
             return QueryValueFromUser(variable);
         }
 
         private Option<string> QueryValueFromUser(IUserInputDescription variable)
         {
-            return QueryPath().Match(() => RetryQueryValueFromUser(variable), Option.Some);
+            return _validatedUserInput
+                .GetValidatedValue(variable, GetPathValidation())
+                .Match(() => QueryValueFromUser(variable), Option.Some);
         }
 
-        private Option<string> QueryPath()
+        private static IEnumerable<IValidation> GetPathValidation()
         {
-            var path = _consoleReader.ReadLine();
-
-            return PathExists(path)
-                ? Option.Some(path)
-                : Option<string>.None();
+            yield return new SimpleValidation(PathExists, "The path you have given does not exists, please enter an existing path:");
         }
 
-        private Option<string> RetryQueryValueFromUser(IUserInputDescription variable)
-        {
-            _consoleWriter.WriteLine("The path you have given does not exists, please enter an existing path:");
-
-            return QueryValueFromUser(variable);
-        }
-
-        private bool PathExists(string path)
+        private static bool PathExists(string path)
         {
             return Directory.Exists(path) || File.Exists(path);
-        }
-
-        private void WriteQuestion(IUserInputDescription variable)
-        {
-            var question = variable.VariableQuestion
-                           ?? $"Please enter a valid path which already exists '{variable.VariableName}':";
-
-            _consoleWriter.WriteLine(question);
         }
     }
 }

@@ -1,51 +1,42 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Globalization;
-using Funcky.Extensions;
 using Funcky.Monads;
-using Messerli.CommandLineAbstractions;
 using Messerli.ProjectAbstractions.UserInput;
 
 namespace Messerli.ProjectGenerator.UserInput
 {
     public class DoubleRequester : IVariableRequester
     {
-        private readonly IConsoleReader _consoleReader;
-        private readonly IConsoleWriter _consoleWriter;
+        private readonly IValidatedUserInput _validatedUserInput;
 
-        public DoubleRequester(IConsoleReader consoleReader, IConsoleWriter consoleWriter)
+        public DoubleRequester(IValidatedUserInput validatedUserInput)
         {
-            _consoleReader = consoleReader;
-            _consoleWriter = consoleWriter;
+            _validatedUserInput = validatedUserInput;
         }
 
         public Option<string> RequestValue(IUserInputDescription variable)
         {
-            WriteQuestion(variable);
+            _validatedUserInput.WriteQuestion(variable, "Please enter a valid double number for '{0}':");
 
             return QueryValueFromUser(variable).AndThen(intValue => intValue.ToString(CultureInfo.InvariantCulture));
         }
 
-        private void WriteQuestion(IUserInputDescription variable)
-        {
-            var question = variable.VariableQuestion
-                           ?? "Please only enter a valid double number.";
-
-            _consoleWriter.WriteLine(question);
-        }
-
         private Option<double> QueryValueFromUser(IUserInputDescription variable)
         {
-            return _consoleReader
-                .ReadLine()
-                .TryParseDouble()
-                .Match(() => RetryQueryValueFromUser(variable), Option.Some);
+            return _validatedUserInput
+                .GetValidatedValue(variable, GetDoubleValidation())
+                .Match(() => QueryValueFromUser(variable), ToDouble);
         }
 
-        private Option<double> RetryQueryValueFromUser(IUserInputDescription variable)
+        private static Option<double> ToDouble(string validatedDoubleString)
         {
-            _consoleWriter.WriteLine($"Please enter a valid double number for '{variable.VariableName}'.");
+            return Option.Some(double.Parse(validatedDoubleString));
+        }
 
-            return QueryValueFromUser(variable);
+        private static IEnumerable<IValidation> GetDoubleValidation()
+        {
+            var dummy = 0.0;
+            yield return new SimpleValidation(input => double.TryParse(input, out dummy), "Please enter true or false (no numeric input allowed).");
         }
     }
 }

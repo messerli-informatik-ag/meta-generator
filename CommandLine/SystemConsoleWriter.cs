@@ -13,5 +13,10 @@ namespace Messerli.CommandLine
         {
             System.Console.WriteLine();
         }
+
+        public void Write(string value)
+        {
+            System.Console.Write(value);
+        }
     }
 }

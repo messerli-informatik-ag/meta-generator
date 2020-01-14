@@ -5,5 +5,7 @@
         void WriteLine(string line);
 
         void WriteLine();
+
+        void Write(string value);
     }
 }

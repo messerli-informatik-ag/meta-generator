@@ -1,50 +1,41 @@
-﻿using System;
-using Funcky.Extensions;
+﻿using System.Collections.Generic;
 using Funcky.Monads;
-using Messerli.CommandLineAbstractions;
 using Messerli.ProjectAbstractions.UserInput;
 
 namespace Messerli.ProjectGenerator.UserInput
 {
     public class BoolRequester : IVariableRequester
     {
-        private readonly IConsoleReader _consoleReader;
-        private readonly IConsoleWriter _consoleWriter;
+        private readonly IValidatedUserInput _validatedUserInput;
 
-        public BoolRequester(IConsoleReader consoleReader, IConsoleWriter consoleWriter)
+        public BoolRequester(IValidatedUserInput validatedUserInput)
         {
-            _consoleReader = consoleReader;
-            _consoleWriter = consoleWriter;
+            _validatedUserInput = validatedUserInput;
         }
 
         public Option<string> RequestValue(IUserInputDescription variable)
         {
-            WriteQuestion(variable);
+            _validatedUserInput.WriteQuestion(variable, "Please enter true or false for '{0}':");
 
             return QueryValueFromUser(variable).AndThen(boolValue => boolValue.ToString());
         }
 
         private Option<bool> QueryValueFromUser(IUserInputDescription variable)
         {
-            return _consoleReader
-                .ReadLine()
-                .TryParseBoolean()
-                .Match(() => RetryQueryValueFromUser(variable), Option.Some);
+            return _validatedUserInput
+                .GetValidatedValue(variable, GetBoolValidation())
+                .Match(() => QueryValueFromUser(variable), ToBool);
         }
 
-        private Option<bool> RetryQueryValueFromUser(IUserInputDescription variable)
+        private static Option<bool> ToBool(string validatedBoolString)
         {
-            _consoleWriter.WriteLine("Please enter true or false (no numeric input allowed).");
-
-            return QueryValueFromUser(variable);
+            return Option.Some(bool.Parse(validatedBoolString));
         }
 
-        private void WriteQuestion(IUserInputDescription variable)
+        private static IEnumerable<IValidation> GetBoolValidation()
         {
-            var question = variable.VariableQuestion
-                           ?? $"Please enter true or false for '{variable.VariableName}':";
-
-            _consoleWriter.WriteLine(question);
+            var dummy = false;
+            yield return new SimpleValidation(input => bool.TryParse(input, out dummy), "Please enter true or false (no numeric input allowed).");
         }
     }
 }

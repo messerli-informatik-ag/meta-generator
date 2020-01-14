@@ -1,24 +1,21 @@
 ﻿using System.Linq;
 using Funcky.Monads;
-using Messerli.CommandLineAbstractions;
 using Messerli.ProjectAbstractions.UserInput;
 
 namespace Messerli.ProjectGenerator.UserInput
 {
     public class StringRequester : IVariableRequester
     {
-        private readonly IConsoleReader _consoleReader;
-        private readonly IConsoleWriter _consoleWriter;
+        private readonly IValidatedUserInput _validatedUserInput;
 
-        public StringRequester(IConsoleReader consoleReader, IConsoleWriter consoleWriter)
+        public StringRequester(IValidatedUserInput validatedUserInput)
         {
-            _consoleReader = consoleReader;
-            _consoleWriter = consoleWriter;
+            _validatedUserInput = validatedUserInput;
         }
 
         public Option<string> RequestValue(IUserInputDescription variable)
         {
-            WriteQuestion(variable);
+            _validatedUserInput.WriteQuestion(variable, "Please enter a value for '{0}':");
 
             return QueryValueFromUser(variable)
                 .AndThen(v => v);
@@ -26,38 +23,9 @@ namespace Messerli.ProjectGenerator.UserInput
 
         private Option<string> QueryValueFromUser(IUserInputDescription variable)
         {
-            return ValidateInput(variable)
-                .Match(() => RetryQueryValueFromUser(variable), Option.Some);
-        }
-
-        private Option<string> RetryQueryValueFromUser(IUserInputDescription variable)
-        {
-            return QueryValueFromUser(variable);
-        }
-
-        private Option<string> ValidateInput(IUserInputDescription variable)
-        {
-            var input = _consoleReader.ReadLine();
-
-            return variable
-                .Validations
-                .Where(validation => validation.Validation(input) == false)
-                .Aggregate(Option.Some(input), AggregateValidationErrors);
-        }
-
-        private Option<string> AggregateValidationErrors(Option<string> input, IValidation validation)
-        {
-            _consoleWriter.WriteLine(validation.Message);
-
-            return Option<string>.None();
-        }
-
-        private void WriteQuestion(IUserInputDescription variable)
-        {
-            var question = variable.VariableQuestion
-                           ?? $"Please enter a value for '{variable.VariableName}':";
-
-            _consoleWriter.WriteLine(question);
+            return _validatedUserInput
+                .GetValidatedValue(variable, Enumerable.Empty<IValidation>())
+                .Match(() => QueryValueFromUser(variable), Option.Some);
         }
     }
 }

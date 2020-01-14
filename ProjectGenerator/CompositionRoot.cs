@@ -26,6 +26,7 @@ namespace Messerli.ProjectGenerator
 
             builder.RegisterType<SystemConsoleWriter>().As<IConsoleWriter>();
             builder.RegisterType<SystemConsoleReader>().As<IConsoleReader>();
+            builder.RegisterType<ValidatedUserInput>().As<IValidatedUserInput>();
             builder.RegisterType<UserInputProvider>().As<IUserInputProvider>().SingleInstance();
             builder.RegisterType<UserInputDescriptionBuilder>().AsSelf();
             builder.RegisterType<TemplateLoader>().As<ITemplateLoader>();
@@ -37,6 +38,17 @@ namespace Messerli.ProjectGenerator
 
             builder.RegisterType<ExecutingPluginAssemblyProvider>().As<IExecutingPluginAssemblyProvider>().SingleInstance();
 
+            RegisterVariableRequesters(builder);
+
+            builder.RegisterType<SolutionLoader>().As<ISolutionLoader>();
+
+            RegisterPlugins(builder);
+
+            return builder.Build();
+        }
+
+        private static void RegisterVariableRequesters(ContainerBuilder builder)
+        {
             builder.RegisterType<StringRequester>();
             builder.RegisterType<BoolRequester>();
             builder.RegisterType<IntegerRequester>();
@@ -49,12 +61,6 @@ namespace Messerli.ProjectGenerator
             builder.RegisterType<TimeRequester>();
 
             builder.Register(VariableRequesterFactory).As<IVariableRequester>();
-
-            builder.RegisterType<SolutionLoader>().As<ISolutionLoader>();
-
-            RegisterPlugins(builder);
-
-            return builder.Build();
         }
 
         private void RegisterPlugins(ContainerBuilder builder)

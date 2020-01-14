@@ -1,50 +1,41 @@
-﻿using System;
-using Funcky.Extensions;
+﻿using System.Collections.Generic;
 using Funcky.Monads;
-using Messerli.CommandLineAbstractions;
 using Messerli.ProjectAbstractions.UserInput;
 
 namespace Messerli.ProjectGenerator.UserInput
 {
     public class IntegerRequester : IVariableRequester
     {
-        private readonly IConsoleReader _consoleReader;
-        private readonly IConsoleWriter _consoleWriter;
+        private readonly IValidatedUserInput _validatedUserInput;
 
-        public IntegerRequester(IConsoleReader consoleReader, IConsoleWriter consoleWriter)
+        public IntegerRequester(IValidatedUserInput validatedUserInput)
         {
-            _consoleReader = consoleReader;
-            _consoleWriter = consoleWriter;
+            _validatedUserInput = validatedUserInput;
         }
 
         public Option<string> RequestValue(IUserInputDescription variable)
         {
-            WriteQuestion(variable);
+            _validatedUserInput.WriteQuestion(variable, "Please enter a valid integer for '{0}':");
 
             return QueryValueFromUser(variable).AndThen(intValue => intValue.ToString());
         }
 
         private Option<int> QueryValueFromUser(IUserInputDescription variable)
         {
-            return _consoleReader
-                .ReadLine()
-                .TryParseInt()
-                .Match(() => RetryQueryValueFromUser(variable), Option.Some);
+            return _validatedUserInput
+                .GetValidatedValue(variable, GetIntegerValidation())
+                .Match(() => QueryValueFromUser(variable), ToInteger);
         }
 
-        private Option<int> RetryQueryValueFromUser(IUserInputDescription variable)
+        private static Option<int> ToInteger(string validatedIntegerString)
         {
-            _consoleWriter.WriteLine("Please only enter an integer number.");
-
-            return QueryValueFromUser(variable);
+            return Option.Some(int.Parse(validatedIntegerString));
         }
 
-        private void WriteQuestion(IUserInputDescription variable)
+        private static IEnumerable<IValidation> GetIntegerValidation()
         {
-            var question = variable.VariableQuestion
-                           ?? $"Please enter a valid integer for '{variable.VariableName}':";
-
-            _consoleWriter.WriteLine(question);
+            var dummy = 0;
+            yield return new SimpleValidation(input => int.TryParse(input, out dummy), "Please enter true or false (no numeric input allowed).");
         }
     }
 }

@@ -77,7 +77,7 @@ namespace Messerli.ProjectGenerator
         private void ListProjects()
         {
             _consoleWriter.WriteLine("Available project types");
-            _consoleWriter.WriteLine(string.Empty);
+            _consoleWriter.WriteLine();
 
             if (_projectGenerators.Any())
             {
@@ -94,8 +94,7 @@ namespace Messerli.ProjectGenerator
 
         private void ExecuteWizard(string projectType)
         {
-            _consoleWriter.WriteLine("Welcome to the project generator wizard: ");
-            _consoleWriter.WriteLine(string.Empty);
+            _consoleWriter.WriteLine("Welcome to the project generator wizard");
 
             var projectGenerator = _projectGenerators
                 .FirstOrDefault(generator => generator.ShortName == projectType)

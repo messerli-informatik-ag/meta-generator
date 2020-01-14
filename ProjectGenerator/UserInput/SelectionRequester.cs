@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Funcky.Extensions;
 using Funcky.Monads;
@@ -9,12 +10,12 @@ namespace Messerli.ProjectGenerator.UserInput
 {
     public class SelectionRequester : IVariableRequester
     {
-        private readonly IConsoleReader _consoleReader;
+        private readonly IValidatedUserInput _validatedUserInput;
         private readonly IConsoleWriter _consoleWriter;
 
-        public SelectionRequester(IConsoleReader consoleReader, IConsoleWriter consoleWriter)
+        public SelectionRequester(IValidatedUserInput validatedUserInput, IConsoleWriter consoleWriter)
         {
-            _consoleReader = consoleReader;
+            _validatedUserInput = validatedUserInput;
             _consoleWriter = consoleWriter;
         }
 
@@ -22,7 +23,7 @@ namespace Messerli.ProjectGenerator.UserInput
         {
             CheckForMissingOptions(variable);
 
-            WriteQuestion(variable);
+            _validatedUserInput.WriteQuestion(variable, "Please select one of the given values for '{0}':");
             WriteOptions(variable);
 
             return QueryValueFromUser(variable);
@@ -38,39 +39,31 @@ namespace Messerli.ProjectGenerator.UserInput
 
         private Option<string> QueryValueFromUser(IUserInputDescription variable)
         {
-            return QueryOptionValue(variable).Match(() => RetryQueryValueFromUser(variable), Option.Some);
+            return _validatedUserInput
+                .GetValidatedValue(variable, GetSelectionValidation(variable))
+                .Match(() => QueryValueFromUser(variable), input => IndexToValue(input, variable));
         }
 
-        private Option<string> RetryQueryValueFromUser(IUserInputDescription variable)
+        private Option<string> IndexToValue(string input, IUserInputDescription variable)
         {
-            _consoleWriter.WriteLine($"Please select from the possible options between 1 and {ToHumandIndex(variable.VariableSelectionValues.Count - 1)}");
+            var index = int.Parse(input);
 
-            return QueryValueFromUser(variable);
+            return Option.Some(variable.VariableSelectionValues[FromHumandIndex(index)].Value!);
         }
 
-        private Option<string> QueryOptionValue(IUserInputDescription variable)
+        private static IEnumerable<IValidation> GetSelectionValidation(IUserInputDescription variable)
         {
-            var maybeValue = _consoleReader.ReadLine().TryParseInt();
-
-            return IsValuePossible(variable, maybeValue)
-                ? maybeValue.AndThen(index => variable.VariableSelectionValues[FromHumandIndex(index)].Value!)
-                : Option<string>.None();
+            yield return new SimpleValidation(input => IsValuePossible(variable, input), $"Please select from the possible options between 1 and {ToHumandIndex(variable.VariableSelectionValues.Count - 1)}");
         }
 
-        private static bool IsValuePossible(IUserInputDescription variable, Option<int> maybeValue)
+        private static bool IsValuePossible(IUserInputDescription variable, string input)
         {
+            var maybeValue = input.TryParseInt();
+
             return maybeValue.Match(
                 false,
                 value => value > 0
                          && value <= variable.VariableSelectionValues.Count);
-        }
-
-        private void WriteQuestion(IUserInputDescription variable)
-        {
-            var question = variable.VariableQuestion
-                           ?? $"Please select one of the given values for '{variable.VariableName}':";
-
-            _consoleWriter.WriteLine(question);
         }
 
         private void WriteOptions(IUserInputDescription variable)
@@ -82,8 +75,8 @@ namespace Messerli.ProjectGenerator.UserInput
             }
         }
 
-        private int ToHumandIndex(int index) => index + 1;
+        private static int ToHumandIndex(int index) => index + 1;
 
-        private int FromHumandIndex(int index) => index - 1;
+        private static int FromHumandIndex(int index) => index - 1;
     }
 }
