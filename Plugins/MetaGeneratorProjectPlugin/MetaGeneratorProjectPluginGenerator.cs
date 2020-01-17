@@ -40,7 +40,7 @@ namespace Messerli.ProjectGeneratorPluginProjects
             _userInputProvider = userInputProvider;
         }
 
-        public string Name => "Create a plugin for the project generator. (new project type)";
+        public string Name => "Create a new plugin for this generator.";
 
         public string ShortName => "project-generator.plugin";
 
@@ -50,7 +50,7 @@ namespace Messerli.ProjectGeneratorPluginProjects
 
             _userInputProvider.AddValidation(ProjectName, Validations.ValuePresent);
             _userInputProvider.AddValidation(ProjectName, Validations.NoWhiteSpace);
-            _userInputProvider.AddValidation(ProjectGeneratorPath, new SimpleValidation(path => File.Exists(Path.Combine(path, "ProjectGenerator.sln")), "No ProjectGenerator.sln found at location."));
+            _userInputProvider.AddValidation(ProjectGeneratorPath, new SimpleValidation(path => File.Exists(Path.Combine(path, "Generator.sln")), "No ProjectGenerator.sln found at location."));
             _userInputProvider.AddValidation(ProjectDescription, Validations.ValuePresent);
         }
 

@@ -21,7 +21,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\CommandLineAbstractions\CommandLineAbstractions.csproj" />
-    <ProjectReference Include="..\..\ProjectAbstractions\ProjectAbstractions.csproj" />
+    <ProjectReference Include="..\..\MetaGeneratorAbstractions\MetaGeneratorAbstractions.csproj" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="templates\publish.template" />

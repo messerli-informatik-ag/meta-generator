@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29201.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectGenerator", "ProjectGenerator\ProjectGenerator.csproj", "{759017FC-2082-4392-9355-1EE78061E5DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaGenerator", "MetaGenerator\MetaGenerator.csproj", "{759017FC-2082-4392-9355-1EE78061E5DD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectGenerator.Test", "ProjectGenerator.Test\ProjectGenerator.Test.csproj", "{B096EAAF-F16C-459F-A8F3-35B8121A00E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaGenerator.Test", "MetaGenerator.Test\MetaGenerator.Test.csproj", "{B096EAAF-F16C-459F-A8F3-35B8121A00E8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TfsClient", "TfsClient\TfsClient.csproj", "{5E6FF452-50F7-415F-A75A-0E73F0824775}"
 EndProject
@@ -13,11 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandLine", "CommandLine\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandLineAbstractions", "CommandLineAbstractions\CommandLineAbstractions.csproj", "{4F05AE06-C918-4576-9427-F15EC6663755}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectAbstractions", "ProjectAbstractions\ProjectAbstractions.csproj", "{0FFED16E-FCE2-4183-8D45-CDD4794FBCA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaGeneratorAbstractions", "MetaGeneratorAbstractions\MetaGeneratorAbstractions.csproj", "{0FFED16E-FCE2-4183-8D45-CDD4794FBCA0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{20C9369F-5188-445E-9A81-837709067EA5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectGeneratorPluginProjects", "Plugins\ProjectGeneratorPluginProjects\ProjectGeneratorPluginProjects.csproj", "{DA906E3A-6E30-4465-940A-2F5EC6E24333}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaGeneratorProjectPlugin", "Plugins\MetaGeneratorProjectPlugin\MetaGeneratorProjectPlugin.csproj", "{DA906E3A-6E30-4465-940A-2F5EC6E24333}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{06866539-29BC-400F-A087-0AE5B536B976}"
 	ProjectSection(SolutionItems) = preProject

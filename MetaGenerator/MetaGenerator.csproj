@@ -13,7 +13,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommandLine\CommandLine.csproj" />
-    <ProjectReference Include="..\ProjectAbstractions\ProjectAbstractions.csproj" />
+    <ProjectReference Include="..\MetaGeneratorAbstractions\MetaGeneratorAbstractions.csproj" />
     <ProjectReference Include="..\TfsClient\TfsClient.csproj" />
     <ProjectReference Include="..\VsSolution\VsSolution.csproj" />
   </ItemGroup>
