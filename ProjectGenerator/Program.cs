@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Messerli.ProjectAbstractions;
 
 namespace Messerli.ProjectGenerator
 {

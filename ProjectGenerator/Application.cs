@@ -125,7 +125,7 @@ namespace Messerli.ProjectGenerator
         private List<SelectionValue> ToSelectionValues(IEnumerable<IProjectGenerator> projectGenerators)
         {
             return projectGenerators
-                .Select(projectGenerator => new SelectionValue { Value = projectGenerator.ShortName, Description = projectGenerator.Name })
+                .Select(projectGenerator => new SelectionValue { Value = projectGenerator.Name, Description = projectGenerator.ShortName })
                 .ToList();
         }
 

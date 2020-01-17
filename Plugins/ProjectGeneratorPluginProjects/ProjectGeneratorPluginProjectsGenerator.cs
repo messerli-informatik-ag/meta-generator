@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LibGit2Sharp;
@@ -52,7 +49,7 @@ namespace Messerli.ProjectGeneratorPluginProjects
             _userInputProvider.RegisterVariablesFromTemplate(VariableDeclarations);
 
             _userInputProvider.AddValidation(ProjectName, Validations.ValuePresent);
-            _userInputProvider.AddValidation(ProjectName, new SimpleValidation(projectName => projectName.Any(c => char.IsWhiteSpace(c) == false), "ProjectName contains whitespace"));
+            _userInputProvider.AddValidation(ProjectName, Validations.NoWhiteSpace);
             _userInputProvider.AddValidation(ProjectGeneratorPath, new SimpleValidation(path => File.Exists(Path.Combine(path, "ProjectGenerator.sln")), "No ProjectGenerator.sln found at location."));
             _userInputProvider.AddValidation(ProjectDescription, Validations.ValuePresent);
         }
