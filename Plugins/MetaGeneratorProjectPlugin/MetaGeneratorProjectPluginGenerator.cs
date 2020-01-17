@@ -11,13 +11,13 @@ namespace Messerli.MetaGeneratorProjectPlugin
 {
     public class MetaGeneratorProjectPluginGenerator : IMetaGenerator
     {
-        private const string VariableDeclarations = "Messerli.MetaGeneratorProjectPluginGenerator.templates.VariableDeclarations.json";
-        private const string VariableDeclarationsTemplate = "Messerli.MetaGeneratorProjectPluginGenerator.templates.VariableDeclarations.json.template";
-        private const string PluginProjectFileTemplate = "Messerli.MetaGeneratorProjectPluginGenerator.templates.plugin.csproj.template";
-        private const string GeneratorFileTemplate = "Messerli.MetaGeneratorProjectPluginGenerator.templates.generator.source.template";
-        private const string ModuleFileTemplate = "Messerli.MetaGeneratorProjectPluginGenerator.templates.module.source.template";
-        private const string PaketReferencesTemplate = "Messerli.MetaGeneratorProjectPluginGenerator.templates.paket.template";
-        private const string PublishScript = "Messerli.MetaGeneratorProjectPluginGenerator.templates.publish.template";
+        private const string VariableDeclarations = "Messerli.MetaGeneratorProjectPlugin.templates.VariableDeclarations.json";
+        private const string VariableDeclarationsTemplate = "Messerli.MetaGeneratorProjectPlugin.templates.VariableDeclarations.json.template";
+        private const string PluginProjectFileTemplate = "Messerli.MetaGeneratorProjectPlugin.templates.plugin.csproj.template";
+        private const string GeneratorFileTemplate = "Messerli.MetaGeneratorProjectPlugin.templates.generator.source.template";
+        private const string ModuleFileTemplate = "Messerli.MetaGeneratorProjectPlugin.templates.module.source.template";
+        private const string PaketReferencesTemplate = "Messerli.MetaGeneratorProjectPlugin.templates.paket.template";
+        private const string PublishScript = "Messerli.MetaGeneratorProjectPlugin.templates.publish.template";
 
         private const string GeneratorName = "GeneratorName";
         private const string GeneratorDescription = "GeneratorDescription";

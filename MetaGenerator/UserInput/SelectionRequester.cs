@@ -71,7 +71,7 @@ namespace Messerli.MetaGenerator.UserInput
             foreach (var (selectionValue, index) in variable.VariableSelectionValues.Select((selectionValue, index) =>
                 (selectionValue, index)))
             {
-                _consoleWriter.WriteLine($"{ToHumandIndex(index)}.) {selectionValue.Value} ({selectionValue.Description})");
+                _consoleWriter.WriteLine($"{ToHumandIndex(index)}.) {selectionValue.Description}");
             }
         }
 

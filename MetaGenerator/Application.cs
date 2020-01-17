@@ -125,7 +125,7 @@ namespace Messerli.MetaGenerator
         private List<SelectionValue> ToSelectionValues(IEnumerable<IMetaGenerator> metaGenerators)
         {
             return metaGenerators
-                .Select(metaGenerator => new SelectionValue { Value = metaGenerator.Name, Description = metaGenerator.ShortName })
+                .Select(metaGenerator => new SelectionValue { Value = metaGenerator.ShortName, Description = $"{metaGenerator.Name} ({metaGenerator.ShortName})" })
                 .ToList();
         }
 
