@@ -74,11 +74,10 @@ namespace Messerli.MetaGenerator.UserInput
 
         private List<Variable> GetVariablesFromTemplate(string templateName)
         {
-            using (var stream = _templateLoader.GetTemplateStream(templateName))
-            {
-                return (List<Variable>)_jsonSerializer
-                    .ReadObject(stream);
-            }
+            using var stream = _templateLoader.GetTemplateStream(templateName);
+
+            return (List<Variable>)_jsonSerializer
+                .ReadObject(stream);
         }
 
         private void RegisterVariablesFromJson(Variable variable)

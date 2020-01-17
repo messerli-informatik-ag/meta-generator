@@ -39,20 +39,18 @@ namespace Messerli.MetaGenerator
 
         private Option<string> FindTemplate(string templateName)
         {
-            using (var templateStream = GetTemplateStream(templateName))
-            {
-                return templateStream != null
-                    ? Option.Some(ReadTemplate(templateStream))
-                    : Option<string>.None();
-            }
+            using var templateStream = GetTemplateStream(templateName);
+
+            return templateStream != null
+                ? Option.Some(ReadTemplate(templateStream))
+                : Option<string>.None();
         }
 
         private string ReadTemplate(Stream templateStream)
         {
-            using (var reader = new StreamReader(templateStream))
-            {
-                return reader.ReadToEnd();
-            }
+            using var reader = new StreamReader(templateStream);
+
+            return reader.ReadToEnd();
         }
     }
 }

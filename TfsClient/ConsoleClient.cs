@@ -38,7 +38,7 @@ namespace Messerli.TfsClient
 
         private void StartTfProcess(string arguments)
         {
-            using (var process = new Process
+            using var process = new Process
             {
                 StartInfo =
                 {
@@ -47,11 +47,10 @@ namespace Messerli.TfsClient
                     CreateNoWindow = true,
                     UseShellExecute = false,
                 },
-            })
-            {
-                process.Start();
-                process.WaitForExit();
-            }
+            };
+
+            process.Start();
+            process.WaitForExit();
         }
 
         private static string IncludeTfsRoot(string path)
@@ -79,7 +78,7 @@ namespace Messerli.TfsClient
 
         private static string GetProcessData(string path, string arguments)
         {
-            using (var process = new Process
+            using var process = new Process
             {
                 StartInfo = new ProcessStartInfo
                 {
@@ -89,18 +88,17 @@ namespace Messerli.TfsClient
                     RedirectStandardOutput = true,
                     CreateNoWindow = true,
                 },
-            })
-            {
-                process.Start();
-                var line = string.Empty;
-                while (!process.StandardOutput.EndOfStream)
-                {
-                    line += process.StandardOutput.ReadLine();
-                    line += "\n";
-                }
+            };
 
-                return line;
+            process.Start();
+            var line = string.Empty;
+            while (!process.StandardOutput.EndOfStream)
+            {
+                line += process.StandardOutput.ReadLine();
+                line += "\n";
             }
+
+            return line;
         }
 
         private static string GetNeedle(string processData, string regexNeedle)

@@ -9,12 +9,11 @@ namespace Messerli.MetaGenerator
     {
         public static Option<string> GetExecutablePath()
         {
-            using (var process = Process.GetCurrentProcess())
-            {
-                return process.MainModule == null
-                    ? Option<string>.None()
-                    : Option.Some(process.MainModule.FileName);
-            }
+            using var process = Process.GetCurrentProcess();
+
+            return process.MainModule == null
+                ? Option<string>.None()
+                : Option.Some(process.MainModule.FileName);
         }
 
         public static Option<string> GetExecutableDirectory()

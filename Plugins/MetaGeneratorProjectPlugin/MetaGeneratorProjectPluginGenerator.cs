@@ -78,10 +78,9 @@ namespace Messerli.MetaGeneratorProjectPlugin
 
         public void TearDown()
         {
-            using (var repo = new Repository(GetSolutionPath()))
-            {
-                Commands.Stage(repo, Path.Combine("Plugins", _userInputProvider.Value(GeneratorName), "*"));
-            }
+            using var repo = new Repository(GetSolutionPath());
+
+            Commands.Stage(repo, Path.Combine("Plugins", _userInputProvider.Value(GeneratorName), "*"));
         }
 
         private string GetSolutionPath()

@@ -41,10 +41,8 @@ namespace Messerli.MetaGenerator
                 throw new Exception($"cannot append to file '{filePath}' it does not exist.");
             }
 
-            await using (var sw = File.AppendText(filePath))
-            {
-                await sw.WriteAsync(await OutputFromTemplate(templateName));
-            }
+            await using var sw = File.AppendText(filePath);
+            await sw.WriteAsync(await OutputFromTemplate(templateName));
         }
 
         public async Task AddProjectToSolution(string? solutionFolder, string projectName, string projectPath, string solutionPath)
