@@ -4,7 +4,7 @@ using Messerli.MetaGeneratorAbstractions.UserInput;
 
 namespace Messerli.MetaGenerator.UserInput
 {
-    public class BoolRequester : IVariableRequester
+    internal class BoolRequester : IVariableRequester
     {
         private readonly IValidatedUserInput _validatedUserInput;
 

@@ -8,7 +8,7 @@ using Stubble.Core.Settings;
 
 namespace Messerli.MetaGenerator
 {
-    public class FileGenerator : IFileGenerator
+    internal class FileGenerator : IFileGenerator
     {
         private readonly IVariableProvider _variableProvider;
         private readonly ITemplateLoader _templateLoader;

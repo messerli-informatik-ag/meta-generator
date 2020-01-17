@@ -8,7 +8,7 @@ using Messerli.MetaGeneratorAbstractions.UserInput;
 
 namespace Messerli.MetaGenerator.UserInput
 {
-    public class SelectionRequester : IVariableRequester
+    internal class SelectionRequester : IVariableRequester
     {
         private readonly IValidatedUserInput _validatedUserInput;
         private readonly IConsoleWriter _consoleWriter;

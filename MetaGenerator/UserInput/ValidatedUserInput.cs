@@ -8,7 +8,7 @@ using Pastel;
 
 namespace Messerli.MetaGenerator.UserInput
 {
-    public class ValidatedUserInput : IValidatedUserInput
+    internal class ValidatedUserInput : IValidatedUserInput
     {
         private readonly IConsoleReader _consoleReader;
         private readonly IConsoleWriter _consoleWriter;

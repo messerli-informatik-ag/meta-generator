@@ -5,7 +5,7 @@ using Messerli.MetaGeneratorAbstractions.UserInput;
 
 namespace Messerli.MetaGenerator.UserInput
 {
-    public class UserInputDescriptionBuilder
+    internal class UserInputDescriptionBuilder
     {
         private string? _variableName;
         private string? _variableQuestion;

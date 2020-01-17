@@ -6,7 +6,7 @@ using Messerli.MetaGeneratorAbstractions.UserInput;
 
 namespace Messerli.MetaGenerator
 {
-    public class VariableProvider : IVariableProvider
+    internal class VariableProvider : IVariableProvider
     {
         private readonly IUserInputProvider _userInputProvider;
 

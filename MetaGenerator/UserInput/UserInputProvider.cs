@@ -9,7 +9,7 @@ using Messerli.MetaGeneratorAbstractions.UserInput;
 
 namespace Messerli.MetaGenerator.UserInput
 {
-    public class UserInputProvider : IUserInputProvider
+    internal class UserInputProvider : IUserInputProvider
     {
         private readonly ITemplateLoader _templateLoader;
         private readonly Dictionary<string, IUserInputDescription> _knownUserInputs = new Dictionary<string, IUserInputDescription>();

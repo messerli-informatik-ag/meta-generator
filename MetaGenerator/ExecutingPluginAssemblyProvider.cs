@@ -4,7 +4,7 @@ using Messerli.MetaGeneratorAbstractions;
 
 namespace Messerli.MetaGenerator
 {
-    public class ExecutingPluginAssemblyProvider : IExecutingPluginAssemblyProvider
+    internal class ExecutingPluginAssemblyProvider : IExecutingPluginAssemblyProvider
     {
         private Assembly? _pluginAssembly;
 

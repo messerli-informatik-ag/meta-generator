@@ -4,7 +4,7 @@ using System.Runtime.Loader;
 
 namespace Messerli.MetaGenerator
 {
-    public class PluginLoadContext : AssemblyLoadContext
+    internal class PluginLoadContext : AssemblyLoadContext
     {
         private readonly AssemblyDependencyResolver _resolver;
 

@@ -9,7 +9,7 @@ using Messerli.MetaGeneratorAbstractions.UserInput;
 
 namespace Messerli.MetaGeneratorProjectPlugin
 {
-    public class MetaGeneratorProjectPluginGenerator : IMetaGenerator
+    internal class MetaGeneratorProjectPluginGenerator : IMetaGenerator
     {
         private const string VariableDeclarations = "Messerli.MetaGeneratorProjectPlugin.templates.VariableDeclarations.json";
         private const string VariableDeclarationsTemplate = "Messerli.MetaGeneratorProjectPlugin.templates.VariableDeclarations.json.template";

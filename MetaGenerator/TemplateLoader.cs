@@ -6,7 +6,7 @@ using Messerli.MetaGeneratorAbstractions;
 
 namespace Messerli.MetaGenerator
 {
-    public class TemplateLoader : ITemplateLoader
+    internal class TemplateLoader : ITemplateLoader
     {
         private readonly IExecutingPluginAssemblyProvider _assemblyProvider;
 
