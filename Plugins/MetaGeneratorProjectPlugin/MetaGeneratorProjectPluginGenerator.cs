@@ -4,31 +4,31 @@ using System.Text;
 using System.Threading.Tasks;
 using LibGit2Sharp;
 using Messerli.CommandLineAbstractions;
-using Messerli.ProjectAbstractions;
-using Messerli.ProjectAbstractions.UserInput;
+using Messerli.MetaGeneratorAbstractions;
+using Messerli.MetaGeneratorAbstractions.UserInput;
 
-namespace Messerli.ProjectGeneratorPluginProjects
+namespace Messerli.MetaGeneratorProjectPlugin
 {
-    public class ProjectGeneratorPluginProjectsGenerator : IProjectGenerator
+    public class MetaGeneratorProjectPluginGenerator : IMetaGenerator
     {
-        private const string VariableDeclarations = "Messerli.ProjectGeneratorPluginProjects.templates.VariableDeclarations.json";
-        private const string VariableDeclarationsTemplate = "Messerli.ProjectGeneratorPluginProjects.templates.VariableDeclarations.json.template";
-        private const string PluginProjectFileTemplate = "Messerli.ProjectGeneratorPluginProjects.templates.plugin.csproj.template";
-        private const string GeneratorFileTemplate = "Messerli.ProjectGeneratorPluginProjects.templates.generator.source.template";
-        private const string ModuleFileTemplate = "Messerli.ProjectGeneratorPluginProjects.templates.module.source.template";
-        private const string PaketReferencesTemplate = "Messerli.ProjectGeneratorPluginProjects.templates.paket.template";
-        private const string PublishScript = "Messerli.ProjectGeneratorPluginProjects.templates.publish.template";
+        private const string VariableDeclarations = "Messerli.MetaGeneratorProjectPluginGenerator.templates.VariableDeclarations.json";
+        private const string VariableDeclarationsTemplate = "Messerli.MetaGeneratorProjectPluginGenerator.templates.VariableDeclarations.json.template";
+        private const string PluginProjectFileTemplate = "Messerli.MetaGeneratorProjectPluginGenerator.templates.plugin.csproj.template";
+        private const string GeneratorFileTemplate = "Messerli.MetaGeneratorProjectPluginGenerator.templates.generator.source.template";
+        private const string ModuleFileTemplate = "Messerli.MetaGeneratorProjectPluginGenerator.templates.module.source.template";
+        private const string PaketReferencesTemplate = "Messerli.MetaGeneratorProjectPluginGenerator.templates.paket.template";
+        private const string PublishScript = "Messerli.MetaGeneratorProjectPluginGenerator.templates.publish.template";
 
-        private const string ProjectName = "ProjectName";
-        private const string ProjectDescription = "ProjectDescription";
-        private const string ProjectGeneratorPath = "ProjectGeneratorPath";
+        private const string GeneratorName = "GeneratorName";
+        private const string GeneratorDescription = "GeneratorDescription";
+        private const string GeneratorPath = "GeneratorPath";
 
         private readonly IConsoleWriter _consoleWriter;
         private readonly IFileGenerator _fileGenerator;
         private readonly IFileManipulator _fileManipulator;
         private readonly IUserInputProvider _userInputProvider;
 
-        public ProjectGeneratorPluginProjectsGenerator(
+        public MetaGeneratorProjectPluginGenerator(
             IConsoleWriter consoleWriter,
             IFileGenerator fileGenerator,
             IFileManipulator fileManipulator,
@@ -42,16 +42,16 @@ namespace Messerli.ProjectGeneratorPluginProjects
 
         public string Name => "Create a new plugin for this generator.";
 
-        public string ShortName => "project-generator.plugin";
+        public string ShortName => "meta-generator.plugin";
 
         public void Register()
         {
             _userInputProvider.RegisterVariablesFromTemplate(VariableDeclarations);
 
-            _userInputProvider.AddValidation(ProjectName, Validations.ValuePresent);
-            _userInputProvider.AddValidation(ProjectName, Validations.NoWhiteSpace);
-            _userInputProvider.AddValidation(ProjectGeneratorPath, new SimpleValidation(path => File.Exists(Path.Combine(path, "Generator.sln")), "No ProjectGenerator.sln found at location."));
-            _userInputProvider.AddValidation(ProjectDescription, Validations.ValuePresent);
+            _userInputProvider.AddValidation(GeneratorName, Validations.ValuePresent);
+            _userInputProvider.AddValidation(GeneratorName, Validations.NoWhiteSpace);
+            _userInputProvider.AddValidation(GeneratorPath, new SimpleValidation(path => File.Exists(Path.Combine(path, "MetaGenerator.sln")), "No ProjectGenerator.sln found at location."));
+            _userInputProvider.AddValidation(GeneratorDescription, Validations.ValuePresent);
         }
 
         public void Prepare()
@@ -60,17 +60,17 @@ namespace Messerli.ProjectGeneratorPluginProjects
 
         public void Generate()
         {
-            _consoleWriter.WriteLine($"Creating the plugin '{_userInputProvider.Value(ProjectName)}' for the project generator.");
+            _consoleWriter.WriteLine($"Creating the plugin '{_userInputProvider.Value(GeneratorName)}' for the project generator.");
 
             var tasks = new List<Task>
             {
-                _fileGenerator.FromTemplate(PluginProjectFileTemplate, Path.Combine(GetPluginPath(), $"{_userInputProvider.Value(ProjectName)}.csproj"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(GeneratorFileTemplate, Path.Combine(GetPluginPath(), $"{_userInputProvider.Value(ProjectName)}Generator.cs"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(ModuleFileTemplate, Path.Combine(GetPluginPath(), $"{_userInputProvider.Value(ProjectName)}Module.cs"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(PluginProjectFileTemplate, Path.Combine(GetPluginPath(), $"{_userInputProvider.Value(GeneratorName)}.csproj"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(GeneratorFileTemplate, Path.Combine(GetPluginPath(), $"{_userInputProvider.Value(GeneratorName)}Generator.cs"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(ModuleFileTemplate, Path.Combine(GetPluginPath(), $"{_userInputProvider.Value(GeneratorName)}Module.cs"), Encoding.UTF8),
                 _fileGenerator.FromTemplate(VariableDeclarationsTemplate, Path.Combine(GetPluginPath(), "templates", "VariableDeclarations.json"), new UTF8Encoding(false)),
                 _fileGenerator.FromTemplate(PaketReferencesTemplate, Path.Combine(GetPluginPath(), "paket.references"), Encoding.UTF8),
                 _fileManipulator.AppendTemplate(PublishScript, Path.Combine(GetSolutionPath(), "publish.ps1")),
-                _fileManipulator.AddProjectToSolution("Plugins", ProjectName, Path.Combine(GetPluginPath(), $"{_userInputProvider.Value(ProjectName)}.csproj"), Path.Combine(GetSolutionPath(), "ProjectGenerator.sln")),
+                _fileManipulator.AddProjectToSolution("Plugins", GeneratorName, Path.Combine(GetPluginPath(), $"{_userInputProvider.Value(GeneratorName)}.csproj"), Path.Combine(GetSolutionPath(), "MetaGenerator.sln")),
             };
 
             Task.WaitAll(tasks.ToArray());
@@ -80,18 +80,18 @@ namespace Messerli.ProjectGeneratorPluginProjects
         {
             using (var repo = new Repository(GetSolutionPath()))
             {
-                Commands.Stage(repo, Path.Combine("Plugins", _userInputProvider.Value(ProjectName), "*"));
+                Commands.Stage(repo, Path.Combine("Plugins", _userInputProvider.Value(GeneratorName), "*"));
             }
         }
 
         private string GetSolutionPath()
         {
-            return _userInputProvider.Value(ProjectGeneratorPath);
+            return _userInputProvider.Value(GeneratorPath);
         }
 
         private string GetPluginPath()
         {
-            return Path.Combine(GetSolutionPath(), "Plugins", _userInputProvider.Value(ProjectName));
+            return Path.Combine(GetSolutionPath(), "Plugins", _userInputProvider.Value(GeneratorName));
         }
     }
 }

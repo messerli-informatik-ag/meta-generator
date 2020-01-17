@@ -1,8 +1,8 @@
 [
   {
     "Description": "unused",
-    "Question": "Enter the name of the project file name:",
-    "Name": "ProjectName",
+    "Question": "Enter the name of the file generator name:",
+    "Name": "GeneratorName",
     "Type": 0
   }
 ]

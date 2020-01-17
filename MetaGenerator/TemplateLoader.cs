@@ -2,9 +2,9 @@
 using System.IO;
 using System.Linq;
 using Funcky.Monads;
-using Messerli.ProjectAbstractions;
+using Messerli.MetaGeneratorAbstractions;
 
-namespace Messerli.ProjectGenerator
+namespace Messerli.MetaGenerator
 {
     public class TemplateLoader : ITemplateLoader
     {

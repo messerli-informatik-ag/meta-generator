@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Messerli.ProjectAbstractions.UserInput
+namespace Messerli.MetaGeneratorAbstractions.UserInput
 {
     public class SimpleValidation : IValidation
     {

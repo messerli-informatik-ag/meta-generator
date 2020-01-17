@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Messerli.ProjectAbstractions
+namespace Messerli.MetaGeneratorAbstractions
 {
     public interface IVariableProvider
     {

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
-using Messerli.ProjectAbstractions.UserInput;
+using Messerli.MetaGeneratorAbstractions.UserInput;
 
-namespace Messerli.ProjectAbstractions.Json
+namespace Messerli.MetaGeneratorAbstractions.Json
 {
     [DataContract]
     public class Variable

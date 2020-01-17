@@ -1,4 +1,4 @@
-﻿namespace Messerli.ProjectGenerator
+﻿namespace Messerli.MetaGenerator
 {
     internal class TimeMeasurements
     {

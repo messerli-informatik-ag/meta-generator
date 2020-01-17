@@ -1,6 +1,6 @@
-﻿namespace Messerli.ProjectAbstractions
+﻿namespace Messerli.MetaGeneratorAbstractions
 {
-    public interface IProjectGenerator
+    public interface IMetaGenerator
     {
         string Name { get; }
 
@@ -12,17 +12,17 @@
         void Register();
 
         /// <summary>
-        /// Steps which are necessary before the file generation/alteration. (adding files to repository, cleanup ...)
+        /// Steps which are necessary before the file generation/alteration. (checkout files from the repository.)
         /// </summary>
         void Prepare();
 
         /// <summary>
-        /// Generate the project.
+        /// Generate the files.
         /// </summary>
         void Generate();
 
         /// <summary>
-        /// Steps which are necessary after the file generation. (adding files to repository, cleanup ...)
+        /// Steps which are necessary after the file generation. (adding files to repository or cleanup.)
         /// </summary>
         void TearDown();
     }

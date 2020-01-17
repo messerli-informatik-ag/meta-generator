@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Funcky.Monads;
 
-namespace Messerli.ProjectAbstractions.UserInput
+namespace Messerli.MetaGeneratorAbstractions.UserInput
 {
     public interface IValidatedUserInput
     {

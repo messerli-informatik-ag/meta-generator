@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Reflection;
-using Messerli.ProjectAbstractions;
+using Messerli.MetaGeneratorAbstractions;
 
-namespace Messerli.ProjectGenerator
+namespace Messerli.MetaGenerator
 {
     public class ExecutingPluginAssemblyProvider : IExecutingPluginAssemblyProvider
     {

@@ -6,15 +6,15 @@ using Autofac;
 using Autofac.Core;
 using Messerli.CommandLine;
 using Messerli.CommandLineAbstractions;
-using Messerli.ProjectAbstractions;
-using Messerli.ProjectAbstractions.UserInput;
-using Messerli.ProjectGenerator.UserInput;
+using Messerli.MetaGenerator.UserInput;
+using Messerli.MetaGeneratorAbstractions;
+using Messerli.MetaGeneratorAbstractions.UserInput;
 using Messerli.TfsClient;
 using Messerli.VsSolution;
 using Stubble.Core.Builders;
-using static Messerli.ProjectGenerator.ExecutableInformation;
+using static Messerli.MetaGenerator.ExecutableInformation;
 
-namespace Messerli.ProjectGenerator
+namespace Messerli.MetaGenerator
 {
     internal class CompositionRoot
     {

@@ -1,13 +1,13 @@
 ﻿using Autofac;
-using Messerli.ProjectAbstractions;
+using Messerli.MetaGeneratorAbstractions;
 
-namespace Messerli.{{ProjectName}}
+namespace Messerli.{{GeneratorName}}
 {
-    public class {{ProjectName}}Module : Module
+    public class {{GeneratorName}}Module : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<{{ProjectName}}Generator>().As<IProjectGenerator>();
+            builder.RegisterType<{{GeneratorName}}Generator>().As<IMetaGenerator>();
         }
     }
 }

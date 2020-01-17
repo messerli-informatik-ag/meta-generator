@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace Messerli.ProjectAbstractions.Json
+namespace Messerli.MetaGeneratorAbstractions.Json
 {
     [DataContract]
     public class SelectionValue

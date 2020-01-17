@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Messerli.ProjectAbstractions;
-using Messerli.ProjectAbstractions.UserInput;
+using Messerli.MetaGeneratorAbstractions;
+using Messerli.MetaGeneratorAbstractions.UserInput;
 
-namespace Messerli.ProjectGenerator
+namespace Messerli.MetaGenerator
 {
     public class VariableProvider : IVariableProvider
     {

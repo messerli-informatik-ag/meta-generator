@@ -1,11 +1,11 @@
 ﻿using System.Linq;
 
-namespace Messerli.ProjectAbstractions.UserInput
+namespace Messerli.MetaGeneratorAbstractions.UserInput
 {
     public static class Validations
     {
         public static IValidation ValuePresent => new SimpleValidation(value => value.Length > 0, "Value '{0}' must not be empty.");
 
-        public static IValidation NoWhiteSpace => new SimpleValidation(projectName => projectName.Any(c => char.IsWhiteSpace(c) == false), "Value '{0}' must not contain whitespace");
+        public static IValidation NoWhiteSpace => new SimpleValidation(value => value.Any(c => char.IsWhiteSpace(c) == false), "Value '{0}' must not contain whitespace");
     }
 }

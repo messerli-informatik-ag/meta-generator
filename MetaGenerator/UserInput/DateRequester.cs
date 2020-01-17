@@ -1,8 +1,8 @@
 ﻿using System;
 using Funcky.Monads;
-using Messerli.ProjectAbstractions.UserInput;
+using Messerli.MetaGeneratorAbstractions.UserInput;
 
-namespace Messerli.ProjectGenerator.UserInput
+namespace Messerli.MetaGenerator.UserInput
 {
     public class DateRequester : IVariableRequester
     {

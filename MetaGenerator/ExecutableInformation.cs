@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using Funcky.Monads;
 
-namespace Messerli.ProjectGenerator
+namespace Messerli.MetaGenerator
 {
     public static class ExecutableInformation
     {

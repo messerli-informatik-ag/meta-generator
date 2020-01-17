@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Messerli.ProjectAbstractions
+namespace Messerli.MetaGeneratorAbstractions
 {
     public interface IExecutingPluginAssemblyProvider
     {

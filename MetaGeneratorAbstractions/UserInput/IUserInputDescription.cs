@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Funcky.Monads;
-using Messerli.ProjectAbstractions.Json;
+using Messerli.MetaGeneratorAbstractions.Json;
 
-namespace Messerli.ProjectAbstractions.UserInput
+namespace Messerli.MetaGeneratorAbstractions.UserInput
 {
     public interface IUserInputDescription
     {

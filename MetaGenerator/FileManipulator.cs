@@ -2,14 +2,13 @@
 using System.IO;
 using System.Threading.Tasks;
 using Messerli.CommandLineAbstractions;
-using Messerli.ProjectAbstractions;
-using Messerli.ProjectAbstractions.UserInput;
+using Messerli.MetaGeneratorAbstractions;
 using Messerli.VsSolution;
 using Messerli.VsSolution.Model;
 using Stubble.Core.Builders;
 using Stubble.Core.Settings;
 
-namespace Messerli.ProjectGenerator
+namespace Messerli.MetaGenerator
 {
     public class FileManipulator : IFileManipulator
     {

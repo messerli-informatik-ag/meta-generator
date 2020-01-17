@@ -1,6 +1,6 @@
 ﻿using Xunit;
 
-namespace Messerli.ProjectGenerator.Test
+namespace Messerli.MetaGenerator.Test
 {
     public class TestCase
     {

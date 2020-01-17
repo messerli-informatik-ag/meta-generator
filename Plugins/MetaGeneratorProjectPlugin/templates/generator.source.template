@@ -1,28 +1,30 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Messerli.CommandLineAbstractions;
-using Messerli.ProjectAbstractions;
-using Messerli.ProjectAbstractions.UserInput;
+using Messerli.MetaGeneratorAbstractions;
+using Messerli.MetaGeneratorAbstractions.UserInput;
 
-namespace Messerli.{{ProjectName}}
+namespace Messerli.{{GeneratorName}}
 {
-    public class {{ProjectName}}Generator : IProjectGenerator
+    public class {{GeneratorName}}Generator : IMetaGenerator
     {
-        private const string VariableDeclarations = "Messerli.{{ProjectName}}.templates.VariableDeclarations.json";
-        private const string ProjectName = "ProjectName";
+        private const string VariableDeclarations = "Messerli.{{GeneratorName}}.templates.VariableDeclarations.json";
+        private const string GeneratorName = "GeneratorName";
 
         private readonly IConsoleWriter _consoleWriter;
         private readonly IFileGenerator _fileGenerator;
         private readonly IUserInputProvider _userInputProvider;
+        private readonly IVariableProvider _variableProvider;
 
-        public {{ProjectName}}Generator(IConsoleWriter consoleWriter, IFileGenerator fileGenerator, IUserInputProvider userInputProvider)
+        public {{GeneratorName}}Generator(IConsoleWriter consoleWriter, IFileGenerator fileGenerator, IUserInputProvider userInputProvider, IVariableProvider variableProvider)
         {
             _consoleWriter = consoleWriter;
             _fileGenerator = fileGenerator;
             _userInputProvider = userInputProvider;
+            _variableProvider = variableProvider;
         }
 
-        public string Name => "{{ProjectDescription}}";
+        public string Name => "{{GeneratorDescription}}";
 
         public string ShortName => "give.me.a.name";
 
@@ -38,9 +40,9 @@ namespace Messerli.{{ProjectName}}
 
         public void Generate()
         {
-            var projectName = _userInputProvider.Value(ProjectName);
+            var generatorName = _userInputProvider.Value(GeneratorName);
 
-            _consoleWriter.WriteLine($"Creating ... '{projectName}' ...");
+            _consoleWriter.WriteLine($"Creating ... '{generatorName}' ...");
 
             var tasks = new List<Task>
             {

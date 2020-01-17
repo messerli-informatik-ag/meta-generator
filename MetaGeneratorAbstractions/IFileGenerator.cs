@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System.Threading.Tasks;
 
-namespace Messerli.ProjectAbstractions
+namespace Messerli.MetaGeneratorAbstractions
 {
     public interface IFileGenerator
     {

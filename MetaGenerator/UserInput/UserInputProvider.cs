@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization.Json;
 using Funcky.Extensions;
-using Messerli.ProjectAbstractions.Json;
-using Messerli.ProjectAbstractions.UserInput;
+using Messerli.MetaGeneratorAbstractions;
+using Messerli.MetaGeneratorAbstractions.Json;
+using Messerli.MetaGeneratorAbstractions.UserInput;
 
-namespace Messerli.ProjectGenerator.UserInput
+namespace Messerli.MetaGenerator.UserInput
 {
     public class UserInputProvider : IUserInputProvider
     {

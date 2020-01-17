@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Messerli.ProjectAbstractions.UserInput
+namespace Messerli.MetaGeneratorAbstractions.UserInput
 {
     public interface IUserInputProvider
     {

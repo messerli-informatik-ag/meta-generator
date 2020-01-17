@@ -4,17 +4,17 @@ using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Linq;
 using Messerli.CommandLineAbstractions;
-using Messerli.ProjectAbstractions;
-using Messerli.ProjectAbstractions.Json;
-using Messerli.ProjectAbstractions.UserInput;
-using Messerli.ProjectGenerator.UserInput;
+using Messerli.MetaGenerator.UserInput;
+using Messerli.MetaGeneratorAbstractions;
+using Messerli.MetaGeneratorAbstractions.Json;
+using Messerli.MetaGeneratorAbstractions.UserInput;
 
-namespace Messerli.ProjectGenerator
+namespace Messerli.MetaGenerator
 {
     internal class Application : IApplication
     {
         private readonly IConsoleWriter _consoleWriter;
-        private readonly IEnumerable<IProjectGenerator> _projectGenerators;
+        private readonly IEnumerable<IMetaGenerator> _generators;
         private readonly IUserInputProvider _userInputProvider;
         private readonly IExecutingPluginAssemblyProvider _assemblyProvider;
         private readonly RootCommand _rootCommand;
@@ -24,7 +24,7 @@ namespace Messerli.ProjectGenerator
 
         public Application(
             IConsoleWriter consoleWriter,
-            IEnumerable<IProjectGenerator> projectGenerators,
+            IEnumerable<IMetaGenerator> generators,
             IUserInputProvider userInputProvider,
             IExecutingPluginAssemblyProvider assemblyProvider,
             SelectionRequester selectionRequester,
@@ -32,14 +32,14 @@ namespace Messerli.ProjectGenerator
             Func<UserInputDescriptionBuilder> newUserInputDescriptionBuilder)
         {
             _consoleWriter = consoleWriter;
-            _projectGenerators = projectGenerators;
+            _generators = generators;
             _userInputProvider = userInputProvider;
             _assemblyProvider = assemblyProvider;
             _selectionRequester = selectionRequester;
             _newNewUserInputDescriptionBuilder = newUserInputDescriptionBuilder;
 
             _rootCommand = SetupRootCommand();
-            SetupProjectCommand();
+            SetupGeneratorCommand();
             _timeKeeper = timeKeeper;
         }
 
@@ -52,40 +52,40 @@ namespace Messerli.ProjectGenerator
         {
             var rootCommand = new RootCommand
             {
-                Description = "This is the Messerli Project generator",
+                Description = "This is the meta generator for the automatic creation of files, wrappers, projects or whatever the plugin provides.",
                 Handler = CommandHandler.Create<string>(ExecuteWizard),
             };
 
-            var projectTypeOption = new Option("--project-type", "Give the project-type")
+            var generatorTypeOption = new Option("--generator-type", "Give the generator-type")
             {
                 Argument = new Argument<string?>(defaultValue: () => null),
             };
 
-            rootCommand.AddOption(projectTypeOption);
+            rootCommand.AddOption(generatorTypeOption);
 
             return rootCommand;
         }
 
-        private void SetupProjectCommand()
+        private void SetupGeneratorCommand()
         {
-            var projectsCommand = new Command("projects", "List all project types")
+            var generatorCommand = new Command("generators", "List all generator types")
             {
-                Handler = CommandHandler.Create(ListProjects),
+                Handler = CommandHandler.Create(ListGenerators),
             };
 
-            _rootCommand.AddCommand(projectsCommand);
+            _rootCommand.AddCommand(generatorCommand);
         }
 
-        private void ListProjects()
+        private void ListGenerators()
         {
-            _consoleWriter.WriteLine("Available project types");
+            _consoleWriter.WriteLine("Available generator-plugins");
             _consoleWriter.WriteLine();
 
-            if (_projectGenerators.Any())
+            if (_generators.Any())
             {
-                foreach (var projectGenerator in _projectGenerators)
+                foreach (var generator in _generators)
                 {
-                    _consoleWriter.WriteLine($"* {projectGenerator.ShortName} ({projectGenerator.Name})");
+                    _consoleWriter.WriteLine($"* {generator.ShortName} ({generator.Name})");
                 }
             }
             else
@@ -94,52 +94,52 @@ namespace Messerli.ProjectGenerator
             }
         }
 
-        private void ExecuteWizard(string projectType)
+        private void ExecuteWizard(string selectedGenerator)
         {
-            _consoleWriter.WriteLine("Welcome to the project generator wizard");
+            _consoleWriter.WriteLine("Welcome to the meta-generator wizard");
 
-            var projectGenerator = _projectGenerators
-                .FirstOrDefault(generator => generator.ShortName == projectType)
+            var metaGenerator = _generators
+                .FirstOrDefault(generator => generator.ShortName == selectedGenerator)
                 ?? _selectionRequester
-                    .RequestValue(ToSelection(_projectGenerators))
-                    .AndThen(shortName => _projectGenerators
+                    .RequestValue(ToSelection(_generators))
+                    .AndThen(shortName => _generators
                         .FirstOrDefault(generator => generator.ShortName == shortName))
-                    .OrElse(NullProjectGenerator.Instance);
+                    .OrElse(NullMetaGenerator.Instance);
 
-            ExecuteProjectGenerator(projectGenerator);
+            ExecuteGenerator(metaGenerator);
         }
 
-        private IUserInputDescription ToSelection(IEnumerable<IProjectGenerator> projectGenerators)
+        private IUserInputDescription ToSelection(IEnumerable<IMetaGenerator> metaGenerators)
         {
             var builder = _newNewUserInputDescriptionBuilder();
 
-            builder.SetVariableName("ProjectType");
-            builder.SetVariableDescription("The type of the project");
+            builder.SetVariableName("GeneratorType");
+            builder.SetVariableDescription("What do you want to generate?");
             builder.SetVariableType(VariableType.Selection);
-            builder.SetVariableQuestion("What kind of project do you want to generate? Please select from the following options.");
-            builder.SetSelectionValues(ToSelectionValues(projectGenerators));
+            builder.SetVariableQuestion("What do you want to generate? Please select from the following options.");
+            builder.SetSelectionValues(ToSelectionValues(metaGenerators));
 
             return builder.Build();
         }
 
-        private List<SelectionValue> ToSelectionValues(IEnumerable<IProjectGenerator> projectGenerators)
+        private List<SelectionValue> ToSelectionValues(IEnumerable<IMetaGenerator> metaGenerators)
         {
-            return projectGenerators
-                .Select(projectGenerator => new SelectionValue { Value = projectGenerator.Name, Description = projectGenerator.ShortName })
+            return metaGenerators
+                .Select(metaGenerator => new SelectionValue { Value = metaGenerator.Name, Description = metaGenerator.ShortName })
                 .ToList();
         }
 
-        private void ExecuteProjectGenerator(IProjectGenerator projectTypeGenerator)
+        private void ExecuteGenerator(IMetaGenerator metaTypeGenerator)
         {
-            _assemblyProvider.PluginAssembly = projectTypeGenerator.GetType().Assembly;
+            _assemblyProvider.PluginAssembly = metaTypeGenerator.GetType().Assembly;
 
-            _timeKeeper.MeasureTime(projectTypeGenerator.Register, "Registration");
+            _timeKeeper.MeasureTime(metaTypeGenerator.Register, "Registration");
 
             _userInputProvider.AskUser();
 
-            _timeKeeper.MeasureTime(projectTypeGenerator.Prepare, "Prepartion");
-            _timeKeeper.MeasureTime(projectTypeGenerator.Generate, "Generation");
-            _timeKeeper.MeasureTime(projectTypeGenerator.TearDown, "Tear down");
+            _timeKeeper.MeasureTime(metaTypeGenerator.Prepare, "Prepartion");
+            _timeKeeper.MeasureTime(metaTypeGenerator.Generate, "Generation");
+            _timeKeeper.MeasureTime(metaTypeGenerator.TearDown, "Tear down");
 
             _timeKeeper.Print();
         }

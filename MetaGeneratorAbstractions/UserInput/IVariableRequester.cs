@@ -1,6 +1,6 @@
 ﻿using Funcky.Monads;
 
-namespace Messerli.ProjectAbstractions.UserInput
+namespace Messerli.MetaGeneratorAbstractions.UserInput
 {
     public interface IVariableRequester
     {

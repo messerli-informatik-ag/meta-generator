@@ -3,10 +3,10 @@ using System.Drawing;
 using System.Linq;
 using Funcky.Monads;
 using Messerli.CommandLineAbstractions;
-using Messerli.ProjectAbstractions.UserInput;
+using Messerli.MetaGeneratorAbstractions.UserInput;
 using Pastel;
 
-namespace Messerli.ProjectGenerator.UserInput
+namespace Messerli.MetaGenerator.UserInput
 {
     public class ValidatedUserInput : IValidatedUserInput
     {

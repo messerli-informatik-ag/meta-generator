@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Messerli.CommandLineAbstractions;
-using Messerli.ProjectAbstractions;
+using Messerli.MetaGeneratorAbstractions;
 using static System.Math;
 
-namespace Messerli.ProjectGenerator
+namespace Messerli.MetaGenerator
 {
     internal class TimeKeeper : ITimeKeeper
     {

@@ -1,7 +1,7 @@
 ﻿using Autofac;
-using Messerli.ProjectAbstractions;
+using Messerli.MetaGeneratorAbstractions;
 
-namespace Messerli.ProjectGenerator
+namespace Messerli.MetaGenerator
 {
     internal class Program
     {

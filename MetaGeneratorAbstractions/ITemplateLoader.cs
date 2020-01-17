@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Messerli.ProjectGenerator
+namespace Messerli.MetaGeneratorAbstractions
 {
     public interface ITemplateLoader
     {

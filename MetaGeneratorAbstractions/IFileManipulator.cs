@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Messerli.ProjectAbstractions
+namespace Messerli.MetaGeneratorAbstractions
 {
     public interface IFileManipulator
     {

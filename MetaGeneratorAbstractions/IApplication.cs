@@ -1,4 +1,4 @@
-﻿namespace Messerli.ProjectAbstractions
+﻿namespace Messerli.MetaGeneratorAbstractions
 {
     public interface IApplication
     {

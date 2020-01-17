@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <RootNamespace>Messerli.{{ProjectName}}</RootNamespace>
+    <RootNamespace>Messerli.{{GeneratorName}}</RootNamespace>
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
     <NullableContextOptions>enable</NullableContextOptions>
@@ -12,7 +12,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\CommandLineAbstractions\CommandLineAbstractions.csproj" />
-    <ProjectReference Include="..\..\ProjectAbstractions\ProjectAbstractions.csproj" />
+    <ProjectReference Include="..\..\MetaGeneratorAbstractions\MetaGeneratorAbstractions.csproj" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="templates\VariableDeclarations.json" />

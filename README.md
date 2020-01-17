@@ -1,5 +1,6 @@
 # Introduction 
-Project Generator
+
+## Meta Generator
 
 # Getting Started
 

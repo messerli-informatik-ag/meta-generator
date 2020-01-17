@@ -1,17 +1,17 @@
 ﻿using System;
 
-namespace Messerli.ProjectAbstractions
+namespace Messerli.MetaGeneratorAbstractions
 {
-    public class NullProjectGenerator : IProjectGenerator
+    public class NullMetaGenerator : IMetaGenerator
     {
-        private static readonly Lazy<NullProjectGenerator> LazyInstance =
-            new Lazy<NullProjectGenerator>(() => new NullProjectGenerator());
+        private static readonly Lazy<NullMetaGenerator> LazyInstance =
+            new Lazy<NullMetaGenerator>(() => new NullMetaGenerator());
 
         public string Name { get; } = string.Empty;
 
         public string ShortName { get; } = string.Empty;
 
-        public static NullProjectGenerator Instance => LazyInstance.Value;
+        public static NullMetaGenerator Instance => LazyInstance.Value;
 
         public void Register()
         {

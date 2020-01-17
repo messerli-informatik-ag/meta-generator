@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Messerli.ProjectAbstractions;
-using Messerli.ProjectAbstractions.Json;
-using Messerli.ProjectAbstractions.UserInput;
+using Messerli.MetaGeneratorAbstractions.Json;
+using Messerli.MetaGeneratorAbstractions.UserInput;
 
-namespace Messerli.ProjectGenerator.UserInput
+namespace Messerli.MetaGenerator.UserInput
 {
     public class UserInputDescriptionBuilder
     {
