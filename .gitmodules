@@ -1,6 +1,0 @@
-[submodule "Config/Style"]
-	path = Config/Style
-	url = ssh://rmitfs:22/tfs/Messerli%20Main/MesserliOne/_git/Style
-[submodule ".config/code-style"]
-	path = .config/code-style
-	url = git@github.com:messerli-informatik-ag/code-style.git
