@@ -65,9 +65,9 @@ namespace Messerli.MetaGenerator.UserInput
 
         public string Value(string variableName)
         {
-            var x = _knownUserInputs.TryGetValue(key: variableName);
-
-            return x.Match(
+            return _knownUserInputs
+                .TryGetValue(key: variableName)
+                .Match(
                 none: () => throw new Exception($"Variable '{variableName}' is not a registered user input."),
                 some: userInput => userInput.Value).OrElse("BAD");
         }
@@ -88,7 +88,7 @@ namespace Messerli.MetaGenerator.UserInput
             RegisterVariableName(variable.Name, builder);
             RegsiterVariableQuestion(variable.Question, builder);
             RegsiterVariableDescription(variable.Description, builder);
-            RegisterVariableType(variable.Type, builder);
+            RegisterVariableType(variable.GetVariableType(), builder);
             RegisterSelectionValues(variable, builder);
 
             RegisterVariable(builder.Build());
@@ -96,12 +96,12 @@ namespace Messerli.MetaGenerator.UserInput
 
         private void RegisterSelectionValues(Variable variable, UserInputDescriptionBuilder builder)
         {
-            if (variable.Type == VariableType.Selection && (variable.SelectionValues == null || variable.SelectionValues.Count == 0))
+            if (variable.GetVariableType() == VariableType.Selection && (variable.SelectionValues == null || variable.SelectionValues.Count == 0))
             {
                 throw new Exception("If the variable type is selection, there must be at least one selection value.");
             }
 
-            if (variable.Type != VariableType.Selection && variable.SelectionValues != null && variable.SelectionValues.Count > 0)
+            if (variable.GetVariableType() != VariableType.Selection && variable.SelectionValues != null && variable.SelectionValues.Count > 0)
             {
                 throw new Exception("You have specified values for a selection, but the type is not a selection.");
             }
@@ -111,7 +111,7 @@ namespace Messerli.MetaGenerator.UserInput
                 throw new Exception("All selections value must have a valid string value!");
             }
 
-            if (variable.Type == VariableType.Selection && variable.SelectionValues != null && variable.SelectionValues.Count > 0)
+            if (variable.GetVariableType() == VariableType.Selection && variable.SelectionValues != null && variable.SelectionValues.Count > 0)
             {
                 builder.SetSelectionValues(variable.SelectionValues);
             }
