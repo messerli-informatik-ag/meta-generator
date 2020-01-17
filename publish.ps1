@@ -5,3 +5,5 @@ New-Item -Path "publish" -Name "plugins" -ItemType "directory" -Force
 #Plugins
 
 &dotnet publish Plugins/MetaGeneratorProjectPlugin/MetaGeneratorProjectPlugin.csproj --configuration Release --runtime win-x64 --output "publish\plugins\MetaGeneratorProjectPlugin"
+
+&dotnet publish Plugins/NativeProjectsPlugin/NativeProjectsPlugin.csproj --configuration Debug --runtime win-x64 --output "publish\plugins\NativeProjectsPlugin"
