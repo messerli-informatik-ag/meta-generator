@@ -11,18 +11,18 @@ namespace Messerli.ProjectGenerator
 {
     public class FileGenerator : IFileGenerator
     {
-        private readonly IUserInputProvider _userInputProvider;
+        private readonly IVariableProvider _variableProvider;
         private readonly ITemplateLoader _templateLoader;
         private readonly StubbleBuilder _stubbleBuilder;
         private readonly IConsoleWriter _consoleWriter;
 
         public FileGenerator(
-            IUserInputProvider userInputProvider,
+            IVariableProvider variableProvider,
             ITemplateLoader templateLoader,
             StubbleBuilder stubbleBuilder,
             IConsoleWriter consoleWriter)
         {
-            _userInputProvider = userInputProvider;
+            _variableProvider = variableProvider;
             _templateLoader = templateLoader;
             _stubbleBuilder = stubbleBuilder;
             _consoleWriter = consoleWriter;
@@ -43,7 +43,7 @@ namespace Messerli.ProjectGenerator
                 .Configure(StubbleBuilderSettings)
                 .Build();
 
-            return await stubble.RenderAsync(_templateLoader.GetTemplate(templateName), _userInputProvider.View(), TemplateRenderSettings());
+            return await stubble.RenderAsync(_templateLoader.GetTemplate(templateName), _variableProvider.GetVariableValues(), TemplateRenderSettings());
         }
 
         private static void StubbleBuilderSettings(RendererSettingsBuilder settings)

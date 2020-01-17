@@ -57,6 +57,10 @@ namespace Messerli.ProjectGeneratorPluginProjects
             _userInputProvider.AddValidation(ProjectDescription, Validations.ValuePresent);
         }
 
+        public void Prepare()
+        {
+        }
+
         public void Generate()
         {
             _consoleWriter.WriteLine($"Creating the plugin '{_userInputProvider.Value(ProjectName)}' for the project generator.");
@@ -75,7 +79,7 @@ namespace Messerli.ProjectGeneratorPluginProjects
             Task.WaitAll(tasks.ToArray());
         }
 
-        public void PostGenerate()
+        public void TearDown()
         {
             using (var repo = new Repository(GetSolutionPath()))
             {

@@ -28,8 +28,11 @@ namespace Messerli.ProjectGenerator
             builder.RegisterType<SystemConsoleReader>().As<IConsoleReader>();
             builder.RegisterType<ValidatedUserInput>().As<IValidatedUserInput>();
             builder.RegisterType<UserInputProvider>().As<IUserInputProvider>().SingleInstance();
+            builder.RegisterType<VariableProvider>().As<IVariableProvider>().SingleInstance();
+
             builder.RegisterType<UserInputDescriptionBuilder>().AsSelf();
             builder.RegisterType<TemplateLoader>().As<ITemplateLoader>();
+            builder.RegisterType<TimeKeeper>().As<ITimeKeeper>();
 
             builder.RegisterType<ConsoleClient>().As<IClient>();
             builder.RegisterType<FileGenerator>().As<IFileGenerator>();

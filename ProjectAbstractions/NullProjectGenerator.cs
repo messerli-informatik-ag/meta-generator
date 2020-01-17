@@ -17,11 +17,15 @@ namespace Messerli.ProjectAbstractions
         {
         }
 
+        public void Prepare()
+        {
+        }
+
         public void Generate()
         {
         }
 
-        public void PostGenerate()
+        public void TearDown()
         {
         }
     }

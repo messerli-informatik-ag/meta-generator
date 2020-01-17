@@ -31,6 +31,11 @@ namespace Messerli.{{ProjectName}}
             _userInputProvider.RegisterVariablesFromTemplate(VariableDeclarations);
         }
 
+        public void Prepare()
+        {
+            // for example tfs checkout
+        }
+
         public void Generate()
         {
             var projectName = _userInputProvider.Value(ProjectName);
@@ -44,8 +49,9 @@ namespace Messerli.{{ProjectName}}
             Task.WaitAll(tasks.ToArray());
         }
 
-        public void PostGenerate()
+        public void TearDown()
         {
+            // for example git add
         }
     }
 }

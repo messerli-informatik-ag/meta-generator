@@ -50,7 +50,7 @@ namespace Messerli.ProjectGenerator.UserInput
             }
         }
 
-        public Dictionary<string, string> View()
+        public Dictionary<string, string> GetVariableValues()
         {
             return _knownUserInputs
                 .Select(kv => kv.Value)
@@ -73,8 +73,11 @@ namespace Messerli.ProjectGenerator.UserInput
 
         private List<Variable> GetVariablesFromTemplate(string templateName)
         {
-            return (List<Variable>)_jsonSerializer
-                .ReadObject(_templateLoader.GetTemplateStream(templateName));
+            using (var stream = _templateLoader.GetTemplateStream(templateName))
+            {
+                return (List<Variable>)_jsonSerializer
+                    .ReadObject(stream);
+            }
         }
 
         private void RegisterVariablesFromJson(Variable variable)

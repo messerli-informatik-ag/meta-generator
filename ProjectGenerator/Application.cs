@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
-using System.Diagnostics;
 using System.Linq;
 using Messerli.CommandLineAbstractions;
 using Messerli.ProjectAbstractions;
@@ -21,6 +20,7 @@ namespace Messerli.ProjectGenerator
         private readonly RootCommand _rootCommand;
         private readonly SelectionRequester _selectionRequester;
         private readonly Func<UserInputDescriptionBuilder> _newNewUserInputDescriptionBuilder;
+        private readonly ITimeKeeper _timeKeeper;
 
         public Application(
             IConsoleWriter consoleWriter,
@@ -28,6 +28,7 @@ namespace Messerli.ProjectGenerator
             IUserInputProvider userInputProvider,
             IExecutingPluginAssemblyProvider assemblyProvider,
             SelectionRequester selectionRequester,
+            ITimeKeeper timeKeeper,
             Func<UserInputDescriptionBuilder> newUserInputDescriptionBuilder)
         {
             _consoleWriter = consoleWriter;
@@ -39,6 +40,7 @@ namespace Messerli.ProjectGenerator
 
             _rootCommand = SetupRootCommand();
             SetupProjectCommand();
+            _timeKeeper = timeKeeper;
         }
 
         public int Run(string[] args)
@@ -131,23 +133,15 @@ namespace Messerli.ProjectGenerator
         {
             _assemblyProvider.PluginAssembly = projectTypeGenerator.GetType().Assembly;
 
-            MeasureTime(projectTypeGenerator.Register, "Registration");
+            _timeKeeper.MeasureTime(projectTypeGenerator.Register, "Registration");
 
             _userInputProvider.AskUser();
 
-            MeasureTime(projectTypeGenerator.Generate, "Generation");
-            MeasureTime(projectTypeGenerator.PostGenerate, "Cleanup");
-        }
+            _timeKeeper.MeasureTime(projectTypeGenerator.Prepare, "Prepartion");
+            _timeKeeper.MeasureTime(projectTypeGenerator.Generate, "Generation");
+            _timeKeeper.MeasureTime(projectTypeGenerator.TearDown, "Tear down");
 
-        private void MeasureTime(Action action, string eventName)
-        {
-            var stopWatch = new Stopwatch();
-
-            stopWatch.Start();
-            action();
-            stopWatch.Stop();
-
-            _consoleWriter.WriteLine($"{eventName}: {stopWatch.ElapsedMilliseconds}ms");
+            _timeKeeper.Print();
         }
     }
 }
