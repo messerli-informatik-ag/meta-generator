@@ -70,7 +70,7 @@ namespace Messerli.MetaGeneratorProjectPlugin
                 _fileGenerator.FromTemplate(VariableDeclarationsTemplate, Path.Combine(GetPluginPath(), "templates", "VariableDeclarations.json"), new UTF8Encoding(false)),
                 _fileGenerator.FromTemplate(PaketReferencesTemplate, Path.Combine(GetPluginPath(), "paket.references"), Encoding.UTF8),
                 _fileManipulator.AppendTemplate(PublishScript, Path.Combine(GetSolutionPath(), "publish.ps1")),
-                _fileManipulator.AddProjectToSolution("Plugins", GeneratorName, Path.Combine(GetPluginPath(), $"{_userInputProvider.Value(GeneratorName)}.csproj"), Path.Combine(GetSolutionPath(), "MetaGenerator.sln")),
+                _fileManipulator.AddProjectToSolution("Plugins", _userInputProvider.Value(GeneratorName), Path.Combine(GetPluginPath(), $"{_userInputProvider.Value(GeneratorName)}.csproj"), Path.Combine(GetSolutionPath(), "MetaGenerator.sln")),
             };
 
             Task.WaitAll(tasks.ToArray());
