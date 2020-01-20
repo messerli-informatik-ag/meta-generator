@@ -29,7 +29,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VsSolution", "VsSolution\VsSolution.csproj", "{A9936752-DD5B-46C8-BFB2-DADBA6F2F1AC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeneratorName", "C:\Repositories\MetaGenerator\Plugins\NativeProjectsPlugin\NativeProjectsPlugin.csproj", "{71710905-1901-49C9-86BF-409D276FE968}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeneratorName", "Plugins\NativeProjectsPlugin\NativeProjectsPlugin.csproj", "{71710905-1901-49C9-86BF-409D276FE968}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
