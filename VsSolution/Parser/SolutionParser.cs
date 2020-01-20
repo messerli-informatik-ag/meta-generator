@@ -1,4 +1,6 @@
-﻿using apophis.Lexer;
+﻿using System.IO;
+using System.Threading.Tasks;
+using apophis.Lexer;
 using Messerli.VsSolution.Lexer;
 using Messerli.VsSolution.Model;
 using Messerli.VsSolution.Parser.GlobalSection;
@@ -13,7 +15,6 @@ namespace Messerli.VsSolution.Parser
         private readonly HeaderParser _headerParser;
         private readonly ProjectParser _projectParser;
         private readonly GlobalSectionParser _globalSectionParser;
-        private readonly Solution _solution = new Solution();
 
         public SolutionParser(TokenWalker tokenWalker, HeaderParser headerParser, ProjectParser projectParser, GlobalSectionParser globalSectionParser)
         {
@@ -36,13 +37,15 @@ namespace Messerli.VsSolution.Parser
             return new SolutionParser(tokenWalker, headerParser, projectParser, globalSectionParser);
         }
 
-        public Solution Parse(string solutionContent)
+        public async Task<Solution> Parse(string solutionPath)
         {
-            _tokenWalker.Scan(solutionContent);
+            var solution = new Solution(solutionPath);
 
-            Parse(_tokenWalker, _solution);
+            _tokenWalker.Scan(await File.ReadAllTextAsync(solutionPath));
 
-            return _solution;
+            Parse(_tokenWalker, solution);
+
+            return solution;
         }
 
         private void Parse(TokenWalker tokenWalker, Solution solution)

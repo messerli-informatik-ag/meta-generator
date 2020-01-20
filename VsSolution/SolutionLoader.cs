@@ -18,7 +18,7 @@ namespace Messerli.VsSolution
 
         public async Task<Solution> Load(string solutionPath)
         {
-            return _parser.Parse(await File.ReadAllTextAsync(solutionPath));
+            return await _parser.Parse(solutionPath);
         }
 
         public async Task Store(string solutionPath, Solution solution)

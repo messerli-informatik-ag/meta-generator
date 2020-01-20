@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Messerli.VsSolution.Model
@@ -8,6 +9,13 @@ namespace Messerli.VsSolution.Model
     {
         private const string ActiveConfiguration = "ActiveCfg";
         private const string BuildZero = "Build.0";
+
+        public Solution(string solutionPath)
+        {
+            SolutionPath = solutionPath;
+        }
+
+        public string SolutionPath { get; }
 
         public int FormatVersion { get; set; }
 
@@ -29,7 +37,7 @@ namespace Messerli.VsSolution.Model
 
         public void AddProject(string projectName, string projectPath, ProjectType.Identifier projectType)
         {
-            var project = new Project(projectName, projectPath, projectType);
+            var project = new Project(projectName, PathRelativeToSolution(projectPath), projectType);
 
             foreach (var platform in Platforms)
             {
@@ -49,6 +57,13 @@ namespace Messerli.VsSolution.Model
             var project = Projects.First(p => p.ProjectName == projectName);
 
             ProjectNesting.Add(new NestedProject(folder.ProjectGuid, project.ProjectGuid));
+        }
+
+        private string PathRelativeToSolution(string projectPath)
+        {
+            var solutionDirectory = Path.GetDirectoryName(SolutionPath);
+
+            return Path.GetRelativePath(solutionDirectory, projectPath);
         }
     }
 }
