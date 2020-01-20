@@ -48,10 +48,10 @@ namespace Messerli.MetaGeneratorProjectPlugin
         {
             _userInputProvider.RegisterVariablesFromTemplate(VariableDeclarations);
 
-            _userInputProvider.AddValidation(GeneratorName, Validations.ValuePresent);
-            _userInputProvider.AddValidation(GeneratorName, Validations.NoWhiteSpace);
-            _userInputProvider.AddValidation(GeneratorPath, new SimpleValidation(path => File.Exists(Path.Combine(path, "MetaGenerator.sln")), "No ProjectGenerator.sln found at location."));
-            _userInputProvider.AddValidation(GeneratorDescription, Validations.ValuePresent);
+            _userInputProvider[GeneratorName].Validations.Add(Validations.ValuePresent);
+            _userInputProvider[GeneratorName].Validations.Add(Validations.NoWhiteSpace);
+            _userInputProvider[GeneratorPath].Validations.Add(new SimpleValidation(path => File.Exists(Path.Combine(path, "MetaGenerator.sln")), "No ProjectGenerator.sln found at location."));
+            _userInputProvider[GeneratorDescription].Validations.Add(Validations.ValuePresent);
         }
 
         public void Prepare()

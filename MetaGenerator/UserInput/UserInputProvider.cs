@@ -28,6 +28,8 @@ namespace Messerli.MetaGenerator.UserInput
             _jsonSerializer = new DataContractJsonSerializer(typeof(List<Variable>));
         }
 
+        public IUserInputDescription this[string key] => GetUserInputDescription(key);
+
         public void RegisterVariable(UserInputDescription description)
         {
             _knownUserInputs.Add(description.VariableName, description);
@@ -43,6 +45,8 @@ namespace Messerli.MetaGenerator.UserInput
 
         public void AskUser()
         {
+            VerifyUserInputs();
+
             foreach (var variable in _knownUserInputs.Select(v => v.Value).Where(v => v.IsNeeded.Value))
             {
                 var variableRequster = _variableRequesterFactory(variable.VariableType);
@@ -58,18 +62,13 @@ namespace Messerli.MetaGenerator.UserInput
                 .ToDictionary(v => v.VariableName, v => v.Value.OrElse("BAD VALUE!"));
         }
 
-        public void AddValidation(string variableName, IValidation validation)
-        {
-            _knownUserInputs[variableName].Validations.Add(validation);
-        }
-
         public string Value(string variableName)
         {
             return _knownUserInputs
                 .TryGetValue(key: variableName)
                 .Match(
-                none: () => throw new Exception($"Variable '{variableName}' is not a registered user input."),
-                some: userInput => userInput.Value).OrElse("BAD");
+                    none: () => throw new Exception($"Variable '{variableName}' is not a registered user input."),
+                    some: userInput => userInput.Value).OrElse("should not happen");
         }
 
         private List<Variable> GetVariablesFromTemplate(string templateName)
@@ -86,7 +85,6 @@ namespace Messerli.MetaGenerator.UserInput
 
             RegisterVariableName(variable.Name, builder);
             RegsiterVariableQuestion(variable.Question, builder);
-            RegsiterVariableDescription(variable.Description, builder);
             RegisterVariableType(variable.GetVariableType(), builder);
             RegisterSelectionValues(variable, builder);
 
@@ -95,21 +93,6 @@ namespace Messerli.MetaGenerator.UserInput
 
         private void RegisterSelectionValues(Variable variable, UserInputDescriptionBuilder builder)
         {
-            if (variable.GetVariableType() == VariableType.Selection && (variable.SelectionValues == null || variable.SelectionValues.Count == 0))
-            {
-                throw new Exception("If the variable type is selection, there must be at least one selection value.");
-            }
-
-            if (variable.GetVariableType() != VariableType.Selection && variable.SelectionValues != null && variable.SelectionValues.Count > 0)
-            {
-                throw new Exception("You have specified values for a selection, but the type is not a selection.");
-            }
-
-            if (variable.SelectionValues != null && variable.SelectionValues.Any(selectionValue => string.IsNullOrEmpty(selectionValue.Value)))
-            {
-                throw new Exception("All selections value must have a valid string value!");
-            }
-
             if (variable.GetVariableType() == VariableType.Selection && variable.SelectionValues != null && variable.SelectionValues.Count > 0)
             {
                 builder.SetSelectionValues(variable.SelectionValues);
@@ -124,17 +107,24 @@ namespace Messerli.MetaGenerator.UserInput
             }
         }
 
-        private void RegsiterVariableDescription(string? variableDescription, UserInputDescriptionBuilder builder)
-        {
-            if (variableDescription != null)
-            {
-                builder.SetVariableDescription(variableDescription);
-            }
-        }
-
         private void RegisterVariableType(VariableType variableType, UserInputDescriptionBuilder builder)
         {
             builder.SetVariableType(variableType);
+        }
+
+        private IUserInputDescription GetUserInputDescription(string variableName)
+        {
+            var x = _knownUserInputs
+                .TryGetValue(key: variableName);
+
+            return x.Match(
+                none: () => NoValue(variableName),
+                some: userInput => userInput);
+        }
+
+        private static IUserInputDescription NoValue(in string variableName)
+        {
+            throw new Exception($"No value known for '{variableName}'");
         }
 
         private static void RegisterVariableName(string? variableName, UserInputDescriptionBuilder builder)
@@ -145,6 +135,32 @@ namespace Messerli.MetaGenerator.UserInput
             }
 
             builder.SetVariableName(variableName);
+        }
+
+        private void VerifyUserInputs()
+        {
+            foreach (var (key, variable) in _knownUserInputs)
+            {
+                VerifyVariable(variable);
+            }
+        }
+
+        private static void VerifyVariable(IUserInputDescription variable)
+        {
+            if (variable.VariableType == VariableType.Selection && (variable.VariableSelectionValues == null || variable.VariableSelectionValues.Count == 0))
+            {
+                throw new Exception("If the variable type is selection, there must be at least one selection value.");
+            }
+
+            if (variable.VariableType != VariableType.Selection && variable.VariableSelectionValues != null && variable.VariableSelectionValues.Count > 0)
+            {
+                throw new Exception("You have specified values for a selection, but the type is not a selection.");
+            }
+
+            if (variable.VariableSelectionValues != null && variable.VariableSelectionValues.Any(selectionValue => string.IsNullOrEmpty(selectionValue.Value)))
+            {
+                throw new Exception("All selections value must have a valid string value!");
+            }
         }
     }
 }

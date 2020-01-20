@@ -15,9 +15,6 @@ namespace Messerli.MetaGeneratorAbstractions.Json
         public string? Question { get; set; }
 
         [DataMember]
-        public string? Description { get; set; }
-
-        [DataMember]
         public string? Type { get; set; }
 
         [DataMember]

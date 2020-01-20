@@ -29,13 +29,6 @@ namespace Messerli.TfsClient
             StartTfProcess("checkout " + path);
         }
 
-        public string GetPath()
-        {
-            var workfold = GetProcessData(_tfPath, "vc workfold");
-            var path = GetNeedle(workfold, ": (.+\\\\.+)");
-            return IncludeTfsRoot(path);
-        }
-
         private void StartTfProcess(string arguments)
         {
             using var process = new Process

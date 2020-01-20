@@ -5,7 +5,5 @@
         void AddToWorkspace(string path);
 
         void CheckOutFile(string path);
-
-        string GetPath();
     }
 }

@@ -4,14 +4,14 @@ namespace Messerli.MetaGeneratorAbstractions.UserInput
 {
     public interface IUserInputProvider
     {
+        IUserInputDescription this[string variableName] { get; }
+
         string Value(string variableName);
+
+        Dictionary<string, string> GetVariableValues();
 
         void RegisterVariablesFromTemplate(string templateName);
 
         void AskUser();
-
-        void AddValidation(string variableName, IValidation validation);
-
-        Dictionary<string, string> GetVariableValues();
     }
 }
