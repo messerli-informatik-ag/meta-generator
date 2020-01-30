@@ -35,9 +35,9 @@ namespace Messerli.VsSolution.Model
 
         public List<TfsControlProperty> TfsControlProperties { get; } = new List<TfsControlProperty>();
 
-        public void AddProject(string projectName, string projectPath, ProjectType.Identifier projectType)
+        public void AddProject(string projectName, string projectPath, ProjectType.Identifier projectType, Guid? projectGuid)
         {
-            var project = new Project(projectName, PathRelativeToSolution(projectPath), projectType);
+            var project = new Project(projectName, PathRelativeToSolution(projectPath), projectType, projectGuid);
 
             foreach (var platform in Platforms)
             {

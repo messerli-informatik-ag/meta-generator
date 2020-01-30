@@ -34,7 +34,7 @@ namespace Messerli.MetaGenerator
             builder.RegisterType<TemplateLoader>().As<ITemplateLoader>();
             builder.RegisterType<TimeKeeper>().As<ITimeKeeper>();
 
-            builder.RegisterType<ConsoleClient>().As<IClient>();
+            builder.RegisterType<ConsoleTfsClient>().As<ITfsClient>();
             builder.RegisterType<FileGenerator>().As<IFileGenerator>();
             builder.RegisterType<FileManipulator>().As<IFileManipulator>();
             builder.RegisterType<StubbleBuilder>().AsSelf();

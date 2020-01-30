@@ -45,11 +45,11 @@ namespace Messerli.MetaGenerator
             await sw.WriteAsync(await OutputFromTemplate(templateName));
         }
 
-        public async Task AddProjectToSolution(string? solutionFolder, string projectName, string projectPath, string solutionPath)
+        public async Task AddProjectToSolution(string? solutionFolder, string projectName, string projectPath, string solutionPath, Guid? projectGuid)
         {
             var solution = await _solutionParser.Load(solutionPath);
 
-            solution.AddProject(projectName, projectPath, ProjectType.Identifier.CSharpSdk);
+            solution.AddProject(projectName, projectPath, ProjectType.Identifier.CSharpSdk, projectGuid);
 
             if (solutionFolder != null)
             {

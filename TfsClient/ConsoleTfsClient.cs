@@ -6,12 +6,12 @@ using Messerli.CommandLineAbstractions;
 
 namespace Messerli.TfsClient
 {
-    public class ConsoleClient : IClient
+    public class ConsoleTfsClient : ITfsClient
     {
         private readonly IConsoleWriter _consoleWriter;
         private readonly string _tfPath;
 
-        public ConsoleClient(IConsoleWriter consoleWriter)
+        public ConsoleTfsClient(IConsoleWriter consoleWriter)
         {
             _consoleWriter = consoleWriter;
             _tfPath = CreateTfPath(GetVsPath());
@@ -20,13 +20,13 @@ namespace Messerli.TfsClient
         public void AddToWorkspace(string path)
         {
             _consoleWriter.WriteLine($"TFS: add '{path}' to work space");
-            StartTfProcess("add " + path + " /recursive");
+            StartTfProcess($"add \"{path}\" /recursive");
         }
 
         public void CheckOutFile(string path)
         {
             _consoleWriter.WriteLine($"TFS: check out '{path}'");
-            StartTfProcess("checkout " + path);
+            StartTfProcess($"checkout \"{path}\"");
         }
 
         private void StartTfProcess(string arguments)

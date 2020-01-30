@@ -1,6 +1,6 @@
 ﻿namespace Messerli.TfsClient
 {
-    public interface IClient
+    public interface ITfsClient
     {
         void AddToWorkspace(string path);
 

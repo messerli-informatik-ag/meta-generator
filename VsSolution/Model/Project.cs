@@ -5,12 +5,12 @@ namespace Messerli.VsSolution.Model
 {
     public class Project
     {
-        public Project(string projectName, string projectPath, ProjectType.Identifier projectType)
+        public Project(string projectName, string projectPath, ProjectType.Identifier projectType, Guid? projectGuid)
         {
             ProjectName = projectName;
             ProjectPath = projectPath;
             ProjectType = new ProjectType(projectType);
-            ProjectGuid = Guid.NewGuid();
+            ProjectGuid = projectGuid ?? Guid.NewGuid();
         }
 
         public Project(string projectName, string projectPath, Guid typeGuid, Guid projectGuid)

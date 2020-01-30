@@ -11,14 +11,18 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="templates\ProjectName.vcxproj.template" />
+    <None Remove="templates\SignList.template" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\CommandLineAbstractions\CommandLineAbstractions.csproj" />
     <ProjectReference Include="..\..\MetaGeneratorAbstractions\MetaGeneratorAbstractions.csproj" />
+    <ProjectReference Include="..\..\TfsClient\TfsClient.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="templates\ProjectName.vcxproj.template" />
+    <EmbeddedResource Include="templates\SignList.template" />
     <EmbeddedResource Include="templates\VariableDeclarations.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="templates\" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
