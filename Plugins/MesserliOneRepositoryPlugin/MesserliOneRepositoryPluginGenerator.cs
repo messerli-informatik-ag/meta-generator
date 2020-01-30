@@ -22,6 +22,7 @@ namespace Messerli.MesserliOneRepositoryPlugin
         private const string PaketReferences = "Messerli.MesserliOneRepositoryPlugin.templates.paket.references.template";
         private const string GitIgnore = "Messerli.MesserliOneRepositoryPlugin.templates.gitignore.template";
         private const string ProjectFile = "Messerli.MesserliOneRepositoryPlugin.templates.Project.csproj.template";
+        private const string PublishScript = "Messerli.MesserliOneRepositoryPlugin.templates.publish.ps1.template";
 
         private const string ProgramSource = "Messerli.MesserliOneRepositoryPlugin.templates.Program.Source.template";
         private const string ApplicationSource = "Messerli.MesserliOneRepositoryPlugin.templates.Application.Source.template";
@@ -68,6 +69,7 @@ namespace Messerli.MesserliOneRepositoryPlugin
             {
                 _fileGenerator.FromTemplate(DirectoryBuildTargets, Path.Combine(RepositoryPath(), "Directory.Build.targets"), Encoding.UTF8),
                 _fileGenerator.FromTemplate(GitIgnore, Path.Combine(RepositoryPath(), ".gitignore"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(PublishScript, Path.Combine(RepositoryPath(), "publish.ps1"), Encoding.UTF8),
                 _fileGenerator.FromTemplate(ProjectFile, Path.Combine(RepositoryPath(), RepositoryName(), $"{RepositoryName()}.csproj"), Encoding.UTF8),
                 _fileGenerator.FromTemplate(PaketDependencies, Path.Combine(RepositoryPath(), "paket.dependencies"), Encoding.UTF8),
 

@@ -8,6 +8,7 @@
         public int Run(string[] args)
         {
             // Implement your great CLI program
+            System.Console.WriteLine("Hello World!");
             return 0;
         }
     }
