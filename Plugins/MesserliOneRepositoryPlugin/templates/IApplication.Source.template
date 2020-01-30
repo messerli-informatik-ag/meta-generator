@@ -1,4 +1,4 @@
-﻿namespace Messerli.CheckCode
+﻿namespace Messerli.{{RepositoryName}}
 {
     /// <summary>
     /// Your application interface, the Run is the main entry point to your program.
