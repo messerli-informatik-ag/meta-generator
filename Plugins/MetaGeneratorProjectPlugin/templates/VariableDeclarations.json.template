@@ -2,6 +2,6 @@
   {
     "Question": "Enter the name of the file generator name:",
     "Name": "GeneratorName",
-    "Type": 0
+    "Type": "String"
   }
 ]

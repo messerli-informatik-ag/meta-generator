@@ -15,20 +15,20 @@ namespace Messerli.MetaGenerator
         private readonly IVariableProvider _variableProvider;
         private readonly ITemplateLoader _templateLoader;
         private readonly StubbleBuilder _stubbleBuilder;
-        private readonly ISolutionLoader _solutionParser;
+        private readonly ISolutionLoader _solutionLoader;
         private readonly IConsoleWriter _consoleWriter;
 
         public FileManipulator(
             IVariableProvider variableProvider,
             ITemplateLoader templateLoader,
             StubbleBuilder stubbleBuilder,
-            ISolutionLoader solutionParser,
+            ISolutionLoader solutionLoader,
             IConsoleWriter consoleWriter)
         {
             _variableProvider = variableProvider;
             _templateLoader = templateLoader;
             _stubbleBuilder = stubbleBuilder;
-            _solutionParser = solutionParser;
+            _solutionLoader = solutionLoader;
             _consoleWriter = consoleWriter;
         }
 
@@ -47,7 +47,7 @@ namespace Messerli.MetaGenerator
 
         public async Task AddProjectToSolution(string? solutionFolder, string projectName, string projectPath, string solutionPath, Guid? projectGuid)
         {
-            var solution = await _solutionParser.Load(solutionPath);
+            var solution = await _solutionLoader.Load(solutionPath);
 
             solution.AddProject(projectName, projectPath, ProjectType.Identifier.CSharpSdk, projectGuid);
 
@@ -56,7 +56,7 @@ namespace Messerli.MetaGenerator
                 solution.AddNestedProject(solutionFolder, projectName);
             }
 
-            await _solutionParser.Store(solutionPath, solution);
+            await _solutionLoader.Store(solutionPath, solution);
         }
 
         private async Task<string> OutputFromTemplate(string templateName)

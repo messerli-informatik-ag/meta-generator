@@ -1,0 +1,14 @@
+﻿namespace Messerli.{{RepositoryName}}
+{
+    /// <summary>
+    /// Your application implementation, the Run is the main entry point to your program.
+    /// </summary>
+    internal class Application : IApplication
+    {
+        public int Run(string[] args)
+        {
+            // Implement your great CLI program
+            return 0;
+        }
+    }
+}

@@ -31,6 +31,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VsSolution", "VsSolution\Vs
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeneratorName", "Plugins\NativeProjectsPlugin\NativeProjectsPlugin.csproj", "{71710905-1901-49C9-86BF-409D276FE968}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MesserliOneRepositoryPlugin", "Plugins\MesserliOneRepositoryPlugin\MesserliOneRepositoryPlugin.csproj", "{478ED0F0-33E5-43B1-96D3-E00993E3A35D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,10 @@ Global
 		{71710905-1901-49C9-86BF-409D276FE968}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71710905-1901-49C9-86BF-409D276FE968}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71710905-1901-49C9-86BF-409D276FE968}.Release|Any CPU.Build.0 = Release|Any CPU
+		{478ED0F0-33E5-43B1-96D3-E00993E3A35D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{478ED0F0-33E5-43B1-96D3-E00993E3A35D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{478ED0F0-33E5-43B1-96D3-E00993E3A35D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{478ED0F0-33E5-43B1-96D3-E00993E3A35D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -80,6 +86,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{DA906E3A-6E30-4465-940A-2F5EC6E24333} = {20C9369F-5188-445E-9A81-837709067EA5}
 		{71710905-1901-49C9-86BF-409D276FE968} = {20C9369F-5188-445E-9A81-837709067EA5}
+		{478ED0F0-33E5-43B1-96D3-E00993E3A35D} = {20C9369F-5188-445E-9A81-837709067EA5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E1DAC9D9-5C44-443C-9697-0BC57D1F0914}
