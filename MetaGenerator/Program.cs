@@ -7,7 +7,13 @@ namespace Messerli.MetaGenerator
     {
         public static int Main(string[] args)
         {
-            using var container = new CompositionRoot().Build();
+            using var container = CompositionRoot
+                    .Create()
+                    .RegisterModules()
+                    .RegisterGenerator()
+                    .RegisterPlugins()
+                    .Build();
+
             var application = container.Resolve<IApplication>();
 
             return application.Run(args);
