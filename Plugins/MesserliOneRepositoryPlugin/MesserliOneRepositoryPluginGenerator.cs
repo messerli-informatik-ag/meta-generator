@@ -113,7 +113,7 @@ namespace Messerli.MesserliOneRepositoryPlugin
             {
                 var paketInstall = new ProcessStartInfo(GetFullPath("paket.exe"))
                 {
-                    Arguments = "install",
+                    ArgumentList = { "install" },
                     WorkingDirectory = RepositoryPath(),
                 };
                 using var process = Process.Start(paketInstall);
