@@ -4,8 +4,8 @@ namespace Messerli.ToolLoaderAbstractions
 {
     public interface ITool
     {
-        public bool IsAvailable();
+        void Execute(IEnumerable<string> arguments, string workingDirectory);
 
-        public void Execute(IEnumerable<string> arguments);
+        bool IsAvailable();
     }
 }

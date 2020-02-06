@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -9,6 +8,7 @@ using LibGit2Sharp;
 using Messerli.CommandLineAbstractions;
 using Messerli.MetaGeneratorAbstractions;
 using Messerli.MetaGeneratorAbstractions.UserInput;
+using Messerli.ToolLoaderAbstractions;
 using Messerli.VsSolution;
 using Messerli.VsSolution.Model;
 
@@ -39,13 +39,15 @@ namespace Messerli.MesserliOneRepositoryPlugin
         private readonly IFileGenerator _fileGenerator;
         private readonly IUserInputProvider _userInputProvider;
         private readonly ISolutionLoader _solutionLoader;
+        private readonly ITools _tools;
 
-        public MesserliOneRepositoryPluginGenerator(IConsoleWriter consoleWriter, IFileGenerator fileGenerator, IUserInputProvider userInputProvider, ISolutionLoader solutionLoader)
+        public MesserliOneRepositoryPluginGenerator(IConsoleWriter consoleWriter, IFileGenerator fileGenerator, IUserInputProvider userInputProvider, ISolutionLoader solutionLoader, ITools tools)
         {
             _consoleWriter = consoleWriter;
             _fileGenerator = fileGenerator;
             _userInputProvider = userInputProvider;
             _solutionLoader = solutionLoader;
+            _tools = tools;
         }
 
         public string Name => "This will generate a git repository with a new .NET Core Solution according to the Messerli One Standards";
@@ -55,6 +57,8 @@ namespace Messerli.MesserliOneRepositoryPlugin
         public void Register()
         {
             _userInputProvider.RegisterVariablesFromTemplate(VariableDeclarations);
+            _tools.RegisterTool("dotnet", "dotnet.exe");
+            _tools.RegisterTool("paket", "paket.exe");
         }
 
         public void Prepare()
@@ -97,50 +101,29 @@ namespace Messerli.MesserliOneRepositoryPlugin
             repo.Commit(InitialCommitMessage, Author(), Commiter());
 
             // paket install here...
-            if (RunPaketInstall())
-            {
-                // add generated Paket.restore.target andpaket.lock files to the repository
-                Commands.Stage(repo, "*");
+            RunPaketInstall();
 
-                // Commit these changes
-                repo.Commit(PaketInstallCommitMessage, Author(), Commiter());
-            }
+            // add generated Paket.restore.target andpaket.lock files to the repository
+            Commands.Stage(repo, "*");
+
+            // Commit these changes
+            repo.Commit(PaketInstallCommitMessage, Author(), Commiter());
+
+            RunBuild();
         }
 
-        public bool RunPaketInstall()
+        private void RunBuild()
         {
-            if (ExistsOnPath("paket.exe"))
-            {
-                var paketInstall = new ProcessStartInfo(GetFullPath("paket.exe"))
-                {
-                    ArgumentList = { "install" },
-                    WorkingDirectory = RepositoryPath(),
-                };
-                using var process = Process.Start(paketInstall);
+            var dotnet = _tools.GetTool("dotnet");
 
-                process?.WaitForExit();
-                return true;
-            }
-
-            _consoleWriter.WriteLine("paket.exe is not found in your machines PATH.");
-            _consoleWriter.WriteLine("Install paket.exe and execute 'paket install' in the generated directory and commit the two generated files.");
-
-            return false;
+            dotnet.Execute(new[] { "build" }, RepositoryPath());
         }
 
-        public static bool ExistsOnPath(string fileName)
+        private void RunPaketInstall()
         {
-            return GetFullPath(fileName) != null;
-        }
+            var dotnet = _tools.GetTool("paket");
 
-        public static string? GetFullPath(string fileName)
-        {
-            return File.Exists(fileName)
-                ? Path.GetFullPath(fileName)
-                : Environment.GetEnvironmentVariable("PATH")
-                    ?.Split(Path.PathSeparator)
-                    .Select(path => Path.Combine(path, fileName))
-                    .FirstOrDefault(File.Exists);
+            dotnet.Execute(new[] { "install" }, RepositoryPath());
         }
 
         private static Signature Commiter()

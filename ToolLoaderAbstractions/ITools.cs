@@ -1,7 +1,13 @@
-﻿namespace Messerli.ToolLoaderAbstractions
+﻿using System.Collections.Generic;
+
+namespace Messerli.ToolLoaderAbstractions
 {
     public interface ITools
     {
-        public ITool CreateTool(string name, string executable);
+        void RegisterTool(string name, string executable, string? specificPath = null);
+
+        IEnumerable<string> VerifyTools();
+
+        public ITool GetTool(string name);
     }
 }

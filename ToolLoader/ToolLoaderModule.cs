@@ -7,7 +7,7 @@ namespace Messerli.ToolLoader
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<Tools>().As<ITools>();
+            builder.RegisterType<Tools>().As<ITools>().SingleInstance();
         }
     }
 }
