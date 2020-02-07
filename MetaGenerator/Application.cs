@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.CommandLine;
-using System.CommandLine.Invocation;
 using System.Drawing;
 using System.Linq;
 using Messerli.CommandLineAbstractions;
@@ -20,7 +18,6 @@ namespace Messerli.MetaGenerator
         private readonly IEnumerable<IMetaGenerator> _generators;
         private readonly IUserInputProvider _userInputProvider;
         private readonly IExecutingPluginAssemblyProvider _assemblyProvider;
-        private readonly RootCommand _rootCommand;
         private readonly SelectionRequester _selectionRequester;
         private readonly Func<UserInputDescriptionBuilder> _newNewUserInputDescriptionBuilder;
         private readonly ITools _tools;
@@ -43,43 +40,13 @@ namespace Messerli.MetaGenerator
             _selectionRequester = selectionRequester;
             _newNewUserInputDescriptionBuilder = newUserInputDescriptionBuilder;
             _tools = tools;
-
-            _rootCommand = SetupRootCommand();
-            SetupGeneratorCommand();
             _timeKeeper = timeKeeper;
         }
 
         public int Run(string[] args)
         {
-            return _rootCommand.Invoke(args);
-        }
-
-        private RootCommand SetupRootCommand()
-        {
-            var rootCommand = new RootCommand
-            {
-                Description = "This is the meta generator for the automatic creation of files, wrappers, projects or whatever the plugin provides.",
-                Handler = CommandHandler.Create<string>(ExecuteWizard),
-            };
-
-            var generatorTypeOption = new Option("--generator-type", "Give the generator-type")
-            {
-                Argument = new Argument<string?>(defaultValue: () => null),
-            };
-
-            rootCommand.AddOption(generatorTypeOption);
-
-            return rootCommand;
-        }
-
-        private void SetupGeneratorCommand()
-        {
-            var generatorCommand = new Command("generators", "List all generator types")
-            {
-                Handler = CommandHandler.Create(ListGenerators),
-            };
-
-            _rootCommand.AddCommand(generatorCommand);
+            ExecuteWizard(string.Empty);
+            return 0;
         }
 
         private void ListGenerators()
