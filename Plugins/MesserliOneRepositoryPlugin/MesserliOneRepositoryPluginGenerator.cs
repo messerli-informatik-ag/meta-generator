@@ -31,8 +31,6 @@ namespace Messerli.MesserliOneRepositoryPlugin
 
         private const string RepositoryNameVariable = "RepositoryName";
         private const string BasePath = "BasePath";
-        private const string InitialCommitMessage = "Initial commit by the MetaGenerator";
-        private const string PaketInstallCommitMessage = "paket install by the MetaGenerator";
         private const string SolutionItems = "SolutionItems";
 
         private readonly IConsoleWriter _consoleWriter;
@@ -58,7 +56,6 @@ namespace Messerli.MesserliOneRepositoryPlugin
         {
             _userInputProvider.RegisterVariablesFromTemplate(VariableDeclarations);
             _tools.RegisterTool("dotnet", "dotnet.exe");
-            _tools.RegisterTool("paket", "paket.exe");
         }
 
         public void Prepare()
@@ -95,21 +92,30 @@ namespace Messerli.MesserliOneRepositoryPlugin
 
             // Add created files to repository: git add --all <RepositoryPath>
             using var repo = new Repository(RepositoryPath());
-            Commands.Stage(repo, "*");
 
             // Create an initial commit
-            repo.Commit(InitialCommitMessage, Author(), Commiter());
+            CommitAll(repo, "Initial commit by the MetaGenerator");
 
-            // paket install here...
-            RunPaketInstall();
+            var dotnet = _tools.GetTool("dotnet");
 
-            // add generated Paket.restore.target andpaket.lock files to the repository
-            Commands.Stage(repo, "*");
+            dotnet.Execute(new[] { "new", "tool-manifest" }, RepositoryPath());
+            CommitAll(repo, "dotnet new tool-manifest");
 
-            // Commit these changes
-            repo.Commit(PaketInstallCommitMessage, Author(), Commiter());
+            dotnet.Execute(new[] { "tool", "install", "paket" }, RepositoryPath());
+            CommitAll(repo, "dotnet tool install paket");
+
+            dotnet.Execute(new[] { "paket", "install" }, RepositoryPath());
+            CommitAll(repo, "dotnet paket install");
 
             RunBuild();
+        }
+
+        private void CommitAll(Repository repository, string message)
+        {
+            Commands.Stage(repository, "*");
+
+            // Create an initial commit
+            repository.Commit(message, Author(), Commiter());
         }
 
         private void RunBuild()
@@ -117,13 +123,6 @@ namespace Messerli.MesserliOneRepositoryPlugin
             var dotnet = _tools.GetTool("dotnet");
 
             dotnet.Execute(new[] { "build" }, RepositoryPath());
-        }
-
-        private void RunPaketInstall()
-        {
-            var dotnet = _tools.GetTool("paket");
-
-            dotnet.Execute(new[] { "install" }, RepositoryPath());
         }
 
         private static Signature Commiter()

@@ -7,13 +7,27 @@ namespace Messerli.{{RepositoryName}}
     /// </summary>
     internal class CompositionRoot
     {
+        private readonly ContainerBuilder _builder = new ContainerBuilder();
+
+        private CompositionRoot()
+        {
+        }
+
+        public static CompositionRoot Create()
+        {
+            return new CompositionRoot();
+        }
+
+        public CompositionRoot RegisterApplication()
+        {
+            _builder.RegisterType<Application>().As<IApplication>();
+
+            return this;
+        }
+
         public IContainer Build()
         {
-            var builder = new ContainerBuilder();
-
-            builder.RegisterType<Application>().As<IApplication>();
-
-            return builder.Build();
+            return _builder.Build();
         }
     }
 }
