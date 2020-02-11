@@ -84,7 +84,7 @@ namespace Messerli.MetaGenerator.UserInput
             var builder = _newInputDescriptionBuilder();
 
             RegisterVariableName(variable.Name, builder);
-            RegsiterVariableQuestion(variable.Question, builder);
+            RegisterVariableQuestion(variable.Question, builder);
             RegisterVariableType(variable.GetVariableType(), builder);
             RegisterSelectionValues(variable, builder);
 
@@ -99,7 +99,7 @@ namespace Messerli.MetaGenerator.UserInput
             }
         }
 
-        private void RegsiterVariableQuestion(string? variableQuestion, UserInputDescriptionBuilder builder)
+        private void RegisterVariableQuestion(string? variableQuestion, UserInputDescriptionBuilder builder)
         {
             if (variableQuestion != null)
             {
