@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.CommandLine;
-using System.CommandLine.Invocation;
+using System.Collections.Immutable;
+using System.Drawing;
 using System.Linq;
 using Messerli.CommandLineAbstractions;
 using Messerli.MetaGenerator.UserInput;
 using Messerli.MetaGeneratorAbstractions;
 using Messerli.MetaGeneratorAbstractions.Json;
 using Messerli.MetaGeneratorAbstractions.UserInput;
+using Messerli.ToolLoaderAbstractions;
+using Pastel;
 
 namespace Messerli.MetaGenerator
 {
@@ -17,9 +19,9 @@ namespace Messerli.MetaGenerator
         private readonly IEnumerable<IMetaGenerator> _generators;
         private readonly IUserInputProvider _userInputProvider;
         private readonly IExecutingPluginAssemblyProvider _assemblyProvider;
-        private readonly RootCommand _rootCommand;
         private readonly SelectionRequester _selectionRequester;
         private readonly Func<UserInputDescriptionBuilder> _newNewUserInputDescriptionBuilder;
+        private readonly ITools _tools;
         private readonly ITimeKeeper _timeKeeper;
 
         public Application(
@@ -29,7 +31,8 @@ namespace Messerli.MetaGenerator
             IExecutingPluginAssemblyProvider assemblyProvider,
             SelectionRequester selectionRequester,
             ITimeKeeper timeKeeper,
-            Func<UserInputDescriptionBuilder> newUserInputDescriptionBuilder)
+            Func<UserInputDescriptionBuilder> newUserInputDescriptionBuilder,
+            ITools tools)
         {
             _consoleWriter = consoleWriter;
             _generators = generators;
@@ -37,43 +40,16 @@ namespace Messerli.MetaGenerator
             _assemblyProvider = assemblyProvider;
             _selectionRequester = selectionRequester;
             _newNewUserInputDescriptionBuilder = newUserInputDescriptionBuilder;
-
-            _rootCommand = SetupRootCommand();
-            SetupGeneratorCommand();
+            _tools = tools;
             _timeKeeper = timeKeeper;
         }
 
         public int Run(string[] args)
         {
-            return _rootCommand.Invoke(args);
-        }
+            var options = args.ToImmutableList();
 
-        private RootCommand SetupRootCommand()
-        {
-            var rootCommand = new RootCommand
-            {
-                Description = "This is the meta generator for the automatic creation of files, wrappers, projects or whatever the plugin provides.",
-                Handler = CommandHandler.Create<string>(ExecuteWizard),
-            };
-
-            var generatorTypeOption = new Option("--generator-type", "Give the generator-type")
-            {
-                Argument = new Argument<string?>(defaultValue: () => null),
-            };
-
-            rootCommand.AddOption(generatorTypeOption);
-
-            return rootCommand;
-        }
-
-        private void SetupGeneratorCommand()
-        {
-            var generatorCommand = new Command("generators", "List all generator types")
-            {
-                Handler = CommandHandler.Create(ListGenerators),
-            };
-
-            _rootCommand.AddCommand(generatorCommand);
+            ExecuteWizard(string.Empty);
+            return 0;
         }
 
         private void ListGenerators()
@@ -135,13 +111,28 @@ namespace Messerli.MetaGenerator
 
             _timeKeeper.MeasureTime(metaTypeGenerator.Register, "Registration");
 
-            _userInputProvider.AskUser();
+            if (VerifyTools())
+            {
+                _userInputProvider.AskUser();
 
-            _timeKeeper.MeasureTime(metaTypeGenerator.Prepare, "Prepartion");
-            _timeKeeper.MeasureTime(metaTypeGenerator.Generate, "Generation");
-            _timeKeeper.MeasureTime(metaTypeGenerator.TearDown, "Tear down");
+                _timeKeeper.MeasureTime(metaTypeGenerator.Prepare, "Prepartion");
+                _timeKeeper.MeasureTime(metaTypeGenerator.Generate, "Generation");
+                _timeKeeper.MeasureTime(metaTypeGenerator.TearDown, "Tear down");
+            }
 
             _timeKeeper.Print();
+        }
+
+        private bool VerifyTools()
+        {
+            var unavailableTools = _tools.VerifyTools().ToList();
+
+            foreach (var toolName in unavailableTools)
+            {
+                _consoleWriter.WriteLine($"Tool '{toolName}' is necessary for this plugin and has not been found on your machine.".Pastel(Color.OrangeRed));
+            }
+
+            return unavailableTools.Any() == false;
         }
     }
 }

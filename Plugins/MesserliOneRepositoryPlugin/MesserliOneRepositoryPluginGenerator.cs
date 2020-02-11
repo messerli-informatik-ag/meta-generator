@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -9,6 +8,7 @@ using LibGit2Sharp;
 using Messerli.CommandLineAbstractions;
 using Messerli.MetaGeneratorAbstractions;
 using Messerli.MetaGeneratorAbstractions.UserInput;
+using Messerli.ToolLoaderAbstractions;
 using Messerli.VsSolution;
 using Messerli.VsSolution.Model;
 
@@ -31,21 +31,21 @@ namespace Messerli.MesserliOneRepositoryPlugin
 
         private const string RepositoryNameVariable = "RepositoryName";
         private const string BasePath = "BasePath";
-        private const string InitialCommitMessage = "Initial commit by the MetaGenerator";
-        private const string PaketInstallCommitMessage = "paket install by the MetaGenerator";
         private const string SolutionItems = "SolutionItems";
 
         private readonly IConsoleWriter _consoleWriter;
         private readonly IFileGenerator _fileGenerator;
         private readonly IUserInputProvider _userInputProvider;
         private readonly ISolutionLoader _solutionLoader;
+        private readonly ITools _tools;
 
-        public MesserliOneRepositoryPluginGenerator(IConsoleWriter consoleWriter, IFileGenerator fileGenerator, IUserInputProvider userInputProvider, ISolutionLoader solutionLoader)
+        public MesserliOneRepositoryPluginGenerator(IConsoleWriter consoleWriter, IFileGenerator fileGenerator, IUserInputProvider userInputProvider, ISolutionLoader solutionLoader, ITools tools)
         {
             _consoleWriter = consoleWriter;
             _fileGenerator = fileGenerator;
             _userInputProvider = userInputProvider;
             _solutionLoader = solutionLoader;
+            _tools = tools;
         }
 
         public string Name => "This will generate a git repository with a new .NET Core Solution according to the Messerli One Standards";
@@ -55,6 +55,7 @@ namespace Messerli.MesserliOneRepositoryPlugin
         public void Register()
         {
             _userInputProvider.RegisterVariablesFromTemplate(VariableDeclarations);
+            _tools.RegisterTool("dotnet", "dotnet.exe");
         }
 
         public void Prepare()
@@ -91,56 +92,37 @@ namespace Messerli.MesserliOneRepositoryPlugin
 
             // Add created files to repository: git add --all <RepositoryPath>
             using var repo = new Repository(RepositoryPath());
-            Commands.Stage(repo, "*");
 
             // Create an initial commit
-            repo.Commit(InitialCommitMessage, Author(), Commiter());
+            CommitAll(repo, "Initial commit by the MetaGenerator");
 
-            // paket install here...
-            if (RunPaketInstall())
-            {
-                // add generated Paket.restore.target andpaket.lock files to the repository
-                Commands.Stage(repo, "*");
+            var dotnet = _tools.GetTool("dotnet");
 
-                // Commit these changes
-                repo.Commit(PaketInstallCommitMessage, Author(), Commiter());
-            }
+            dotnet.Execute(new[] { "new", "tool-manifest" }, RepositoryPath());
+            CommitAll(repo, "dotnet new tool-manifest");
+
+            dotnet.Execute(new[] { "tool", "install", "paket" }, RepositoryPath());
+            CommitAll(repo, "dotnet tool install paket");
+
+            dotnet.Execute(new[] { "paket", "install" }, RepositoryPath());
+            CommitAll(repo, "dotnet paket install");
+
+            RunBuild();
         }
 
-        public bool RunPaketInstall()
+        private void CommitAll(Repository repository, string message)
         {
-            if (ExistsOnPath("paket.exe"))
-            {
-                var paketInstall = new ProcessStartInfo(GetFullPath("paket.exe"))
-                {
-                    Arguments = "install",
-                    WorkingDirectory = RepositoryPath(),
-                };
-                using var process = Process.Start(paketInstall);
+            Commands.Stage(repository, "*");
 
-                process?.WaitForExit();
-                return true;
-            }
-
-            _consoleWriter.WriteLine("paket.exe is not found in your machines PATH.");
-            _consoleWriter.WriteLine("Install paket.exe and execute 'paket install' in the generated directory and commit the two generated files.");
-
-            return false;
+            // Create an initial commit
+            repository.Commit(message, Author(), Commiter());
         }
 
-        public static bool ExistsOnPath(string fileName)
+        private void RunBuild()
         {
-            return GetFullPath(fileName) != null;
-        }
+            var dotnet = _tools.GetTool("dotnet");
 
-        public static string? GetFullPath(string fileName)
-        {
-            return File.Exists(fileName)
-                ? Path.GetFullPath(fileName)
-                : Environment.GetEnvironmentVariable("PATH")
-                    ?.Split(Path.PathSeparator)
-                    .Select(path => Path.Combine(path, fileName))
-                    .FirstOrDefault(File.Exists);
+            dotnet.Execute(new[] { "build" }, RepositoryPath());
         }
 
         private static Signature Commiter()
