@@ -1,0 +1,19 @@
+﻿using Autofac;
+
+namespace Messerli.{{RepositoryName}}
+{
+    /// <summary>
+    /// This is the composition root of your program, register your services here.
+    /// </summary>
+    internal class CompositionRoot
+    {
+        public IContainer Build()
+        {
+            var builder = new ContainerBuilder();
+
+            builder.RegisterType<Application>().As<IApplication>();
+
+            return builder.Build();
+        }
+    }
+}

@@ -1,0 +1,2 @@
+
+&dotnet publish Plugins/{{GeneratorName}}/{{GeneratorName}}.csproj --configuration Release --runtime win-x64 --output "publish\plugins\{{GeneratorName}}"

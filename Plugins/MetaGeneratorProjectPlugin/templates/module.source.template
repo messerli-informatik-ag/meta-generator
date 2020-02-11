@@ -1,0 +1,13 @@
+﻿using Autofac;
+using Messerli.MetaGeneratorAbstractions;
+
+namespace Messerli.{{GeneratorName}}
+{
+    public class {{GeneratorName}}Module : Module
+    {
+        protected override void Load(ContainerBuilder builder)
+        {
+            builder.RegisterType<{{GeneratorName}}Generator>().As<IMetaGenerator>();
+        }
+    }
+}

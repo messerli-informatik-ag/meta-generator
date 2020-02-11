@@ -1,0 +1,12 @@
+[
+  {
+    "Question": "Enter the name of the repository:",
+    "Name": "RepositoryName",
+    "Type": "String"
+  },
+  {
+    "Question": "Enter the path in which the repository should be generated:",
+    "Name": "BasePath",
+    "Type": "ExistingPath"
+  }
+]

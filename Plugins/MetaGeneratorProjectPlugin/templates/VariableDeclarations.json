@@ -1,0 +1,17 @@
+[
+  {
+    "Question": "Enter the name of the project file name (no spaces) -> 'YourProjectPlugin.csproj'",
+    "Name": "GeneratorName",
+    "Type": "String"
+  },
+  {
+    "Question": "Enter a description of what your plugin will be generating",
+    "Name": "GeneratorDescription",
+    "Type": "String"
+  },
+  {
+    "Question": "Enter the full path of the ProjectGenerator repository (the directory must have a file called 'MetaGenerator.sln')",
+    "Name": "GeneratorPath",
+    "Type": "ExistingPath"
+  }
+]

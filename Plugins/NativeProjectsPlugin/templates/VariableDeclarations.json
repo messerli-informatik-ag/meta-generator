@@ -1,0 +1,27 @@
+[
+  {
+    "Question": "Enter the name of the native C++ project you want to create:",
+    "Name": "ProjectName",
+    "Type": "String"
+  },
+  {
+    "Question": "The project should be created in which branch?",
+    "Name": "Branch",
+    "Type": "Selection"
+  },
+  {
+    "Question": "In which subfolder should this project be placed? This can be empty.",
+    "Name": "Subfolder",
+    "Type": "Path"
+  },
+  {
+    "Question": "Will this project include resources? (y/n)",
+    "Name": "UsesResources",
+    "Type": "Bool"
+  },
+  {
+    "Question": "Will this project be a test project? (y/n):",
+    "Name": "IsTestProject",
+    "Type": "Bool"
+  }
+]
