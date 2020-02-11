@@ -3,7 +3,7 @@ framework netcoreapp3.1, netstandard2.1
 source https://www.nuget.org/api/v2
 
 nuget Autofac ~> 5.0
-nuget Funcky ~> 1.3
+nuget Funcky ~> 1.4
 nuget Stubble.Core  ~> 1.6
 nuget JetBrains.Annotations ~> 2019.1
 nuget Microsoft.NETCore.App ~> 2.2

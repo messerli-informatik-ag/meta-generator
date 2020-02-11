@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Drawing;
 using System.Linq;
 using Messerli.CommandLineAbstractions;
@@ -45,6 +46,8 @@ namespace Messerli.MetaGenerator
 
         public int Run(string[] args)
         {
+            var options = args.ToImmutableList();
+
             ExecuteWizard(string.Empty);
             return 0;
         }
