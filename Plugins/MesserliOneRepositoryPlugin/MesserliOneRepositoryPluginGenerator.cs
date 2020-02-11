@@ -115,7 +115,7 @@ namespace Messerli.MesserliOneRepositoryPlugin
             Commands.Stage(repository, "*");
 
             // Create an initial commit
-            repository.Commit(message, Author(), Commiter());
+            repository.Commit(message, Author(), Commiter(repository));
         }
 
         private void RunBuild()
@@ -125,9 +125,11 @@ namespace Messerli.MesserliOneRepositoryPlugin
             dotnet.Execute(new[] { "build" }, RepositoryPath());
         }
 
-        private static Signature Commiter()
+        private static Signature Commiter(Repository repository)
         {
-            return new Signature("Thomas Bruderer", "thomas.bruderer@messerli.ch", DateTime.Now);
+            var config = repository.Config;
+
+            return config.BuildSignature(DateTimeOffset.Now) ?? Author();
         }
 
         private static Signature Author()
@@ -148,26 +150,27 @@ namespace Messerli.MesserliOneRepositoryPlugin
         private async Task GenerateSolution()
         {
             var solutionPath = Path.Combine(RepositoryPath(), $"{RepositoryName()}.sln");
-            var solution = new Solution(solutionPath)
-            {
-                FormatVersion = 12,
-                VisualStudioVersion = new System.Version(16, 0, 29709, 97),
-                MinimumVisualStudioVersion = new System.Version(10, 0, 40219, 1),
-                Guid = Guid.NewGuid(),
-            };
+            var solution = Solution.NewSolution(solutionPath);
 
-            solution.Platforms.Add(new PlatformConfiguration("Debug|Any CPU", "Debug|Any CPU"));
-            solution.Platforms.Add(new PlatformConfiguration("Release|Any CPU", "Release|Any CPU"));
-
-            solution.AddProject(SolutionItems, Path.Combine(RepositoryPath(), RepositoryName(), $"{RepositoryName()}.csproj"), ProjectType.Identifier.SolutionFolder, null);
-            var solutionItems = solution.Projects.First();
-
-            solutionItems.SolutionItems.Add(new SolutionItem(".gitignore", ".gitignore"));
-            solutionItems.SolutionItems.Add(new SolutionItem("paket.dependencies", "paket.dependencies"));
+            AddSolutionFolder(solution);
 
             solution.AddProject(RepositoryName(), Path.Combine(RepositoryPath(), RepositoryName(), $"{RepositoryName()}.csproj"), ProjectType.Identifier.CSharpSdk, null);
 
             await _solutionLoader.Store(solutionPath, solution);
+        }
+
+        private void AddSolutionFolder(Solution solution)
+        {
+            solution.AddProject(SolutionItems, Path.Combine(RepositoryPath(), RepositoryName(), $"{RepositoryName()}.csproj"), ProjectType.Identifier.SolutionFolder, null);
+            var project = solution.Projects.First();
+
+            AddSolutionItemToProject(project, ".gitignore");
+            AddSolutionItemToProject(project, "paket.dependencies");
+        }
+
+        private static void AddSolutionItemToProject(Project project, string item, string? alias = null)
+        {
+            project.SolutionItems.Add(new SolutionItem(item, alias ?? item));
         }
     }
 }

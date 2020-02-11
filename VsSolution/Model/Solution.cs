@@ -7,6 +7,7 @@ namespace Messerli.VsSolution.Model
 {
     public class Solution
     {
+        private const int CurrentFormatVersion = 12;
         private const string ActiveConfiguration = "ActiveCfg";
         private const string BuildZero = "Build.0";
 
@@ -34,6 +35,22 @@ namespace Messerli.VsSolution.Model
         public List<NestedProject> ProjectNesting { get; } = new List<NestedProject>();
 
         public List<TfsControlProperty> TfsControlProperties { get; } = new List<TfsControlProperty>();
+
+        public static Solution NewSolution(string solutionPath)
+        {
+            var result = new Solution(solutionPath)
+            {
+                FormatVersion = CurrentFormatVersion,
+                VisualStudioVersion = VisualStudio2019(),
+                MinimumVisualStudioVersion = CurrentMinimumVisualStudioVersion(),
+                Guid = Guid.NewGuid(),
+            };
+
+            result.Platforms.Add(Configuration("Debug"));
+            result.Platforms.Add(Configuration("Release"));
+
+            return result;
+        }
 
         public void AddProject(string projectName, string projectPath, ProjectType.Identifier projectType, Guid? projectGuid)
         {
@@ -64,6 +81,28 @@ namespace Messerli.VsSolution.Model
             var solutionDirectory = Path.GetDirectoryName(SolutionPath);
 
             return Path.GetRelativePath(solutionDirectory, projectPath);
+        }
+
+        private static PlatformConfiguration Configuration(string configuration)
+        {
+            var platform = "Any CPU";
+
+            return new PlatformConfiguration(ConfigurationPlatform(configuration, platform), ConfigurationPlatform(configuration, platform));
+        }
+
+        private static string ConfigurationPlatform(string configuration, string platform)
+        {
+            return $"{configuration}|{platform}";
+        }
+
+        private static Version CurrentMinimumVisualStudioVersion()
+        {
+            return new Version(10, 0, 40219, 1);
+        }
+
+        private static Version VisualStudio2019()
+        {
+            return new Version(16, 0, 29709, 97);
         }
     }
 }
