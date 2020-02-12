@@ -20,5 +20,6 @@
   <ItemGroup>
     <Folder Include="templates\" />
   </ItemGroup>
+  <Import Project="..\..\Plugin.targets" />
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

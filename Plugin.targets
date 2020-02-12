@@ -1,0 +1,31 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<BackbonePluginsTargetDir Condition="'$(BackbonePluginsTargetDir)' == ''">$(MSBuildThisFileDirectory)MetaGenerator\bin\$(Configuration)\$(TargetFramework)\plugins</BackbonePluginsTargetDir>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<_PublishTargets>
+			PrepareForPublish;
+			ComputeAndCopyFilesToPublishDirectory;
+			GeneratePublishDependencyFile;
+			BundlePublishDirectory;
+		</_PublishTargets>
+		<_PluginTargetDir>$(BackbonePluginsTargetDir)\$(AssemblyName)</_PluginTargetDir>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<_ExistingPluginFiles Include="$(_PluginTargetDir)/**/*"></_ExistingPluginFiles>
+	</ItemGroup>
+
+	<Target Name="CopyPlugin" AfterTargets="PostBuildEvent" DependsOnTargets="$(_PublishTargets)">
+		<Error Text="Plugins must be publishable" Condition="$(IsPublishable) != 'true'" />
+
+		<CreateItem Include="$(PublishDir)/**/*" Exclude="$(PublishDir)/Messerli.Backbone.PluginAbstractions.*">
+			<Output TaskParameter="Include" ItemName="_PluginFiles"/>
+		</CreateItem>
+
+		<Delete Files="@(_ExistingPluginFiles)" Condition="Exists('$(_PluginTargetDir)')" />
+		<Copy SourceFiles="@(_PluginFiles)" DestinationFolder="$(_PluginTargetDir)\%(RecursiveDir)" ContinueOnError="false" />
+		<Message Importance="High" Text="$(MSBuildProjectName) -&gt; $([System.IO.Path]::GetFullPath('$(_PluginTargetDir)'))" />
+	</Target>
+</Project>

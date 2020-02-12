@@ -24,5 +24,6 @@
     <EmbeddedResource Include="templates\SignList.template" />
     <EmbeddedResource Include="templates\VariableDeclarations.json" />
   </ItemGroup>
+  <Import Project="..\..\Plugin.targets" />
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
