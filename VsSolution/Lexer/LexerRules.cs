@@ -49,7 +49,7 @@ namespace Messerli.VsSolution.Lexer
         {
             var startPosition = reader.Position;
             var word = new StringBuilder();
-            while (reader.Peek().Match(false, AnythingButSeperator))
+            while (reader.Peek().Match(none: false, some: AnythingButSeperator))
             {
                 reader.Read().AndThen(c => word.Append(c));
             }
@@ -98,7 +98,7 @@ namespace Messerli.VsSolution.Lexer
             var startPosition = reader.Position;
             var quotedString = new StringBuilder();
 
-            while (reader.Peek().Match(false, c => IsNotSecondQuote(c, startPosition == reader.Position)))
+            while (reader.Peek().Match(none: false, some: c => IsNotSecondQuote(c, startPosition == reader.Position)))
             {
                 reader.Read().AndThen(c => quotedString.Append(c));
             }
@@ -124,7 +124,7 @@ namespace Messerli.VsSolution.Lexer
             var startPosition = reader.Position;
             var number = new StringBuilder();
 
-            while (reader.Peek().Match(false, char.IsDigit))
+            while (reader.Peek().Match(none: false, some: char.IsDigit))
             {
                 reader.Read().AndThen(c => number.Append(c));
             }
@@ -137,7 +137,7 @@ namespace Messerli.VsSolution.Lexer
             var startPosition = reader.Position;
             var word = new StringBuilder();
 
-            while (reader.Peek().Match(false, char.IsLetter))
+            while (reader.Peek().Match(none: false, some: char.IsLetter))
             {
                 reader.Read().AndThen(c => word.Append(c));
             }

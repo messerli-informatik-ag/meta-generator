@@ -25,7 +25,7 @@ namespace Messerli.MetaGenerator.UserInput
         {
             return _validatedUserInput
                 .GetValidatedValue(variable, GetDoubleValidation())
-                .Match(() => QueryValueFromUser(variable), ToDouble);
+                .Match(none: () => QueryValueFromUser(variable), some: ToDouble);
         }
 
         private static Option<double> ToDouble(string validatedDoubleString)

@@ -24,7 +24,7 @@ namespace Messerli.MetaGenerator.UserInput
         {
             return _validatedUserInput
                 .GetValidatedValue(variable, GetIntegerValidation())
-                .Match(() => QueryValueFromUser(variable), ToInteger);
+                .Match(none: () => QueryValueFromUser(variable), some: ToInteger);
         }
 
         private static Option<int> ToInteger(string validatedIntegerString)

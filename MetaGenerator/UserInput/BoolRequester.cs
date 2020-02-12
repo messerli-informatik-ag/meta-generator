@@ -28,7 +28,7 @@ namespace Messerli.MetaGenerator.UserInput
         {
             return _validatedUserInput
                 .GetValidatedValue(variable, GetBoolValidation())
-                .Match(() => QueryValueFromUser(variable), ToBool);
+                .Match(none: () => QueryValueFromUser(variable), some: ToBool);
         }
 
         private static IEnumerable<IValidation> GetBoolValidation()
