@@ -10,6 +10,12 @@ namespace Messerli.ToolLoader
     {
         private readonly List<Tuple<string, Func<ITool>>> _findTools = new List<Tuple<string, Func<ITool>>>();
         private Dictionary<string, ITool> _tools = new Dictionary<string, ITool>();
+        private Tool.Factory _toolFactory;
+
+        public Tools(Tool.Factory toolFactory)
+        {
+            _toolFactory = toolFactory;
+        }
 
         public void RegisterTool(string name, string executable, string? specificPath = null)
             => _findTools.Add(Tuple.Create(name, (Func<ITool>)(() => FindTool(executable, specificPath))));
@@ -31,7 +37,7 @@ namespace Messerli.ToolLoader
 
         private ITool FindTool(string executable, string? specificPath) =>
                     FindToolPath(executable, specificPath) is { } toolPath
-                        ? new Tool(toolPath)
+                        ? _toolFactory(toolPath)
                         : NullTool.Create();
 
         private string? FindToolPath(string executable, string? specificPath) =>

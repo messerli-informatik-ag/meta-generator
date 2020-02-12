@@ -1,25 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using Messerli.CommandLineAbstractions;
 using Messerli.ToolLoaderAbstractions;
 
 namespace Messerli.ToolLoader
 {
     public class Tool : ITool
     {
+        private readonly IConsoleWriter _consoleWriter;
         private readonly string _path;
 
-        internal Tool(string path)
+        public Tool(IConsoleWriter consoleWriter, string path)
         {
             Debug.Assert(File.Exists(path), $"No '{nameof(path)}' given");
-
+            _consoleWriter = consoleWriter;
             _path = path;
         }
 
+        public delegate Tool Factory(string path);
+
         public void Execute(IEnumerable<string> arguments, string workingDirectory)
         {
-            Console.WriteLine($"Execute '{_path} {string.Join(" ", arguments)}' in {workingDirectory}");
+            _consoleWriter.WriteLine($"Execute '{_path} {string.Join(" ", arguments)}' in {workingDirectory}");
 
             var paketInstall = new ProcessStartInfo(_path)
             {
