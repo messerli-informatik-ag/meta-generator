@@ -13,6 +13,7 @@ namespace Messerli.MetaGenerator.UserInput
         private VariableType _variableType;
         private Func<bool> _isNeededPredicate;
         private List<SelectionValue>? _variableSelectionValues;
+        private List<IValidation> _validations = new List<IValidation>();
 
         public UserInputDescriptionBuilder()
         {
@@ -23,37 +24,54 @@ namespace Messerli.MetaGenerator.UserInput
         {
             return _variableName == null
                 ? throw new Exception("Variable Name needs to be set with SetVariableName before building!")
-                : new UserInputDescription(_variableName, _variableQuestion, _variableDescription, _variableType, _isNeededPredicate, _variableSelectionValues);
+                : new UserInputDescription(_variableName, _variableQuestion, _variableDescription, _variableType, _isNeededPredicate, _variableSelectionValues, _validations);
         }
 
-        public void SetIsNeededPredicate(Func<bool> isNeededPredicate)
+        public UserInputDescriptionBuilder SetIsNeededPredicate(Func<bool> isNeededPredicate)
         {
             _isNeededPredicate = isNeededPredicate;
+
+            return this;
         }
 
-        public void SetVariableName(string variableName)
+        public UserInputDescriptionBuilder SetVariableName(string variableName)
         {
             _variableName = variableName;
+
+            return this;
         }
 
-        public void SetVariableDescription(string variableDescription)
+        public UserInputDescriptionBuilder SetVariableDescription(string variableDescription)
         {
             _variableDescription = variableDescription;
+
+            return this;
         }
 
-        public void SetVariableQuestion(string variableQuestion)
+        public UserInputDescriptionBuilder SetVariableQuestion(string variableQuestion)
         {
             _variableQuestion = variableQuestion;
+
+            return this;
         }
 
-        public void SetVariableType(VariableType variableType)
+        public void SetValidation(IValidation validation)
+        {
+            _validations.Add(validation);
+        }
+
+        public UserInputDescriptionBuilder SetVariableType(VariableType variableType)
         {
             _variableType = variableType;
+
+            return this;
         }
 
-        public void SetSelectionValues(List<SelectionValue> variableSelectionValues)
+        public UserInputDescriptionBuilder SetSelectionValues(List<SelectionValue> variableSelectionValues)
         {
             _variableSelectionValues = variableSelectionValues;
+
+            return this;
         }
     }
 }

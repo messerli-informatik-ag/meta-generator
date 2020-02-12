@@ -47,11 +47,6 @@ namespace Messerli.MetaGeneratorProjectPlugin
         public void Register()
         {
             _userInputProvider.RegisterVariablesFromTemplate(VariableDeclarations);
-
-            _userInputProvider[GeneratorName].Validations.Add(Validations.ValuePresent);
-            _userInputProvider[GeneratorName].Validations.Add(Validations.NoWhiteSpace);
-            _userInputProvider[GeneratorPath].Validations.Add(new SimpleValidation(path => File.Exists(Path.Combine(path, "MetaGenerator.sln")), "No MetaGenerator.sln found at location."));
-            _userInputProvider[GeneratorDescription].Validations.Add(Validations.ValuePresent);
         }
 
         public void Prepare()

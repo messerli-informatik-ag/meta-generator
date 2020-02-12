@@ -25,7 +25,7 @@ namespace Messerli.MetaGenerator.UserInput
         {
             return _validatedUserInput
                 .GetValidatedValue(variable, GetPathValidation())
-                .Match(() => QueryValueFromUser(variable), Option.Some);
+                .Match(none: () => QueryValueFromUser(variable), some: Option.Some);
         }
 
         private static IEnumerable<IValidation> GetPathValidation()

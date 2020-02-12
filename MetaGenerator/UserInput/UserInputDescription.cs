@@ -8,7 +8,7 @@ namespace Messerli.MetaGenerator.UserInput
 {
     internal class UserInputDescription : IUserInputDescription
     {
-        internal UserInputDescription(string variableName, string? variableQuestion, string? variableDescription, VariableType variableType, Func<bool> isNeededPredicate, List<SelectionValue>? variableSelectionValues)
+        internal UserInputDescription(string variableName, string? variableQuestion, string? variableDescription, VariableType variableType, Func<bool> isNeededPredicate, List<SelectionValue>? variableSelectionValues, List<IValidation> validations)
         {
             VariableName = variableName;
             VariableQuestion = variableQuestion;
@@ -17,7 +17,7 @@ namespace Messerli.MetaGenerator.UserInput
             VariableName = variableName;
             IsNeeded = new Lazy<bool>(isNeededPredicate);
             VariableSelectionValues = variableSelectionValues ?? new List<SelectionValue>();
-            Validations = new List<IValidation>();
+            Validations = validations;
         }
 
         public List<SelectionValue> VariableSelectionValues { get; set; }

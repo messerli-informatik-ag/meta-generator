@@ -41,7 +41,7 @@ namespace Messerli.MetaGenerator.UserInput
         {
             return _validatedUserInput
                 .GetValidatedValue(variable, GetSelectionValidation(variable))
-                .Match(() => QueryValueFromUser(variable), input => IndexToValue(input, variable));
+                .Match(none: () => QueryValueFromUser(variable), some: input => IndexToValue(input, variable));
         }
 
         private Option<string> IndexToValue(string input, IUserInputDescription variable)

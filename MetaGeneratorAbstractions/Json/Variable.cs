@@ -20,6 +20,9 @@ namespace Messerli.MetaGeneratorAbstractions.Json
         [DataMember]
         public List<SelectionValue>? SelectionValues { get; set; }
 
+        [DataMember]
+        public List<string> Validations { get; set; } = new List<string>();
+
         public VariableType GetVariableType() => Enum.Parse<VariableType>(Type);
     }
 }

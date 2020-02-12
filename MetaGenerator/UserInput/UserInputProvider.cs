@@ -12,6 +12,7 @@ namespace Messerli.MetaGenerator.UserInput
     internal class UserInputProvider : IUserInputProvider
     {
         private readonly ITemplateLoader _templateLoader;
+        private readonly IExecutingPluginAssemblyProvider _executingPluginAssemblyProvider;
         private readonly Dictionary<string, IUserInputDescription> _knownUserInputs = new Dictionary<string, IUserInputDescription>();
         private readonly Func<UserInputDescriptionBuilder> _newInputDescriptionBuilder;
         private readonly Func<VariableType, IVariableRequester> _variableRequesterFactory;
@@ -20,9 +21,11 @@ namespace Messerli.MetaGenerator.UserInput
         public UserInputProvider(
             ITemplateLoader templateLoader,
             Func<UserInputDescriptionBuilder> newInputDescriptionBuilder,
+            IExecutingPluginAssemblyProvider executingPluginAssemblyProvider,
             Func<VariableType, IVariableRequester> variableRequesterFactory)
         {
             _templateLoader = templateLoader;
+            _executingPluginAssemblyProvider = executingPluginAssemblyProvider;
             _newInputDescriptionBuilder = newInputDescriptionBuilder;
             _variableRequesterFactory = variableRequesterFactory;
             _jsonSerializer = new DataContractJsonSerializer(typeof(List<Variable>));
@@ -81,60 +84,32 @@ namespace Messerli.MetaGenerator.UserInput
 
         private void RegisterVariablesFromJson(Variable variable)
         {
-            var builder = _newInputDescriptionBuilder();
-
-            RegisterVariableName(variable.Name, builder);
-            RegisterVariableQuestion(variable.Question, builder);
-            RegisterVariableType(variable.GetVariableType(), builder);
-            RegisterSelectionValues(variable, builder);
-
-            RegisterVariable(builder.Build());
+            RegisterVariable(BuildUserInput(variable));
         }
 
-        private void RegisterSelectionValues(Variable variable, UserInputDescriptionBuilder builder)
+        private UserInputDescription BuildUserInput(Variable variable)
         {
-            if (variable.GetVariableType() == VariableType.Selection && variable.SelectionValues != null && variable.SelectionValues.Count > 0)
-            {
-                builder.SetSelectionValues(variable.SelectionValues);
-            }
-        }
-
-        private void RegisterVariableQuestion(string? variableQuestion, UserInputDescriptionBuilder builder)
-        {
-            if (variableQuestion != null)
-            {
-                builder.SetVariableQuestion(variableQuestion);
-            }
-        }
-
-        private void RegisterVariableType(VariableType variableType, UserInputDescriptionBuilder builder)
-        {
-            builder.SetVariableType(variableType);
+            return _newInputDescriptionBuilder()
+                .RegisterVariableName(variable.Name)
+                .RegisterVariableQuestion(variable.Question)
+                .SetVariableType(variable.GetVariableType())
+                .RegisterSelectionValues(variable)
+                .RegisterVariableValidations(variable, _executingPluginAssemblyProvider.PluginAssembly)
+                .Build();
         }
 
         private IUserInputDescription GetUserInputDescription(string variableName)
         {
-            var x = _knownUserInputs
-                .TryGetValue(key: variableName);
-
-            return x.Match(
-                none: () => NoValue(variableName),
-                some: userInput => userInput);
+            return _knownUserInputs
+                .TryGetValue(key: variableName)
+                .Match(
+                    none: () => NoValue(variableName),
+                    some: userInput => userInput);
         }
 
         private static IUserInputDescription NoValue(in string variableName)
         {
             throw new Exception($"No value known for '{variableName}'");
-        }
-
-        private static void RegisterVariableName(string? variableName, UserInputDescriptionBuilder builder)
-        {
-            if (variableName == null)
-            {
-                throw new Exception("A variable must have a name.");
-            }
-
-            builder.SetVariableName(variableName);
         }
 
         private void VerifyUserInputs()

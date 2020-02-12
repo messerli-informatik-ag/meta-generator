@@ -87,15 +87,13 @@ namespace Messerli.MetaGenerator
 
         private IUserInputDescription ToSelection(IEnumerable<IMetaGenerator> metaGenerators)
         {
-            var builder = _newNewUserInputDescriptionBuilder();
-
-            builder.SetVariableName("GeneratorType");
-            builder.SetVariableDescription("What do you want to generate?");
-            builder.SetVariableType(VariableType.Selection);
-            builder.SetVariableQuestion("What do you want to generate? Please select from the following options.");
-            builder.SetSelectionValues(ToSelectionValues(metaGenerators));
-
-            return builder.Build();
+            return _newNewUserInputDescriptionBuilder()
+                .SetVariableName("GeneratorType")
+                .SetVariableDescription("What do you want to generate?")
+                .SetVariableType(VariableType.Selection)
+                .SetVariableQuestion("What do you want to generate? Please select from the following options.")
+                .SetSelectionValues(ToSelectionValues(metaGenerators))
+                .Build();
         }
 
         private List<SelectionValue> ToSelectionValues(IEnumerable<IMetaGenerator> metaGenerators)
