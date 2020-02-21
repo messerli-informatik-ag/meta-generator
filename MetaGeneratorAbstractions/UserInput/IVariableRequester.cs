@@ -4,6 +4,6 @@ namespace Messerli.MetaGeneratorAbstractions.UserInput
 {
     public interface IVariableRequester
     {
-        Option<string> RequestValue(IUserInputDescription variable);
+        string RequestValue(IUserInputDescription variable, Option<string> userArgument);
     }
 }

@@ -40,9 +40,9 @@ namespace Messerli.MetaGeneratorProjectPlugin
             _userInputProvider = userInputProvider;
         }
 
-        public string Name => "Create a new plugin for this generator.";
+        public string Description => "Create a new plugin for this generator.";
 
-        public string ShortName => "meta-generator.plugin";
+        public string Name => "meta-generator-plugin";
 
         public void Register()
         {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization.Json;
 using Funcky.Extensions;
+using Funcky.Monads;
 using Messerli.MetaGeneratorAbstractions;
 using Messerli.MetaGeneratorAbstractions.Json;
 using Messerli.MetaGeneratorAbstractions.UserInput;
@@ -46,7 +47,7 @@ namespace Messerli.MetaGenerator.UserInput
             }
         }
 
-        public void AskUser()
+        public void AskUser(Dictionary<string, string> userArguments)
         {
             VerifyUserInputs();
 
@@ -54,8 +55,18 @@ namespace Messerli.MetaGenerator.UserInput
             {
                 var variableRequster = _variableRequesterFactory(variable.VariableType);
 
-                variable.Value = variableRequster.RequestValue(variable);
+                variable.Value = Option.Some(variableRequster.RequestValue(variable, userArguments.TryGetValue(key: variable.VariableName)));
             }
+        }
+
+        public IEnumerable<IUserInputDescription> GetUserInputDescriptions()
+        {
+            return _knownUserInputs.Values;
+        }
+
+        public void Clear()
+        {
+            _knownUserInputs.Clear();
         }
 
         public Dictionary<string, string> GetVariableValues()

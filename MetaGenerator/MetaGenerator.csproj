@@ -10,6 +10,10 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageProjectUrl>https://github.com/messerli-informatik-ag/MetaGenerator</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/messerli-informatik-ag/MetaGenerator</RepositoryUrl>
+    <PackageTags>generator</PackageTags>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommandLine\CommandLine.csproj" />

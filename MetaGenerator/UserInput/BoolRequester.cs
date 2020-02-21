@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.ComTypes;
+using Funcky;
 using Funcky.Monads;
 using Messerli.MetaGeneratorAbstractions.UserInput;
 
@@ -17,11 +18,19 @@ namespace Messerli.MetaGenerator.UserInput
             _validatedUserInput = validatedUserInput;
         }
 
-        public Option<string> RequestValue(IUserInputDescription variable)
+        public string RequestValue(IUserInputDescription variable, Option<string> userArgument)
+        {
+            return _validatedUserInput.ValidateArgument(variable, userArgument, GetBoolValidation())
+                .Match(() => InteractiveQuery(variable), Functional.Identity);
+        }
+
+        private string InteractiveQuery(IUserInputDescription variable)
         {
             _validatedUserInput.WriteQuestion(variable, "Please enter true or false for '{0}':");
 
-            return QueryValueFromUser(variable).AndThen(boolValue => boolValue.ToString());
+            return QueryValueFromUser(variable).Match(
+                none: () => throw new NotImplementedException("cannot not happen"),
+                some: boolValue => boolValue.ToString());
         }
 
         private Option<bool> QueryValueFromUser(IUserInputDescription variable)

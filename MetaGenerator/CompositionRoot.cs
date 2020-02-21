@@ -37,7 +37,10 @@ namespace Messerli.MetaGenerator
         public CompositionRoot RegisterGenerator()
         {
             _builder.RegisterType<Application>().As<IApplication>();
+            _builder.RegisterType<RootCommandBuilder>().As<IRootCommandBuilder>();
+            _builder.RegisterType<PluginSelection>().As<IPluginSelection>();
 
+            _builder.RegisterType<GenerationSteps>().As<IGenerationSteps>();
             _builder.RegisterType<ValidatedUserInput>().As<IValidatedUserInput>();
             _builder.RegisterType<UserInputProvider>().As<IUserInputProvider>().SingleInstance();
             _builder.RegisterType<VariableProvider>().As<IVariableProvider>().SingleInstance();

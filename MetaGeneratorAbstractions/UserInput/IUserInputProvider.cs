@@ -12,6 +12,10 @@ namespace Messerli.MetaGeneratorAbstractions.UserInput
 
         void RegisterVariablesFromTemplate(string templateName);
 
-        void AskUser();
+        void AskUser(Dictionary<string, string> userArguments);
+
+        IEnumerable<IUserInputDescription> GetUserInputDescriptions();
+
+        void Clear();
     }
 }

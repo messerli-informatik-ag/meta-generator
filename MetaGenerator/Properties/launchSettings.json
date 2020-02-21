@@ -1,7 +1,8 @@
 {
   "profiles": {
     "ProjectGenerator": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "commandLineArgs": "meta-generator-plugin --generator-name \"My CoolStuff\" --generator-description=\"Coole description\""
     }
   }
 }

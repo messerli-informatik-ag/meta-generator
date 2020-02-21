@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Funcky;
 using Funcky.Extensions;
 using Funcky.Monads;
 using Messerli.CommandLineAbstractions;
@@ -19,14 +20,22 @@ namespace Messerli.MetaGenerator.UserInput
             _consoleWriter = consoleWriter;
         }
 
-        public Option<string> RequestValue(IUserInputDescription variable)
+        public string RequestValue(IUserInputDescription variable, Option<string> userArgument)
+        {
+            return _validatedUserInput.ValidateArgument(variable, userArgument,  GetSelectionValidation(variable))
+                .Match(() => InteractiveQuery(variable), Functional.Identity);
+        }
+
+        private string InteractiveQuery(IUserInputDescription variable)
         {
             CheckForMissingOptions(variable);
 
             _validatedUserInput.WriteQuestion(variable, "Please select one of the given values for '{0}':");
             WriteOptions(variable);
 
-            return QueryValueFromUser(variable);
+            return QueryValueFromUser(variable).Match(
+                none: () => throw new NotImplementedException("cannot not happen"),
+                some: Functional.Identity);
         }
 
         private static void CheckForMissingOptions(IUserInputDescription variable)

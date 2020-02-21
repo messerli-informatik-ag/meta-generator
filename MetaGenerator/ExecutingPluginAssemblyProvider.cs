@@ -11,15 +11,12 @@ namespace Messerli.MetaGenerator
         Assembly IExecutingPluginAssemblyProvider.PluginAssembly
         {
             get => _pluginAssembly ?? throw new Exception("No plugin has been set.");
-            set
-            {
-                if (_pluginAssembly != null)
-                {
-                    throw new Exception("Plugin assembly has already been set.");
-                }
+            set => _pluginAssembly = value;
+        }
 
-                _pluginAssembly = value;
-            }
+        public void Clear()
+        {
+            _pluginAssembly = null;
         }
     }
 }

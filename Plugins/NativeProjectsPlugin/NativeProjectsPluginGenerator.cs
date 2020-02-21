@@ -54,9 +54,9 @@ namespace Messerli.NativeProjectsPlugin
             _tfsClient = tfsClient;
         }
 
-        public string Name => "This plugin creates native C++ projects for the All Projects solution.";
+        public string Description => "This plugin creates native C++ projects for the All Projects solution.";
 
-        public string ShortName => "rmiprod.native";
+        public string Name => "rmiprod-native";
 
         public void Register()
         {

@@ -48,9 +48,9 @@ namespace Messerli.MesserliOneRepositoryPlugin
             _tools = tools;
         }
 
-        public string Name => "This will generate a git repository with a new .NET Core Solution according to the Messerli One Standards";
+        public string Description => "This will generate a git repository with a new .NET Core Solution according to the Messerli One Standards";
 
-        public string ShortName => "messerli-one.repository";
+        public string Name => "messerli-one-repository";
 
         public void Register()
         {

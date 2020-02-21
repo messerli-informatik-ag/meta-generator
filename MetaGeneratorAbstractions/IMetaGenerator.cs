@@ -2,9 +2,9 @@
 {
     public interface IMetaGenerator
     {
-        string Name { get; }
+        string Description { get; }
 
-        string ShortName { get; }
+        string Name { get; }
 
         /// <summary>
         /// Registers all necessary input from the user.

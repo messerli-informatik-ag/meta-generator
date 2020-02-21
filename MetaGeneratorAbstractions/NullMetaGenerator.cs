@@ -7,9 +7,9 @@ namespace Messerli.MetaGeneratorAbstractions
         private static readonly Lazy<NullMetaGenerator> LazyInstance =
             new Lazy<NullMetaGenerator>(() => new NullMetaGenerator());
 
-        public string Name { get; } = string.Empty;
+        public string Description { get; } = string.Empty;
 
-        public string ShortName { get; } = string.Empty;
+        public string Name { get; } = string.Empty;
 
         public static NullMetaGenerator Instance => LazyInstance.Value;
 
