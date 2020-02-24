@@ -9,28 +9,26 @@ using Messerli.MetaGeneratorAbstractions.UserInput;
 
 namespace Messerli.MetaGenerator.UserInput
 {
-    internal class SelectionRequester : IVariableRequester
+    internal class SelectionRequester : AbstractVariableRequester
     {
-        private readonly IValidatedUserInput _validatedUserInput;
         private readonly IConsoleWriter _consoleWriter;
 
         public SelectionRequester(IValidatedUserInput validatedUserInput, IConsoleWriter consoleWriter)
+            : base(validatedUserInput)
         {
-            _validatedUserInput = validatedUserInput;
             _consoleWriter = consoleWriter;
         }
 
-        public string RequestValue(IUserInputDescription variable, Option<string> userArgument)
+        protected override IEnumerable<IValidation> RequesterValidations()
         {
-            return _validatedUserInput.ValidateArgument(variable, userArgument,  GetSelectionValidation(variable))
-                .Match(() => InteractiveQuery(variable), Functional.Identity);
+            throw new NotImplementedException();
         }
 
-        private string InteractiveQuery(IUserInputDescription variable)
+        protected override string InteractiveQuery(IUserInputDescription variable)
         {
             CheckForMissingOptions(variable);
 
-            _validatedUserInput.WriteQuestion(variable, "Please select one of the given values for '{0}':");
+            ValidatedUserInput.WriteQuestion(variable, "Please select one of the given values for '{0}':");
             WriteOptions(variable);
 
             return QueryValueFromUser(variable).Match(
@@ -48,7 +46,7 @@ namespace Messerli.MetaGenerator.UserInput
 
         private Option<string> QueryValueFromUser(IUserInputDescription variable)
         {
-            return _validatedUserInput
+            return ValidatedUserInput
                 .GetValidatedValue(variable, GetSelectionValidation(variable))
                 .Match(none: () => QueryValueFromUser(variable), some: input => IndexToValue(input, variable));
         }

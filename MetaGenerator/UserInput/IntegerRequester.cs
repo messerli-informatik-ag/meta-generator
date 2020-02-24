@@ -6,25 +6,22 @@ using Messerli.MetaGeneratorAbstractions.UserInput;
 
 namespace Messerli.MetaGenerator.UserInput
 {
-    internal class IntegerRequester : IVariableRequester
+    internal class IntegerRequester : AbstractVariableRequester
     {
-        private readonly IValidatedUserInput _validatedUserInput;
-        private readonly IEnumerable<IValidation> _requesterValidations = GetIntegerValidation();
-
         public IntegerRequester(IValidatedUserInput validatedUserInput)
+            : base(validatedUserInput)
         {
-            _validatedUserInput = validatedUserInput;
         }
 
-        public string RequestValue(IUserInputDescription variable, Option<string> userArgument)
+        protected override IEnumerable<IValidation> RequesterValidations()
         {
-            return _validatedUserInput.ValidateArgument(variable, userArgument, _requesterValidations)
-                .Match(() => InteractiveQuery(variable), Functional.Identity);
+            var dummy = 0;
+            yield return new SimpleValidation(input => int.TryParse(input, out dummy), "Please enter true or false (no numeric input allowed).");
         }
 
-        private string InteractiveQuery(IUserInputDescription variable)
+        protected override string InteractiveQuery(IUserInputDescription variable)
         {
-            _validatedUserInput.WriteQuestion(variable, "Please enter a valid integer for '{0}':");
+            ValidatedUserInput.WriteQuestion(variable, "Please enter a valid integer for '{0}':");
 
             return QueryValueFromUser(variable).Match(
                 none: () => throw new NotImplementedException("cannot not happen"),
@@ -33,20 +30,14 @@ namespace Messerli.MetaGenerator.UserInput
 
         private Option<int> QueryValueFromUser(IUserInputDescription variable)
         {
-            return _validatedUserInput
-                .GetValidatedValue(variable, _requesterValidations)
+            return ValidatedUserInput
+                .GetValidatedValue(variable, RequesterValidations())
                 .Match(none: () => QueryValueFromUser(variable), some: ToInteger);
         }
 
         private static Option<int> ToInteger(string validatedIntegerString)
         {
             return Option.Some(int.Parse(validatedIntegerString));
-        }
-
-        private static IEnumerable<IValidation> GetIntegerValidation()
-        {
-            var dummy = 0;
-            yield return new SimpleValidation(input => int.TryParse(input, out dummy), "Please enter true or false (no numeric input allowed).");
         }
     }
 }

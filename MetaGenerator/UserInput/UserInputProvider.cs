@@ -16,14 +16,14 @@ namespace Messerli.MetaGenerator.UserInput
         private readonly IExecutingPluginAssemblyProvider _executingPluginAssemblyProvider;
         private readonly Dictionary<string, IUserInputDescription> _knownUserInputs = new Dictionary<string, IUserInputDescription>();
         private readonly Func<UserInputDescriptionBuilder> _newInputDescriptionBuilder;
-        private readonly Func<VariableType, IVariableRequester> _variableRequesterFactory;
+        private readonly Func<VariableType, AbstractVariableRequester> _variableRequesterFactory;
         private readonly DataContractJsonSerializer _jsonSerializer;
 
         public UserInputProvider(
             ITemplateLoader templateLoader,
             Func<UserInputDescriptionBuilder> newInputDescriptionBuilder,
             IExecutingPluginAssemblyProvider executingPluginAssemblyProvider,
-            Func<VariableType, IVariableRequester> variableRequesterFactory)
+            Func<VariableType, AbstractVariableRequester> variableRequesterFactory)
         {
             _templateLoader = templateLoader;
             _executingPluginAssemblyProvider = executingPluginAssemblyProvider;

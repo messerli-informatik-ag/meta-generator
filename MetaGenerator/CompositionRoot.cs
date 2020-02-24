@@ -105,10 +105,10 @@ namespace Messerli.MetaGenerator
             _builder.RegisterType<DateTimeRequester>();
             _builder.RegisterType<TimeRequester>();
 
-            _builder.Register(VariableRequesterFactory).As<IVariableRequester>();
+            _builder.Register(VariableRequesterFactory).As<AbstractVariableRequester>();
         }
 
-        private static IVariableRequester VariableRequesterFactory(IComponentContext context, IEnumerable<Parameter> paremeter)
+        private static AbstractVariableRequester VariableRequesterFactory(IComponentContext context, IEnumerable<Parameter> paremeter)
         {
             var variableType = paremeter.TypedAs<VariableType>();
 

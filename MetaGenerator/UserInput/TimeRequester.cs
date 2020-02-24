@@ -1,31 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Funcky;
-using Funcky.Monads;
 using Messerli.MetaGeneratorAbstractions.UserInput;
 
 namespace Messerli.MetaGenerator.UserInput
 {
-    internal class TimeRequester : IVariableRequester
+    internal class TimeRequester : AbstractVariableRequester
     {
-        private readonly IValidatedUserInput _validatedUserInput;
-        private readonly IEnumerable<IValidation> _requesterValidations = Enumerable.Empty<IValidation>();
-
         public TimeRequester(IValidatedUserInput validatedUserInput)
+            : base(validatedUserInput)
         {
-            _validatedUserInput = validatedUserInput;
         }
 
-        public string RequestValue(IUserInputDescription variable, Option<string> userArgument)
+        protected override IEnumerable<IValidation> RequesterValidations()
         {
-            return _validatedUserInput.ValidateArgument(variable, userArgument, _requesterValidations)
-                .Match(() => InteractiveQuery(variable), Functional.Identity);
+            yield break;
         }
 
-        private string InteractiveQuery(IUserInputDescription variable)
+        protected override string InteractiveQuery(IUserInputDescription variable)
         {
-            _validatedUserInput.WriteQuestion(variable, "Please a valid time for '{0}':");
+            ValidatedUserInput.WriteQuestion(variable, "Please a valid time for '{0}':");
 
             throw new NotImplementedException();
         }
