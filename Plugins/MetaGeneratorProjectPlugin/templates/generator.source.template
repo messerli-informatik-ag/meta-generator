@@ -24,9 +24,9 @@ namespace Messerli.{{GeneratorName}}
             _variableProvider = variableProvider;
         }
 
-        public string Name => "{{GeneratorDescription}}";
+        public string Description => "{{GeneratorDescription}}";
 
-        public string ShortName => "give.me.a.name";
+        public string Name => "{{KebabGeneratorName}}";
 
         public void Register()
         {

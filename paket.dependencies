@@ -15,4 +15,5 @@ nuget apophis.Lexer ~> 1.3
 nuget LibGit2Sharp ~> 0.26.2
 nuget Pastel ~> 1.3
 nuget System.CommandLine ~> 2.0.0-beta1.20104.2 
+nuget Soltys.ChangeCase ~> 1.6
 
