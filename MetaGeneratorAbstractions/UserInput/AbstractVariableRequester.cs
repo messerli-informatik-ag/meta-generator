@@ -15,12 +15,12 @@ namespace Messerli.MetaGeneratorAbstractions.UserInput
 
         public string RequestValue(IUserInputDescription variable, Option<string> userArgument)
         {
-            return ValidatedUserInput.ValidateArgument(variable, userArgument, RequesterValidations())
+            return ValidatedUserInput.ValidateArgument(variable, userArgument, RequesterValidations(variable))
                 .Match(() => InteractiveQuery(variable), Functional.Identity);
         }
 
         protected abstract string InteractiveQuery(IUserInputDescription variable);
 
-        protected abstract IEnumerable<IValidation> RequesterValidations();
+        protected abstract IEnumerable<IValidation> RequesterValidations(IUserInputDescription variable);
     }
 }

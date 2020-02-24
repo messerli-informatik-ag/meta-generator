@@ -24,7 +24,7 @@ namespace Messerli.MetaGenerator.UserInput
                 some: boolValue => boolValue.ToString());
         }
 
-        protected override IEnumerable<IValidation> RequesterValidations()
+        protected override IEnumerable<IValidation> RequesterValidations(IUserInputDescription variable)
         {
             yield return new SimpleValidation(IsValidInput, "Please enter a valid 'yes' or 'no' value.");
         }
@@ -32,7 +32,7 @@ namespace Messerli.MetaGenerator.UserInput
         private Option<bool> QueryValueFromUser(IUserInputDescription variable)
         {
             return ValidatedUserInput
-                .GetValidatedValue(variable, RequesterValidations())
+                .GetValidatedValue(variable, RequesterValidations(variable))
                 .Match(none: () => QueryValueFromUser(variable), some: ToBool);
         }
 

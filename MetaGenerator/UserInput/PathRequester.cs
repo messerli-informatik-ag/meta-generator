@@ -14,7 +14,7 @@ namespace Messerli.MetaGenerator.UserInput
         {
         }
 
-        protected override IEnumerable<IValidation> RequesterValidations()
+        protected override IEnumerable<IValidation> RequesterValidations(IUserInputDescription variable)
         {
             yield break;
         }

@@ -13,7 +13,7 @@ namespace Messerli.MetaGenerator.UserInput
         {
         }
 
-        protected override IEnumerable<IValidation> RequesterValidations()
+        protected override IEnumerable<IValidation> RequesterValidations(IUserInputDescription variable)
         {
             var dummy = 0;
             yield return new SimpleValidation(input => int.TryParse(input, out dummy), "Please enter true or false (no numeric input allowed).");
@@ -31,7 +31,7 @@ namespace Messerli.MetaGenerator.UserInput
         private Option<int> QueryValueFromUser(IUserInputDescription variable)
         {
             return ValidatedUserInput
-                .GetValidatedValue(variable, RequesterValidations())
+                .GetValidatedValue(variable, RequesterValidations(variable))
                 .Match(none: () => QueryValueFromUser(variable), some: ToInteger);
         }
 

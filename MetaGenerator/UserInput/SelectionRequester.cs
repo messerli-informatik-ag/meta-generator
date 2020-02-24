@@ -19,9 +19,9 @@ namespace Messerli.MetaGenerator.UserInput
             _consoleWriter = consoleWriter;
         }
 
-        protected override IEnumerable<IValidation> RequesterValidations()
+        protected override IEnumerable<IValidation> RequesterValidations(IUserInputDescription variable)
         {
-            throw new NotImplementedException();
+            yield return new SimpleValidation(input => IsValuePossible(variable, input), $"Please select from the possible options between 1 and {ToHumandIndex(variable.VariableSelectionValues.Count - 1)}");
         }
 
         protected override string InteractiveQuery(IUserInputDescription variable)
@@ -40,14 +40,14 @@ namespace Messerli.MetaGenerator.UserInput
         {
             if (variable.VariableSelectionValues.Any() == false)
             {
-                throw new Exception("There are no options to chose from...");
+                throw new ArgumentOutOfRangeException(nameof(variable));
             }
         }
 
         private Option<string> QueryValueFromUser(IUserInputDescription variable)
         {
             return ValidatedUserInput
-                .GetValidatedValue(variable, GetSelectionValidation(variable))
+                .GetValidatedValue(variable, RequesterValidations(variable))
                 .Match(none: () => QueryValueFromUser(variable), some: input => IndexToValue(input, variable));
         }
 
@@ -56,11 +56,6 @@ namespace Messerli.MetaGenerator.UserInput
             var index = int.Parse(input);
 
             return Option.Some(variable.VariableSelectionValues[FromHumandIndex(index)].Value!);
-        }
-
-        private static IEnumerable<IValidation> GetSelectionValidation(IUserInputDescription variable)
-        {
-            yield return new SimpleValidation(input => IsValuePossible(variable, input), $"Please select from the possible options between 1 and {ToHumandIndex(variable.VariableSelectionValues.Count - 1)}");
         }
 
         private static bool IsValuePossible(IUserInputDescription variable, string input)

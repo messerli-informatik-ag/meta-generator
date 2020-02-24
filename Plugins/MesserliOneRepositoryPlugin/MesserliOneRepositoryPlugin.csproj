@@ -9,6 +9,9 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageOutputPath>../../nupkg/plugins</PackageOutputPath>
+    <Version>1.0.0</Version>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="templates\Application.Source.template" />

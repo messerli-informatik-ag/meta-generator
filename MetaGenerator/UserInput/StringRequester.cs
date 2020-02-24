@@ -13,7 +13,7 @@ namespace Messerli.MetaGenerator.UserInput
         {
         }
 
-        protected override IEnumerable<IValidation> RequesterValidations()
+        protected override IEnumerable<IValidation> RequesterValidations(IUserInputDescription variable)
         {
             yield break;
         }
@@ -30,7 +30,7 @@ namespace Messerli.MetaGenerator.UserInput
         private Option<string> QueryValueFromUser(IUserInputDescription variable)
         {
             return ValidatedUserInput
-                .GetValidatedValue(variable, RequesterValidations())
+                .GetValidatedValue(variable, RequesterValidations(variable))
                 .Match(none: () => QueryValueFromUser(variable), some: Option.Some);
         }
     }

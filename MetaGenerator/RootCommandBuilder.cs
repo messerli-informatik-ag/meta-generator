@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
-using System.Linq;
-using System.Text.RegularExpressions;
 using Funcky.Extensions;
 using Messerli.MetaGeneratorAbstractions;
 using Messerli.MetaGeneratorAbstractions.UserInput;
@@ -29,7 +26,7 @@ namespace Messerli.MetaGenerator
         {
             var root = new RootCommand("The Messerli meta-generator is a versatile generator which can create files, projects, repositories with the right plugins!")
             {
-                Handler = CommandHandler.Create<InvocationContext>(context => { _pluginSelection.StartPluginInteractive(context); }),
+                Handler = CommandHandler.Create<InvocationContext>(context => { context.ResultCode = _pluginSelection.StartPluginInteractive(context); }),
             };
 
             _generators.Each(generator => root.AddCommand(CreateCommands(generator)));
@@ -41,7 +38,7 @@ namespace Messerli.MetaGenerator
         {
             var command = new Command(generator.Name, generator.Description)
             {
-                Handler = CommandHandler.Create<InvocationContext>(context => { _pluginSelection.StartPlugin(context, generator.Name); }),
+                Handler = CommandHandler.Create<InvocationContext>(context => { context.ResultCode = _pluginSelection.StartPlugin(context, generator.Name); }),
             };
 
             _executingPluginAssemblyProvider.PluginAssembly = generator.GetType().Assembly;

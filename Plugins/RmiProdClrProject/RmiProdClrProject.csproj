@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RootNamespace>Messerli.NativeProjectsPlugin</RootNamespace>
+    <RootNamespace>Messerli.RmiProdClrProject</RootNamespace>
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
     <NullableContextOptions>enable</NullableContextOptions>
@@ -14,18 +14,14 @@
     <Version>1.0.0</Version>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="templates\ProjectName.vcxproj.template" />
-    <None Remove="templates\SignList.template" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\CommandLineAbstractions\CommandLineAbstractions.csproj" />
     <ProjectReference Include="..\..\MetaGeneratorAbstractions\MetaGeneratorAbstractions.csproj" />
-    <ProjectReference Include="..\..\TfsClient\TfsClient.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="templates\ProjectName.vcxproj.template" />
-    <EmbeddedResource Include="templates\SignList.template" />
     <EmbeddedResource Include="templates\VariableDeclarations.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="templates\" />
   </ItemGroup>
   <Import Project="..\..\Plugin.targets" />
   <Import Project="..\..\.paket\Paket.Restore.targets" />

@@ -77,7 +77,7 @@ namespace Messerli.MetaGenerator
                     () => throw new Exception("Failed to get directory of executable."),
                     executablePath =>
                     {
-                        var pluginsPath = Path.Combine(executablePath, "plugins");
+                        var pluginsPath = VerifyExistence(Path.Combine(executablePath, "plugins"));
                         foreach (var pluginPath in Directory.GetDirectories(pluginsPath, "*"))
                         {
                             var pluginName = Path.GetRelativePath(pluginsPath, pluginPath);
@@ -90,6 +90,16 @@ namespace Messerli.MetaGenerator
                     });
 
             return this;
+        }
+
+        private string VerifyExistence(string pluginsPath)
+        {
+            if (Directory.Exists(pluginsPath) == false)
+            {
+                Directory.CreateDirectory(pluginsPath);
+            }
+
+            return pluginsPath;
         }
 
         private void RegisterVariableRequesters()
