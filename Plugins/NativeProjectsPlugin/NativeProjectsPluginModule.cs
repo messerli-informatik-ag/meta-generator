@@ -8,7 +8,7 @@ namespace Messerli.NativeProjectsPlugin
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<NativeProjectsPluginGenerator>().As<IMetaGenerator>();
+            builder.RegisterType<NativeProjectsPluginGenerator>().As<IMetaGenerator>().InstancePerLifetimeScope();
             builder.RegisterType<TfsPaths>().As<ITfsPaths>();
             builder.RegisterType<ConsoleTfsClient>().As<ITfsClient>();
             builder.RegisterType<ProjectInformation>().As<IProjectInformation>().SingleInstance();

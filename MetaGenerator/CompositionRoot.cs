@@ -38,13 +38,14 @@ namespace Messerli.MetaGenerator
         {
             _builder.RegisterType<Application>().As<IApplication>();
             _builder.RegisterType<RootCommandBuilder>().As<IRootCommandBuilder>();
+            _builder.RegisterType<GeneratorCommandBuilder>().As<IGeneratorCommandBuilder>();
             _builder.RegisterType<PluginSelection>().As<IPluginSelection>();
             _builder.RegisterType<PluginManager>().As<IPluginManager>();
 
             _builder.RegisterType<GenerationSteps>().As<IGenerationSteps>();
             _builder.RegisterType<ValidatedUserInput>().As<IValidatedUserInput>();
-            _builder.RegisterType<UserInputProvider>().As<IUserInputProvider>().SingleInstance();
-            _builder.RegisterType<VariableProvider>().As<IVariableProvider>().SingleInstance();
+            _builder.RegisterType<UserInputProvider>().As<IUserInputProvider>().InstancePerLifetimeScope();
+            _builder.RegisterType<VariableProvider>().As<IVariableProvider>().InstancePerLifetimeScope();
 
             _builder.RegisterType<UserInputDescriptionBuilder>().AsSelf();
             _builder.RegisterType<TemplateLoader>().As<ITemplateLoader>();
@@ -55,7 +56,7 @@ namespace Messerli.MetaGenerator
             _builder.RegisterType<FileManipulator>().As<IFileManipulator>();
             _builder.RegisterType<StubbleBuilder>().AsSelf();
 
-            _builder.RegisterType<ExecutingPluginAssemblyProvider>().As<IExecutingPluginAssemblyProvider>().SingleInstance();
+            _builder.RegisterType<ExecutingPluginAssemblyProvider>().As<IExecutingPluginAssemblyProvider>().InstancePerLifetimeScope();
 
             RegisterVariableRequesters();
 

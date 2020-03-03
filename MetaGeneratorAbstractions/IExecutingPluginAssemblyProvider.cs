@@ -5,7 +5,5 @@ namespace Messerli.MetaGeneratorAbstractions
     public interface IExecutingPluginAssemblyProvider
     {
         Assembly PluginAssembly { get; set; }
-
-        void Clear();
     }
 }

@@ -64,11 +64,6 @@ namespace Messerli.MetaGenerator.UserInput
             return _knownUserInputs.Values;
         }
 
-        public void Clear()
-        {
-            _knownUserInputs.Clear();
-        }
-
         public Dictionary<string, string> GetVariableValues()
         {
             return _knownUserInputs

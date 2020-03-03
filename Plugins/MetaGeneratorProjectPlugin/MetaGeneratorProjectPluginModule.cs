@@ -7,7 +7,7 @@ namespace Messerli.MetaGeneratorProjectPlugin
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<MetaGeneratorProjectPluginGenerator>().As<IMetaGenerator>();
+            builder.RegisterType<MetaGeneratorProjectPluginGenerator>().As<IMetaGenerator>().InstancePerLifetimeScope();
         }
     }
 }

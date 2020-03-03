@@ -1,30 +1,28 @@
 ﻿using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
+using System.Linq;
+using Autofac;
 using Funcky.Extensions;
 using Messerli.MetaGeneratorAbstractions;
-using Messerli.MetaGeneratorAbstractions.UserInput;
 
 namespace Messerli.MetaGenerator
 {
     internal class RootCommandBuilder : IRootCommandBuilder
     {
+        private readonly ILifetimeScope _programScope;
         private readonly IEnumerable<IMetaGenerator> _generators;
-        private readonly IUserInputProvider _userInputProvider;
-        private readonly IExecutingPluginAssemblyProvider _executingPluginAssemblyProvider;
         private readonly IPluginSelection _pluginSelection;
         private readonly IPluginManager _pluginManager;
 
         public RootCommandBuilder(
+            ILifetimeScope programScope,
             IEnumerable<IMetaGenerator> generators,
-            IUserInputProvider userInputProvider,
-            IExecutingPluginAssemblyProvider executingPluginAssemblyProvider,
             IPluginSelection pluginSelection,
             IPluginManager pluginManager)
         {
+            _programScope = programScope;
             _generators = generators;
-            _userInputProvider = userInputProvider;
-            _executingPluginAssemblyProvider = executingPluginAssemblyProvider;
             _pluginSelection = pluginSelection;
             _pluginManager = pluginManager;
         }
@@ -36,11 +34,27 @@ namespace Messerli.MetaGenerator
                 Handler = CommandHandler.Create<InvocationContext>(context => { context.ResultCode = _pluginSelection.StartPluginInteractive(context); }),
             };
 
-            _generators.Each(generator => root.AddCommand(CreateGeneratorCommands(generator)));
+            RegisterPluginCommands(root);
 
             root.AddCommand(CreatePluginManagerCommands());
 
             return root;
+        }
+
+        private void RegisterPluginCommands(Command root)
+        {
+            _generators
+                .Select(CreateCommandInLifeTimeScope)
+                .Each(root.AddCommand);
+        }
+
+        private Command CreateCommandInLifeTimeScope(IMetaGenerator generator)
+        {
+            using var scope = _programScope.BeginLifetimeScope();
+
+            return scope
+                .Resolve<IGeneratorCommandBuilder>()
+                .Build(generator.Name);
         }
 
         private Command CreatePluginManagerCommands()
@@ -75,32 +89,6 @@ namespace Messerli.MetaGenerator
             uninstallCommand.AddArgument(new Argument { Arity = new ArgumentArity(1, 1), Name = "pluginName", Description = "The name of the plugin you want to uninstall." });
 
             return uninstallCommand;
-        }
-
-        private Command CreateGeneratorCommands(IMetaGenerator generator)
-        {
-            var command = new Command(generator.Name, generator.Description)
-            {
-                Handler = CommandHandler.Create<InvocationContext>(context => { context.ResultCode = _pluginSelection.StartPlugin(context, generator.Name); }),
-            };
-
-            _executingPluginAssemblyProvider.PluginAssembly = generator.GetType().Assembly;
-            generator.Register();
-            _userInputProvider.GetUserInputDescriptions().Each(variable => command.AddOption(CreateOption(variable)));
-            _executingPluginAssemblyProvider.Clear();
-            _userInputProvider.Clear();
-
-            return command;
-        }
-
-        private static Option CreateOption(IUserInputDescription userInput)
-        {
-            var option = new Option(UserUptionFormat.ToUserOption(userInput.VariableName), userInput.VariableDescription)
-            {
-                Argument = new Argument<string>(),
-            };
-
-            return option;
         }
     }
 }
