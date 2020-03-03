@@ -39,6 +39,7 @@ namespace Messerli.MetaGenerator
             _builder.RegisterType<Application>().As<IApplication>();
             _builder.RegisterType<RootCommandBuilder>().As<IRootCommandBuilder>();
             _builder.RegisterType<PluginSelection>().As<IPluginSelection>();
+            _builder.RegisterType<PluginManager>().As<IPluginManager>();
 
             _builder.RegisterType<GenerationSteps>().As<IGenerationSteps>();
             _builder.RegisterType<ValidatedUserInput>().As<IValidatedUserInput>();
@@ -94,6 +95,7 @@ namespace Messerli.MetaGenerator
 
         private string VerifyExistence(string pluginsPath)
         {
+            Console.WriteLine(pluginsPath);
             if (Directory.Exists(pluginsPath) == false)
             {
                 Directory.CreateDirectory(pluginsPath);

@@ -13,13 +13,20 @@ namespace Messerli.MetaGenerator
         private readonly IUserInputProvider _userInputProvider;
         private readonly IExecutingPluginAssemblyProvider _executingPluginAssemblyProvider;
         private readonly IPluginSelection _pluginSelection;
+        private readonly IPluginManager _pluginManager;
 
-        public RootCommandBuilder(IEnumerable<IMetaGenerator> generators, IUserInputProvider userInputProvider, IExecutingPluginAssemblyProvider executingPluginAssemblyProvider, IPluginSelection pluginSelection)
+        public RootCommandBuilder(
+            IEnumerable<IMetaGenerator> generators,
+            IUserInputProvider userInputProvider,
+            IExecutingPluginAssemblyProvider executingPluginAssemblyProvider,
+            IPluginSelection pluginSelection,
+            IPluginManager pluginManager)
         {
             _generators = generators;
             _userInputProvider = userInputProvider;
             _executingPluginAssemblyProvider = executingPluginAssemblyProvider;
             _pluginSelection = pluginSelection;
+            _pluginManager = pluginManager;
         }
 
         public RootCommand Build()
@@ -29,12 +36,48 @@ namespace Messerli.MetaGenerator
                 Handler = CommandHandler.Create<InvocationContext>(context => { context.ResultCode = _pluginSelection.StartPluginInteractive(context); }),
             };
 
-            _generators.Each(generator => root.AddCommand(CreateCommands(generator)));
+            _generators.Each(generator => root.AddCommand(CreateGeneratorCommands(generator)));
+
+            root.AddCommand(CreatePluginManagerCommands());
 
             return root;
         }
 
-        private Command CreateCommands(IMetaGenerator generator)
+        private Command CreatePluginManagerCommands()
+        {
+            var pluginCommand = new Command("plugin", "Plugin manager");
+
+            pluginCommand.AddCommand(CreateInstallPluginCommand());
+            pluginCommand.AddCommand(CreateUninstallPluginCommand());
+
+            return pluginCommand;
+        }
+
+        private Command CreateInstallPluginCommand()
+        {
+            var installCommand = new Command("install", "Install a plugin from the plugin repository")
+            {
+                Handler = CommandHandler.Create<string>(_pluginManager.Install),
+            };
+
+            installCommand.AddArgument(new Argument { Arity = new ArgumentArity(1, 1), Name = "pluginName", Description = "The name of the plugin you want to install." });
+
+            return installCommand;
+        }
+
+        private Command CreateUninstallPluginCommand()
+        {
+            var uninstallCommand = new Command("uninstall", "Install a plugin from the plugin repository")
+            {
+                Handler = CommandHandler.Create<string>(_pluginManager.Uninstall),
+            };
+
+            uninstallCommand.AddArgument(new Argument { Arity = new ArgumentArity(1, 1), Name = "pluginName", Description = "The name of the plugin you want to uninstall." });
+
+            return uninstallCommand;
+        }
+
+        private Command CreateGeneratorCommands(IMetaGenerator generator)
         {
             var command = new Command(generator.Name, generator.Description)
             {

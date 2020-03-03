@@ -12,10 +12,6 @@ namespace Messerli.MetaGenerator
 {
     internal class GenerationSteps : IGenerationSteps
     {
-        private const int Success = 0;
-        private const int ExceptionOccured = 1;
-        private const int ToolMissing = 2;
-
         private readonly IUserInputProvider _userInputProvider;
         private readonly IExecutingPluginAssemblyProvider _assemblyProvider;
         private readonly ITools _tools;
@@ -33,7 +29,7 @@ namespace Messerli.MetaGenerator
 
         public int Execute(IMetaGenerator metaTypeGenerator, InvocationContext context)
         {
-            var result = Success;
+            var result = ExitCode.Success;
 
             _assemblyProvider.PluginAssembly = metaTypeGenerator.GetType().Assembly;
 
@@ -51,7 +47,7 @@ namespace Messerli.MetaGenerator
                 }
                 else
                 {
-                    result = ToolMissing;
+                    result = ExitCode.ToolMissing;
                 }
 
                 _timeKeeper.Print();
@@ -59,7 +55,7 @@ namespace Messerli.MetaGenerator
             catch (System.Exception exception)
             {
                 _consoleWriter.WriteLine(exception.Message.Pastel(Color.OrangeRed));
-                result = ExceptionOccured;
+                result = ExitCode.ExceptionOccured;
 #if DEBUG
                 if (exception.StackTrace != null)
                 {

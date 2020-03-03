@@ -10,7 +10,7 @@
     <WarningsAsErrors />
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageOutputPath>../../nupkg/plugins</PackageOutputPath>
+    <PackageOutputPath>../../nupkg</PackageOutputPath>
     <Version>1.0.0</Version>
   </PropertyGroup>
   <ItemGroup>

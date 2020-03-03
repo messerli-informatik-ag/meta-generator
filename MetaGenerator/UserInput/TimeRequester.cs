@@ -18,7 +18,7 @@ namespace Messerli.MetaGenerator.UserInput
 
         protected override string InteractiveQuery(IUserInputDescription variable)
         {
-            ValidatedUserInput.WriteQuestion(variable, "Please a valid time for '{0}':");
+            ValidatedUserInput.WriteQuestion(variable, "Please enter a valid time for '{0}':");
 
             throw new NotImplementedException();
         }
