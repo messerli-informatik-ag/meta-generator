@@ -4,8 +4,8 @@ namespace Messerli.MetaGenerator
 {
     internal interface IPluginSelection
     {
-        void StartPluginInteractive(InvocationContext context);
+        int StartPluginInteractive(InvocationContext context);
 
-        void StartPlugin(InvocationContext context, string generatorName);
+        int StartPlugin(InvocationContext context, string generatorName);
     }
 }

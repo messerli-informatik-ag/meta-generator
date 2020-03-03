@@ -7,25 +7,21 @@ using Messerli.MetaGeneratorAbstractions.UserInput;
 
 namespace Messerli.MetaGenerator.UserInput
 {
-    internal class PathRequester : IVariableRequester
+    internal class PathRequester : AbstractVariableRequester
     {
-        private readonly IValidatedUserInput _validatedUserInput;
-        private readonly IEnumerable<IValidation> _requesterValidations = Enumerable.Empty<IValidation>();
-
         public PathRequester(IValidatedUserInput validatedUserInput)
+            : base(validatedUserInput)
         {
-            _validatedUserInput = validatedUserInput;
         }
 
-        public string RequestValue(IUserInputDescription variable, Option<string> userArgument)
+        protected override IEnumerable<IValidation> RequesterValidations(IUserInputDescription variable)
         {
-            return _validatedUserInput.ValidateArgument(variable, userArgument, _requesterValidations)
-                .Match(() => InteractiveQuery(variable), Functional.Identity);
+            yield break;
         }
 
-        private string InteractiveQuery(IUserInputDescription variable)
+        protected override string InteractiveQuery(IUserInputDescription variable)
         {
-            _validatedUserInput.WriteQuestion(variable, "Please enter a valid path for '{0}':");
+            ValidatedUserInput.WriteQuestion(variable, "Please enter a valid path for '{0}':");
 
             return QueryValueFromUser(variable).Match(
                 none: () => throw new NotImplementedException("cannot not happen"),
@@ -34,7 +30,7 @@ namespace Messerli.MetaGenerator.UserInput
 
         private Option<string> QueryValueFromUser(IUserInputDescription variable)
         {
-            return _validatedUserInput
+            return ValidatedUserInput
                 .GetValidatedValue(variable, Enumerable.Empty<IValidation>())
                 .Match(none: () => QueryValueFromUser(variable), some: Option.Some);
         }

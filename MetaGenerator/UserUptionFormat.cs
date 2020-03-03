@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Text.RegularExpressions;
+﻿using Soltys.ChangeCase;
 
 namespace Messerli.MetaGenerator
 {
@@ -7,11 +6,7 @@ namespace Messerli.MetaGenerator
     {
         public static string ToUserOption(string userInputVariableName)
         {
-            var parts = Regex
-                .Split(userInputVariableName, @"(?<!^)(?=[A-Z])")
-                .Select(part => part.ToLower());
-
-            return $"--{string.Join("-", parts)}";
+            return $"--{userInputVariableName.ParamCase()}";
         }
     }
 }

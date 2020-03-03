@@ -9,28 +9,26 @@ using Messerli.MetaGeneratorAbstractions.UserInput;
 
 namespace Messerli.MetaGenerator.UserInput
 {
-    internal class SelectionRequester : IVariableRequester
+    internal class SelectionRequester : AbstractVariableRequester
     {
-        private readonly IValidatedUserInput _validatedUserInput;
         private readonly IConsoleWriter _consoleWriter;
 
         public SelectionRequester(IValidatedUserInput validatedUserInput, IConsoleWriter consoleWriter)
+            : base(validatedUserInput)
         {
-            _validatedUserInput = validatedUserInput;
             _consoleWriter = consoleWriter;
         }
 
-        public string RequestValue(IUserInputDescription variable, Option<string> userArgument)
+        protected override IEnumerable<IValidation> RequesterValidations(IUserInputDescription variable)
         {
-            return _validatedUserInput.ValidateArgument(variable, userArgument,  GetSelectionValidation(variable))
-                .Match(() => InteractiveQuery(variable), Functional.Identity);
+            yield return new SimpleValidation(input => IsValuePossible(variable, input), $"Please select from the possible options between 1 and {ToHumandIndex(variable.VariableSelectionValues.Count - 1)}");
         }
 
-        private string InteractiveQuery(IUserInputDescription variable)
+        protected override string InteractiveQuery(IUserInputDescription variable)
         {
             CheckForMissingOptions(variable);
 
-            _validatedUserInput.WriteQuestion(variable, "Please select one of the given values for '{0}':");
+            ValidatedUserInput.WriteQuestion(variable, "Please select one of the given values for '{0}':");
             WriteOptions(variable);
 
             return QueryValueFromUser(variable).Match(
@@ -42,14 +40,14 @@ namespace Messerli.MetaGenerator.UserInput
         {
             if (variable.VariableSelectionValues.Any() == false)
             {
-                throw new Exception("There are no options to chose from...");
+                throw new ArgumentOutOfRangeException(nameof(variable));
             }
         }
 
         private Option<string> QueryValueFromUser(IUserInputDescription variable)
         {
-            return _validatedUserInput
-                .GetValidatedValue(variable, GetSelectionValidation(variable))
+            return ValidatedUserInput
+                .GetValidatedValue(variable, RequesterValidations(variable))
                 .Match(none: () => QueryValueFromUser(variable), some: input => IndexToValue(input, variable));
         }
 
@@ -58,11 +56,6 @@ namespace Messerli.MetaGenerator.UserInput
             var index = int.Parse(input);
 
             return Option.Some(variable.VariableSelectionValues[FromHumandIndex(index)].Value!);
-        }
-
-        private static IEnumerable<IValidation> GetSelectionValidation(IUserInputDescription variable)
-        {
-            yield return new SimpleValidation(input => IsValuePossible(variable, input), $"Please select from the possible options between 1 and {ToHumandIndex(variable.VariableSelectionValues.Count - 1)}");
         }
 
         private static bool IsValuePossible(IUserInputDescription variable, string input)

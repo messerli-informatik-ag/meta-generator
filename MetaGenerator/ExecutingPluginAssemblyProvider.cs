@@ -13,10 +13,5 @@ namespace Messerli.MetaGenerator
             get => _pluginAssembly ?? throw new Exception("No plugin has been set.");
             set => _pluginAssembly = value;
         }
-
-        public void Clear()
-        {
-            _pluginAssembly = null;
-        }
     }
 }

@@ -15,7 +15,5 @@ namespace Messerli.MetaGeneratorAbstractions.UserInput
         void AskUser(Dictionary<string, string> userArguments);
 
         IEnumerable<IUserInputDescription> GetUserInputDescriptions();
-
-        void Clear();
     }
 }

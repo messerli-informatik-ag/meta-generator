@@ -1,31 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Funcky;
 using Funcky.Monads;
 using Messerli.MetaGeneratorAbstractions.UserInput;
 
 namespace Messerli.MetaGenerator.UserInput
 {
-    internal class StringRequester : IVariableRequester
+    internal class StringRequester : AbstractVariableRequester
     {
-        private readonly IValidatedUserInput _validatedUserInput;
-        private readonly IEnumerable<IValidation> _requesterValidations = Enumerable.Empty<IValidation>();
-
         public StringRequester(IValidatedUserInput validatedUserInput)
+            : base(validatedUserInput)
         {
-            _validatedUserInput = validatedUserInput;
         }
 
-        public string RequestValue(IUserInputDescription variable, Option<string> userArgument)
+        protected override IEnumerable<IValidation> RequesterValidations(IUserInputDescription variable)
         {
-            return _validatedUserInput.ValidateArgument(variable, userArgument, _requesterValidations)
-                .Match(() => InteractiveQuery(variable), Functional.Identity);
+            yield break;
         }
 
-        private string InteractiveQuery(IUserInputDescription variable)
+        protected override string InteractiveQuery(IUserInputDescription variable)
         {
-            _validatedUserInput.WriteQuestion(variable, "Please enter a value for '{0}':");
+            ValidatedUserInput.WriteQuestion(variable, "Please enter a value for '{0}':");
 
             return QueryValueFromUser(variable).Match(
                 none: () => throw new NotImplementedException("cannot not happen"),
@@ -34,8 +29,8 @@ namespace Messerli.MetaGenerator.UserInput
 
         private Option<string> QueryValueFromUser(IUserInputDescription variable)
         {
-            return _validatedUserInput
-                .GetValidatedValue(variable, _requesterValidations)
+            return ValidatedUserInput
+                .GetValidatedValue(variable, RequesterValidations(variable))
                 .Match(none: () => QueryValueFromUser(variable), some: Option.Some);
         }
     }

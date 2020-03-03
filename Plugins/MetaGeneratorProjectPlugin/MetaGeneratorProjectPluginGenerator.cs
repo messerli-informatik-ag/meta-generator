@@ -2,10 +2,12 @@
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using Funcky.Extensions;
 using LibGit2Sharp;
 using Messerli.CommandLineAbstractions;
 using Messerli.MetaGeneratorAbstractions;
 using Messerli.MetaGeneratorAbstractions.UserInput;
+using Soltys.ChangeCase;
 
 namespace Messerli.MetaGeneratorProjectPlugin
 {
@@ -20,24 +22,27 @@ namespace Messerli.MetaGeneratorProjectPlugin
         private const string PublishScript = "Messerli.MetaGeneratorProjectPlugin.templates.publish.template";
 
         private const string GeneratorName = "GeneratorName";
-        private const string GeneratorDescription = "GeneratorDescription";
+        private const string KebabGeneratorName = "KebabGeneratorName";
         private const string GeneratorPath = "GeneratorPath";
 
         private readonly IConsoleWriter _consoleWriter;
         private readonly IFileGenerator _fileGenerator;
         private readonly IFileManipulator _fileManipulator;
         private readonly IUserInputProvider _userInputProvider;
+        private readonly IVariableProvider _variableProvider;
 
         public MetaGeneratorProjectPluginGenerator(
             IConsoleWriter consoleWriter,
             IFileGenerator fileGenerator,
             IFileManipulator fileManipulator,
-            IUserInputProvider userInputProvider)
+            IUserInputProvider userInputProvider,
+            IVariableProvider variableProvider)
         {
             _consoleWriter = consoleWriter;
             _fileGenerator = fileGenerator;
             _fileManipulator = fileManipulator;
             _userInputProvider = userInputProvider;
+            _variableProvider = variableProvider;
         }
 
         public string Description => "Create a new plugin for this generator.";
@@ -51,6 +56,10 @@ namespace Messerli.MetaGeneratorProjectPlugin
 
         public void Prepare()
         {
+            _variableProvider
+                .GetVariableValues()
+                .TryGetValue(key: GeneratorName)
+                .AndThen(name => _variableProvider.RegisterValue(KebabGeneratorName, name.ParamCase()));
         }
 
         public void Generate()

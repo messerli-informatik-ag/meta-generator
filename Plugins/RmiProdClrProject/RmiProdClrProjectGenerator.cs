@@ -4,11 +4,11 @@ using Messerli.CommandLineAbstractions;
 using Messerli.MetaGeneratorAbstractions;
 using Messerli.MetaGeneratorAbstractions.UserInput;
 
-namespace Messerli.{{GeneratorName}}
+namespace Messerli.RmiProdClrProject
 {
-    public class {{GeneratorName}}Generator : IMetaGenerator
+    public class RmiProdClrProjectGenerator : IMetaGenerator
     {
-        private const string VariableDeclarations = "Messerli.{{GeneratorName}}.templates.VariableDeclarations.json";
+        private const string VariableDeclarations = "Messerli.RmiProdClrProject.templates.VariableDeclarations.json";
         private const string GeneratorName = "GeneratorName";
 
         private readonly IConsoleWriter _consoleWriter;
@@ -16,7 +16,7 @@ namespace Messerli.{{GeneratorName}}
         private readonly IUserInputProvider _userInputProvider;
         private readonly IVariableProvider _variableProvider;
 
-        public {{GeneratorName}}Generator(IConsoleWriter consoleWriter, IFileGenerator fileGenerator, IUserInputProvider userInputProvider, IVariableProvider variableProvider)
+        public RmiProdClrProjectGenerator(IConsoleWriter consoleWriter, IFileGenerator fileGenerator, IUserInputProvider userInputProvider, IVariableProvider variableProvider)
         {
             _consoleWriter = consoleWriter;
             _fileGenerator = fileGenerator;
@@ -24,9 +24,9 @@ namespace Messerli.{{GeneratorName}}
             _variableProvider = variableProvider;
         }
 
-        public string Description => "{{GeneratorDescription}}";
+        public string Description => "Generates a Clr project in the Messerli 'All Projects' Solution";
 
-        public string Name => "{{KebabGeneratorName}}";
+        public string Name => "rmi-prod-clr-project";
 
         public void Register()
         {

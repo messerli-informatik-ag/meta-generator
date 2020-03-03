@@ -12,5 +12,8 @@
     <ApplicationIcon />
     <OutputType>Exe</OutputType>
     <StartupObject />
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageOutputPath>../../nupkg/plugins</PackageOutputPath>
+    <Version>1.0.0</Version>
   </PropertyGroup>
 </Project>

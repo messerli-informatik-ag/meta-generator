@@ -33,9 +33,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeProjectsPlugin", "Plu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MesserliOneRepositoryPlugin", "Plugins\MesserliOneRepositoryPlugin\MesserliOneRepositoryPlugin.csproj", "{478ED0F0-33E5-43B1-96D3-E00993E3A35D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolLoader", "ToolLoader\ToolLoader.csproj", "{ED0DD2CD-F2C5-4DB8-8C65-3F8093BC5D69}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToolLoader", "ToolLoader\ToolLoader.csproj", "{ED0DD2CD-F2C5-4DB8-8C65-3F8093BC5D69}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToolLoaderAbstractions", "ToolLoaderAbstractions\ToolLoaderAbstractions.csproj", "{B8E9F584-0EB5-490C-96E4-E610D8823642}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToolLoaderAbstractions", "ToolLoaderAbstractions\ToolLoaderAbstractions.csproj", "{B8E9F584-0EB5-490C-96E4-E610D8823642}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
