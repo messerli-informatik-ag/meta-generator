@@ -107,39 +107,16 @@ namespace Messerli.MetaGenerator
 
         private void RegisterVariableRequesters()
         {
-            _builder.RegisterType<StringRequester>();
-            _builder.RegisterType<BoolRequester>();
-            _builder.RegisterType<IntegerRequester>();
-            _builder.RegisterType<DoubleRequester>();
-            _builder.RegisterType<SelectionRequester>();
-            _builder.RegisterType<PathRequester>();
-            _builder.RegisterType<ExistingPathRequester>();
-            _builder.RegisterType<DateRequester>();
-            _builder.RegisterType<DateTimeRequester>();
-            _builder.RegisterType<TimeRequester>();
-
-            _builder.Register(VariableRequesterFactory).As<AbstractVariableRequester>();
-        }
-
-        private static AbstractVariableRequester VariableRequesterFactory(IComponentContext context, IEnumerable<Parameter> paremeter)
-        {
-            var variableType = paremeter.TypedAs<VariableType>();
-
-            return variableType switch
-            {
-                VariableType.String => context.Resolve<StringRequester>(),
-                VariableType.Bool => context.Resolve<BoolRequester>(),
-                VariableType.Integer => context.Resolve<IntegerRequester>(),
-                VariableType.Double => context.Resolve<DoubleRequester>(),
-                VariableType.Selection => context.Resolve<SelectionRequester>(),
-                VariableType.Path => context.Resolve<PathRequester>(),
-                VariableType.ExistingPath => context.Resolve<ExistingPathRequester>(),
-                VariableType.Date => context.Resolve<DateRequester>(),
-                VariableType.DateTime => context.Resolve<DateTimeRequester>(),
-                VariableType.Time => context.Resolve<TimeRequester>(),
-
-                _ => throw new NotImplementedException($"The VariableType '{variableType}' is not supported at the moment..."),
-            };
+            _builder.RegisterType<StringRequester>().Keyed<AbstractVariableRequester>(VariableType.String);
+            _builder.RegisterType<BoolRequester>().Keyed<AbstractVariableRequester>(VariableType.Bool);
+            _builder.RegisterType<IntegerRequester>().Keyed<AbstractVariableRequester>(VariableType.Integer);
+            _builder.RegisterType<DoubleRequester>().Keyed<AbstractVariableRequester>(VariableType.Double);
+            _builder.RegisterType<SelectionRequester>().Keyed<AbstractVariableRequester>(VariableType.Selection).AsSelf();
+            _builder.RegisterType<PathRequester>().Keyed<AbstractVariableRequester>(VariableType.Path);
+            _builder.RegisterType<ExistingPathRequester>().Keyed<AbstractVariableRequester>(VariableType.ExistingPath);
+            _builder.RegisterType<DateRequester>().Keyed<AbstractVariableRequester>(VariableType.Date);
+            _builder.RegisterType<DateTimeRequester>().Keyed<AbstractVariableRequester>(VariableType.DateTime);
+            _builder.RegisterType<TimeRequester>().Keyed<AbstractVariableRequester>(VariableType.Time);
         }
     }
 }

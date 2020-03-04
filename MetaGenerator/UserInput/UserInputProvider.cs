@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization.Json;
+using Autofac.Features.Indexed;
 using Funcky.Extensions;
 using Funcky.Monads;
 using Messerli.MetaGeneratorAbstractions;
@@ -14,21 +15,21 @@ namespace Messerli.MetaGenerator.UserInput
     {
         private readonly ITemplateLoader _templateLoader;
         private readonly IExecutingPluginAssemblyProvider _executingPluginAssemblyProvider;
+        private readonly IIndex<VariableType, AbstractVariableRequester> _variableRequesters;
         private readonly Dictionary<string, IUserInputDescription> _knownUserInputs = new Dictionary<string, IUserInputDescription>();
         private readonly Func<UserInputDescriptionBuilder> _newInputDescriptionBuilder;
-        private readonly Func<VariableType, AbstractVariableRequester> _variableRequesterFactory;
         private readonly DataContractJsonSerializer _jsonSerializer;
 
         public UserInputProvider(
             ITemplateLoader templateLoader,
             Func<UserInputDescriptionBuilder> newInputDescriptionBuilder,
             IExecutingPluginAssemblyProvider executingPluginAssemblyProvider,
-            Func<VariableType, AbstractVariableRequester> variableRequesterFactory)
+            IIndex<VariableType, AbstractVariableRequester> variableRequesters)
         {
             _templateLoader = templateLoader;
             _executingPluginAssemblyProvider = executingPluginAssemblyProvider;
+            _variableRequesters = variableRequesters;
             _newInputDescriptionBuilder = newInputDescriptionBuilder;
-            _variableRequesterFactory = variableRequesterFactory;
             _jsonSerializer = new DataContractJsonSerializer(typeof(List<Variable>));
         }
 
@@ -53,7 +54,7 @@ namespace Messerli.MetaGenerator.UserInput
 
             foreach (var variable in _knownUserInputs.Select(v => v.Value).Where(v => v.IsNeeded.Value))
             {
-                var variableRequster = _variableRequesterFactory(variable.VariableType);
+                var variableRequster = _variableRequesters[variable.VariableType];
 
                 variable.Value = Option.Some(variableRequster.RequestValue(variable, userArguments.TryGetValue(key: variable.VariableName)));
             }

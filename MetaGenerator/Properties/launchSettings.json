@@ -1,8 +1,7 @@
 {
   "profiles": {
     "ProjectGenerator": {
-      "commandName": "Project",
-      "commandLineArgs": "plugin install \"we can\""
+      "commandName": "Project"
     }
   }
 }
