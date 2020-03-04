@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Autofac;
-using Autofac.Core;
 using Messerli.CommandLine;
 using Messerli.MetaGenerator.UserInput;
 using Messerli.MetaGeneratorAbstractions;

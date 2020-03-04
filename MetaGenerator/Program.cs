@@ -14,10 +14,9 @@ namespace Messerli.MetaGenerator
                     .RegisterPlugins()
                     .Build();
 
-            using var globaLifetimeScope = container.BeginLifetimeScope();
-            var application = globaLifetimeScope.Resolve<IApplication>();
-
-            return application.Run(args);
+            return container
+                .Resolve<IApplication>()
+                .Run(args);
         }
     }
 }
