@@ -7,14 +7,17 @@ namespace Messerli.MetaGenerator
     {
         public static int Main(string[] args)
         {
-            using var container = CompositionRoot
+            using var rootContainer = CompositionRoot
                     .Create()
                     .RegisterModules()
                     .RegisterGenerator()
                     .RegisterPlugins()
                     .Build();
 
-            return container
+            // Autofac documentation advices to resolve from a lifetimescope instead of the root container
+            using var programLifetime = rootContainer.BeginLifetimeScope();
+
+            return programLifetime
                 .Resolve<IApplication>()
                 .Run(args);
         }
