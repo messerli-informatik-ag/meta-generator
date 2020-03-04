@@ -37,7 +37,7 @@ namespace Messerli.MetaGenerator
             _builder.RegisterType<Application>().As<IApplication>();
             _builder.RegisterType<RootCommandBuilder>().As<IRootCommandBuilder>();
             _builder.RegisterType<GeneratorCommandBuilder>().As<IGeneratorCommandBuilder>();
-            _builder.RegisterType<PluginSelection>().As<IPluginSelection>();
+            _builder.RegisterType<PluginSelection>().As<IPluginSelection>().SingleInstance();
             _builder.RegisterType<PluginManager>().As<IPluginManager>();
 
             _builder.RegisterType<GenerationSteps>().As<IGenerationSteps>();
