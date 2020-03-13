@@ -1,5 +1,0 @@
-<Project>
-    <ItemGroup>
-        <PackageReference Include="Messerli.CodeStyle" Version="1.0.0-alpha.1" PrivateAssets="all" />
-    </ItemGroup>
-</Project>

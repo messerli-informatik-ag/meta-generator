@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk; Microsoft.Build.CentralPackageVersions">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>Messerli.MetaGenerator.Test</RootNamespace>
@@ -14,5 +14,10 @@
   <ItemGroup>
     <ProjectReference Include="..\VsSolution\VsSolution.csproj" />
   </ItemGroup>
-  <Import Project="..\.paket\Paket.Restore.targets" />
+  <ItemGroup>
+    <PackageReference Include="Autofac" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+  </ItemGroup>
 </Project>
