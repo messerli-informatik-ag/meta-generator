@@ -46,5 +46,8 @@
     <EmbeddedResource Include="templates\VariableDeclarations.json" />
   </ItemGroup>
   <Import Project="..\..\Plugin.targets" />
-  <Import Project="..\..\.paket\Paket.Restore.targets" />
+  <ItemGroup>
+    <PackageReference Include="Autofac" />
+    <PackageReference Include="LibGit2Sharp" />
+  </ItemGroup>
 </Project>

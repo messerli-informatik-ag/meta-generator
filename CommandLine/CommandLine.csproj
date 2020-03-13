@@ -13,5 +13,8 @@
   <ItemGroup>
     <ProjectReference Include="..\CommandLineAbstractions\CommandLineAbstractions.csproj" />
   </ItemGroup>
-  <Import Project="..\.paket\Paket.Restore.targets" />
+  <ItemGroup>
+    <PackageReference Include="Autofac" />
+    <PackageReference Include="Funcky" />
+  </ItemGroup>
 </Project>

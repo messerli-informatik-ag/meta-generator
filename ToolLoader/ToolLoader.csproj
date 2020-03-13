@@ -14,5 +14,7 @@
     <ProjectReference Include="..\CommandLineAbstractions\CommandLineAbstractions.csproj" />
     <ProjectReference Include="..\ToolLoaderAbstractions\ToolLoaderAbstractions.csproj" />
   </ItemGroup>
-  <Import Project="..\.paket\Paket.Restore.targets" />
+  <ItemGroup>
+    <PackageReference Include="Autofac" />
+  </ItemGroup>
 </Project>

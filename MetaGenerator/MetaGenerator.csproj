@@ -26,5 +26,12 @@
     <ProjectReference Include="..\ToolLoader\ToolLoader.csproj" />
     <ProjectReference Include="..\VsSolution\VsSolution.csproj" />
   </ItemGroup>
-  <Import Project="..\.paket\Paket.Restore.targets" />
+  <ItemGroup>
+    <PackageReference Include="Autofac" />
+    <PackageReference Include="Stubble.Core" />
+    <PackageReference Include="Pastel" />
+    <PackageReference Include="System.CommandLine" />
+    <PackageReference Include="Funcky" />
+    <PackageReference Include="Soltys.ChangeCase" />
+  </ItemGroup>
 </Project>
