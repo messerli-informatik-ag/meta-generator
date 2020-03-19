@@ -13,5 +13,6 @@
   <ItemGroup>
     <PackageReference Include="Autofac" />
     <PackageReference Include="apophis.Lexer" />
+    <PackageReference Include="Funcky"/>
   </ItemGroup>
 </Project>

@@ -19,7 +19,6 @@ namespace Messerli.MesserliOneRepositoryPlugin
         private const string VariableDeclarations = "Messerli.MesserliOneRepositoryPlugin.templates.VariableDeclarations.json";
         private const string DirectoryBuildTargets = "Messerli.MesserliOneRepositoryPlugin.templates.Directory.Build.targets.template";
         private const string PaketDependencies = "Messerli.MesserliOneRepositoryPlugin.templates.paket.dependencies.template";
-        private const string PaketReferences = "Messerli.MesserliOneRepositoryPlugin.templates.paket.references.template";
         private const string GitIgnore = "Messerli.MesserliOneRepositoryPlugin.templates.gitignore.template";
         private const string ProjectFile = "Messerli.MesserliOneRepositoryPlugin.templates.Project.csproj.template";
         private const string PublishScript = "Messerli.MesserliOneRepositoryPlugin.templates.publish.ps1.template";
@@ -78,7 +77,6 @@ namespace Messerli.MesserliOneRepositoryPlugin
                 _fileGenerator.FromTemplate(ApplicationSource, Path.Combine(RepositoryPath(), RepositoryName(), "Application.cs"), Encoding.UTF8),
                 _fileGenerator.FromTemplate(ApplicationInterfaceSource, Path.Combine(RepositoryPath(), RepositoryName(), "IApplication.cs"), Encoding.UTF8),
                 _fileGenerator.FromTemplate(CompositionRootSource, Path.Combine(RepositoryPath(), RepositoryName(), "CompositionRoot.cs"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(PaketReferences, Path.Combine(RepositoryPath(), RepositoryName(), "paket.references"), Encoding.UTF8),
 
                 GenerateSolution(),
             };

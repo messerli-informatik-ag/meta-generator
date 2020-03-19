@@ -18,7 +18,6 @@ namespace Messerli.MetaGeneratorProjectPlugin
         private const string PluginProjectFileTemplate = "Messerli.MetaGeneratorProjectPlugin.templates.plugin.csproj.template";
         private const string GeneratorFileTemplate = "Messerli.MetaGeneratorProjectPlugin.templates.generator.source.template";
         private const string ModuleFileTemplate = "Messerli.MetaGeneratorProjectPlugin.templates.module.source.template";
-        private const string PaketReferencesTemplate = "Messerli.MetaGeneratorProjectPlugin.templates.paket.template";
         private const string PublishScript = "Messerli.MetaGeneratorProjectPlugin.templates.publish.template";
 
         private const string GeneratorName = "GeneratorName";
@@ -72,7 +71,6 @@ namespace Messerli.MetaGeneratorProjectPlugin
                 _fileGenerator.FromTemplate(GeneratorFileTemplate, Path.Combine(GetPluginPath(), $"{_userInputProvider.Value(GeneratorName)}Generator.cs"), Encoding.UTF8),
                 _fileGenerator.FromTemplate(ModuleFileTemplate, Path.Combine(GetPluginPath(), $"{_userInputProvider.Value(GeneratorName)}Module.cs"), Encoding.UTF8),
                 _fileGenerator.FromTemplate(VariableDeclarationsTemplate, Path.Combine(GetPluginPath(), "templates", "VariableDeclarations.json"), new UTF8Encoding(false)),
-                _fileGenerator.FromTemplate(PaketReferencesTemplate, Path.Combine(GetPluginPath(), "paket.references"), Encoding.UTF8),
                 _fileManipulator.AppendTemplate(PublishScript, Path.Combine(GetSolutionPath(), "publish.ps1")),
                 _fileManipulator.AddProjectToSolution("Plugins", _userInputProvider.Value(GeneratorName), Path.Combine(GetPluginPath(), $"{_userInputProvider.Value(GeneratorName)}.csproj"), Path.Combine(GetSolutionPath(), "MetaGenerator.sln"), null),
             };

@@ -21,7 +21,6 @@
     <None Remove="templates\gitignore.template" />
     <None Remove="templates\IApplication.Source.template" />
     <None Remove="templates\paket.dependencies.template" />
-    <None Remove="templates\paket.references.template" />
     <None Remove="templates\Program.Source.template" />
     <None Remove="templates\Project.csproj.template" />
     <None Remove="templates\publish.ps1.template" />
@@ -39,7 +38,6 @@
     <EmbeddedResource Include="templates\gitignore.template" />
     <EmbeddedResource Include="templates\IApplication.Source.template" />
     <EmbeddedResource Include="templates\paket.dependencies.template" />
-    <EmbeddedResource Include="templates\paket.references.template" />
     <EmbeddedResource Include="templates\Program.Source.template" />
     <EmbeddedResource Include="templates\Project.csproj.template" />
     <EmbeddedResource Include="templates\publish.ps1.template" />
