@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Property">
+      <UniqueIdentifier>{{PropertyFilterGuid}}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{{SourceFilterGuid}}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Resource">
+      <UniqueIdentifier>{{ResourceFilterGuid}}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Include">
+      <UniqueIdentifier>{{IncludeFilterGuid}}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  
+  <ItemGroup>
+   <ClCompile Include="Source\ProjectX\ProjectX.cpp">
+      <Filter>Source\{{ProjectName}}</Filter>
+   </ClCompile>
+   <ClInclude Include="Source\{{ProjectName}}\stdafx.h">
+      <Filter>Source\{{ProjectName}}</Filter>
+   </ClInclude>
+   <ClCompile Include="Source\{{ProjectName}}\stdafx.cpp">
+      <Filter>Source\{{ProjectName}}</Filter>
+   </ClCompile>
+   <ResourceCompile Include="Resource\{{ProjectName}}.rc2">
+      <Filter>Resource</Filter>
+   </ResourceCompile>
+   <None Include="Resource\resource.h">
+      <Filter>Resource</Filter>
+   </None>
+   <None Include="Property\{{ProjectName}}Debug.props">
+      <Filter>Property</Filter>
+   </None>
+   <None Include="Property\{{ProjectName}}Release.props">
+      <Filter>Property</Filter>
+   </None>
+   <None Include="Property\Use{{ProjectName}}.props">
+      <Filter>Property</Filter>
+   </None>
+   <None Include="packages.config">
+      <Filter>packages.config</Filter>
+   </None>
+   <ClInclude Include="Include\{{ProjectName}}\{{ProjectName}}.h">
+      <Filter>Include\{{ProjectName}}</Filter>
+   </ClInclude>
+   <ClCompile Include="Source\{{ProjectName}}\dllmain.cpp">
+      <Filter>Source\{{ProjectName}}</Filter>
+   </ClCompile>
+
+
+  </ItemGroup>
+</Project>

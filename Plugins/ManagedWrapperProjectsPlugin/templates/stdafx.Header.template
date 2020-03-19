@@ -1,0 +1,9 @@
+#pragma once
+
+//
+// {{Description}}
+//
+
+#define NOMINMAX
+#include "rmi.h"
+#include "resource.h"

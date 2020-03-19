@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>Messerli.ManagedWrapperProjectsPlugin</RootNamespace>
+    <LangVersion>8.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <NullableContextOptions>enable</NullableContextOptions>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="templates\dllmain.Source.template" />
+    <None Remove="templates\packages.config,template" />
+    <None Remove="templates\ProjectDebug.props.template" />
+    <None Remove="templates\ProjectName.vcxproj.filters.template" />
+    <None Remove="templates\ProjectName.vcxproj.template" />
+    <None Remove="templates\ProjectRelease.props.template" />
+    <None Remove="templates\Resource.template" />
+    <None Remove="templates\Sample.Header.template" />
+    <None Remove="templates\Sample.Source.template" />
+    <None Remove="templates\stdafx.Header.template" />
+    <None Remove="templates\stdafx.Source.template" />
+    <None Remove="templates\UseProject.props.template" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="templates\dllmain.Source.template" />
+    <EmbeddedResource Include="templates\packages.config,template" />
+    <EmbeddedResource Include="templates\ProjectDebug.props.template" />
+    <EmbeddedResource Include="templates\ProjectRelease.props.template" />
+    <EmbeddedResource Include="templates\Resource.template" />
+    <EmbeddedResource Include="templates\Sample.Header.template" />
+    <EmbeddedResource Include="templates\Sample.Source.template" />
+    <EmbeddedResource Include="templates\UseProject.props.template" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\CommandLineAbstractions\CommandLineAbstractions.csproj" />
+    <ProjectReference Include="..\..\MetaGeneratorAbstractions\MetaGeneratorAbstractions.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="templates\ProjectName.vcxproj.filters.template" />
+    <EmbeddedResource Include="templates\ProjectName.vcxproj.template" />
+    <EmbeddedResource Include="templates\stdafx.Header.template" />
+    <EmbeddedResource Include="templates\stdafx.Source.template" />
+    <EmbeddedResource Include="templates\VariableDeclarations.json" />
+  </ItemGroup>
+  <Import Project="..\..\Plugin.targets" />
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
+</Project>

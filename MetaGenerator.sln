@@ -37,6 +37,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToolLoader", "ToolLoader\To
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToolLoaderAbstractions", "ToolLoaderAbstractions\ToolLoaderAbstractions.csproj", "{B8E9F584-0EB5-490C-96E4-E610D8823642}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ManagedWrapperProjectsPlugin", "Plugins\ManagedWrapperProjectsPlugin\ManagedWrapperProjectsPlugin.csproj", "{DB3EF7E4-220A-405F-82CC-9F1E9B7B71A9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +93,10 @@ Global
 		{B8E9F584-0EB5-490C-96E4-E610D8823642}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8E9F584-0EB5-490C-96E4-E610D8823642}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8E9F584-0EB5-490C-96E4-E610D8823642}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB3EF7E4-220A-405F-82CC-9F1E9B7B71A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB3EF7E4-220A-405F-82CC-9F1E9B7B71A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB3EF7E4-220A-405F-82CC-9F1E9B7B71A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB3EF7E4-220A-405F-82CC-9F1E9B7B71A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -99,6 +105,7 @@ Global
 		{DA906E3A-6E30-4465-940A-2F5EC6E24333} = {20C9369F-5188-445E-9A81-837709067EA5}
 		{71710905-1901-49C9-86BF-409D276FE968} = {20C9369F-5188-445E-9A81-837709067EA5}
 		{478ED0F0-33E5-43B1-96D3-E00993E3A35D} = {20C9369F-5188-445E-9A81-837709067EA5}
+		{DB3EF7E4-220A-405F-82CC-9F1E9B7B71A9} = {20C9369F-5188-445E-9A81-837709067EA5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E1DAC9D9-5C44-443C-9697-0BC57D1F0914}

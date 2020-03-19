@@ -1,0 +1,80 @@
+#include "stdafx.h"
+
+#include <afxwin.h>
+#include <afxdllx.h>
+
+// Muss immer an letzter Stelle stehen
+#include "Common/rmi_debug.h"
+
+static AFX_EXTENSION_MODULE {ProjectName_Variablename}DLL = {NULL, NULL};
+
+extern "C" int APIENTRY
+DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
+{
+    UNREFERENCED_PARAMETER(lpReserved);
+
+    if (dwReason == DLL_PROCESS_ATTACH) {
+        OutputDebugString(_T("{ProjectName_Variablename}.DLL Begin DllMain DLL_PROCESS_ATTACH\r\n"));
+
+        if (!AfxInitExtensionModule({ProjectName_Variablename}DLL, hInstance)) {
+            return 0;
+        }
+
+        // Insert this DLL into the resource chain
+        // NOTE: If this Extension DLL is being implicitly linked to by
+        //  an MFC Regular DLL (such as an ActiveX Control)
+        //  instead of an MFC application, then you will want to
+        //  remove this line from DllMain and put it in a separate
+        //  function exported from this Extension DLL.  The Regular DLL
+        //  that uses this Extension DLL should then explicitly call that
+        //  function to initialize this Extension DLL.  Otherwise,
+        //  the CDynLinkLibrary object will not be attached to the
+        //  Regular DLL's resource chain, and serious problems will
+        //  result.
+
+        new CDynLinkLibrary({ProjectName_Variablename}DLL);
+        OutputDebugString(_T("{ProjectName_Variablename}.DLL End DllMain DLL_PROCESS_ATTACH\r\n"));
+    } else if (dwReason == DLL_PROCESS_DETACH) {
+        OutputDebugString(_T("{ProjectName_Variablename}.DLL Begin DllMain DLL_PROCESS_DETACH\r\n"));
+        AfxTermExtensionModule({ProjectName_Variablename}DLL);
+        OutputDebugString(_T("{ProjectName_Variablename}.DLL End DllMain DLL_PROCESS_DETACH\r\n"));
+    }
+    return 1;
+}
+
+///      Gibt den Instance-Handle auf diese DLL zurück.
+HINSTANCE {ProjectName_Variablename}GetInstanceHandle()
+{
+    _ASSERTE({ProjectName_Variablename}DLL.hModule != NULL);
+
+    return {ProjectName_Variablename}DLL.hModule;
+}
+
+///      Gibt den Resource-Handle auf diese DLL zurück.
+HINSTANCE {ProjectName_Variablename}GetResourceHandle()
+{
+    _ASSERTE({ProjectName_Variablename}DLL.hModule != NULL || {ProjectName_Variablename}DLL.hResource != NULL);
+
+    if ({ProjectName_Variablename}DLL.hResource == NULL) {
+        return {ProjectName_Variablename}DLL.hModule;
+    }
+
+    return {ProjectName_Variablename}DLL.hResource;
+}
+
+///      Fügt diese DLL dem Resource Chain hinzu
+void {ProjectName_Variablename}RegisterDLL()
+{
+    if (!{ProjectName_Variablename}DLL.bInitialized) {
+        _ASSERTE(false);
+        return;
+    }
+
+    new CDynLinkLibrary({ProjectName_Variablename}DLL);
+}
+
+///      Für die Unit-Tests: Testet ob die Resourcen verfügbar sind.
+bool {ProjectName_Variablename}ResourceTest()
+{
+    return true;
+}

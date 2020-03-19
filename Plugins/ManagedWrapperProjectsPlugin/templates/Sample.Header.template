@@ -1,0 +1,6 @@
+#pragma once
+
+namespace Messerli::{{ProjectName}}
+{
+    {{ProjectName}}_API bool IsTrue();
+}

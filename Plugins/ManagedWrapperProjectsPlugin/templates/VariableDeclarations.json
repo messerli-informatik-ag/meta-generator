@@ -1,0 +1,69 @@
+[
+  {
+    "Question": "Enter the name of the project you want to generate:",
+    "Name": "ProjectName",
+    "Type": "String"
+  },
+  {
+    "Question": ".Net Target Framework:",
+    "Name": "TargetFramework",
+    "Type": "Selection",
+    "SelectionValues": [
+      {
+        "Value": "net46",
+        "Description": ".NET Framework 4.6"
+      },
+      {
+        "Value": "net461",
+        "Description": ".NET Framework 4.6.1"
+      },
+      {
+        "Value": "net462",
+        "Description": ".NET Framework 4.6.2"
+      },
+      {
+        "Value": "net47",
+        "Description": ".NET Framework 4.7"
+      },
+      {
+        "Value": "net471",
+        "Description": ".NET Framework 4.7.1"
+      },
+      {
+        "Value": "net472",
+        "Description": ".NET Framework 4.7.2"
+      },
+      {
+        "Value": "netstandard2.0",
+        "Description": ".NET Standard 2.0"
+      },
+      {
+        "Value": "netstandard2.1",
+        "Description": ".NET Standard 2.1"
+      },
+      {
+        "Value": "netcoreapp3.0",
+        "Description": ".NET Core 3.0"
+      },
+      {
+        "Value": "netcoreapp3.1",
+        "Description": ".NET Core 3.1"
+      }
+    ]
+  },
+  {
+    "Question": "The project should be created in which branch?",
+    "Name": "Branch",
+    "Type": "Selection"
+  },
+  {
+    "Question": "Projektpfad (path from branch)",
+    "Name": "ProjectPath",
+    "Type": "String"
+  },
+  {
+    "Question": "Description of the library",
+    "Name": "ProjectDescription",
+    "Type": "String"
+  }
+]

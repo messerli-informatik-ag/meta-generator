@@ -1,0 +1,10 @@
+#include "stdafx.h"
+#include "{{ProjectName}}/{{ProjectName}}.h"
+
+namespace Messerli::{{ProjectName}}
+{
+    bool IsTrue()
+    {
+        return true;
+    }
+}
