@@ -10,6 +10,8 @@ namespace Messerli.ToolLoader
         {
         }
 
+        public string StandardOutput => string.Empty;
+
         public static ITool Create()
         {
             return new NullTool();

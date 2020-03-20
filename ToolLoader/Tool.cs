@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using Messerli.CommandLineAbstractions;
 using Messerli.ToolLoaderAbstractions;
 
@@ -10,6 +11,7 @@ namespace Messerli.ToolLoader
     {
         private readonly IConsoleWriter _consoleWriter;
         private readonly string _path;
+        private readonly StringBuilder _stringBuilder = new StringBuilder();
 
         public Tool(IConsoleWriter consoleWriter, string path)
         {
@@ -20,28 +22,48 @@ namespace Messerli.ToolLoader
 
         public delegate Tool Factory(string path);
 
+        public string StandardOutput => _stringBuilder.ToString();
+
         public void Execute(IEnumerable<string> arguments, string workingDirectory)
         {
+            _stringBuilder.Clear();
             _consoleWriter.WriteLine($"Execute '{_path} {string.Join(" ", arguments)}' in {workingDirectory}");
 
-            var paketInstall = new ProcessStartInfo(_path)
+            using var process = Process.Start(CreateProcessStartInfo(arguments, workingDirectory));
+
+            RecursiveRead(process, _stringBuilder);
+        }
+
+        public bool IsAvailable()
+        {
+            return true;
+        }
+
+        private void RecursiveRead(Process process, StringBuilder stringBuilder)
+        {
+            if (process.HasExited)
+            {
+                return;
+            }
+
+            _stringBuilder.Append(process.StandardOutput.ReadToEnd());
+            RecursiveRead(process, stringBuilder);
+        }
+
+        private ProcessStartInfo CreateProcessStartInfo(IEnumerable<string> arguments, string workingDirectory)
+        {
+            var startInfo = new ProcessStartInfo(_path)
             {
                 WorkingDirectory = workingDirectory,
             };
 
             foreach (var argument in arguments)
             {
-                paketInstall.ArgumentList.Add(argument);
+                startInfo.ArgumentList.Add(argument);
             }
 
-            using var process = Process.Start(paketInstall);
-
-            process?.WaitForExit();
-        }
-
-        public bool IsAvailable()
-        {
-            return true;
+            startInfo.RedirectStandardOutput = true;
+            return startInfo;
         }
     }
 }

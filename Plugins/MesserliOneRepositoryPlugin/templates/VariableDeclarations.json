@@ -8,5 +8,12 @@
     "Question": "Enter the path in which the repository should be generated:",
     "Name": "BasePath",
     "Type": "ExistingPath"
+  },
+  {
+    "Question": ".NET Target Framework:",
+    "Name": "TargetFramework",
+    "Type": "Selection",
+    "SelectionValues": [
+    ]
   }
 ]

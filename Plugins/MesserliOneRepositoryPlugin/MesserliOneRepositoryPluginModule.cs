@@ -8,6 +8,7 @@ namespace Messerli.MesserliOneRepositoryPlugin
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<MesserliOneRepositoryPluginGenerator>().As<IMetaGenerator>().InstancePerLifetimeScope();
+            builder.RegisterType<TargetFrameworkProvider>().As<ITargetFrameworkProvider>().InstancePerLifetimeScope();
         }
     }
 }

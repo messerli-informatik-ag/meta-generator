@@ -42,7 +42,7 @@ namespace Messerli.ManagedWrapperProjectsPlugin
 
         public void Register()
         {
-            _userInputProvider.RegisterVariablesFromTemplate(TemplateName.VariableDeclarations);
+            _userInputProvider.RegisterVariablesFromTemplate(Template.VariableDeclarations);
 
             _userInputProvider[Variable.Branch].VariableSelectionValues.AddRange(_pathProvider.GetBranches());
 
@@ -67,18 +67,18 @@ namespace Messerli.ManagedWrapperProjectsPlugin
 
             var tasks = new List<Task>
             {
-                _fileGenerator.FromTemplate(TemplateName.ProjectFile, Path.Combine(_pathProvider.GetProjectPath(), $"{projectName}.vcxproj"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(TemplateName.ProjectFilter, Path.Combine(_pathProvider.GetProjectPath(), $"{projectName}.vcxproj.filter"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(TemplateName.SampleSource, Path.Combine(_pathProvider.GetProjectPath(), "Source", projectName, $"{projectName}.cpp"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(TemplateName.SampleHeader, Path.Combine(_pathProvider.GetProjectPath(), "Header", projectName, $"{projectName}.h"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(TemplateName.StdAfxSource, Path.Combine(_pathProvider.GetProjectPath(), "stdafx.cpp"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(TemplateName.StdAfxHeader, Path.Combine(_pathProvider.GetProjectPath(),  "stdafx.h"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(TemplateName.Resource, Path.Combine(_pathProvider.GetProjectPath(), "Resource", $"{projectName}.rc2"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(TemplateName.DllMain, Path.Combine(_pathProvider.GetProjectPath(), "Source", projectName, "dllmain.cpp"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(TemplateName.PackagesConfig, Path.Combine(_pathProvider.GetProjectPath(), "packages.config"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(TemplateName.DebugProperties, Path.Combine(_pathProvider.GetProjectPath(), "Property", $"{projectName}Debug.props"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(TemplateName.ReleaseProperties, Path.Combine(_pathProvider.GetProjectPath(), "Property", $"{projectName}Debug.props"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(TemplateName.UseProperties, Path.Combine(_pathProvider.GetProjectPath(), "Property", $"Use{projectName}.props"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(Template.ProjectFile, Path.Combine(_pathProvider.GetProjectPath(), $"{projectName}.vcxproj"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(Template.ProjectFilter, Path.Combine(_pathProvider.GetProjectPath(), $"{projectName}.vcxproj.filter"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(Template.SampleSource, Path.Combine(_pathProvider.GetProjectPath(), "Source", projectName, $"{projectName}.cpp"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(Template.SampleHeader, Path.Combine(_pathProvider.GetProjectPath(), "Header", projectName, $"{projectName}.h"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(Template.StdAfxSource, Path.Combine(_pathProvider.GetProjectPath(), "stdafx.cpp"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(Template.StdAfxHeader, Path.Combine(_pathProvider.GetProjectPath(),  "stdafx.h"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(Template.Resource, Path.Combine(_pathProvider.GetProjectPath(), "Resource", $"{projectName}.rc2"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(Template.DllMain, Path.Combine(_pathProvider.GetProjectPath(), "Source", projectName, "dllmain.cpp"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(Template.PackagesConfig, Path.Combine(_pathProvider.GetProjectPath(), "packages.config"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(Template.DebugProperties, Path.Combine(_pathProvider.GetProjectPath(), "Property", $"{projectName}Debug.props"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(Template.ReleaseProperties, Path.Combine(_pathProvider.GetProjectPath(), "Property", $"{projectName}Debug.props"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(Template.UseProperties, Path.Combine(_pathProvider.GetProjectPath(), "Property", $"Use{projectName}.props"), Encoding.UTF8),
             };
 
             Task.WaitAll(tasks.ToArray());

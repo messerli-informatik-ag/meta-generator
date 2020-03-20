@@ -16,34 +16,31 @@ namespace Messerli.MesserliOneRepositoryPlugin
 {
     public class MesserliOneRepositoryPluginGenerator : IMetaGenerator
     {
-        private const string VariableDeclarations = "Messerli.MesserliOneRepositoryPlugin.templates.VariableDeclarations.json";
-        private const string DirectoryBuildTargets = "Messerli.MesserliOneRepositoryPlugin.templates.Directory.Build.targets.template";
-        private const string PaketDependencies = "Messerli.MesserliOneRepositoryPlugin.templates.paket.dependencies.template";
-        private const string GitIgnore = "Messerli.MesserliOneRepositoryPlugin.templates.gitignore.template";
-        private const string ProjectFile = "Messerli.MesserliOneRepositoryPlugin.templates.Project.csproj.template";
-        private const string PublishScript = "Messerli.MesserliOneRepositoryPlugin.templates.publish.ps1.template";
-
-        private const string ProgramSource = "Messerli.MesserliOneRepositoryPlugin.templates.Program.Source.template";
-        private const string ApplicationSource = "Messerli.MesserliOneRepositoryPlugin.templates.Application.Source.template";
-        private const string ApplicationInterfaceSource = "Messerli.MesserliOneRepositoryPlugin.templates.IApplication.Source.template";
-        private const string CompositionRootSource = "Messerli.MesserliOneRepositoryPlugin.templates.CompositionRoot.Source.template";
-
         private const string RepositoryNameVariable = "RepositoryName";
         private const string BasePath = "BasePath";
         private const string SolutionItems = "SolutionItems";
+        private const string TargetFramework = "TargetFramework";
 
         private readonly IConsoleWriter _consoleWriter;
         private readonly IFileGenerator _fileGenerator;
         private readonly IUserInputProvider _userInputProvider;
         private readonly ISolutionLoader _solutionLoader;
         private readonly ITools _tools;
+        private readonly ITargetFrameworkProvider _targetFrameworkProvider;
 
-        public MesserliOneRepositoryPluginGenerator(IConsoleWriter consoleWriter, IFileGenerator fileGenerator, IUserInputProvider userInputProvider, ISolutionLoader solutionLoader, ITools tools)
+        public MesserliOneRepositoryPluginGenerator(
+            IConsoleWriter consoleWriter,
+            IFileGenerator fileGenerator,
+            IUserInputProvider userInputProvider,
+            ISolutionLoader solutionLoader,
+            ITargetFrameworkProvider targetFrameworkProvider,
+            ITools tools)
         {
             _consoleWriter = consoleWriter;
             _fileGenerator = fileGenerator;
             _userInputProvider = userInputProvider;
             _solutionLoader = solutionLoader;
+            _targetFrameworkProvider = targetFrameworkProvider;
             _tools = tools;
         }
 
@@ -53,8 +50,12 @@ namespace Messerli.MesserliOneRepositoryPlugin
 
         public void Register()
         {
-            _userInputProvider.RegisterVariablesFromTemplate(VariableDeclarations);
             _tools.RegisterTool("dotnet", "dotnet.exe");
+
+            _userInputProvider.RegisterVariablesFromTemplate(Template.VariableDeclarations);
+
+            _tools.VerifyTools();
+            _userInputProvider[TargetFramework].VariableSelectionValues.AddRange(_targetFrameworkProvider.GetSelection());
         }
 
         public void Prepare()
@@ -67,16 +68,17 @@ namespace Messerli.MesserliOneRepositoryPlugin
 
             var tasks = new List<Task>
             {
-                _fileGenerator.FromTemplate(DirectoryBuildTargets, Path.Combine(RepositoryPath(), "Directory.Build.targets"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(GitIgnore, Path.Combine(RepositoryPath(), ".gitignore"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(PublishScript, Path.Combine(RepositoryPath(), "publish.ps1"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(ProjectFile, Path.Combine(RepositoryPath(), RepositoryName(), $"{RepositoryName()}.csproj"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(PaketDependencies, Path.Combine(RepositoryPath(), "paket.dependencies"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(Template.DirectoryBuildTargets, Path.Combine(RepositoryPath(), "Directory.Build.targets"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(Template.GitIgnore, Path.Combine(RepositoryPath(), ".gitignore"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(Template.PublishScript, Path.Combine(RepositoryPath(), "publish.ps1"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(Template.ProjectFile, Path.Combine(RepositoryPath(), RepositoryName(), $"{RepositoryName()}.csproj"), Encoding.UTF8),
 
-                _fileGenerator.FromTemplate(ProgramSource, Path.Combine(RepositoryPath(), RepositoryName(), "Program.cs"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(ApplicationSource, Path.Combine(RepositoryPath(), RepositoryName(), "Application.cs"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(ApplicationInterfaceSource, Path.Combine(RepositoryPath(), RepositoryName(), "IApplication.cs"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(CompositionRootSource, Path.Combine(RepositoryPath(), RepositoryName(), "CompositionRoot.cs"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(Template.ProgramSource, Path.Combine(RepositoryPath(), RepositoryName(), "Program.cs"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(Template.ApplicationSource, Path.Combine(RepositoryPath(), RepositoryName(), "Application.cs"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(Template.ApplicationInterfaceSource, Path.Combine(RepositoryPath(), RepositoryName(), "IApplication.cs"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(Template.CompositionRootSource, Path.Combine(RepositoryPath(), RepositoryName(), "CompositionRoot.cs"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(Template.GlobalJson, Path.Combine(RepositoryPath(), "global.json"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(Template.PackagesProperties, Path.Combine(RepositoryPath(), "Packages.props"), Encoding.UTF8),
 
                 GenerateSolution(),
             };
@@ -96,14 +98,8 @@ namespace Messerli.MesserliOneRepositoryPlugin
 
             var dotnet = _tools.GetTool("dotnet");
 
-            dotnet.Execute(new[] { "new", "tool-manifest" }, RepositoryPath());
-            CommitAll(repo, "dotnet new tool-manifest");
-
-            dotnet.Execute(new[] { "tool", "install", "paket" }, RepositoryPath());
-            CommitAll(repo, "dotnet tool install paket");
-
-            dotnet.Execute(new[] { "paket", "install" }, RepositoryPath());
-            CommitAll(repo, "dotnet paket install");
+            dotnet.Execute(new[] { "restore" }, RepositoryPath());
+            CommitAll(repo, "dotnet restore");
 
             RunBuild();
         }

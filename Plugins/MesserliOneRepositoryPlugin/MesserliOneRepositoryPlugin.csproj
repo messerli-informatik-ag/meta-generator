@@ -18,9 +18,10 @@
     <None Remove="templates\Application.Source.template" />
     <None Remove="templates\CompositionRoot.Source.template" />
     <None Remove="templates\Directory.Build.targets.template" />
+    <None Remove="templates\DotNetSdks.json" />
     <None Remove="templates\gitignore.template" />
     <None Remove="templates\IApplication.Source.template" />
-    <None Remove="templates\paket.dependencies.template" />
+    <None Remove="templates\Packages.props.template" />
     <None Remove="templates\Program.Source.template" />
     <None Remove="templates\Project.csproj.template" />
     <None Remove="templates\publish.ps1.template" />
@@ -37,15 +38,20 @@
     <EmbeddedResource Include="templates\Directory.Build.targets.template" />
     <EmbeddedResource Include="templates\gitignore.template" />
     <EmbeddedResource Include="templates\IApplication.Source.template" />
-    <EmbeddedResource Include="templates\paket.dependencies.template" />
+    <EmbeddedResource Include="templates\Packages.props.template" />
     <EmbeddedResource Include="templates\Program.Source.template" />
     <EmbeddedResource Include="templates\Project.csproj.template" />
     <EmbeddedResource Include="templates\publish.ps1.template" />
+    <EmbeddedResource Include="templates\DotNetSdks.json" />
     <EmbeddedResource Include="templates\VariableDeclarations.json" />
   </ItemGroup>
   <Import Project="..\..\Plugin.targets" />
   <ItemGroup>
+    <EmbeddedResource Include="templates\global.json.template" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Autofac" />
     <PackageReference Include="LibGit2Sharp" />
+    <PackageReference Include="Pastel" />
   </ItemGroup>
 </Project>

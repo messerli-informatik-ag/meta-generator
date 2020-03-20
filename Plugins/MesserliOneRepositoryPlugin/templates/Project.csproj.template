@@ -16,4 +16,7 @@
     <PackageOutputPath>../../nupkg/plugins</PackageOutputPath>
     <Version>1.0.0</Version>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Autofac"/>
+  </ItemGroup>
 </Project>

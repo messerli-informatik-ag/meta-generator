@@ -1,0 +1,42 @@
+[
+  {
+    "Released": "2020-03-16",
+    "EndOfLife": "TBA",
+    "DotNetVersion": ".NET 5.0",
+    "ReleaseVersion": "v5.0.0-preview.1",
+    "SdkVersion": "5.0.100-preview.1.20155.7",
+    "IsLts": "false"
+  },
+  {
+    "Released": "2020-03-16",
+    "EndOfLife": "2022-12-03",
+    "DotNetVersion": ".NET Core 3.1",
+    "ReleaseVersion": "v3.1.2",
+    "SdkVersion": "3.1.200",
+    "IsLts": "true"
+  },
+  {
+    "Released": "2020-03-16",
+    "EndOfLife": "2022-12-03",
+    "DotNetVersion": ".NET Core 3.1",
+    "ReleaseVersion": "v3.1.2",
+    "SdkVersion": "3.1.102",
+    "IsLts": "true"
+  },
+  {
+    "Released": "2020-01-14",
+    "EndOfLife": "2022-12-03",
+    "DotNetVersion": ".NET Core 3.1",
+    "ReleaseVersion": "v3.1.1",
+    "SdkVersion": "3.1.101",
+    "IsLts": "true"
+  },
+  {
+    "Released": "2019-12-03",
+    "EndOfLife": "2022-12-03",
+    "DotNetVersion": ".NET Core 3.1",
+    "ReleaseVersion": "v3.1.0",
+    "SdkVersion": "3.1.100",
+    "IsLts": "true"
+  }
+]

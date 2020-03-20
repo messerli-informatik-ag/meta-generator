@@ -5,7 +5,7 @@
     "Type": "String"
   },
   {
-    "Question": ".Net Target Framework:",
+    "Question": ".NET Target Framework:",
     "Name": "TargetFramework",
     "Type": "Selection",
     "SelectionValues": [
