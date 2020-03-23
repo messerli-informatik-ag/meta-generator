@@ -11,3 +11,5 @@ New-Item -Path "publish" -Name "plugins" -ItemType "directory" -Force
 &dotnet publish Plugins/MesserliOneRepositoryPlugin/MesserliOneRepositoryPlugin.csproj --configuration Release --runtime win-x64 --output "publish\plugins\MesserliOneRepositoryPlugin"
 
 &dotnet publish Plugins/ManagedWrapperProjectsPlugin/ManagedWrapperProjectsPlugin.csproj --configuration Release --runtime win-x64 --output "publish\plugins\ManagedWrapperProjectsPlugin"
+
+&dotnet publish Plugins/BackbonePluginTemplatePlugin/BackbonePluginTemplatePlugin.csproj --configuration Release --runtime win-x64 --output "publish\plugins\BackbonePluginTemplatePlugin"
