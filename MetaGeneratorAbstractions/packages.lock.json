@@ -52,7 +52,7 @@
       "System.Collections": {
         "type": "Transitive",
         "resolved": "4.3.0",
-        "contentHash": "faurQg8qRb/0ad/grjNLl2SUFeQCn/OursgR0ovNcxdzazS6yj0rwWGaSFGJowttoAah0KUIeSuCnJqJTiS93w==",
+        "contentHash": "3Dcj85/TBdVpL5Zr+gEEBUuFe2icOnLalmEh9hfck1PTYbbyWuZgh4fmm2ysCLTrqLQw6t3TgTyJ+VLp+Qb+Lw==",
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.1.0",
           "Microsoft.NETCore.Targets": "1.1.0",
@@ -71,7 +71,7 @@
       "System.Threading.Tasks": {
         "type": "Transitive",
         "resolved": "4.3.0",
-        "contentHash": "GkT9CtrjEZ5uRNxMM4eoGmODYknacGggG6NwImfqFJxaR49VufNDnVP/KMDmnSXwBMfkkrNXxhha53ULTs3Zbw==",
+        "contentHash": "LbSxKEdOUhVe8BezB/9uOGGppt+nZf6e1VFyw6v3DN6lqitm0OSn2uXMOdtP0M3W4iMcqcivm2J6UgqiwwnXiA==",
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.1.0",
           "Microsoft.NETCore.Targets": "1.1.0",

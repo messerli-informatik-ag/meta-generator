@@ -2,6 +2,12 @@
   "version": 1,
   "dependencies": {
     ".NETCoreApp,Version=v3.1": {
+      "Autofac": {
+        "type": "Direct",
+        "requested": "[5.1.2, 6.0.0)",
+        "resolved": "5.1.2",
+        "contentHash": "iGEx5Cm6Uor6/bZkgCHHjJO8cEQvDSOxgzNmHGJgGOnLDCe0b8NpOlhotsqx8dFvBDCsEX/V3YGRR30sRQLsxw=="
+      },
       "Messerli.CodeStyle": {
         "type": "Direct",
         "requested": "[1.0.1, )",
@@ -10,6 +16,14 @@
         "dependencies": {
           "IDisposableAnalyzers": "3.2.0",
           "StyleCop.Analyzers": "1.2.0-beta.113"
+        }
+      },
+      "apophis.Lexer": {
+        "type": "Transitive",
+        "resolved": "1.3.0",
+        "contentHash": "QpmqbjoA987e1N36w0st9zF1iCTEvsrUxeDVYvVZFnWvNaCE4tf8MGcJrRc0fjoTLV6wj+2Kxr/KcSJIoAXYmQ==",
+        "dependencies": {
+          "Funcky": "1.1.0"
         }
       },
       "Funcky": {
@@ -97,6 +111,17 @@
         "type": "Project",
         "dependencies": {
           "Funcky": "[1.5.1, 2.0.0)"
+        }
+      },
+      "toolloaderabstractions": {
+        "type": "Project"
+      },
+      "vssolution": {
+        "type": "Project",
+        "dependencies": {
+          "Autofac": "[5.1.2, 6.0.0)",
+          "Funcky": "[1.5.1, 2.0.0)",
+          "apophis.Lexer": "[1.3.0, 2.0.0)"
         }
       }
     }
