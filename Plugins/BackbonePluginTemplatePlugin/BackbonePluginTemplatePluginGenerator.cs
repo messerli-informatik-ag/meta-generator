@@ -24,7 +24,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
             _variableProvider = variableProvider;
         }
 
-        public string Description => "Creates a Messerli backbone plugin template plugin"";
+        public string Description => "Creates a Messerli backbone plugin template plugin";
 
         public string Name => "backbone-plugin-template-plugin";
 
