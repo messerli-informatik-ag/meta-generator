@@ -6,7 +6,6 @@ using Messerli.CommandLine;
 using Messerli.MetaGenerator.UserInput;
 using Messerli.MetaGeneratorAbstractions;
 using Messerli.MetaGeneratorAbstractions.UserInput;
-using Messerli.TfsClient;
 using Messerli.ToolLoader;
 using Messerli.VsSolution;
 using Stubble.Core.Builders;
@@ -49,7 +48,6 @@ namespace Messerli.MetaGenerator
             _builder.RegisterType<TemplateLoader>().As<ITemplateLoader>();
             _builder.RegisterType<TimeKeeper>().As<ITimeKeeper>();
 
-            _builder.RegisterType<ConsoleTfsClient>().As<ITfsClient>();
             _builder.RegisterType<FileGenerator>().As<IFileGenerator>();
             _builder.RegisterType<FileManipulator>().As<IFileManipulator>();
             _builder.RegisterType<StubbleBuilder>().AsSelf();

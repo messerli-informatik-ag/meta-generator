@@ -105,11 +105,8 @@
           "Funcky": "[1.5.1, 2.0.0)"
         }
       },
-      "tfsclient": {
-        "type": "Project",
-        "dependencies": {
-          "CommandLineAbstractions": "1.0.0"
-        }
+      "toolloaderabstractions": {
+        "type": "Project"
       }
     }
   }

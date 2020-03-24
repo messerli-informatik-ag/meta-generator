@@ -1,8 +1,11 @@
-﻿using System;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace Messerli.MesserliOneRepositoryPlugin
 {
+    /// <summary>
+    /// The current .NET SDKs can be found here:
+    /// https://dotnet.microsoft.com/download/dotnet-core .
+    /// </summary>
     [DataContract]
     public class DotNetSdk
     {

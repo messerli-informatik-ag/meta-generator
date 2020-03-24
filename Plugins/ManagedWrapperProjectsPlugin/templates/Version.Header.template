@@ -1,0 +1,60 @@
+//================================================================================================
+//   Copyright (c)   Messerli Informatik AG, CH-8957 Spreitenbach
+//================================================================================================
+//
+//   Versionsinformationen für {{ProjectName}}
+//
+//================================================================================================
+// Nachfolgend Dateiformatdefinition für BuildNoExt.exe ! Nicht entfernen !
+// BuildNoFileType: 3
+//================================================================================================
+
+#pragma once
+
+#include "VersionMajor.h"
+#include "BuildCounterUsage.h"
+
+//================================================================================================
+// #defines für Versionsinfo-Block              |<
+//================================================================================================
+#define VERSINFO_{{ProjectNameConstantCase}}_MAJOR VERSINFO_PROGRAM_MAJOR
+#define VERSINFO_{{ProjectNameConstantCase}}_MAJOR_STR _MAKESTRING_(VERSINFO_{{ProjectNameConstantCase}}_MAJOR)
+#define VERSINFO_{{ProjectNameConstantCase}}_MAJOR_REV VERSINFO_PROGRAM_MAJOR_REV
+#define VERSINFO_{{ProjectNameConstantCase}}_MAJOR_REV_STR _MAKESTRING_(VERSINFO_{{ProjectNameConstantCase}}_MAJOR_REV)
+#define VERSINFO_{{ProjectNameConstantCase}}_MAJOR_REV_ALIAS VERSINFO_PROGRAM_MAJOR_REV_ALIAS
+#define VERSINFO_{{ProjectNameConstantCase}}_MINOR 1
+#define VERSINFO_{{ProjectNameConstantCase}}_MINOR_STR _MAKESTRING_(VERSINFO_{{ProjectNameConstantCase}}_MINOR)
+
+#ifndef VERSINFO_BUILD_COUNT
+#define VERSINFO_{{ProjectNameConstantCase}}_MINOR_REV 1738
+#define VERSINFO_{{ProjectNameConstantCase}}_MINOR_REV_STR _MAKESTRING_(VERSINFO_{{ProjectNameConstantCase}}_MINOR_REV)
+#define VERSINFO_{{ProjectNameConstantCase}}_BUILD_DATE 1331307129 // 09.03.2012 16:32
+#define VERSINFO_{{ProjectNameConstantCase}}_BUILD_DATE_STR "09.03.2012 16:32"
+#else
+#define VERSINFO_{{ProjectNameConstantCase}}_MINOR_REV VERSINFO_BUILD_COUNT
+#define VERSINFO_{{ProjectNameConstantCase}}_MINOR_REV_STR _MAKESTRING_(VERSINFO_{{ProjectNameConstantCase}}_MINOR_REV)
+#define VERSINFO_{{ProjectNameConstantCase}}_BUILD_DATE VERSINFO_BUILD_DATE
+#define VERSINFO_{{ProjectNameConstantCase}}_BUILD_DATE_STR VERSINFO_BUILD_DATE_STR
+#endif
+
+#define VERSINFO_{{ProjectNameConstantCase}}_FILEDESCRIPTION "{ProjectDescription}\0"
+#define VERSINFO_{{ProjectNameConstantCase}}_INTERNALNAME "{ProjectName}\0"
+#define VERSINFO_{{ProjectNameConstantCase}}_ORIGINALFILENAME "{ProjectName}.dll\0"
+#define VERSINFO_{{ProjectNameConstantCase}}_PRODUCTNAME "{ProjectName}\0"
+#define VERSINFO_{{ProjectNameConstantCase}}_COMMENTS "{ProjectName}.dll Version: " VERSINFO_{{ProjectNameConstantCase}}_MAJOR_STR "." VERSINFO_{{ProjectNameConstantCase}}_MAJOR_REV_ALIAS "." VERSINFO_{{ProjectNameConstantCase}}_MINOR_STR " Build: " VERSINFO_{{ProjectNameConstantCase}}_MINOR_REV_STR " (" PROGRAM_VERSION_INTERNALNAME ") vom " VERSINFO_{{ProjectNameConstantCase}}_BUILD_DATE_STR
+
+//================================================================================================
+// #defines für Programm aus Kompatibilitätsgründen
+//================================================================================================
+#ifndef BUILD_NO
+#define BUILD_NO VERSINFO_{{ProjectNameConstantCase}}_MINOR_REV
+#define BUILD_NO_STR VERSINFO_{{ProjectNameConstantCase}}_MINOR_REV_STR
+
+#define BUILD_DATE VERSINFO_{{ProjectNameConstantCase}}_BUILD_DATE
+#define BUILD_DATE_STR VERSINFO_{{ProjectNameConstantCase}}_BUILD_DATE_STR
+#define PROGRAM_VERSION VERSINFO_{{ProjectNameConstantCase}}_MAJOR_STR "." VERSINFO_{{ProjectNameConstantCase}}_MAJOR_REV_ALIAS "." VERSINFO_{{ProjectNameConstantCase}}_MINOR_STR
+#else
+#define {{ProjectNameConstantCase}}_PROGRAM_VERSION VERSINFO_{{ProjectNameConstantCase}}_MAJOR_STR "." VERSINFO_{{ProjectNameConstantCase}}_MAJOR_REV_STR "." VERSINFO_{{ProjectNameConstantCase}}_MINOR_STR "." VERSINFO_{{ProjectNameConstantCase}}_MINOR_REV_STR
+#define {{ProjectNameConstantCase}}_PROGRAM_VERSION_MS ((DWORD)MAKELONG(VERSINFO_{{ProjectNameConstantCase}}_MAJOR_REV, VERSINFO_{{ProjectNameConstantCase}}_MAJOR))
+#define {{ProjectNameConstantCase}}_PROGRAM_VERSION_LS ((DWORD)MAKELONG(VERSINFO_{{ProjectNameConstantCase}}_MINOR_REV, VERSINFO_{{ProjectName}}_MINOR))
+#endif

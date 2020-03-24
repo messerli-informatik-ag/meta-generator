@@ -10,44 +10,32 @@
     "Type": "Selection",
     "SelectionValues": [
       {
-        "Value": "net46",
+        "Value": "v4.6",
         "Description": ".NET Framework 4.6"
       },
       {
-        "Value": "net461",
+        "Value": "v4.6.1",
         "Description": ".NET Framework 4.6.1"
       },
       {
-        "Value": "net462",
+        "Value": "v4.6.2",
         "Description": ".NET Framework 4.6.2"
       },
       {
-        "Value": "net47",
+        "Value": "v4.7",
         "Description": ".NET Framework 4.7"
       },
       {
-        "Value": "net471",
+        "Value": "v4.7.1",
         "Description": ".NET Framework 4.7.1"
       },
       {
-        "Value": "net472",
+        "Value": "v4.7.5",
         "Description": ".NET Framework 4.7.2"
       },
       {
-        "Value": "netstandard2.0",
-        "Description": ".NET Standard 2.0"
-      },
-      {
-        "Value": "netstandard2.1",
-        "Description": ".NET Standard 2.1"
-      },
-      {
-        "Value": "netcoreapp3.0",
-        "Description": ".NET Core 3.0"
-      },
-      {
-        "Value": "netcoreapp3.1",
-        "Description": ".NET Core 3.1"
+        "Value": "v4.8",
+        "Description": ".NET Framework 4.8"
       }
     ]
   },

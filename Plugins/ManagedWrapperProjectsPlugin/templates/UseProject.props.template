@@ -6,8 +6,8 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(_VersionRootDir){{Path}}{{ProjectName}}/Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>{ProjectName_CAPS}_API=__declspec(dllimport);%(PreprocessorDefinitions);</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(_VersionRootDir){{ProjectPath}}{{ProjectName}}/Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>{{ProjectNameConstantCase}}_API=__declspec(dllimport);%(PreprocessorDefinitions);</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(_VersionRootDir){{ProjectPath}}{{ProjectName}}/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -15,7 +15,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="$(_VersionRootDir){{Path}}{{ProjectName}}/{{ProjectName}}.vcxproj">
+    <ProjectReference Include="$(_VersionRootDir){{ProjectPath}}{{ProjectName}}/{{ProjectName}}.vcxproj">
       <Project>{{ProjectGuid}}</Project>
     </ProjectReference>
   </ItemGroup>

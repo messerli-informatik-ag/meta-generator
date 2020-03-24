@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Messerli.MetaGeneratorAbstractions;
-using Messerli.TfsClient;
 
 namespace Messerli.NativeProjectsPlugin
 {
@@ -10,7 +9,6 @@ namespace Messerli.NativeProjectsPlugin
         {
             builder.RegisterType<NativeProjectsPluginGenerator>().As<IMetaGenerator>().InstancePerLifetimeScope();
             builder.RegisterType<TfsPaths>().As<ITfsPaths>();
-            builder.RegisterType<ConsoleTfsClient>().As<ITfsClient>();
             builder.RegisterType<ProjectInformation>().As<IProjectInformation>().SingleInstance();
         }
     }

@@ -18,6 +18,12 @@
           "StyleCop.Analyzers": "1.2.0-beta.113"
         }
       },
+      "Soltys.ChangeCase": {
+        "type": "Direct",
+        "requested": "[1.6.0, 2.0.0)",
+        "resolved": "1.6.0",
+        "contentHash": "syS7azgPwV0kwehzm31QZEmyhPrzjX57ACZIjpV1CBW13g/fkDR3pEGGSf3KDZcBQZ/7vBZnTXwZVrjStrMymQ=="
+      },
       "Funcky": {
         "type": "Transitive",
         "resolved": "1.5.1",
@@ -104,6 +110,15 @@
         "dependencies": {
           "Funcky": "[1.5.1, 2.0.0)"
         }
+      },
+      "tfsclient": {
+        "type": "Project",
+        "dependencies": {
+          "CommandLineAbstractions": "1.0.0"
+        }
+      },
+      "toolloaderabstractions": {
+        "type": "Project"
       }
     }
   }

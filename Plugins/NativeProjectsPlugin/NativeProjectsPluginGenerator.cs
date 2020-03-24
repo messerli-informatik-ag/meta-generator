@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Messerli.CommandLineAbstractions;
 using Messerli.MetaGeneratorAbstractions;
 using Messerli.MetaGeneratorAbstractions.UserInput;
-using Messerli.TfsClient;
+using Messerli.ToolLoaderAbstractions;
 
 namespace Messerli.NativeProjectsPlugin
 {
@@ -32,7 +32,7 @@ namespace Messerli.NativeProjectsPlugin
         private readonly IVariableProvider _variableProvider;
         private readonly IProjectInformation _projectInformation;
         private readonly ITfsPaths _tfsPaths;
-        private readonly ITfsClient _tfsClient;
+        private readonly ITools _tools;
 
         public NativeProjectsPluginGenerator(
             IConsoleWriter consoleWriter,
@@ -42,7 +42,7 @@ namespace Messerli.NativeProjectsPlugin
             IVariableProvider variableProvider,
             IProjectInformation projectInformation,
             ITfsPaths tfsPaths,
-            ITfsClient tfsClient)
+            ITools tools)
         {
             _consoleWriter = consoleWriter;
             _fileGenerator = fileGenerator;
@@ -51,7 +51,7 @@ namespace Messerli.NativeProjectsPlugin
             _variableProvider = variableProvider;
             _projectInformation = projectInformation;
             _tfsPaths = tfsPaths;
-            _tfsClient = tfsClient;
+            _tools = tools;
         }
 
         public string Description => "This plugin creates native C++ projects for the All Projects solution.";
@@ -60,6 +60,8 @@ namespace Messerli.NativeProjectsPlugin
 
         public void Register()
         {
+            _tools.RegisterTool("tfs", "tf.exe");
+
             _userInputProvider.RegisterVariablesFromTemplate(VariableDeclarations);
 
             _userInputProvider[Variable.Branch].VariableSelectionValues.AddRange(_tfsPaths.Branches());
@@ -69,13 +71,16 @@ namespace Messerli.NativeProjectsPlugin
 
         public void Prepare()
         {
-            _tfsClient.CheckOutFile(AllSolutionPath());
+            var tfs = _tools.GetTool("tfs");
+            var branchPath = _userInputProvider.Value(Variable.Branch);
+
+            tfs.Execute(new[] { "checkout", AllSolutionPath() }, ".");
 
             foreach (var signFileList in SignFileLists())
             {
                 if (File.Exists(signFileList))
                 {
-                    _tfsClient.CheckOutFile(signFileList);
+                    tfs.Execute(new[] { "checkout", signFileList }, Path.Combine(branchPath, "Build", "AdditionalBuildSteps", "Sign"));
                 }
                 else
                 {
@@ -117,7 +122,9 @@ namespace Messerli.NativeProjectsPlugin
 
         public void TearDown()
         {
-            _tfsClient.AddToWorkspace(_projectInformation.ProjectPath());
+            var tfs = _tools.GetTool("tfs");
+
+            tfs.Execute(new[] { "add", _projectInformation.ProjectPath(), "/recursive" }, _projectInformation.ProjectPath());
         }
 
         private string AllSolutionPath()
@@ -136,10 +143,8 @@ namespace Messerli.NativeProjectsPlugin
 
         private IEnumerable<string> SignFileLists()
         {
-            var branchPath = _userInputProvider.Value(Variable.Branch);
-
-            yield return Path.Combine(branchPath, "Build", "AdditionalBuildSteps", "Sign", "FileList_Win32.txt");
-            yield return Path.Combine(branchPath, "Build", "AdditionalBuildSteps", "Sign", "FileList_x64.txt");
+            yield return "FileList_Win32.txt";
+            yield return "FileList_x64.txt";
         }
     }
 }

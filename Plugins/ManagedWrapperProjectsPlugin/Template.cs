@@ -18,7 +18,7 @@ namespace Messerli.ManagedWrapperProjectsPlugin
 
         public static string SampleHeader => WithPath("Sample.Header.template");
 
-        public static string StdAfxSource => WithPath("stdafx.Header.template");
+        public static string StdAfxSource => WithPath("stdafx.Source.template");
 
         public static string StdAfxHeader => WithPath("stdafx.Header.template");
 
@@ -30,6 +30,10 @@ namespace Messerli.ManagedWrapperProjectsPlugin
 
         public static string Resource => WithPath("Resource.template");
 
-        private static string WithPath(string rest) => $"Messerli.ManagedWrapperProjectsPlugin.templates.{rest}";
+        public static string VersionInfo => WithPath("Version.Header.template");
+
+        public static string FilesToSign => WithPath("FilesToSign.template");
+
+        private static string WithPath(string file) => $"Messerli.ManagedWrapperProjectsPlugin.templates.{file}";
     }
 }
