@@ -108,7 +108,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
         private ProjectInfo.Builder GetProjectTestInfoBuilder()
             => new ProjectInfo.Builder()
                 .WithName(GetTestProjectName())
-                .WithPath(Path.Combine(GetTestRepositoryPath(), $"{GetTestProjectName()}.{ProjectFileExtension}"));
+                .WithPath(Path.Combine(GetTestRepositoryPath(), $"{GetProjectName()}.{ProjectFileExtension}"));
 
         private TemplateFileProperty CreateTemplateFileProperty()
             => new TemplateFileProperty(_fileGenerator, GetSolutionPath(), GetProjectName());
