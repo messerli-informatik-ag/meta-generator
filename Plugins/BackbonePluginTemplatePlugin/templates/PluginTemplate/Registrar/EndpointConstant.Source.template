@@ -1,0 +1,14 @@
+﻿using System.Net.Http;
+using Messerli.Backbone.PluginAbstractions.Http.Routing;
+
+namespace Messerli.{{RepositoryName}}.Registrar
+{
+    internal static class EndpointConstant
+    {
+        public const string HelloWorldRoute = "/hello-world";
+
+        public static readonly Endpoint HelloWorldPage = new Endpoint(
+            HttpMethod.Get,
+            HelloWorldRoute);
+    }
+}

@@ -1,0 +1,10 @@
+
+<div class="title"></div>
+
+<div class="content">{{Text}}</div>
+
+<div class="sidebar">
+    <div class="sidebar-container">
+        <a class="logo" href="/"><img src="/assets/images/logo.svg"></a>
+    </div>
+</div>
