@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Messerli.MetaGeneratorAbstractions
 {
@@ -7,6 +6,6 @@ namespace Messerli.MetaGeneratorAbstractions
     {
         Task AppendTemplate(string templatename, string filePath);
 
-        Task AddProjectToSolution(string? solutionFolder, string projectName, string projectPath, string solutionPath, Guid? projectGuid);
+        Task AddProjectToSolution(SolutionInfo solutionInfo, ProjectInfo projectInfo);
     }
 }

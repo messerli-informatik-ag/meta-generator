@@ -95,8 +95,6 @@ namespace Messerli.NativeProjectsPlugin
 
             _consoleWriter.WriteLine($"Creating the C++ Project '{projectName}' for the All Projects.sln.");
 
-            var guid = Guid.Parse(_userInputProvider.Value(Variable.ProjectGuid));
-
             var tasks = new List<Task>
             {
                 _fileGenerator.FromTemplate(ProjectFileTemplate, _projectInformation.ProjectPath($"{projectName}.vcxproj"), Encoding.UTF8),
@@ -112,7 +110,7 @@ namespace Messerli.NativeProjectsPlugin
                 _fileGenerator.FromTemplate(ReleasePropertyTemplate, _projectInformation.PropertyPath($"{projectName}Release.props"), Encoding.UTF8),
                 _fileGenerator.FromTemplate(UsePropertyTemplate, _projectInformation.PropertyPath($"Use{projectName}.props"), Encoding.UTF8),
 
-                _fileManipulator.AddProjectToSolution(null, _userInputProvider.Value(Variable.ProjectName), _projectInformation.ProjectPath($"{projectName}.vcxproj"), AllSolutionPath(), guid),
+                _fileManipulator.AddProjectToSolution(GetSolutionInfoBuilder().Build(), GetProjectInfoBuilder().Build()),
             };
 
             tasks.AddRange(SignFileLists().Select(s => _fileManipulator.AppendTemplate(SignListTemplate, s)));
@@ -125,6 +123,22 @@ namespace Messerli.NativeProjectsPlugin
             var tfs = _tools.GetTool("tfs");
 
             tfs.Execute(new[] { "add", _projectInformation.ProjectPath(), "/recursive" }, _projectInformation.ProjectPath());
+        }
+
+        private SolutionInfo.Builder GetSolutionInfoBuilder()
+        {
+            return new SolutionInfo.Builder()
+                .WithPath(AllSolutionPath());
+        }
+
+        private ProjectInfo.Builder GetProjectInfoBuilder()
+        {
+            var projectName = _userInputProvider.Value(Variable.ProjectName);
+
+            return new ProjectInfo.Builder()
+                            .WithName(_userInputProvider.Value(Variable.ProjectName))
+                            .WithPath(_projectInformation.ProjectPath($"{projectName}.vcxproj"))
+                            .WithGuid(Guid.Parse(_userInputProvider.Value(Variable.ProjectGuid)));
         }
 
         private string AllSolutionPath()

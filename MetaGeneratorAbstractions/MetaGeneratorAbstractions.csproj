@@ -16,4 +16,7 @@
   <ItemGroup>
     <PackageReference Include="Funcky" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VsSolution\VsSolution.csproj" />
+  </ItemGroup>
 </Project>

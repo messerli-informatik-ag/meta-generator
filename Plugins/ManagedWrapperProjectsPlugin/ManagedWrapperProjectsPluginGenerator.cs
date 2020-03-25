@@ -7,6 +7,7 @@ using Messerli.CommandLineAbstractions;
 using Messerli.MetaGeneratorAbstractions;
 using Messerli.MetaGeneratorAbstractions.UserInput;
 using Messerli.ToolLoaderAbstractions;
+using Messerli.VsSolution.Model;
 using Soltys.ChangeCase;
 
 namespace Messerli.ManagedWrapperProjectsPlugin
@@ -96,19 +97,19 @@ namespace Messerli.ManagedWrapperProjectsPlugin
                 _fileGenerator.FromTemplate(Template.ProjectFilter, Path.Combine(_pathProvider.GetProjectPath(), $"{projectName}.vcxproj.filter"), Encoding.UTF8),
                 _fileGenerator.FromTemplate(Template.SampleSource, Path.Combine(_pathProvider.GetProjectPath(), "Source", projectName, $"{projectName}.cpp"), Encoding.UTF8),
                 _fileGenerator.FromTemplate(Template.SampleHeader, Path.Combine(_pathProvider.GetProjectPath(), "Header", projectName, $"{projectName}.h"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(Template.StdAfxSource, Path.Combine(_pathProvider.GetProjectPath(), "stdafx.cpp"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(Template.StdAfxHeader, Path.Combine(_pathProvider.GetProjectPath(), "stdafx.h"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(Template.StdAfxSource, Path.Combine(_pathProvider.GetProjectPath(), "Source", "stdafx.cpp"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(Template.StdAfxHeader, Path.Combine(_pathProvider.GetProjectPath(), "Header", "stdafx.h"), Encoding.UTF8),
                 _fileGenerator.FromTemplate(Template.Resource, Path.Combine(_pathProvider.GetProjectPath(), "Resource", $"{projectName}.rc2"), Encoding.UTF8),
                 _fileGenerator.FromTemplate(Template.DllMain, Path.Combine(_pathProvider.GetProjectPath(), "Source", projectName, "dllmain.cpp"), Encoding.UTF8),
                 _fileGenerator.FromTemplate(Template.PackagesConfig, Path.Combine(_pathProvider.GetProjectPath(), "packages.config"), Encoding.UTF8),
                 _fileGenerator.FromTemplate(Template.DebugProperties, Path.Combine(_pathProvider.GetProjectPath(), "Property", $"{projectName}Debug.props"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(Template.ReleaseProperties, Path.Combine(_pathProvider.GetProjectPath(), "Property", $"{projectName}Debug.props"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(Template.ReleaseProperties, Path.Combine(_pathProvider.GetProjectPath(), "Property", $"{projectName}Release.props"), Encoding.UTF8),
                 _fileGenerator.FromTemplate(Template.UseProperties, Path.Combine(_pathProvider.GetProjectPath(), "Property", $"Use{projectName}.props"), Encoding.UTF8),
                 _fileGenerator.FromTemplate(Template.VersionInfo, Path.Combine(_pathProvider.GetVersionInfoPath(),  $"{projectName}Version.h"), Encoding.UTF8),
 
                 _fileManipulator.AppendTemplate(Template.FilesToSign, Path.Combine(_pathProvider.GetBuildStepSignDirectory(), "FileList_Win32.txt")),
                 _fileManipulator.AppendTemplate(Template.FilesToSign, Path.Combine(_pathProvider.GetBuildStepSignDirectory(), "FileList_x64.txt")),
-                _fileManipulator.AddProjectToSolution(null, projectName, Path.Combine(_pathProvider.GetProjectPath(), $"{projectName}.vcxproj"), Path.Combine(_pathProvider.GetSolutionDirectory(), "All Projects (Main).sln"), _projectGuid),
+                _fileManipulator.AddProjectToSolution(GetSolutionInfoBuilder().Build(), GetProjectInfoBuilder().Build()),
             };
 
             Task.WaitAll(tasks.ToArray());
@@ -121,6 +122,25 @@ namespace Messerli.ManagedWrapperProjectsPlugin
             var tfs = _tools.GetTool("tfs");
             tfs.Execute(new[] { "add", _pathProvider.GetProjectPath(), "/recursive" }, _pathProvider.GetProjectPath());
             tfs.Execute(new[] { "add", Path.Combine(_pathProvider.GetVersionInfoPath(), $"{projectName}Version.h") }, _pathProvider.GetVersionInfoPath());
+        }
+
+        private SolutionInfo.Builder GetSolutionInfoBuilder()
+        {
+            var projectName = _userInputProvider.Value(Variable.ProjectName);
+
+            return new SolutionInfo.Builder()
+                .WithPath(Path.Combine(_pathProvider.GetSolutionDirectory(), "All Projects (Main).sln"));
+        }
+
+        private ProjectInfo.Builder GetProjectInfoBuilder()
+        {
+            var projectName = _userInputProvider.Value(Variable.ProjectName);
+
+            return new ProjectInfo.Builder()
+                .WithName(projectName)
+                .WithPath(Path.Combine(_pathProvider.GetProjectPath(), $"{projectName}.vcxproj"))
+                .WithGuid(_projectGuid)
+                .WithType(ProjectType.Identifier.CPlusPlus);
         }
 
         private static string CreateGuid()
