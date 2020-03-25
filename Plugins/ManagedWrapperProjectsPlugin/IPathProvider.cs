@@ -11,6 +11,12 @@ namespace Messerli.ManagedWrapperProjectsPlugin
 
         string GetProjectPath();
 
-        string GetSolutionPath();
+        string GetVersionInfoPath();
+
+        string GetSolutionDirectory();
+
+        string GetBuildStepSignDirectory();
+
+        string GetVisualStudioToolDirectory();
     }
 }

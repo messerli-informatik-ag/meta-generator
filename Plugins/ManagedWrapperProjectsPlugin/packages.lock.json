@@ -18,6 +18,20 @@
           "StyleCop.Analyzers": "1.2.0-beta.113"
         }
       },
+      "Soltys.ChangeCase": {
+        "type": "Direct",
+        "requested": "[1.6.0, 2.0.0)",
+        "resolved": "1.6.0",
+        "contentHash": "syS7azgPwV0kwehzm31QZEmyhPrzjX57ACZIjpV1CBW13g/fkDR3pEGGSf3KDZcBQZ/7vBZnTXwZVrjStrMymQ=="
+      },
+      "apophis.Lexer": {
+        "type": "Transitive",
+        "resolved": "1.3.0",
+        "contentHash": "QpmqbjoA987e1N36w0st9zF1iCTEvsrUxeDVYvVZFnWvNaCE4tf8MGcJrRc0fjoTLV6wj+2Kxr/KcSJIoAXYmQ==",
+        "dependencies": {
+          "Funcky": "1.1.0"
+        }
+      },
       "Funcky": {
         "type": "Transitive",
         "resolved": "1.5.1",
@@ -102,7 +116,19 @@
       "metageneratorabstractions": {
         "type": "Project",
         "dependencies": {
-          "Funcky": "[1.5.1, 2.0.0)"
+          "Funcky": "[1.5.1, 2.0.0)",
+          "VsSolution": "1.0.0"
+        }
+      },
+      "toolloaderabstractions": {
+        "type": "Project"
+      },
+      "vssolution": {
+        "type": "Project",
+        "dependencies": {
+          "Autofac": "[5.1.2, 6.0.0)",
+          "Funcky": "[1.5.1, 2.0.0)",
+          "apophis.Lexer": "[1.3.0, 2.0.0)"
         }
       }
     }

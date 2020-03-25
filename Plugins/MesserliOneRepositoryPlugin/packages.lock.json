@@ -130,7 +130,8 @@
       "metageneratorabstractions": {
         "type": "Project",
         "dependencies": {
-          "Funcky": "[1.5.1, 2.0.0)"
+          "Funcky": "[1.5.1, 2.0.0)",
+          "VsSolution": "1.0.0"
         }
       },
       "toolloaderabstractions": {

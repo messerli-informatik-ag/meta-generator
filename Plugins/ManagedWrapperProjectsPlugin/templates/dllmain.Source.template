@@ -6,7 +6,7 @@
 // Muss immer an letzter Stelle stehen
 #include "Common/rmi_debug.h"
 
-static AFX_EXTENSION_MODULE {ProjectName_Variablename}DLL = {NULL, NULL};
+static AFX_EXTENSION_MODULE {{ProjectNameConstantCase}}_DLL = {NULL, NULL};
 
 extern "C" int APIENTRY
 DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
@@ -14,9 +14,9 @@ DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
     UNREFERENCED_PARAMETER(lpReserved);
 
     if (dwReason == DLL_PROCESS_ATTACH) {
-        OutputDebugString(_T("{ProjectName_Variablename}.DLL Begin DllMain DLL_PROCESS_ATTACH\r\n"));
+        OutputDebugString(_T("{{ProjectName}}.DLL Begin DllMain DLL_PROCESS_ATTACH\r\n"));
 
-        if (!AfxInitExtensionModule({ProjectName_Variablename}DLL, hInstance)) {
+        if (!AfxInitExtensionModule({{ProjectNameConstantCase}}_DLL, hInstance)) {
             return 0;
         }
 
@@ -32,49 +32,49 @@ DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
         //  Regular DLL's resource chain, and serious problems will
         //  result.
 
-        new CDynLinkLibrary({ProjectName_Variablename}DLL);
-        OutputDebugString(_T("{ProjectName_Variablename}.DLL End DllMain DLL_PROCESS_ATTACH\r\n"));
+        new CDynLinkLibrary({{ProjectNameConstantCase}}_DLL);
+        OutputDebugString(_T("{{ProjectName}}.DLL End DllMain DLL_PROCESS_ATTACH\r\n"));
     } else if (dwReason == DLL_PROCESS_DETACH) {
-        OutputDebugString(_T("{ProjectName_Variablename}.DLL Begin DllMain DLL_PROCESS_DETACH\r\n"));
-        AfxTermExtensionModule({ProjectName_Variablename}DLL);
-        OutputDebugString(_T("{ProjectName_Variablename}.DLL End DllMain DLL_PROCESS_DETACH\r\n"));
+        OutputDebugString(_T("{{ProjectName}}.DLL Begin DllMain DLL_PROCESS_DETACH\r\n"));
+        AfxTermExtensionModule({{ProjectNameConstantCase}}_DLL);
+        OutputDebugString(_T("{{ProjectName}}.DLL End DllMain DLL_PROCESS_DETACH\r\n"));
     }
     return 1;
 }
 
 ///      Gibt den Instance-Handle auf diese DLL zurück.
-HINSTANCE {ProjectName_Variablename}GetInstanceHandle()
+HINSTANCE {{ProjectName}}GetInstanceHandle()
 {
-    _ASSERTE({ProjectName_Variablename}DLL.hModule != NULL);
+    _ASSERTE({{ProjectNameConstantCase}}_DLL.hModule != NULL);
 
-    return {ProjectName_Variablename}DLL.hModule;
+    return {{ProjectNameConstantCase}}_DLL.hModule;
 }
 
 ///      Gibt den Resource-Handle auf diese DLL zurück.
-HINSTANCE {ProjectName_Variablename}GetResourceHandle()
+HINSTANCE {{ProjectName}}GetResourceHandle()
 {
-    _ASSERTE({ProjectName_Variablename}DLL.hModule != NULL || {ProjectName_Variablename}DLL.hResource != NULL);
+    _ASSERTE({{ProjectNameConstantCase}}_DLL.hModule != NULL || {{ProjectNameConstantCase}}_DLL.hResource != NULL);
 
-    if ({ProjectName_Variablename}DLL.hResource == NULL) {
-        return {ProjectName_Variablename}DLL.hModule;
+    if ({{ProjectNameConstantCase}}_DLL.hResource == NULL) {
+        return {{ProjectNameConstantCase}}_DLL.hModule;
     }
 
-    return {ProjectName_Variablename}DLL.hResource;
+    return {{ProjectNameConstantCase}}_DLL.hResource;
 }
 
 ///      Fügt diese DLL dem Resource Chain hinzu
-void {ProjectName_Variablename}RegisterDLL()
+void {{ProjectName}}RegisterDLL()
 {
-    if (!{ProjectName_Variablename}DLL.bInitialized) {
+    if (!{{ProjectNameConstantCase}}_DLL.bInitialized) {
         _ASSERTE(false);
         return;
     }
 
-    new CDynLinkLibrary({ProjectName_Variablename}DLL);
+    new CDynLinkLibrary({{ProjectNameConstantCase}}_DLL);
 }
 
 ///      Für die Unit-Tests: Testet ob die Resourcen verfügbar sind.
-bool {ProjectName_Variablename}ResourceTest()
+bool {{ProjectName}}ResourceTest()
 {
     return true;
 }

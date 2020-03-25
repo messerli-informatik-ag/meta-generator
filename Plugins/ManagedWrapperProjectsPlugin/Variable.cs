@@ -5,6 +5,7 @@
         public const string Branch = "Branch";
         public const string ProjectPath = "ProjectPath";
         public const string ProjectName = "ProjectName";
+        public const string ProjectNameConstantCase = "ProjectNameConstantCase";
         public const string ProjectDescription = "ProjectDescription";
         public const string ProjectGuid = "ProjectGuid";
         public const string PropertyFilterGuid = "PropertyFilterGuid";
