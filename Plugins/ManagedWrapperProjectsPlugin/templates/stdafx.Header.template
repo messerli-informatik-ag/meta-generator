@@ -6,4 +6,3 @@
 
 #define NOMINMAX
 #include "rmi.h"
-#include "resource.h"
