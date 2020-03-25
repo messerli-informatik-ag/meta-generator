@@ -74,7 +74,7 @@ namespace Messerli.MetaGeneratorProjectPlugin
                 _fileGenerator.FromTemplate(VariableDeclarationsTemplate, Path.Combine(GetPluginPath(), "templates", "VariableDeclarations.json"), new UTF8Encoding(false)),
 
                 _fileManipulator.AppendTemplate(PublishScript, Path.Combine(GetSolutionPath(), "publish.ps1")),
-                _fileManipulator.AddProjectToSolution(GetSolutionInfoBuilder().Build(), GetProjectInfoBuilder().Build()),
+                _fileManipulator.AddProjectsToSolution(GetSolutionInfoBuilder().Build(), GetProjectInfoBuilder().Build().Yield()),
             };
 
             Task.WaitAll(tasks.ToArray());

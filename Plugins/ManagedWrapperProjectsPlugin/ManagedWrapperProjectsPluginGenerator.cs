@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using Funcky.Extensions;
 using Messerli.CommandLineAbstractions;
 using Messerli.MetaGeneratorAbstractions;
 using Messerli.MetaGeneratorAbstractions.UserInput;
@@ -15,6 +16,9 @@ namespace Messerli.ManagedWrapperProjectsPlugin
     internal class ManagedWrapperProjectsPluginGenerator : IMetaGenerator
     {
         private const string TfsProjectRoot = "TfsProjectRoot";
+        private const string HeaderDirectory = "Include";
+        private const string SourceDirectory = "Source";
+        private const string PropertyDirectory = "Property";
 
         private readonly IConsoleWriter _consoleWriter;
         private readonly IFileGenerator _fileGenerator;
@@ -95,21 +99,19 @@ namespace Messerli.ManagedWrapperProjectsPlugin
             {
                 _fileGenerator.FromTemplate(Template.ProjectFile, Path.Combine(_pathProvider.GetProjectPath(), $"{projectName}.vcxproj"), Encoding.UTF8),
                 _fileGenerator.FromTemplate(Template.ProjectFilter, Path.Combine(_pathProvider.GetProjectPath(), $"{projectName}.vcxproj.filter"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(Template.SampleSource, Path.Combine(_pathProvider.GetProjectPath(), "Source", projectName, $"{projectName}.cpp"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(Template.SampleHeader, Path.Combine(_pathProvider.GetProjectPath(), "Header", projectName, $"{projectName}.h"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(Template.StdAfxSource, Path.Combine(_pathProvider.GetProjectPath(), "Source", "stdafx.cpp"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(Template.StdAfxHeader, Path.Combine(_pathProvider.GetProjectPath(), "Header", "stdafx.h"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(Template.Resource, Path.Combine(_pathProvider.GetProjectPath(), "Resource", $"{projectName}.rc2"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(Template.DllMain, Path.Combine(_pathProvider.GetProjectPath(), "Source", projectName, "dllmain.cpp"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(Template.SampleSource, Path.Combine(_pathProvider.GetProjectPath(), SourceDirectory, projectName, $"{projectName}.cpp"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(Template.SampleHeader, Path.Combine(_pathProvider.GetProjectPath(), HeaderDirectory, projectName, $"{projectName}.h"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(Template.StdAfxSource, Path.Combine(_pathProvider.GetProjectPath(), SourceDirectory, "stdafx.cpp"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(Template.StdAfxHeader, Path.Combine(_pathProvider.GetProjectPath(), HeaderDirectory, "stdafx.h"), Encoding.UTF8),
                 _fileGenerator.FromTemplate(Template.PackagesConfig, Path.Combine(_pathProvider.GetProjectPath(), "packages.config"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(Template.DebugProperties, Path.Combine(_pathProvider.GetProjectPath(), "Property", $"{projectName}Debug.props"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(Template.ReleaseProperties, Path.Combine(_pathProvider.GetProjectPath(), "Property", $"{projectName}Release.props"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(Template.UseProperties, Path.Combine(_pathProvider.GetProjectPath(), "Property", $"Use{projectName}.props"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(Template.DebugProperties, Path.Combine(_pathProvider.GetProjectPath(), PropertyDirectory, $"{projectName}Debug.props"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(Template.ReleaseProperties, Path.Combine(_pathProvider.GetProjectPath(), PropertyDirectory, $"{projectName}Release.props"), Encoding.UTF8),
+                _fileGenerator.FromTemplate(Template.UseProperties, Path.Combine(_pathProvider.GetProjectPath(), PropertyDirectory, $"Use{projectName}.props"), Encoding.UTF8),
                 _fileGenerator.FromTemplate(Template.VersionInfo, Path.Combine(_pathProvider.GetVersionInfoPath(),  $"{projectName}Version.h"), Encoding.UTF8),
 
                 _fileManipulator.AppendTemplate(Template.FilesToSign, Path.Combine(_pathProvider.GetBuildStepSignDirectory(), "FileList_Win32.txt")),
                 _fileManipulator.AppendTemplate(Template.FilesToSign, Path.Combine(_pathProvider.GetBuildStepSignDirectory(), "FileList_x64.txt")),
-                _fileManipulator.AddProjectToSolution(GetSolutionInfoBuilder().Build(), GetProjectInfoBuilder().Build()),
+                _fileManipulator.AddProjectsToSolution(GetSolutionInfoBuilder().Build(), GetProjectInfoBuilder().Build().Yield()),
             };
 
             Task.WaitAll(tasks.ToArray());
@@ -126,8 +128,6 @@ namespace Messerli.ManagedWrapperProjectsPlugin
 
         private SolutionInfo.Builder GetSolutionInfoBuilder()
         {
-            var projectName = _userInputProvider.Value(Variable.ProjectName);
-
             return new SolutionInfo.Builder()
                 .WithPath(Path.Combine(_pathProvider.GetSolutionDirectory(), "All Projects (Main).sln"));
         }

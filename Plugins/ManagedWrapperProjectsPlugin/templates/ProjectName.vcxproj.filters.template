@@ -19,7 +19,7 @@
   </ItemGroup>
   
   <ItemGroup>
-   <ClCompile Include="Source\ProjectX\ProjectX.cpp">
+   <ClCompile Include="Source\{{ProjectName}}\{{ProjectName}}.cpp">
       <Filter>Source\{{ProjectName}}</Filter>
    </ClCompile>
    <ClInclude Include="Source\{{ProjectName}}\stdafx.h">
@@ -28,12 +28,6 @@
    <ClCompile Include="Source\{{ProjectName}}\stdafx.cpp">
       <Filter>Source\{{ProjectName}}</Filter>
    </ClCompile>
-   <ResourceCompile Include="Resource\{{ProjectName}}.rc2">
-      <Filter>Resource</Filter>
-   </ResourceCompile>
-   <None Include="Resource\resource.h">
-      <Filter>Resource</Filter>
-   </None>
    <None Include="Property\{{ProjectName}}Debug.props">
       <Filter>Property</Filter>
    </None>

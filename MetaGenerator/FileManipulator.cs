@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Funcky.Extensions;
 using Messerli.CommandLineAbstractions;
 using Messerli.MetaGeneratorAbstractions;
 using Messerli.VsSolution;
@@ -44,15 +46,17 @@ namespace Messerli.MetaGenerator
             await sw.WriteAsync(await OutputFromTemplate(templateName));
         }
 
-        public async Task AddProjectToSolution(SolutionInfo solutionInfo, ProjectInfo projectInfo)
+        public async Task AddProjectsToSolution(SolutionInfo solutionInfo, IEnumerable<ProjectInfo> projectInfos)
         {
             var solution = await _solutionLoader.Load(solutionInfo.Path);
 
-            solution.AddProject(projectInfo.Name, projectInfo.Path, projectInfo.Type, projectInfo.Guid);
+            projectInfos
+                .Each(projectInfo => solution.AddProject(projectInfo.Name, projectInfo.Path, projectInfo.Type, projectInfo.Guid));
 
             if (solutionInfo.FilterFolder != null)
             {
-                solution.AddNestedProject(solutionInfo.FilterFolder, projectInfo.Name);
+                projectInfos
+                    .Each(projectInfo => solution.AddNestedProject(solutionInfo.FilterFolder, projectInfo.Name));
             }
 
             await _solutionLoader.Store(solutionInfo.Path, solution);
