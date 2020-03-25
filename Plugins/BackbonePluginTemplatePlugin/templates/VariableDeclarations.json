@@ -1,7 +1,38 @@
 [
   {
-    "Question": "Enter the name of the file generator name:",
-    "Name": "GeneratorName",
-    "Type": "String"
+    "Question": "Enter the name of the project file (no spaces):",
+    "Name": "RepositoryName",
+    "Type": "String",
+    "Validations": [
+      "Validations.ValuePresent",
+      "Validations.NoWhiteSpace"
+    ]
+  },
+  {
+    "Question": "Enter the full path of the plugin repository",
+    "Name": "TargetPath",
+    "Type": "ExistingPath",
+    "Validations": [
+      "Validations.ValuePresent"
+    ]
+  },
+  {
+    "Question": "Enter the variant of your backbone plugin:",
+    "Name": "PluginVariant",
+    "Type": "Selection",
+    "SelectionValues": [
+      {
+        "Value": 1,
+        "Description": "Minimal backbone plugin template"
+      },
+      {
+        "Value": 2,
+        "Description": "Predefined backbone plugin template plugin"
+      },
+      {
+        "Value": 3,
+        "Description": "Predefined backbone plugin template plugin with database access"
+      }
+    ]
   }
 ]

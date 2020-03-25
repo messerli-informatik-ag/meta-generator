@@ -1,59 +1,80 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
+using Messerli.BackbonePluginTemplatePlugin.Variants;
 using Messerli.CommandLineAbstractions;
 using Messerli.MetaGeneratorAbstractions;
 using Messerli.MetaGeneratorAbstractions.UserInput;
+using Messerli.ToolLoaderAbstractions;
 
 namespace Messerli.BackbonePluginTemplatePlugin
 {
     public class BackbonePluginTemplatePluginGenerator : IMetaGenerator
     {
-        private const string VariableDeclarations = "Messerli.BackbonePluginTemplatePlugin.templates.VariableDeclarations.json";
-        private const string GeneratorName = "GeneratorName";
+        private const string RepositoryNameVariable = "RepositoryName";
+        private const string PluginVariantVariable = "PluginVariant";
+        private const string TargetPath = "TargetPath";
 
         private readonly IConsoleWriter _consoleWriter;
         private readonly IFileGenerator _fileGenerator;
         private readonly IUserInputProvider _userInputProvider;
-        private readonly IVariableProvider _variableProvider;
 
-        public BackbonePluginTemplatePluginGenerator(IConsoleWriter consoleWriter, IFileGenerator fileGenerator, IUserInputProvider userInputProvider, IVariableProvider variableProvider)
+        public BackbonePluginTemplatePluginGenerator(
+            IConsoleWriter consoleWriter,
+            IFileGenerator fileGenerator,
+            IUserInputProvider userInputProvider)
         {
             _consoleWriter = consoleWriter;
             _fileGenerator = fileGenerator;
             _userInputProvider = userInputProvider;
-            _variableProvider = variableProvider;
         }
 
-        public string Description => "Creates a Messerli backbone plugin template plugin";
+        public string Description => "Create a Messerli backbone plugin template plugin";
 
         public string Name => "backbone-plugin-template-plugin";
 
         public void Register()
-        {
-            _userInputProvider.RegisterVariablesFromTemplate(VariableDeclarations);
-        }
+            => _userInputProvider.RegisterVariablesFromTemplate(Template.VariableDeclarations);
 
         public void Prepare()
         {
-            // for example tfs checkout
         }
 
         public void Generate()
         {
-            var generatorName = _userInputProvider.Value(GeneratorName);
-
-            _consoleWriter.WriteLine($"Creating ... '{generatorName}' ...");
-
-            var tasks = new List<Task>
-            {
-            };
+            _consoleWriter.WriteLine($"Creating Plugin: {RepositoryName()}");
+            var tasks = CreatePluginVariant(BackbonePluginVariant())
+                .CreateTemplateFiles();
 
             Task.WaitAll(tasks.ToArray());
         }
 
         public void TearDown()
         {
-            // for example git add
         }
+
+        private string RepositoryName()
+            => _userInputProvider.Value(RepositoryNameVariable);
+
+        private VariantType BackbonePluginVariant()
+            => (VariantType)int.Parse(_userInputProvider.Value(PluginVariantVariable));
+
+        private string RepositoryPath()
+            => Path.Combine(
+                _userInputProvider.Value(TargetPath),
+                RepositoryName());
+
+        private IPluginVariant CreatePluginVariant(VariantType variant)
+            => variant switch
+            {
+                VariantType.MinimalPluginTemplate => new Variants.MinimalPluginTemplate.PluginVariant(CreateTemplateFileProperty()),
+                VariantType.PluginTemplate => new Variants.PluginTemplate.PluginVariant(CreateTemplateFileProperty()),
+                VariantType.DatabaseAccessPluginTemplate => new Variants.DatabaseAccessPluginTemplate.PluginVariant(CreateTemplateFileProperty()),
+                _ => throw new InvalidOperationException(),
+            };
+
+        private TemplateFileProperty CreateTemplateFileProperty()
+            => new TemplateFileProperty(_fileGenerator, RepositoryPath(), RepositoryName());
     }
 }
