@@ -4,8 +4,6 @@ namespace Messerli.ManagedWrapperProjectsPlugin
 {
     internal static class Template
     {
-        public static string DllMain => WithPath("dllmain.Source.template");
-
         public static string PackagesConfig => WithPath("packages.config,template");
 
         public static string VariableDeclarations => WithPath("VariableDeclarations.json");
@@ -27,8 +25,6 @@ namespace Messerli.ManagedWrapperProjectsPlugin
         public static string ReleaseProperties => WithPath("ProjectRelease.props.template");
 
         public static string UseProperties => WithPath("UseProject.props.template");
-
-        public static string Resource => WithPath("Resource.template");
 
         public static string VersionInfo => WithPath("Version.Header.template");
 

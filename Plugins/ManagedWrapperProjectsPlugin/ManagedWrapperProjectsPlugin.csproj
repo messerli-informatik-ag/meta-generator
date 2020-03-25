@@ -11,14 +11,12 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="templates\dllmain.Source.template" />
     <None Remove="templates\FilesToSign.template" />
     <None Remove="templates\packages.config,template" />
     <None Remove="templates\ProjectDebug.props.template" />
     <None Remove="templates\ProjectName.vcxproj.filters.template" />
     <None Remove="templates\ProjectName.vcxproj.template" />
     <None Remove="templates\ProjectRelease.props.template" />
-    <None Remove="templates\Resource.template" />
     <None Remove="templates\Sample.Header.template" />
     <None Remove="templates\Sample.Source.template" />
     <None Remove="templates\stdafx.Header.template" />
@@ -27,12 +25,10 @@
     <None Remove="templates\Version.Header.template" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="templates\dllmain.Source.template" />
     <EmbeddedResource Include="templates\FilesToSign.template" />
     <EmbeddedResource Include="templates\packages.config,template" />
     <EmbeddedResource Include="templates\ProjectDebug.props.template" />
     <EmbeddedResource Include="templates\ProjectRelease.props.template" />
-    <EmbeddedResource Include="templates\Resource.template" />
     <EmbeddedResource Include="templates\Sample.Header.template" />
     <EmbeddedResource Include="templates\Sample.Source.template" />
     <EmbeddedResource Include="templates\UseProject.props.template" />
