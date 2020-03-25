@@ -19,7 +19,7 @@
   </ItemGroup>
   
   <ItemGroup>
-   <ClCompile Include="Source\{{ProjectName}\{{ProjectName}.cpp">
+   <ClCompile Include="Source\{{ProjectName}}\{{ProjectName}}.cpp">
       <Filter>Source\{{ProjectName}}</Filter>
    </ClCompile>
    <ClInclude Include="Source\{{ProjectName}}\stdafx.h">
