@@ -2,5 +2,5 @@
 
 namespace Messerli::{{ProjectName}}
 {
-    {{ProjectName}}_API bool IsTrue();
+    {{ProjectNameConstantCase}}_API bool IsTrue();
 }
