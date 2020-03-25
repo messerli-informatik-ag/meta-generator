@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Messerli.CommandLineAbstractions;
 using Messerli.MetaGeneratorAbstractions;
 using Messerli.VsSolution;
-using Messerli.VsSolution.Model;
 using Stubble.Core.Builders;
 using Stubble.Core.Settings;
 
@@ -45,18 +44,18 @@ namespace Messerli.MetaGenerator
             await sw.WriteAsync(await OutputFromTemplate(templateName));
         }
 
-        public async Task AddProjectToSolution(string? solutionFolder, string projectName, string projectPath, string solutionPath, Guid? projectGuid)
+        public async Task AddProjectToSolution(SolutionInfo solutionInfo, ProjectInfo projectInfo)
         {
-            var solution = await _solutionLoader.Load(solutionPath);
+            var solution = await _solutionLoader.Load(solutionInfo.Path);
 
-            solution.AddProject(projectName, projectPath, ProjectType.Identifier.CSharpSdk, projectGuid);
+            solution.AddProject(projectInfo.Name, projectInfo.Path, projectInfo.Type, projectInfo.Guid);
 
-            if (solutionFolder != null)
+            if (solutionInfo.FilterFolder != null)
             {
-                solution.AddNestedProject(solutionFolder, projectName);
+                solution.AddNestedProject(solutionInfo.FilterFolder, projectInfo.Name);
             }
 
-            await _solutionLoader.Store(solutionPath, solution);
+            await _solutionLoader.Store(solutionInfo.Path, solution);
         }
 
         private async Task<string> OutputFromTemplate(string templateName)

@@ -59,7 +59,7 @@ END
 //
 // Includes
 //
-#include "{ProjectName}Version.h"
+#include "{{ProjectName}}Version.h"
 #include "RTFEditVersion.h"
 
 
@@ -67,7 +67,7 @@ END
 //
 // Defines
 //
-#define VERSINFO_FILEVERSION        VERSINFO_{ProjectName_CAPS}_MAJOR,VERSINFO_{ProjectName_CAPS}_MAJOR_REV,VERSINFO_{ProjectName_CAPS}_MINOR,VERSINFO_{ProjectName_CAPS}_MINOR_REV
+#define VERSINFO_FILEVERSION        VERSINFO_{{ProjectNameConstantCase}}_MAJOR,VERSINFO_{{ProjectNameConstantCase}}_MAJOR_REV,VERSINFO_{{ProjectNameConstantCase}}_MINOR,VERSINFO_{{ProjectNameConstantCase}}_MINOR_REV
 #define VERSINFO_PRODUCTVERSION     VERSINFO_FILEVERSION
 #define VERSINFO_FILEOS             VOS_NT_WINDOWS32
 #define VERSINFO_FILETYPE           VFT_DLL
@@ -79,8 +79,8 @@ END
     #define VERSINFO_FILEFLAGS      0x0000L
 #endif
 
-#define VERSINFO_{ProjectName_CAPS}_FILEVERSION_STR    VERSINFO_{ProjectName_CAPS}_MAJOR_STR "." VERSINFO_{ProjectName_CAPS}_MAJOR_REV_STR "." VERSINFO_{ProjectName_CAPS}_MINOR_STR ", " VERSINFO_{ProjectName_CAPS}_MINOR_REV_STR "\0"
-#define VERSINFO_{ProjectName_CAPS}_PRODUCTVERSION_STR VERSINFO_{ProjectName_CAPS}_MAJOR_STR "." VERSINFO_{ProjectName_CAPS}_MAJOR_REV_ALIAS "." VERSINFO_{ProjectName_CAPS}_MINOR_STR ", (" PROGRAM_VERSION_INTERNALNAME ")\0"
+#define VERSINFO_{{ProjectNameConstantCase}}_FILEVERSION_STR    VERSINFO_{{ProjectNameConstantCase}}_MAJOR_STR "." VERSINFO_{{ProjectNameConstantCase}}_MAJOR_REV_STR "." VERSINFO_{{ProjectNameConstantCase}}_MINOR_STR ", " VERSINFO_{{ProjectNameConstantCase}}_MINOR_REV_STR "\0"
+#define VERSINFO_{{ProjectNameConstantCase}}_PRODUCTVERSION_STR VERSINFO_{{ProjectNameConstantCase}}_MAJOR_STR "." VERSINFO_{{ProjectNameConstantCase}}_MAJOR_REV_ALIAS "." VERSINFO_{{ProjectNameConstantCase}}_MINOR_STR ", (" PROGRAM_VERSION_INTERNALNAME ")\0"
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -107,15 +107,15 @@ BEGIN
     BEGIN
         BLOCK "040704B0"
         BEGIN
-            VALUE "Comments",           VERSINFO_{ProjectName_CAPS}_COMMENTS
+            VALUE "Comments",           VERSINFO_{{ProjectNameConstantCase}}_COMMENTS
             VALUE "CompanyName",        VERSINFO_COMPANYNAME
-            VALUE "FileDescription",    VERSINFO_{ProjectName_CAPS}_FILEDESCRIPTION
-            VALUE "FileVersion",        VERSINFO_{ProjectName_CAPS}_FILEVERSION_STR
-            VALUE "InternalName",       VERSINFO_{ProjectName_CAPS}_INTERNALNAME
+            VALUE "FileDescription",    VERSINFO_{{ProjectNameConstantCase}}_FILEDESCRIPTION
+            VALUE "FileVersion",        VERSINFO_{{ProjectNameConstantCase}}_FILEVERSION_STR
+            VALUE "InternalName",       VERSINFO_{{ProjectNameConstantCase}}_INTERNALNAME
             VALUE "LegalCopyright",     VERSINFO_LEGALCOPYRIGHT
-            VALUE "OriginalFilename",   VERSINFO_{ProjectName_CAPS}_ORIGINALFILENAME
-            VALUE "ProductName",        VERSINFO_{ProjectName_CAPS}_PRODUCTNAME
-            VALUE "ProductVersion",     VERSINFO_{ProjectName_CAPS}_PRODUCTVERSION_STR
+            VALUE "OriginalFilename",   VERSINFO_{{ProjectNameConstantCase}}_ORIGINALFILENAME
+            VALUE "ProductName",        VERSINFO_{{ProjectNameConstantCase}}_PRODUCTNAME
+            VALUE "ProductVersion",     VERSINFO_{{ProjectNameConstantCase}}_PRODUCTVERSION_STR
         END
     END
     BLOCK "VarFileInfo"

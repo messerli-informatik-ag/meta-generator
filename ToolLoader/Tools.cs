@@ -8,9 +8,9 @@ namespace Messerli.ToolLoader
 {
     public class Tools : ITools
     {
+        private readonly Tool.Factory _toolFactory;
         private readonly List<Tuple<string, Func<ITool>>> _findTools = new List<Tuple<string, Func<ITool>>>();
         private Dictionary<string, ITool> _tools = new Dictionary<string, ITool>();
-        private Tool.Factory _toolFactory;
 
         public Tools(Tool.Factory toolFactory)
         {
@@ -20,16 +20,17 @@ namespace Messerli.ToolLoader
         public void RegisterTool(string name, string executable, string? specificPath = null)
             => _findTools.Add(Tuple.Create(name, (Func<ITool>)(() => FindTool(executable, specificPath))));
 
-        public IEnumerable<string> VerifyTools()
+        public IEnumerable<KeyValuePair<string, ITool>> VerifyTools()
         {
             _tools = _findTools.ToDictionary(ToKey, ToValue);
 
             return _tools
-                .Where(tool => tool.Value.IsAvailable() == false)
-                .Select(tool => tool.Key);
+                .Where(tool => tool.Value.IsAvailable() == false);
         }
 
         public ITool GetTool(string name) => _tools[name];
+
+        public ITool CreateToolFromPath(string path) => _toolFactory(path);
 
         private string ToKey(Tuple<string, Func<ITool>> tuple) => tuple.Item1;
 

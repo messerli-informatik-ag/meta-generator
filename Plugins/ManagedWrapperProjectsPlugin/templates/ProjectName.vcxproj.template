@@ -90,6 +90,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <AssemblerListingLocation />
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
     </ClCompile>
@@ -100,6 +101,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <AssemblerListingLocation />
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
     </ClCompile>
@@ -126,28 +128,36 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
+  
   <ItemGroup>
     <ClCompile Include="Source\{{ProjectName}}\{{ProjectName}}.cpp"/>
-    <ClInclude Include="Source\{{ProjectName}}\stdafx.h"/>
-    <ClCompile Include="Source\{{ProjectName}}\stdafx.cpp">
+    <ClCompile Include="Source\{{ProjectName}}\dllmain.cpp"/>
+    <ClCompile Include="Source\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ResourceCompile Include = "Resource\{{ProjectName}}.rc2">
-      <FileType>RC</FileType>
-    </ResourceCompile>
-    <None Include="Resource\resource.h"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Header\{{ProjectName}}\{{ProjectName}}.h"/>
+    <ClInclude Include="Source\stdafx.h"/>
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Property\{{ProjectName}}Debug.props"/>
     <None Include="Property\{{ProjectName}}Release.props"/>
     <None Include="Property\Use{{ProjectName}}.props"/>
     <None Include="packages.config"/>
-    <ClInclude Include="Include\{{ProjectName}}\{{ProjectName}}.h"/>
-    <ClCompile Include="Source\{{ProjectName}}\dllmain.cpp"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include = "Resource\{{ProjectName}}.rc2">
+      <FileType>RC</FileType>
+    </ResourceCompile>
+    <None Include="Resource\resource.h"/>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(_VersionRootDir)\Common\use_custom_fingerprint.targets" />
   </ImportGroup>
 </Project>

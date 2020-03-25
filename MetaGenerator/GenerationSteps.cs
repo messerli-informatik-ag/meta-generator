@@ -86,7 +86,7 @@ namespace Messerli.MetaGenerator
         {
             var unavailableTools = _tools.VerifyTools().ToList();
 
-            foreach (var toolName in unavailableTools)
+            foreach (var (toolName, tool) in unavailableTools)
             {
                 _consoleWriter.WriteLine($"Tool '{toolName}' is necessary for this plugin and has not been found on your machine.".Pastel(Color.OrangeRed));
             }

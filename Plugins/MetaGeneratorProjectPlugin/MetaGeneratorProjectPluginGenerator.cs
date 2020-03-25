@@ -7,6 +7,7 @@ using LibGit2Sharp;
 using Messerli.CommandLineAbstractions;
 using Messerli.MetaGeneratorAbstractions;
 using Messerli.MetaGeneratorAbstractions.UserInput;
+using Messerli.VsSolution.Model;
 using Soltys.ChangeCase;
 
 namespace Messerli.MetaGeneratorProjectPlugin
@@ -71,8 +72,9 @@ namespace Messerli.MetaGeneratorProjectPlugin
                 _fileGenerator.FromTemplate(GeneratorFileTemplate, Path.Combine(GetPluginPath(), $"{_userInputProvider.Value(GeneratorName)}Generator.cs"), Encoding.UTF8),
                 _fileGenerator.FromTemplate(ModuleFileTemplate, Path.Combine(GetPluginPath(), $"{_userInputProvider.Value(GeneratorName)}Module.cs"), Encoding.UTF8),
                 _fileGenerator.FromTemplate(VariableDeclarationsTemplate, Path.Combine(GetPluginPath(), "templates", "VariableDeclarations.json"), new UTF8Encoding(false)),
+
                 _fileManipulator.AppendTemplate(PublishScript, Path.Combine(GetSolutionPath(), "publish.ps1")),
-                _fileManipulator.AddProjectToSolution("Plugins", _userInputProvider.Value(GeneratorName), Path.Combine(GetPluginPath(), $"{_userInputProvider.Value(GeneratorName)}.csproj"), Path.Combine(GetSolutionPath(), "MetaGenerator.sln"), null),
+                _fileManipulator.AddProjectToSolution(GetSolutionInfoBuilder().Build(), GetProjectInfoBuilder().Build()),
             };
 
             Task.WaitAll(tasks.ToArray());
@@ -83,6 +85,20 @@ namespace Messerli.MetaGeneratorProjectPlugin
             using var repo = new Repository(GetSolutionPath());
 
             Commands.Stage(repo, Path.Combine("Plugins", _userInputProvider.Value(GeneratorName), "*"));
+        }
+
+        private SolutionInfo.Builder GetSolutionInfoBuilder()
+        {
+            return new SolutionInfo.Builder()
+                .WithPath(Path.Combine(GetSolutionPath(), "MetaGenerator.sln"))
+                .WithFilterFolder("Plugins");
+        }
+
+        private ProjectInfo.Builder GetProjectInfoBuilder()
+        {
+            return new ProjectInfo.Builder()
+                .WithName(_userInputProvider.Value(GeneratorName))
+                .WithPath(Path.Combine(GetPluginPath(), $"{_userInputProvider.Value(GeneratorName)}.csproj"));
         }
 
         private string GetSolutionPath()

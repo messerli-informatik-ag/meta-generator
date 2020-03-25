@@ -6,8 +6,10 @@ namespace Messerli.ToolLoaderAbstractions
     {
         void RegisterTool(string name, string executable, string? specificPath = null);
 
-        IEnumerable<string> VerifyTools();
+        IEnumerable<KeyValuePair<string, ITool>> VerifyTools();
 
         public ITool GetTool(string name);
+
+        ITool CreateToolFromPath(string path);
     }
 }
