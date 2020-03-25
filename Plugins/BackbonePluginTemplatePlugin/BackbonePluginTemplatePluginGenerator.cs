@@ -54,13 +54,9 @@ namespace Messerli.BackbonePluginTemplatePlugin
             var tasks = CreatePluginVariant(BackbonePluginVariant())
                 .CreateTemplateFiles();
 
-            tasks.Add(_fileManipulator.AddProjectToSolution(
+            tasks.Add(_fileManipulator.AddProjectsToSolution(
                 GetSolutionInfoBuilder().Build(),
-                GetProjectInfoBuilder().Build()));
-
-            tasks.Add(_fileManipulator.AddProjectToSolution(
-            GetSolutionInfoBuilder().Build(),
-            GetProjectTestInfoBuilder().Build()));
+                new[] { GetProjectInfoBuilder().Build(), GetProjectTestInfoBuilder().Build() }));
 
             Task.WaitAll(tasks.ToArray());
         }
