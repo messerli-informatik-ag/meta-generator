@@ -1,0 +1,15 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Reflection.Metadata;
+using System.Threading.Tasks;
+using Messerli.Backbone.PluginAbstractions.Http;
+
+namespace Messerli.{{RepositoryName}}.Gui.View
+{
+    public interface IPresenter
+    {
+        Task<Response> PresentPluginTemplate(
+            Request request,
+            IEnumerable<Database.Person> pluginEntries);
+    }
+}

@@ -1,0 +1,10 @@
+<div class="content">
+    <ul class="items">
+        {{#people}}
+        <li class="item">
+            {{surname}} {{firstName}}
+        </li>
+        {{/people}}
+    </ul>
+</div>
+

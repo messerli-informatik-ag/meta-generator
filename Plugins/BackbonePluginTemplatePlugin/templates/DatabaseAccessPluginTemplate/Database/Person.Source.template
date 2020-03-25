@@ -1,0 +1,37 @@
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+#pragma warning disable CS0660, CS0661
+
+namespace Messerli.{{RepositoryName}}.Database
+{
+    [Equals]
+    public sealed class Person
+    {
+        public Person()
+        {
+        }
+
+        public Person(
+            long? id,
+            string surname,
+            string firstname)
+        {
+            Id = id;
+            Surname = surname;
+            FirstName = firstname;
+        }
+
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public long? Id { get; set; }
+
+        public string Surname { get; set; } = null!;
+
+        public string FirstName { get; set; } = null!;
+
+        public static bool operator ==(Person left, Person right) => Operator.Weave(left, right);
+
+        public static bool operator !=(Person left, Person right) => Operator.Weave(left, right);
+    }
+}
