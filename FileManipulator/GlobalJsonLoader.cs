@@ -21,7 +21,11 @@ namespace Messerli.FileManipulator
 
         public async Task Store(string path, GlobalJson globalJson)
         {
-            await File.WriteAllTextAsync(path, JsonSerializer.Serialize(globalJson));
+            var writeIndented = new JsonSerializerOptions
+            {
+                WriteIndented = true,
+            };
+            await File.WriteAllTextAsync(path, JsonSerializer.Serialize(globalJson, writeIndented));
         }
     }
 }
