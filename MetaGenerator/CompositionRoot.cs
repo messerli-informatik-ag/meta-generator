@@ -3,6 +3,8 @@ using System.IO;
 using System.Reflection;
 using Autofac;
 using Messerli.CommandLine;
+using Messerli.FileManipulator;
+using Messerli.FileManipulatorAbstractions;
 using Messerli.MetaGenerator.UserInput;
 using Messerli.MetaGeneratorAbstractions;
 using Messerli.MetaGeneratorAbstractions.UserInput;
@@ -50,6 +52,7 @@ namespace Messerli.MetaGenerator
 
             _builder.RegisterType<FileGenerator>().As<IFileGenerator>();
             _builder.RegisterType<FileManipulator>().As<IFileManipulator>();
+            _builder.RegisterType<GlobalJsonManipulator>().As<IGlobalJsonManipulator>();
             _builder.RegisterType<StubbleBuilder>().AsSelf();
 
             _builder.RegisterType<ExecutingPluginAssemblyProvider>().As<IExecutingPluginAssemblyProvider>().InstancePerLifetimeScope();
@@ -64,6 +67,7 @@ namespace Messerli.MetaGenerator
             _builder.RegisterModule<CommandLineModule>();
             _builder.RegisterModule<ToolLoaderModule>();
             _builder.RegisterModule<VsSolutionModule>();
+            _builder.RegisterModule<FileManipulatorModule>();
 
             return this;
         }
