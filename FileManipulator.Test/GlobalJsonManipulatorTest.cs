@@ -33,7 +33,7 @@ namespace Messerli.FileManipulator.Test
             }
 
             var globalJsonManipulator = new GlobalJsonManipulator(new FileOpeningBuilder());
-            await globalJsonManipulator.AddMsBuildSdkToGlobalJson(filePath, modification);
+            await globalJsonManipulator.ModifyGlobalJson(filePath, modification);
 
             Assert.Equal(expectedConfig, await File.ReadAllTextAsync(filePath));
         }
@@ -49,12 +49,12 @@ namespace Messerli.FileManipulator.Test
             var filePath = Path.Combine(testEnvironment.RootDirectory, FileName);
 
             var globalJsonManipulator = new GlobalJsonManipulator(new FileOpeningBuilder());
-            await globalJsonManipulator.AddMsBuildSdkToGlobalJson(filePath, new GlobalJsonModificationBuilder()
+            await globalJsonManipulator.ModifyGlobalJson(filePath, new GlobalJsonModificationBuilder()
                 .AddMsBuildSdk(new MsBuildSdk(nugetPackageId, versionOne))
                 .Build());
             await Assert.ThrowsAsync<InvalidOperationException>(async () =>
             {
-                await globalJsonManipulator.AddMsBuildSdkToGlobalJson(filePath, new GlobalJsonModificationBuilder()
+                await globalJsonManipulator.ModifyGlobalJson(filePath, new GlobalJsonModificationBuilder()
                     .AddMsBuildSdk(new MsBuildSdk(nugetPackageId, versionTwo))
                     .Build());
             });

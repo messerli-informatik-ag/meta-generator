@@ -18,7 +18,7 @@ namespace Messerli.FileManipulator
             _fileOpeningBuilder = fileOpeningBuilder;
         }
 
-        public async Task AddMsBuildSdkToGlobalJson(string path, GlobalJsonModification modification)
+        public async Task ModifyGlobalJson(string path, GlobalJsonModification modification)
         {
             var document = await GetJsonDocument(path);
             AddMsBuildSdks(document, modification.MsBuildSdksToAdd);
