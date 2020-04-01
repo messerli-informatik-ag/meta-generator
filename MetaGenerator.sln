@@ -44,6 +44,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileManipulator", "FileMani
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileManipulatorAbstractions", "FileManipulatorAbstractions\FileManipulatorAbstractions.csproj", "{2CE393CD-227E-4C53-9216-FAFED37FED45}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileManipulator.Test", "FileManipulator.Test\FileManipulator.Test.csproj", "{B8477F9B-EBBF-40B0-ADFC-A43F6B080617}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -106,6 +108,10 @@ Global
 		{2CE393CD-227E-4C53-9216-FAFED37FED45}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CE393CD-227E-4C53-9216-FAFED37FED45}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CE393CD-227E-4C53-9216-FAFED37FED45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8477F9B-EBBF-40B0-ADFC-A43F6B080617}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8477F9B-EBBF-40B0-ADFC-A43F6B080617}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8477F9B-EBBF-40B0-ADFC-A43F6B080617}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8477F9B-EBBF-40B0-ADFC-A43F6B080617}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

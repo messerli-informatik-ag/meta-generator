@@ -19,7 +19,7 @@ namespace Messerli.FileManipulatorAbstractions
         public GlobalJsonModificationBuilder AddSdk(MsBuildSdk sdk)
             => ShallowClone(sdkList: _sdksToAdd.Add(sdk));
 
-        public GlobalJsonModification Build(string path)
+        public GlobalJsonModification Build()
             => new GlobalJsonModification(_sdksToAdd);
 
         private GlobalJsonModificationBuilder ShallowClone(

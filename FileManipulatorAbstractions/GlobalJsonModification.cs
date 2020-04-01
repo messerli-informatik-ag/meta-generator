@@ -1,14 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Messerli.FileManipulatorAbstractions
 {
     public sealed class GlobalJsonModification
     {
-        public GlobalJsonModification(IEnumerable<MsBuildSdk> sdksToAdd)
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305: FieldNamesMustNotUseHungarianNotation", Justification = "Not hungarian notation")]
+        public GlobalJsonModification(IEnumerable<MsBuildSdk> msBuildSdksToAdd)
         {
-            SdksToAdd = sdksToAdd;
+            MsBuildSdksToAdd = msBuildSdksToAdd;
         }
 
-        public IEnumerable<MsBuildSdk> SdksToAdd { get; }
+        public IEnumerable<MsBuildSdk> MsBuildSdksToAdd { get; }
     }
 }
