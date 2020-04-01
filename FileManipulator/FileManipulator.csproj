@@ -2,6 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk; Microsoft.Build.CentralPackageVersions">
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
+    <AssemblyName>Messerli.FileManipulator</AssemblyName>
     <RootNamespace>Messerli.FileManipulator</RootNamespace>
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>

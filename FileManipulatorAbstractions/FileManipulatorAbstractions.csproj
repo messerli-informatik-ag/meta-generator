@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk; Microsoft.Build.CentralPackageVersions">
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
+    <AssemblyName>Messerli.FileManipulatorAbstractions</AssemblyName>
     <RootNamespace>Messerli.FileManipulatorAbstractions</RootNamespace>
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>

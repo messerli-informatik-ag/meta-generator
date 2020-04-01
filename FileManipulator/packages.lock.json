@@ -81,7 +81,7 @@
         "resolved": "4.5.2",
         "contentHash": "wprSFgext8cwqymChhrBLu62LMg/1u92bU+VOwyfBimSPVFXtsNqEWC92Pf9ofzJFlk4IHmJA75EDJn1b2goAQ=="
       },
-      "filemanipulatorabstractions": {
+      "Messerli.FileManipulatorAbstractions": {
         "type": "Project",
         "dependencies": {
           "System.Collections.Immutable": "[1.7.0, 2.0.0)"

@@ -130,16 +130,16 @@
           "Funcky": "[1.5.1, 2.0.0)"
         }
       },
-      "filemanipulator": {
+      "Messerli.FileManipulator": {
         "type": "Project",
         "dependencies": {
           "Autofac": "[5.1.2, 6.0.0)",
-          "FileManipulatorAbstractions": "1.0.0",
+          "Messerli.FileManipulatorAbstractions": "1.0.0",
           "Messerli.FileSystem": "[0.1.2, 0.2.0)",
           "Newtonsoft.Json": "[12.0.3, 13.0.0)"
         }
       },
-      "filemanipulatorabstractions": {
+      "Messerli.FileManipulatorAbstractions": {
         "type": "Project",
         "dependencies": {
           "System.Collections.Immutable": "[1.7.0, 2.0.0)"
