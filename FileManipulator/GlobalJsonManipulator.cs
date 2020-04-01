@@ -57,7 +57,7 @@ namespace Messerli.FileManipulator
         {
             var existingSdkVersion = sdkList.GetValue(sdk.NuGetPackageId) is { } value ? (string?)value : null;
 
-            if (existingSdkVersion is { } version && !VersionAreCompatible(version, sdk.Version))
+            if (existingSdkVersion is { } version && !VersionsAreCompatible(version, sdk.Version))
             {
                 throw new ConflictingMsBuildSdkException(sdk, existingSdkVersion);
             }
@@ -65,7 +65,7 @@ namespace Messerli.FileManipulator
             sdkList[sdk.NuGetPackageId] = sdk.Version;
         }
 
-        private static bool VersionAreCompatible(string currentVersion, string newVersion)
+        private static bool VersionsAreCompatible(string currentVersion, string newVersion)
             => currentVersion == newVersion;
 
         private async Task<JObject> GetJsonDocument(string path)
