@@ -12,6 +12,6 @@ namespace Messerli.FileManipulatorAbstractions
             _filePath = filePath;
         }
 
-        public override string Message => $"Error manipulating file {_filePath}";
+        public override string Message => $"Error manipulating file {_filePath} see inner exception for details";
     }
 }
