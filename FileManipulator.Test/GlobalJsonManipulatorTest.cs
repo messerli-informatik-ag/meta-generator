@@ -103,6 +103,19 @@ namespace Messerli.FileManipulator.Test
                     $"}}{NewLine}",
                     AddMsBuildSdkModification
                 },
+                {
+                    $"{{{NewLine}" +
+                    $"    \"msbuild-sdks\": {{{NewLine}" +
+                    $"        \"A.Build\": \"1.0.0\",{NewLine}" +
+                    $"        \"B.Build\": \"1.5.0\"{NewLine}" +
+                    $"    }}{NewLine}" +
+                    $"}}",
+                    null,
+                    new GlobalJsonModificationBuilder()
+                        .AddMsBuildSdk(new MsBuildSdk("A.Build", "1.0.0"))
+                        .AddMsBuildSdk(new MsBuildSdk("B.Build", "1.5.0"))
+                        .Build()
+                },
             };
     }
 }
