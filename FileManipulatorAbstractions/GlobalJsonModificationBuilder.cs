@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.Contracts;
 
 namespace Messerli.FileManipulatorAbstractions
 {
@@ -18,9 +19,11 @@ namespace Messerli.FileManipulatorAbstractions
             _msBuildSdksToAdd = msBuildSdksToAdd;
         }
 
+        [Pure]
         public GlobalJsonModificationBuilder AddMsBuildSdk(MsBuildSdk sdk)
             => ShallowClone(sdksToAdd: _msBuildSdksToAdd.Add(sdk));
 
+        [Pure]
         public GlobalJsonModification Build()
             => new GlobalJsonModification(_msBuildSdksToAdd);
 
