@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk; Microsoft.Build.CentralPackageVersions">
     <PropertyGroup>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <AssemblyName>Messerli.FileManipulator.Test</AssemblyName>
         <RootNamespace>Messerli.FileManipulator.Test</RootNamespace>
+    </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
         <LangVersion>8.0</LangVersion>
         <Nullable>enable</Nullable>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
