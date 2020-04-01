@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Messerli.FileManipulatorAbstractions;
 
 namespace Messerli.FileManipulator
 {
@@ -6,6 +7,7 @@ namespace Messerli.FileManipulator
     {
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterType<GlobalJsonManipulator>().As<IGlobalJsonManipulator>();
         }
     }
 }
