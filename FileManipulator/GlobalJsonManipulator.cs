@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Messerli.FileManipulatorAbstractions;
@@ -19,20 +20,36 @@ namespace Messerli.FileManipulator
             _fileOpeningBuilder = fileOpeningBuilder;
         }
 
-        public async Task ModifyGlobalJson(string path, GlobalJsonModification modification)
+        public async Task ModifyGlobalJson(string filePath, GlobalJsonModification modification)
+            => await WrapExceptions(filePath, async () =>
+            {
+                var document = await GetJsonDocument(filePath);
+                AddMsBuildSdks(document, modification.MsBuildSdksToAdd);
+                await WriteJsonFile(filePath, document);
+            });
+
+        private static async Task WrapExceptions(string filePath, Func<Task> action)
         {
-            var document = await GetJsonDocument(path);
-            AddMsBuildSdks(document, modification.MsBuildSdksToAdd);
-            await WriteJsonFile(path, document);
+            try
+            {
+                await action();
+            }
+            catch (Exception exception)
+            {
+                throw new GlobalJsonManipulationException(exception, filePath);
+            }
         }
 
         private static void AddMsBuildSdks(JObject document, IEnumerable<MsBuildSdk> sdks)
         {
-            var sdkList = document.GetOrInsert<JObject>(MsBuildSdksJsonProperty);
+            var sdkList = document.GetOrInsert(MsBuildSdksJsonProperty, () => new JObject());
+            var sdkListObject = sdkList as JObject
+                ?? throw new MalformedGlobalJsonException(
+                    $"Key '{MsBuildSdksJsonProperty}' is expected to be an object, but was a {sdkList.Type}");
 
             foreach (var sdk in sdks)
             {
-                AddMsBuildSdk(sdkList, sdk);
+                AddMsBuildSdk(sdkListObject, sdk);
             }
         }
 
@@ -40,14 +57,16 @@ namespace Messerli.FileManipulator
         {
             var existingSdkVersion = sdkList.GetValue(sdk.NuGetPackageId) is { } value ? (string?)value : null;
 
-            if (existingSdkVersion is { } version && sdk.Version != version)
+            if (existingSdkVersion is { } version && !VersionAreCompatible(version, sdk.Version))
             {
-                throw new GlobalJsonManipulationException(
-                    $"MSBuild SDK '{sdk.NuGetPackageId}' already exists with conflicting version '{existingSdkVersion}'");
+                throw new ConflictingMsBuildSdkException(sdk, existingSdkVersion);
             }
 
             sdkList[sdk.NuGetPackageId] = sdk.Version;
         }
+
+        private static bool VersionAreCompatible(string currentVersion, string newVersion)
+            => currentVersion == newVersion;
 
         private async Task<JObject> GetJsonDocument(string path)
         {

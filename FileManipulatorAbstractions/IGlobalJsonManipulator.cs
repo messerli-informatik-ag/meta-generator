@@ -5,6 +5,7 @@ namespace Messerli.FileManipulatorAbstractions
     public interface IGlobalJsonManipulator
     {
         /// <exception cref="GlobalJsonManipulationException">Thrown when a <see cref="MsBuildSdk"/> already exists with a conflicting version.</exception>
-        Task ModifyGlobalJson(string path, GlobalJsonModification modification);
+        /// <exception cref="GlobalJsonManipulationException">Thrown when the config file is malformed.</exception>
+        Task ModifyGlobalJson(string filePath, GlobalJsonModification modification);
     }
 }

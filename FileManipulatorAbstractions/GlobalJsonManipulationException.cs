@@ -4,9 +4,14 @@ namespace Messerli.FileManipulatorAbstractions
 {
     public sealed class GlobalJsonManipulationException : Exception
     {
-        public GlobalJsonManipulationException(string message)
-            : base(message)
+        private readonly string _filePath;
+
+        public GlobalJsonManipulationException(Exception innerException, string filePath)
+            : base(null, innerException)
         {
+            _filePath = filePath;
         }
+
+        public override string Message => $"Error manipulating file {_filePath}";
     }
 }
