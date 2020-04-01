@@ -11,6 +11,8 @@ namespace Messerli.FileManipulator
 {
     public sealed class GlobalJsonManipulator : IGlobalJsonManipulator
     {
+        private const string MsBuildSdksJsonProperty = "msbuild-sdks";
+
         private readonly IFileOpeningBuilder _fileOpeningBuilder;
 
         public GlobalJsonManipulator(IFileOpeningBuilder fileOpeningBuilder)
@@ -27,7 +29,7 @@ namespace Messerli.FileManipulator
 
         private static void AddMsBuildSdks(JObject document, IEnumerable<MsBuildSdk> sdks)
         {
-            var sdkList = document.GetOrInsert<JObject>("msbuild-sdks");
+            var sdkList = document.GetOrInsert<JObject>(MsBuildSdksJsonProperty);
 
             foreach (var sdk in sdks)
             {
