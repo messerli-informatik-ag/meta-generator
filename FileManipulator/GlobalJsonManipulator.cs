@@ -45,7 +45,7 @@ namespace Messerli.FileManipulator
             var sdkList = document.GetOrInsert(MsBuildSdksJsonProperty, () => new JObject());
             var sdkListObject = sdkList as JObject
                 ?? throw new MalformedGlobalJsonException(
-                    $"Key '{MsBuildSdksJsonProperty}' is expected to be an object, but was a {sdkList.Type}");
+                    $"Key '{MsBuildSdksJsonProperty}' is expected to be an object, but is of type {sdkList.Type}");
 
             foreach (var sdk in sdks)
             {

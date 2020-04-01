@@ -52,12 +52,33 @@ namespace Messerli.FileManipulator.Test
             await globalJsonManipulator.ModifyGlobalJson(filePath, new GlobalJsonModificationBuilder()
                 .AddMsBuildSdk(new MsBuildSdk(nugetPackageId, versionOne))
                 .Build());
-            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            var exception = await Assert.ThrowsAsync<GlobalJsonManipulationException>(async () =>
             {
                 await globalJsonManipulator.ModifyGlobalJson(filePath, new GlobalJsonModificationBuilder()
                     .AddMsBuildSdk(new MsBuildSdk(nugetPackageId, versionTwo))
                     .Build());
             });
+            Assert.True(exception.InnerException is ConflictingMsBuildSdkException);
+        }
+
+        [Fact]
+        public async Task ThrowsWhenMsbuildSdksKeyHasIncorrectType()
+        {
+            var existingConfig = $"{{{NewLine}" +
+                                       $"    \"msbuild-sdks\": [1, 2, 3]" +
+                                       $"}}";
+
+            using var testEnvironment = new TestEnvironmentProvider();
+            var filePath = Path.Combine(testEnvironment.RootDirectory, FileName);
+
+            await File.WriteAllTextAsync(filePath, existingConfig);
+
+            var globalJsonManipulator = new GlobalJsonManipulator(new FileOpeningBuilder());
+            var exception = await Assert.ThrowsAsync<GlobalJsonManipulationException>(async () =>
+            {
+                await globalJsonManipulator.ModifyGlobalJson(filePath, AddMsBuildSdkModification);
+            });
+            Assert.True(exception.InnerException is MalformedGlobalJsonException);
         }
 
         public static TheoryData<string, string?, GlobalJsonModification> GetModificationData()
