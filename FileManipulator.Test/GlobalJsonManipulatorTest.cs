@@ -15,7 +15,7 @@ namespace Messerli.FileManipulator.Test
         private const string MsBuildSdkVersion = "1.0.0";
         private static readonly string NewLine = Environment.NewLine;
 
-        private static readonly GlobalJsonModification AddMsBuildSdkModification =
+        private static readonly GlobalJsonModification ModificationThatAddsAnMsBuildSdk =
             new GlobalJsonModificationBuilder()
                 .AddMsBuildSdk(new MsBuildSdk(MsBuildSdkNugetPackageId, MsBuildSdkVersion))
                 .Build();
@@ -86,7 +86,7 @@ namespace Messerli.FileManipulator.Test
             var globalJsonManipulator = CreateGlobalJsonManipulator();
             var exception = await Assert.ThrowsAsync<GlobalJsonManipulationException>(async () =>
             {
-                await globalJsonManipulator.ModifyGlobalJson(filePath, AddMsBuildSdkModification);
+                await globalJsonManipulator.ModifyGlobalJson(filePath, ModificationThatAddsAnMsBuildSdk);
             });
             Assert.True(exception.InnerException is MalformedGlobalJsonException);
         }
@@ -110,7 +110,7 @@ namespace Messerli.FileManipulator.Test
                     $"    }},{NewLine}" +
                     $"    \"foo\": \"bar\"{NewLine}" +
                     $"}}{NewLine}",
-                    AddMsBuildSdkModification
+                    ModificationThatAddsAnMsBuildSdk
                 },
                 {
                     $"{{{NewLine}" +
@@ -123,7 +123,7 @@ namespace Messerli.FileManipulator.Test
                     $"        \"{MsBuildSdkNugetPackageId}\": \"{MsBuildSdkVersion}\"{NewLine}" +
                     $"    }}{NewLine}" +
                     $"}}{NewLine}",
-                    AddMsBuildSdkModification
+                    ModificationThatAddsAnMsBuildSdk
                 },
             };
 
@@ -136,7 +136,7 @@ namespace Messerli.FileManipulator.Test
                     $"        \"{MsBuildSdkNugetPackageId}\": \"{MsBuildSdkVersion}\"{NewLine}" +
                     $"    }}{NewLine}" +
                     $"}}",
-                    AddMsBuildSdkModification
+                    ModificationThatAddsAnMsBuildSdk
                 },
                 {
                     $"{{{NewLine}" +
