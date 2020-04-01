@@ -6,7 +6,6 @@ namespace Messerli.FileManipulator
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<GlobalJsonLoader>().As<IGlobalJsonLoader>();
         }
     }
 }
