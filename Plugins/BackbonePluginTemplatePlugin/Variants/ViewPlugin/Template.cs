@@ -1,4 +1,4 @@
-﻿namespace Messerli.BackbonePluginTemplatePlugin.Variants.PluginTemplate
+﻿namespace Messerli.BackbonePluginTemplatePlugin.Variants.ViewPlugin
 {
     internal static class Template
     {

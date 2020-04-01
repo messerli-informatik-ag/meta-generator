@@ -2,9 +2,8 @@
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using Messerli.MetaGeneratorAbstractions;
 
-namespace Messerli.BackbonePluginTemplatePlugin.Variants.MinimalPluginTemplate
+namespace Messerli.BackbonePluginTemplatePlugin.Variants.MinimalPlugin
 {
     public class PluginVariant : IPluginVariant
     {

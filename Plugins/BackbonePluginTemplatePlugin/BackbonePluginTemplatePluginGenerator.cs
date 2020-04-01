@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Messerli.BackbonePluginTemplatePlugin.Variants;
+using Messerli.BackbonePluginTemplatePlugin.Variants.DatabaseAccessPlugin;
 using Messerli.CommandLineAbstractions;
 using Messerli.MetaGeneratorAbstractions;
 using Messerli.MetaGeneratorAbstractions.UserInput;
@@ -53,7 +54,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
         public void Generate()
         {
             _consoleWriter.WriteLine($"Creating Plugin: {PluginName}");
-            var tasks = CreatePluginVariant(PluginVariant)
+            var tasks = CreatePluginVariant()
                 .CreateTemplateFiles();
 
             tasks.Add(_fileManipulator.AddProjectsToSolution(
@@ -79,14 +80,17 @@ namespace Messerli.BackbonePluginTemplatePlugin
         private string GetTestProjectName()
             => $"{PluginName}.{TestFolder}";
 
-        private IPluginVariant CreatePluginVariant(VariantType variant)
-            => variant switch
+        private IPluginVariant CreatePluginVariant()
+        {
+            var templateFileProperty = CreateTemplateFileProperty();
+            return PluginVariant switch
             {
-                VariantType.MinimalPluginTemplate => new Variants.MinimalPluginTemplate.PluginVariant(CreateTemplateFileProperty()),
-                VariantType.PluginTemplate => new Variants.PluginTemplate.PluginVariant(CreateTemplateFileProperty()),
-                VariantType.DatabaseAccessPluginTemplate => new Variants.DatabaseAccessPluginTemplate.PluginVariant(CreateTemplateFileProperty()),
+                VariantType.MinimalPluginTemplate => new Variants.MinimalPlugin.PluginVariant(templateFileProperty),
+                VariantType.PluginTemplate => new Variants.ViewPlugin.PluginVariant(templateFileProperty),
+                VariantType.DatabaseAccessPluginTemplate => new PluginVariant(templateFileProperty),
                 _ => throw new InvalidOperationException(),
             };
+        }
 
         private SolutionInfo.Builder GetSolutionInfoBuilder()
             => new SolutionInfo.Builder()
