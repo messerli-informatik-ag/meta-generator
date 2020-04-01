@@ -73,10 +73,20 @@
         "resolved": "3.2.0",
         "contentHash": "9UelxQG7Kni25Cg63W1RTK3wfJaKdbGcZgCoD7ofgItTtpFQmUkZSk8hpXXnEZftOGPIJdGdMUaqoXyfMAy8Tw=="
       },
+      "Messerli.FileSystem": {
+        "type": "Transitive",
+        "resolved": "0.1.2",
+        "contentHash": "rUMTwZgDNM2nTeBygc97ou/pfrA1kMEsRMumulhlxf/4rEKzLDnEaekFXABCr6M7d7kLTqGlb8WCjb1ShW11WQ=="
+      },
       "Microsoft.CSharp": {
         "type": "Transitive",
         "resolved": "4.5.0",
         "contentHash": "kaj6Wb4qoMuH3HySFJhxwQfe8R/sJsNJnANrvv8WdFPMoNbKY5htfNscv+LHCu5ipz+49m2e+WQXpLXr9XYemQ=="
+      },
+      "Newtonsoft.Json": {
+        "type": "Transitive",
+        "resolved": "12.0.3",
+        "contentHash": "6mgjfnRB4jKMlzHSl+VD+oUc1IebOZabkbyWj2RiTgWwYPPuaK1H97G1sHqGwPlS5npiF5Q0OrxN1wni2n5QWg=="
       },
       "StyleCop.Analyzers": {
         "type": "Transitive",
@@ -93,8 +103,8 @@
       },
       "System.Collections.Immutable": {
         "type": "Transitive",
-        "resolved": "1.5.0",
-        "contentHash": "EXKiDFsChZW0RjrZ4FYHu9aW6+P4MCgEDCklsVseRfhoO0F+dXeMSsMRAlVXIo06kGJ/zv+2w1a2uc2+kxxSaQ=="
+        "resolved": "1.7.0",
+        "contentHash": "RVSM6wZUo6L2y6P3vN6gjUtyJ2IF2RVtrepF3J7nrDKfFQd5u/SnSUFclchYQis8/k5scHy9E+fVeKVQLnnkzw=="
       },
       "System.Memory": {
         "type": "Transitive",
@@ -118,6 +128,21 @@
         "type": "Project",
         "dependencies": {
           "Funcky": "[1.5.1, 2.0.0)"
+        }
+      },
+      "Messerli.FileManipulator": {
+        "type": "Project",
+        "dependencies": {
+          "Autofac": "[5.1.2, 6.0.0)",
+          "Messerli.FileManipulatorAbstractions": "1.0.0",
+          "Messerli.FileSystem": "[0.1.2, 0.2.0)",
+          "Newtonsoft.Json": "[12.0.3, 13.0.0)"
+        }
+      },
+      "Messerli.FileManipulatorAbstractions": {
+        "type": "Project",
+        "dependencies": {
+          "System.Collections.Immutable": "[1.7.0, 2.0.0)"
         }
       },
       "metageneratorabstractions": {
