@@ -21,16 +21,26 @@ namespace Messerli.FileManipulator.Test
                 .Build();
 
         [Theory]
-        [MemberData(nameof(GetModificationData))]
-        public async Task AddsMsBuildSdksToConfig(string expectedConfig, string? existingConfig, GlobalJsonModification modification)
+        [MemberData(nameof(GetModificationsToExistingFile))]
+        public async Task AppliesModificationsToExistingConfigFile(string expectedConfig, string existingConfig, GlobalJsonModification modification)
         {
             using var testEnvironment = new TestEnvironmentProvider();
             var filePath = Path.Combine(testEnvironment.RootDirectory, FileName);
 
-            if (existingConfig is { })
-            {
-                await File.WriteAllTextAsync(filePath, existingConfig);
-            }
+            await File.WriteAllTextAsync(filePath, existingConfig);
+
+            var globalJsonManipulator = CreateGlobalJsonManipulator();
+            await globalJsonManipulator.ModifyGlobalJson(filePath, modification);
+
+            Assert.Equal(expectedConfig, await File.ReadAllTextAsync(filePath));
+        }
+
+        [Theory]
+        [MemberData(nameof(GetModificationsToNewFile))]
+        public async Task AppliesModificationsToNewConfigFile(string expectedConfig, GlobalJsonModification modification)
+        {
+            using var testEnvironment = new TestEnvironmentProvider();
+            var filePath = Path.Combine(testEnvironment.RootDirectory, FileName);
 
             var globalJsonManipulator = CreateGlobalJsonManipulator();
             await globalJsonManipulator.ModifyGlobalJson(filePath, modification);
@@ -81,18 +91,9 @@ namespace Messerli.FileManipulator.Test
             Assert.True(exception.InnerException is MalformedGlobalJsonException);
         }
 
-        public static TheoryData<string, string?, GlobalJsonModification> GetModificationData()
-            => new TheoryData<string, string?, GlobalJsonModification>
+        public static TheoryData<string, string, GlobalJsonModification> GetModificationsToExistingFile()
+            => new TheoryData<string, string, GlobalJsonModification>
             {
-                {
-                    $"{{{NewLine}" +
-                    $"    \"msbuild-sdks\": {{{NewLine}" +
-                    $"        \"{MsBuildSdkNugetPackageId}\": \"{MsBuildSdkVersion}\"{NewLine}" +
-                    $"    }}{NewLine}" +
-                    $"}}",
-                    null,
-                    AddMsBuildSdkModification
-                },
                 {
                     $"{{{NewLine}" +
                     $"    \"sdk\": {{{NewLine}" +
@@ -124,6 +125,19 @@ namespace Messerli.FileManipulator.Test
                     $"}}{NewLine}",
                     AddMsBuildSdkModification
                 },
+            };
+
+        public static TheoryData<string, GlobalJsonModification> GetModificationsToNewFile()
+            => new TheoryData<string, GlobalJsonModification>
+            {
+                {
+                    $"{{{NewLine}" +
+                    $"    \"msbuild-sdks\": {{{NewLine}" +
+                    $"        \"{MsBuildSdkNugetPackageId}\": \"{MsBuildSdkVersion}\"{NewLine}" +
+                    $"    }}{NewLine}" +
+                    $"}}",
+                    AddMsBuildSdkModification
+                },
                 {
                     $"{{{NewLine}" +
                     $"    \"msbuild-sdks\": {{{NewLine}" +
@@ -131,7 +145,6 @@ namespace Messerli.FileManipulator.Test
                     $"        \"B.Build\": \"1.5.0\"{NewLine}" +
                     $"    }}{NewLine}" +
                     $"}}",
-                    null,
                     new GlobalJsonModificationBuilder()
                         .AddMsBuildSdk(new MsBuildSdk("A.Build", "1.0.0"))
                         .AddMsBuildSdk(new MsBuildSdk("B.Build", "1.5.0"))
