@@ -1,32 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Immutable;
 
 namespace Messerli.FileManipulatorAbstractions
 {
-    public class GlobalJsonModificationBuilder
+    public sealed class GlobalJsonModificationBuilder
     {
-        private readonly List<MsBuildSdk> _sdkList = new List<MsBuildSdk>();
-        private string _path;
+        private readonly IImmutableList<MsBuildSdk> _sdksToAdd;
 
-        private GlobalJsonModificationBuilder(string path)
+        public GlobalJsonModificationBuilder()
+            : this(ImmutableList<MsBuildSdk>.Empty)
         {
-            _path = path;
         }
 
-        public GlobalJsonModificationBuilder WithPath(string path)
-            => new GlobalJsonModificationBuilder(path);
-
-        public void AddSdk(MsBuildSdk sdk)
-            => _sdkList.Add(sdk);
-
-        public GlobalJsonModification Build()
+        private GlobalJsonModificationBuilder(IImmutableList<MsBuildSdk> sdksToAdd)
         {
-            if (_path.Length == 0)
-            {
-                throw new ArgumentException(nameof(_path));
-            }
-
-            return new GlobalJsonModification(_path, _sdkList);
+            _sdksToAdd = sdksToAdd;
         }
+
+        public GlobalJsonModificationBuilder AddSdk(MsBuildSdk sdk)
+            => ShallowClone(sdkList: _sdksToAdd.Add(sdk));
+
+        public GlobalJsonModification Build(string path)
+            => new GlobalJsonModification(_sdksToAdd);
+
+        private GlobalJsonModificationBuilder ShallowClone(
+            IImmutableList<MsBuildSdk>? sdkList = null)
+            => new GlobalJsonModificationBuilder(sdkList ?? _sdksToAdd);
     }
 }

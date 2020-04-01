@@ -4,14 +4,11 @@ namespace Messerli.FileManipulatorAbstractions
 {
     public sealed class GlobalJsonModification
     {
-        public GlobalJsonModification(string path, List<MsBuildSdk> msbuildSdk)
+        public GlobalJsonModification(IEnumerable<MsBuildSdk> sdksToAdd)
         {
-            Path = path;
-            SdkList = msbuildSdk;
+            SdksToAdd = sdksToAdd;
         }
 
-        public List<MsBuildSdk> SdkList { get; }
-
-        public string Path { get; }
+        public IEnumerable<MsBuildSdk> SdksToAdd { get; }
     }
 }

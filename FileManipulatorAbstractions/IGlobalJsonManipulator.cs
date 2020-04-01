@@ -4,6 +4,6 @@ namespace Messerli.FileManipulatorAbstractions
 {
     public interface IGlobalJsonManipulator
     {
-        Task AddMsBuildSdkToGlobalJson(GlobalJsonModification modification);
+        Task AddMsBuildSdkToGlobalJson(string path, GlobalJsonModification modification);
     }
 }
