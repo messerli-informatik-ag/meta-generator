@@ -9,20 +9,20 @@ namespace Messerli.FileManipulator
 {
     public sealed class GlobalJsonManipulator : IGlobalJsonManipulator
     {
-        public async Task AddMsBuildSdkToGlobalJson(MsBuildSdkInfo sdk)
+        public async Task AddMsBuildSdkToGlobalJson(GlobalJsonModification modification)
         {
             try
             {
-                var jsonString = await File.ReadAllTextAsync(sdk.Path);
+                var jsonString = await File.ReadAllTextAsync(modification.Path);
                 using var jsonDocument = JsonDocument.Parse(jsonString);
                 var msbuildSdksProperty = jsonDocument.RootElement.GetProperty("msbuild-sdks");
 
-                sdk.SdkList.ForEach(
+                modification.SdkList.ForEach(
                     msbuildSdk =>
                     {
                         if (!msbuildSdksProperty.TryGetProperty(msbuildSdk.NuGetPackageId, out var sdks))
                         {
-                            using FileStream stream = File.Open(sdk.Path, FileMode.CreateNew);
+                            using FileStream stream = File.Open(modification.Path, FileMode.CreateNew);
                             using var writer = new Utf8JsonWriter(stream);
                             writer.WriteStartObject();
 
@@ -33,11 +33,11 @@ namespace Messerli.FileManipulator
             }
             catch (FileNotFoundException)
             {
-                await CreateGlobalJson(sdk);
+                await CreateGlobalJson(modification);
             }
         }
 
-        private Task CreateGlobalJson(MsBuildSdkInfo sdk)
+        private Task CreateGlobalJson(GlobalJsonModification sdk)
         {
             throw new NotImplementedException();
         }

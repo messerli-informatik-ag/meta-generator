@@ -2,9 +2,9 @@
 
 namespace Messerli.FileManipulatorAbstractions
 {
-    public sealed class MsBuildSdkInfo
+    public sealed class GlobalJsonModification
     {
-        public MsBuildSdkInfo(string path, List<MsBuildSdk> msbuildSdk)
+        public GlobalJsonModification(string path, List<MsBuildSdk> msbuildSdk)
         {
             Path = path;
             SdkList = msbuildSdk;
