@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Messerli.FileManipulatorAbstractions;
@@ -43,8 +42,8 @@ namespace Messerli.FileManipulator
 
             if (existingSdkVersion is { } version && sdk.Version != version)
             {
-                throw new InvalidOperationException(
-                    $"MSBuild SDK '{sdk.NuGetPackageId}' already exists with version '{existingSdkVersion}'");
+                throw new GlobalJsonManipulationException(
+                    $"MSBuild SDK '{sdk.NuGetPackageId}' already exists with conflicting version '{existingSdkVersion}'");
             }
 
             sdkList[sdk.NuGetPackageId] = sdk.Version;
