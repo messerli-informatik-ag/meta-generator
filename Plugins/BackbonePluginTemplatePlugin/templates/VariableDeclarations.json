@@ -1,7 +1,15 @@
 [
   {
-    "Question": "Enter the name of the project file (no spaces):",
-    "Name": "RepositoryName",
+    "Question": "Please enter the full path of the directory containing the solution you want to modify.",
+    "Name": "SolutionDirectory",
+    "Type": "ExistingPath",
+    "Validations": [
+      "InputValidations.AnySolutionExists"
+    ]
+  },
+  {
+    "Question": "Please enter the name of the new plugin. The name mustn't contain any spaces.",
+    "Name": "PluginName",
     "Type": "String",
     "Validations": [
       "Validations.ValuePresent",
@@ -9,29 +17,21 @@
     ]
   },
   {
-    "Question": "Enter the full path of the plugin repository",
-    "Name": "TargetPath",
-    "Type": "ExistingPath",
-    "Validations": [
-      "InputValidations.AnySolutionExists"
-    ]
-  },
-  {
-    "Question": "Enter the variant of your backbone plugin:",
+    "Question": "Please select a variant for your Backbone plugin.",
     "Name": "PluginVariant",
     "Type": "Selection",
     "SelectionValues": [
       {
         "Value": 1,
-        "Description": "Minimal backbone plugin template"
+        "Description": "Minimal setup with completely empty implementation."
       },
       {
         "Value": 2,
-        "Description": "Predefined backbone plugin template plugin"
+        "Description": "Default setup for plugins with a controller, presenter, view and a view model."
       },
       {
         "Value": 3,
-        "Description": "Predefined backbone plugin template plugin with database access"
+        "Description": "Advanced setup containing a DB access example."
       }
     ]
   }

@@ -13,10 +13,6 @@ namespace Messerli.BackbonePluginTemplatePlugin
 {
     public class BackbonePluginTemplatePluginGenerator : IMetaGenerator
     {
-        private const string RepositoryName = "RepositoryName";
-        private const string PluginVariant = "PluginVariant";
-        private const string SolutionPath = "TargetPath";
-
         private const string TestFolder = "Test";
         private const string ProjectFileExtension = "csproj";
 
@@ -66,13 +62,13 @@ namespace Messerli.BackbonePluginTemplatePlugin
         }
 
         private string GetProjectName()
-            => _userInputProvider.Value(RepositoryName);
+            => _userInputProvider.Value(VariableConstant.PluginName);
 
         private VariantType BackbonePluginVariant()
-            => (VariantType)int.Parse(_userInputProvider.Value(PluginVariant));
+            => (VariantType)int.Parse(_userInputProvider.Value(VariableConstant.PluginVariant));
 
         private string GetSolutionPath()
-            => _userInputProvider.Value(SolutionPath);
+            => _userInputProvider.Value(VariableConstant.SolutionDirectory);
 
         private string GetRepositoryPath()
             => Path.Combine(GetSolutionPath(), GetProjectName());
