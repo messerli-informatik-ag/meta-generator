@@ -37,7 +37,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
             _userInputProvider = userInputProvider;
         }
 
-        public string Description => "Create a Messerli backbone plugin template plugin";
+        public string Description => "Create a new Backbone Plugin";
 
         public string Name => "backbone-plugin-template-plugin";
 
