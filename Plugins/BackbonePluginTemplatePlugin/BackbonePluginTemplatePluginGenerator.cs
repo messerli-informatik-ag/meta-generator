@@ -37,6 +37,12 @@ namespace Messerli.BackbonePluginTemplatePlugin
 
         public string Name => "backbone-plugin-template-plugin";
 
+        private string PluginName => _userInputProvider.Value(VariableConstant.PluginName);
+
+        private VariantType PluginVariant => ParsePluginVariant(_userInputProvider.Value(VariableConstant.PluginVariant));
+
+        private string SolutionDirectory => _userInputProvider.Value(VariableConstant.SolutionDirectory);
+
         public void Register()
             => _userInputProvider.RegisterVariablesFromTemplate(Template.VariableDeclarations);
 
@@ -46,8 +52,8 @@ namespace Messerli.BackbonePluginTemplatePlugin
 
         public void Generate()
         {
-            _consoleWriter.WriteLine($"Creating Plugin: {GetProjectName()}");
-            var tasks = CreatePluginVariant(BackbonePluginVariant())
+            _consoleWriter.WriteLine($"Creating Plugin: {PluginName}");
+            var tasks = CreatePluginVariant(PluginVariant)
                 .CreateTemplateFiles();
 
             tasks.Add(_fileManipulator.AddProjectsToSolution(
@@ -61,23 +67,17 @@ namespace Messerli.BackbonePluginTemplatePlugin
         {
         }
 
-        private string GetProjectName()
-            => _userInputProvider.Value(VariableConstant.PluginName);
-
-        private VariantType BackbonePluginVariant()
-            => (VariantType)int.Parse(_userInputProvider.Value(VariableConstant.PluginVariant));
-
-        private string GetSolutionPath()
-            => _userInputProvider.Value(VariableConstant.SolutionDirectory);
+        private static VariantType ParsePluginVariant(string variantType)
+            => (VariantType)int.Parse(variantType);
 
         private string GetRepositoryPath()
-            => Path.Combine(GetSolutionPath(), GetProjectName());
+            => Path.Combine(SolutionDirectory, PluginName);
 
         private string GetTestRepositoryPath()
-            => Path.Combine(GetSolutionPath(), GetTestProjectName());
+            => Path.Combine(SolutionDirectory, GetTestProjectName());
 
         private string GetTestProjectName()
-            => $"{GetProjectName()}.{TestFolder}";
+            => $"{PluginName}.{TestFolder}";
 
         private IPluginVariant CreatePluginVariant(VariantType variant)
             => variant switch
@@ -90,19 +90,19 @@ namespace Messerli.BackbonePluginTemplatePlugin
 
         private SolutionInfo.Builder GetSolutionInfoBuilder()
             => new SolutionInfo.Builder()
-                .WithPath(Directory.GetFiles(GetSolutionPath(), "*.sln").FirstOrDefault());
+                .WithPath(Directory.GetFiles(SolutionDirectory, "*.sln").FirstOrDefault());
 
         private ProjectInfo.Builder GetProjectInfoBuilder()
             => new ProjectInfo.Builder()
-                .WithName(GetProjectName())
-                .WithPath(Path.Combine(GetRepositoryPath(), $"{GetProjectName()}.{ProjectFileExtension}"));
+                .WithName(PluginName)
+                .WithPath(Path.Combine(GetRepositoryPath(), $"{PluginName}.{ProjectFileExtension}"));
 
         private ProjectInfo.Builder GetProjectTestInfoBuilder()
             => new ProjectInfo.Builder()
                 .WithName(GetTestProjectName())
-                .WithPath(Path.Combine(GetTestRepositoryPath(), $"{GetProjectName()}.{ProjectFileExtension}"));
+                .WithPath(Path.Combine(GetTestRepositoryPath(), $"{PluginName}.{ProjectFileExtension}"));
 
         private TemplateFileProperty CreateTemplateFileProperty()
-            => new TemplateFileProperty(_fileGenerator, GetSolutionPath(), GetProjectName());
+            => new TemplateFileProperty(_fileGenerator, SolutionDirectory, PluginName);
     }
 }
