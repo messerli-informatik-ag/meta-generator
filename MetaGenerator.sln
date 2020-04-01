@@ -1,4 +1,4 @@
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29201.188
 MinimumVisualStudioVersion = 10.0.40219.1
@@ -39,8 +39,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToolLoaderAbstractions", "ToolLoaderAbstractions\ToolLoaderAbstractions.csproj", "{B8E9F584-0EB5-490C-96E4-E610D8823642}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ManagedWrapperProjectsPlugin", "Plugins\ManagedWrapperProjectsPlugin\ManagedWrapperProjectsPlugin.csproj", "{DB3EF7E4-220A-405F-82CC-9F1E9B7B71A9}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackbonePluginTemplatePlugin", "Plugins\BackbonePluginTemplatePlugin\BackbonePluginTemplatePlugin.csproj", "{C9B0494F-5F2F-4C22-B4DE-4EBDF46D8B9C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileManipulator", "FileManipulator\FileManipulator.csproj", "{1E03BF1E-C0B4-4317-A5F6-C88F9C24EA93}"
 EndProject
@@ -100,10 +98,6 @@ Global
 		{DB3EF7E4-220A-405F-82CC-9F1E9B7B71A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB3EF7E4-220A-405F-82CC-9F1E9B7B71A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB3EF7E4-220A-405F-82CC-9F1E9B7B71A9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C9B0494F-5F2F-4C22-B4DE-4EBDF46D8B9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C9B0494F-5F2F-4C22-B4DE-4EBDF46D8B9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C9B0494F-5F2F-4C22-B4DE-4EBDF46D8B9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C9B0494F-5F2F-4C22-B4DE-4EBDF46D8B9C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1E03BF1E-C0B4-4317-A5F6-C88F9C24EA93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1E03BF1E-C0B4-4317-A5F6-C88F9C24EA93}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E03BF1E-C0B4-4317-A5F6-C88F9C24EA93}.Release|Any CPU.ActiveCfg = Release|Any CPU
