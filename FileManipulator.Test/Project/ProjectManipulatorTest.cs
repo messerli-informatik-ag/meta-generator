@@ -241,6 +241,8 @@ namespace Messerli.FileManipulator.Test.Project
         private static IProjectManipulator CreateProjectManipulator()
             => new MsBuildProjectManipulatorFacade(
                 new MicrosoftBuildAssemblyLoader(),
-                new ProjectManipulator(new ProjectSdkManipulator()));
+                new ProjectManipulator(
+                    new ProjectSdkManipulator(),
+                    new CentralPackageVersionsManipulator()));
     }
 }
