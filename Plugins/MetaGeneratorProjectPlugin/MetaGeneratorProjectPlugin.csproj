@@ -18,7 +18,7 @@
     <ProjectReference Include="..\..\MetaGeneratorAbstractions\MetaGeneratorAbstractions.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="templates\**\*" LogicalName="%(Identity)"/>
+    <EmbeddedResource Include="templates\**\*" LogicalName="%(Identity)" />
   </ItemGroup>
   <Import Project="..\..\Plugin.targets" />
   <ItemGroup>

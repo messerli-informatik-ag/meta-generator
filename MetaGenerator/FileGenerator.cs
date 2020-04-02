@@ -30,6 +30,9 @@ namespace Messerli.MetaGenerator
             _consoleWriter = consoleWriter;
         }
 
+        public Task FromTemplate(string templatename, string destinationPath)
+            => FromTemplate(templatename, destinationPath, Encoding.UTF8);
+
         public async Task FromTemplate(string templateName, string destinationPath, Encoding encoding)
         {
             LogFileCreation(templateName, destinationPath);
@@ -37,6 +40,12 @@ namespace Messerli.MetaGenerator
             var content = await OutputFromTemplate(templateName);
             await FromTemplateContent(content, destinationPath, encoding);
         }
+
+        public Task FromTemplateGlob(string glob)
+            => FromTemplateGlob(glob, new Dictionary<string, string>());
+
+        public Task FromTemplateGlob(string glob, IDictionary<string, string> fileNameTemplateValues)
+            => FromTemplateGlob(glob, fileNameTemplateValues, Encoding.UTF8);
 
         public Task FromTemplateGlob(string glob, IDictionary<string, string> fileNameTemplateValues, Encoding encoding)
         {

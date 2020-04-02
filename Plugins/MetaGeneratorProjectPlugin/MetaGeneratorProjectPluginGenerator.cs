@@ -19,7 +19,6 @@ namespace Messerli.MetaGeneratorProjectPlugin
         private const string PluginProjectFileTemplate = "Messerli.MetaGeneratorProjectPlugin.templates.plugin.csproj.template";
         private const string GeneratorFileTemplate = "Messerli.MetaGeneratorProjectPlugin.templates.generator.source.template";
         private const string ModuleFileTemplate = "Messerli.MetaGeneratorProjectPlugin.templates.module.source.template";
-        private const string PublishScript = "Messerli.MetaGeneratorProjectPlugin.templates.publish.template";
 
         private const string GeneratorName = "GeneratorName";
         private const string KebabGeneratorName = "KebabGeneratorName";
@@ -68,12 +67,13 @@ namespace Messerli.MetaGeneratorProjectPlugin
 
             var tasks = new List<Task>
             {
-                _fileGenerator.FromTemplate(PluginProjectFileTemplate, Path.Combine(GetPluginPath(), $"{_userInputProvider.Value(GeneratorName)}.csproj"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(GeneratorFileTemplate, Path.Combine(GetPluginPath(), $"{_userInputProvider.Value(GeneratorName)}Generator.cs"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(ModuleFileTemplate, Path.Combine(GetPluginPath(), $"{_userInputProvider.Value(GeneratorName)}Module.cs"), Encoding.UTF8),
+                _fileGenerator.FromTemplateGlob("templates/**/*", new Dictionary<string, string>
+                {
+                    { "fileExtension", "cs" },
+                    { "generatorName", _userInputProvider.Value(GeneratorName) },
+                }),
                 _fileGenerator.FromTemplate(VariableDeclarationsTemplate, Path.Combine(GetPluginPath(), "templates", "VariableDeclarations.json"), new UTF8Encoding(false)),
 
-                _fileManipulator.AppendTemplate(PublishScript, Path.Combine(GetSolutionPath(), "publish.ps1")),
                 _fileManipulator.AddProjectsToSolution(GetSolutionInfoBuilder().Build(), GetProjectInfoBuilder().Build().Yield()),
             };
 
