@@ -2,9 +2,12 @@
 
 namespace Messerli.FileManipulatorAbstractions.Project
 {
+    /// <summary>
+    /// This class can be constructed using a <see cref="PackageReferenceBuilder"/>.
+    /// </summary>
     public sealed class PackageReference
     {
-        public PackageReference(
+        internal PackageReference(
             string name,
             string version,
             IAssetListVariant? privateAssets = null,

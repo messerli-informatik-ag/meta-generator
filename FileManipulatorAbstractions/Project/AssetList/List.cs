@@ -9,6 +9,11 @@ namespace Messerli.FileManipulatorAbstractions.Project.AssetList
             Assets = assets;
         }
 
+        public List(params AssetName[] assets)
+            : this(assets as IEnumerable<AssetName>)
+        {
+        }
+
         public IEnumerable<AssetName> Assets { get; }
     }
 }
