@@ -11,8 +11,6 @@ namespace Messerli.FileManipulator.Project.MsBuild
 {
     internal sealed class ProjectManipulator : IProjectManipulator
     {
-        private const string CentralPackageVersionsSdk = "Microsoft.Build.CentralPackageVersions";
-
         private readonly IProjectSdkManipulator _projectSdkManipulator;
 
         private readonly ICentralPackageVersionsManipulator _centralPackageVersionsManipulator;
@@ -30,26 +28,11 @@ namespace Messerli.FileManipulator.Project.MsBuild
         public void ManipulateProject(string projectFilePath, ProjectModification modification)
         {
             using var projectCollection = new ProjectCollection();
-            var project = OpenProject(projectFilePath, projectCollection);
+            var project = ProjectUtility.OpenProjectForEditing(projectFilePath, projectCollection);
             _projectSdkManipulator.AddSdksToProject(project, modification.SdksToAdd);
             AddPackageReferencesToProject(project, modification.PackageReferencesToAdd);
             project.Save();
         }
-
-        private static MsBuildProject OpenProject(string projectFilePath, ProjectCollection projectCollection)
-        {
-            var projectRootElement = ProjectRootElement.Open(projectFilePath, projectCollection, preserveFormatting: true);
-            return new MsBuildProject(projectRootElement);
-        }
-
-        private static bool UseCentralPackageVersionsSdk(MsBuildProject project)
-            => project.Imports.Any(import => import.SdkResult is { } sdk && sdk.SdkReference.Name == CentralPackageVersionsSdk);
-
-        private static bool HasCentralPackageVersionsEnabled(MsBuildProject project)
-            => project.GetPropertyValue("EnableCentralPackageVersions") != "false";
-
-        private static string GetCentralPackagesFile(MsBuildProject project)
-            => project.GetPropertyValue("CentralPackagesFile");
 
         private void AddPackageReferencesToProject(MsBuildProject project, IEnumerable<PackageReference> packageReferences)
         {

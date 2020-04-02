@@ -21,7 +21,7 @@ namespace Messerli.FileManipulator.Project.MsBuild
         public void AddPackageReferencesToGlobalPackages(MsBuildProject project, IEnumerable<PackageReference> packageReferences)
         {
             using var projectCollection = new ProjectCollection();
-            var packagesProject = OpenProject(GetCentralPackagesFile(project), projectCollection);
+            var packagesProject = ProjectUtility.OpenProjectForEditing(GetCentralPackagesFile(project), projectCollection);
             AddPackageReferences(packagesProject, packageReferences);
             packagesProject.Save();
         }
@@ -41,12 +41,6 @@ namespace Messerli.FileManipulator.Project.MsBuild
             centralPackageItem.Update = packageReference.Name;
             itemGroup.AppendChild(centralPackageItem);
             centralPackageItem.AddMetadataAsAttribute(VersionMetadataAttribute, packageReference.Version);
-        }
-
-        private static MsBuildProject OpenProject(string projectFilePath, ProjectCollection projectCollection)
-        {
-            var projectRootElement = ProjectRootElement.Open(projectFilePath, projectCollection, preserveFormatting: true);
-            return new MsBuildProject(projectRootElement);
         }
 
         private static bool HasCentralPackageVersionsEnabled(MsBuildProject project)
