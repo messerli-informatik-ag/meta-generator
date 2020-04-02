@@ -1,7 +1,10 @@
-﻿namespace Messerli.FileManipulator.Project
+﻿using Microsoft.Build.Construction;
+
+namespace Messerli.FileManipulator.Project
 {
-    public class ProjectMetadataElementExtension
+    public static class ProjectItemElementExtension
     {
-        
+        public static ProjectMetadataElement AddMetadataAsAttribute(this ProjectItemElement itemElement, string name, string unevaluatedValue)
+            => itemElement.AddMetadata(name, unevaluatedValue, expressAsAttribute: true);
     }
 }

@@ -22,7 +22,7 @@ namespace Messerli.FileManipulator.Test.Project
             var projectFilePath = Path.Combine(testEnvironment.RootDirectory, ProjectFileName);
             await File.WriteAllTextAsync(projectFilePath, existingProject);
 
-            var projectManipulator = new ProjectManipulator();
+            var projectManipulator = new ProjectManipulator(new MicrosoftBuildAssemblyLoader());
             await projectManipulator.ManipulateProject(projectFilePath, modification);
 
             Assert.Equal(expectedProject, await File.ReadAllTextAsync(projectFilePath));
