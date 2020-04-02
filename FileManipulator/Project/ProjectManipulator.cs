@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Messerli.FileManipulatorAbstractions.Project;
 using Microsoft.Build.Construction;
 using Microsoft.Build.Evaluation;
+using Microsoft.Build.Exceptions;
 using MsBuildProject = Microsoft.Build.Evaluation.Project;
 
 namespace Messerli.FileManipulator.Project
@@ -28,8 +30,24 @@ namespace Messerli.FileManipulator.Project
         public Task ManipulateProject(string projectFilePath, ProjectModification modification)
         {
             _microsoftBuildAssemblyLoader.LoadMicrosoftBuildIfNecessary();
-            ManipulateProjectInternal(projectFilePath, modification);
+            WrapExceptions(projectFilePath, () => ManipulateProjectInternal(projectFilePath, modification));
             return Task.CompletedTask;
+        }
+
+        private static void WrapExceptions(string projectFilePath, Action action)
+        {
+            try
+            {
+                action();
+            }
+            catch (InvalidProjectFileException exception) when (exception.InnerException is FileNotFoundException)
+            {
+                throw new ProjectManipulationException(exception.InnerException, projectFilePath);
+            }
+            catch (Exception exception)
+            {
+                throw new ProjectManipulationException(exception, projectFilePath);
+            }
         }
 
         private static void ManipulateProjectInternal(string projectFilePath, ProjectModification modification)

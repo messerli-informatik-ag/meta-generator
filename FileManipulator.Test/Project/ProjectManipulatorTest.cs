@@ -126,9 +126,19 @@ namespace Messerli.FileManipulator.Test.Project
             };
 
         [Fact]
-        public void ThrowsWhenProjectFileDoesNotExist()
+        public async Task ThrowsWhenProjectFileDoesNotExist()
         {
-            throw new NotImplementedException();
+            using var testEnvironment = new TestEnvironmentProvider();
+
+            var projectFilePath = Path.Combine(testEnvironment.RootDirectory, ProjectFileName);
+
+            var projectManipulator = new ProjectManipulator(new MicrosoftBuildAssemblyLoader());
+
+            var exception = await Assert.ThrowsAsync<ProjectManipulationException>(async () =>
+            {
+                await projectManipulator.ManipulateProject(projectFilePath, new ProjectModificationBuilder().Build());
+            });
+            Assert.True(exception.InnerException is FileNotFoundException);
         }
 
         [Fact]
