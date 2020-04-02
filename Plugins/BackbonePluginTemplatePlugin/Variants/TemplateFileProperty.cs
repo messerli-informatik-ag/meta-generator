@@ -6,18 +6,18 @@ namespace Messerli.BackbonePluginTemplatePlugin.Variants
     {
         public TemplateFileProperty(
             IFileGenerator fileGenerator,
-            string repositoryPath,
-            string repositoryName)
+            string solutionDirectory,
+            string pluginName)
         {
             FileGenerator = fileGenerator;
-            RepositoryPath = repositoryPath;
-            RepositoryName = repositoryName;
+            SolutionDirectory = solutionDirectory;
+            PluginName = pluginName;
         }
 
         public IFileGenerator FileGenerator { get; }
 
-        public string RepositoryPath { get; }
+        public string SolutionDirectory { get; }
 
-        public string RepositoryName { get; }
+        public string PluginName { get; }
     }
 }
