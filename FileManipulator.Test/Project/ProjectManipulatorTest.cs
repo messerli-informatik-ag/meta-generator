@@ -13,6 +13,8 @@ namespace Messerli.FileManipulator.Test.Project
     {
         private const string ProjectFileName = "Foo.csproj";
 
+        private const string PackagesPropsFileName = "Packages.props";
+
         private static readonly string EmptyProject =
             $"<Project Sdk=\"Microsoft.NET.Sdk\">{NewLine}" +
             $"</Project>{NewLine}";
@@ -141,11 +143,92 @@ namespace Messerli.FileManipulator.Test.Project
             Assert.True(exception.InnerException is FileNotFoundException);
         }
 
-        [Fact]
-        public void AddsPackageReferenceToProjectAndPackagesProps()
+        [Theory]
+        [MemberData(nameof(GetModificationsForProjectWithCentralPackageVersionsSdk))]
+        public async Task AddsPackageReferenceToProjectAndPackagesProps(
+            string expectedProject,
+            string expectedPackagesProps,
+            string existingProject,
+            string existingPackagesProps,
+            ProjectModification modification)
         {
-            throw new NotImplementedException();
+            using var testEnvironment = new TestEnvironmentProvider();
+
+            var projectFilePath = Path.Combine(testEnvironment.RootDirectory, ProjectFileName);
+            var packagesPropsFilePath = Path.Combine(testEnvironment.RootDirectory, PackagesPropsFileName);
+
+            await File.WriteAllTextAsync(projectFilePath, existingProject);
+            await File.WriteAllTextAsync(packagesPropsFilePath, existingPackagesProps);
+
+            var projectManipulator = new ProjectManipulator(new MicrosoftBuildAssemblyLoader());
+            await projectManipulator.ManipulateProject(projectFilePath, modification);
+
+            Assert.Equal(expectedProject, await File.ReadAllTextAsync(projectFilePath));
+            Assert.Equal(expectedPackagesProps, await File.ReadAllTextAsync(packagesPropsFilePath));
         }
+
+        public static TheoryData<string, string, string, string, ProjectModification> GetModificationsForProjectWithCentralPackageVersionsSdk()
+            => new TheoryData<string, string, string, string, ProjectModification>
+            {
+                {
+                    $"<Project Sdk=\"Microsoft.NET.Sdk; Microsoft.Build.CentralPackageVersions/2.0.52\">{NewLine}" +
+                    $"    <ItemGroup>{NewLine}" +
+                    $"        <PackageReference Include=\"Bar\" />{NewLine}" +
+                    $"        <PackageReference Include=\"Foo\" />{NewLine}" +
+                    $"    </ItemGroup>{NewLine}" +
+                    $"</Project>{NewLine}",
+                    $"<Project>{NewLine}" +
+                    $"    <ItemGroup>{NewLine}" +
+                    $"        <PackageReference Update=\"Foo\" Version=\"1.0.0\" />{NewLine}" +
+                    $"        <PackageReference Update=\"Bar\" Version=\"2.0.0\" />{NewLine}" +
+                    $"    </ItemGroup>{NewLine}" +
+                    $"</Project>{NewLine}",
+                    $"<Project Sdk=\"Microsoft.NET.Sdk; Microsoft.Build.CentralPackageVersions/2.0.52\">{NewLine}" +
+                    $"    <ItemGroup>{NewLine}" +
+                    $"        <PackageReference Include=\"Foo\" />{NewLine}" +
+                    $"    </ItemGroup>{NewLine}" +
+                    $"</Project>{NewLine}",
+                    $"<Project>{NewLine}" +
+                    $"    <ItemGroup>{NewLine}" +
+                    $"        <PackageReference Update=\"Foo\" Version=\"1.0.0\" />{NewLine}" +
+                    $"    </ItemGroup>{NewLine}" +
+                    $"</Project>{NewLine}",
+                    new ProjectModificationBuilder()
+                        .AddPackageReference(
+                            new PackageReferenceBuilder()
+                                .Name("Bar")
+                                .Version("2.0.0")
+                                .Build())
+                        .Build()
+                },
+                {
+                    $"<Project Sdk=\"Microsoft.NET.Sdk; Microsoft.Build.CentralPackageVersions/2.0.52\">{NewLine}" +
+                    $"    <ItemGroup>{NewLine}" +
+                    $"        <PackageReference Include=\"Messerli.CodeStyle\" PrivateAssets=\"all\" />{NewLine}" +
+                    $"        <PackageReference Include=\"Messerli.IO\" />{NewLine}" +
+                    $"    </ItemGroup>{NewLine}" +
+                    $"</Project>{NewLine}",
+                    $"<Project>{NewLine}" +
+                    $"  <ItemGroup>{NewLine}" +
+                    $"    <PackageReference Update=\"Messerli.IO\" Version=\"0.1.0\" />{NewLine}" +
+                    $"  </ItemGroup>{NewLine}" +
+                    $"</Project>{NewLine}",
+                    $"<Project Sdk=\"Microsoft.NET.Sdk; Microsoft.Build.CentralPackageVersions/2.0.52\">{NewLine}" +
+                    $"    <ItemGroup>{NewLine}" +
+                    $"        <PackageReference Include=\"Messerli.CodeStyle\" PrivateAssets=\"all\" />{NewLine}" +
+                    $"    </ItemGroup>{NewLine}" +
+                    $"</Project>{NewLine}",
+                    $"<Project>{NewLine}" +
+                    $"</Project>{NewLine}",
+                    new ProjectModificationBuilder()
+                        .AddPackageReference(
+                            new PackageReferenceBuilder()
+                                .Name("Messerli.IO")
+                                .Version("0.1.0")
+                                .Build())
+                        .Build()
+                },
+            };
 
         [Fact]
         public void ThrowsWhenPackagesPropsDoesNotExist()

@@ -19,6 +19,7 @@ namespace Messerli.FileManipulator.Project
         private const string IncludeAssetsMetadataAttribute = "IncludeAssets";
         private const string ExcludeAssetsMetadataAttribute = "ExcludeAssets";
         private const char ListSeparator = ';';
+        private const string CentralPackageVersionsSdk = "Microsoft.Build.CentralPackageVersions";
 
         private readonly IMicrosoftBuildAssemblyLoader _microsoftBuildAssemblyLoader;
 
@@ -54,9 +55,13 @@ namespace Messerli.FileManipulator.Project
         {
             using var projectCollection = new ProjectCollection();
             var project = OpenProject(projectFilePath, projectCollection);
+            var centralPackagesFile = UseCentralPackageVersionsSdk(project) && HasCentralPackageVersionsEnabled(project)
+                ? OpenProject(GetCentralPackagesFile(project), projectCollection)
+                : null;
             AddSdksToProject(project, modification.SdksToAdd);
-            AddPackageReferencesToProject(project, modification.PackageReferencesToAdd);
+            AddPackageReferencesToProject(project, centralPackagesFile, modification.PackageReferencesToAdd);
             project.Save();
+            centralPackagesFile?.Save();
         }
 
         private static MsBuildProject OpenProject(string projectFilePath, ProjectCollection projectCollection)
@@ -64,6 +69,15 @@ namespace Messerli.FileManipulator.Project
             var projectRootElement = ProjectRootElement.Open(projectFilePath, projectCollection, preserveFormatting: true);
             return new MsBuildProject(projectRootElement);
         }
+
+        private static bool UseCentralPackageVersionsSdk(MsBuildProject project)
+            => project.Imports.Any(import => import.SdkResult is { } sdk && sdk.SdkReference.Name == CentralPackageVersionsSdk);
+
+        private static bool HasCentralPackageVersionsEnabled(MsBuildProject project)
+            => project.GetPropertyValue("EnableCentralPackageVersions") != "false";
+
+        private static string GetCentralPackagesFile(MsBuildProject project)
+            => project.GetPropertyValue("CentralPackagesFile");
 
         private static void AddSdksToProject(MsBuildProject project, IEnumerable<string> sdksToAdd)
         {
@@ -79,24 +93,34 @@ namespace Messerli.FileManipulator.Project
                 ? new string[0]
                 : sdkList.Split(ListSeparator).Select(s => s.Trim());
 
-        private static void AddPackageReferencesToProject(MsBuildProject project, IEnumerable<PackageReference> packageReferences)
+        private static void AddPackageReferencesToProject(MsBuildProject project, MsBuildProject? centralPackagesFile, IEnumerable<PackageReference> packageReferences)
         {
             if (packageReferences.Any())
             {
                 var itemGroup = project.GetItemGroupWithItemOfTypeOrCreateNew(PackageReferenceTypeTag);
-
+                var centralPackageItemGroup = centralPackagesFile?.GetItemGroupWithItemOfTypeOrCreateNew(PackageReferenceTypeTag);
                 foreach (var packageReference in packageReferences)
                 {
-                    AddPackageReference(itemGroup, packageReference);
+                    AddPackageReference(itemGroup, centralPackageItemGroup, packageReference);
                 }
             }
         }
 
-        private static void AddPackageReference(ProjectItemGroupElement itemGroup, PackageReference packageReference)
+        private static void AddPackageReference(ProjectItemGroupElement itemGroup, ProjectItemGroupElement? centralPackageItemGroup, PackageReference packageReference)
         {
             var item = itemGroup.AddItem(PackageReferenceTypeTag, packageReference.Name);
 
-            item.AddMetadataAsAttribute(VersionMetadataAttribute, packageReference.Version);
+            if (centralPackageItemGroup is { })
+            {
+                var centralPackageItem = centralPackageItemGroup.ContainingProject.CreateItemElement(PackageReferenceTypeTag);
+                centralPackageItem.Update = packageReference.Name;
+                centralPackageItemGroup.AppendChild(centralPackageItem);
+                centralPackageItem.AddMetadataAsAttribute(VersionMetadataAttribute, packageReference.Version);
+            }
+            else
+            {
+                item.AddMetadataAsAttribute(VersionMetadataAttribute, packageReference.Version);
+            }
 
             AddAssetsListMetadataToPackageReference(
                 item,

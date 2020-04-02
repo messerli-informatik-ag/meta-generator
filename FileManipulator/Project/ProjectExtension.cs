@@ -10,16 +10,15 @@ namespace Messerli.FileManipulator.Project
         public static ProjectItemGroupElement GetItemGroupWithItemOfTypeOrCreateNew(this MsBuildProject project, string itemType)
             => project.GetFirstItemGroupWithItemOfType(itemType) ?? project.CreateItemGroup();
 
-        private static ProjectItemGroupElement? GetFirstItemGroupWithItemOfType(this MsBuildProject project, string itemType)
+        public static ProjectItemGroupElement? GetFirstItemGroupWithItemOfType(this MsBuildProject project, string itemType)
             => GetItemGroups(project)
-                .Where(itemGroupElement => itemGroupElement.Items.Any(item => item.ItemType == itemType))?
-                .FirstOrDefault();
+                .FirstOrDefault(itemGroupElement => itemGroupElement.Items.Any(item => item.ItemType == itemType));
 
         private static IEnumerable<ProjectItemGroupElement> GetItemGroups(MsBuildProject project)
             => project
+                .Xml
                 .Items
-                .Where(i => !i.IsImported)
-                .Select(item => item.Xml.Parent)
+                .Select(item => item.Parent)
                 .OfType<ProjectItemGroupElement>()
                 .Distinct();
 
