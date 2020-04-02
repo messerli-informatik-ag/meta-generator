@@ -3,7 +3,7 @@
     /// <summary>
     /// Source: <a href="https://docs.microsoft.com/en-us/nuget/consume-packages/package-references-in-project-files">docs.microsoft.com</a>.
     /// </summary>
-    public enum AssetName
+    public enum DependencyAssetName
     {
         Compile,
         Runtime,

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
-using Messerli.FileManipulatorAbstractions.Project.AssetList;
 
 namespace Messerli.FileManipulatorAbstractions.Project
 {
@@ -10,11 +9,11 @@ namespace Messerli.FileManipulatorAbstractions.Project
 
         private readonly string? _version;
 
-        private readonly IAssetListVariant? _privateAssets;
+        private readonly DependencyAssets? _privateAssets;
 
-        private readonly IAssetListVariant? _excludeAssets;
+        private readonly DependencyAssets? _excludeAssets;
 
-        private readonly IAssetListVariant? _includeAssets;
+        private readonly DependencyAssets? _includeAssets;
 
         public PackageReferenceBuilder()
         {
@@ -23,9 +22,9 @@ namespace Messerli.FileManipulatorAbstractions.Project
         private PackageReferenceBuilder(
             string? name,
             string? version,
-            IAssetListVariant? privateAssets,
-            IAssetListVariant? excludeAssets,
-            IAssetListVariant? includeAssets)
+            DependencyAssets? privateAssets,
+            DependencyAssets? excludeAssets,
+            DependencyAssets? includeAssets)
         {
             _name = name;
             _version = version;
@@ -52,23 +51,23 @@ namespace Messerli.FileManipulatorAbstractions.Project
             => ShallowClone(version: version);
 
         [Pure]
-        public PackageReferenceBuilder PrivateAssets(IAssetListVariant privateAssets)
+        public PackageReferenceBuilder PrivateAssets(DependencyAssets privateAssets)
             => ShallowClone(privateAssets: privateAssets);
 
         [Pure]
-        public PackageReferenceBuilder IncludeAssets(IAssetListVariant includeAssets)
+        public PackageReferenceBuilder IncludeAssets(DependencyAssets includeAssets)
             => ShallowClone(includeAssets: includeAssets);
 
         [Pure]
-        public PackageReferenceBuilder ExcludeAssets(IAssetListVariant excludeAssets)
+        public PackageReferenceBuilder ExcludeAssets(DependencyAssets excludeAssets)
             => ShallowClone(excludeAssets: excludeAssets);
 
         private PackageReferenceBuilder ShallowClone(
             string? name = null,
             string? version = null,
-            IAssetListVariant? privateAssets = null,
-            IAssetListVariant? excludeAssets = null,
-            IAssetListVariant? includeAssets = null)
+            DependencyAssets? privateAssets = null,
+            DependencyAssets? excludeAssets = null,
+            DependencyAssets? includeAssets = null)
             => new PackageReferenceBuilder(
                 name ?? _name,
                 version ?? _version,

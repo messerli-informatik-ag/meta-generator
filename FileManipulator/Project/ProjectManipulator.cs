@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Messerli.FileManipulatorAbstractions.Project;
-using Messerli.FileManipulatorAbstractions.Project.AssetList;
 using Microsoft.Build.Construction;
 using Microsoft.Build.Evaluation;
 using MsBuildProject = Microsoft.Build.Evaluation.Project;
@@ -83,35 +82,35 @@ namespace Messerli.FileManipulator.Project
         private static void AddAssetsListMetadataToPackageReference(
             ProjectItemElement item,
             string attributeName,
-            IAssetListVariant? assetList)
+            DependencyAssets? assetList)
         {
             if (assetList is { })
             {
-                item.AddMetadataAsAttribute(attributeName, MapAssetListToString(assetList));
+                item.AddMetadataAsAttribute(attributeName, MapDependencyAssetsToString(assetList));
             }
         }
 
-        private static string MapAssetListToString(IAssetListVariant assetList)
-            => assetList switch
+        private static string MapDependencyAssetsToString(DependencyAssets dependencyAssets)
+            => dependencyAssets switch
             {
-                All _ => "all",
-                None _ => "none",
-                List list => string.Join(ListSeparator, list.Assets.Select(MapAssetNameToString)),
-                _ => throw new InvalidOperationException($"Enum variant {assetList.GetType().Name} is not supported"),
+                DependencyAssets.All _ => "all",
+                DependencyAssets.None _ => "none",
+                DependencyAssets.List list => string.Join(ListSeparator, list.Select(MapAssetNameToString)),
+                _ => throw new InvalidOperationException($"Enum variant {dependencyAssets.GetType().Name} is not supported"),
             };
 
-        private static string MapAssetNameToString(AssetName assetName)
-            => assetName switch
+        private static string MapAssetNameToString(DependencyAssetName dependencyAssetName)
+            => dependencyAssetName switch
             {
-                AssetName.Compile => "compile",
-                AssetName.Runtime => "runtime",
-                AssetName.ContentFiles => "contentFiles",
-                AssetName.Build => "build",
-                AssetName.BuildMultiTargeting => "buildMultitargeting",
-                AssetName.BuildTransitive => "buildTransitive",
-                AssetName.Analyzers => "analyzers",
-                AssetName.Native => "native",
-                _ => throw new InvalidOperationException($"Enum variant {assetName} is not supported"),
+                DependencyAssetName.Compile => "compile",
+                DependencyAssetName.Runtime => "runtime",
+                DependencyAssetName.ContentFiles => "contentFiles",
+                DependencyAssetName.Build => "build",
+                DependencyAssetName.BuildMultiTargeting => "buildMultitargeting",
+                DependencyAssetName.BuildTransitive => "buildTransitive",
+                DependencyAssetName.Analyzers => "analyzers",
+                DependencyAssetName.Native => "native",
+                _ => throw new InvalidOperationException($"Enum variant {dependencyAssetName} is not supported"),
             };
     }
 }

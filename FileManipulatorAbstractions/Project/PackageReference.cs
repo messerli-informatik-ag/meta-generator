@@ -1,6 +1,4 @@
-﻿using Messerli.FileManipulatorAbstractions.Project.AssetList;
-
-namespace Messerli.FileManipulatorAbstractions.Project
+﻿namespace Messerli.FileManipulatorAbstractions.Project
 {
     /// <summary>
     /// This class can be constructed using a <see cref="PackageReferenceBuilder"/>.
@@ -10,9 +8,9 @@ namespace Messerli.FileManipulatorAbstractions.Project
         internal PackageReference(
             string name,
             string version,
-            IAssetListVariant? privateAssets = null,
-            IAssetListVariant? excludeAssets = null,
-            IAssetListVariant? includeAssets = null)
+            DependencyAssets? privateAssets = null,
+            DependencyAssets? excludeAssets = null,
+            DependencyAssets? includeAssets = null)
         {
             Name = name;
             Version = version;
@@ -25,10 +23,10 @@ namespace Messerli.FileManipulatorAbstractions.Project
 
         public string Version { get; }
 
-        public IAssetListVariant? PrivateAssets { get; }
+        public DependencyAssets? PrivateAssets { get; }
 
-        public IAssetListVariant? ExcludeAssets { get; }
+        public DependencyAssets? ExcludeAssets { get; }
 
-        public IAssetListVariant? IncludeAssets { get; }
+        public DependencyAssets? IncludeAssets { get; }
     }
 }

@@ -3,7 +3,6 @@ using System.IO;
 using System.Threading.Tasks;
 using Messerli.FileManipulator.Project;
 using Messerli.FileManipulatorAbstractions.Project;
-using Messerli.FileManipulatorAbstractions.Project.AssetList;
 using Messerli.Test.Utility;
 using Xunit;
 using static System.Environment;
@@ -93,9 +92,9 @@ namespace Messerli.FileManipulator.Test.Project
                         .AddPackageReference(new PackageReferenceBuilder()
                             .Name("Bar")
                             .Version("2.0.0")
-                            .PrivateAssets(new All())
-                            .IncludeAssets(new List(AssetName.Runtime, AssetName.Analyzers, AssetName.Build))
-                            .ExcludeAssets(new None())
+                            .PrivateAssets(new DependencyAssets.All())
+                            .IncludeAssets(new DependencyAssets.List(DependencyAssetName.Runtime, DependencyAssetName.Analyzers, DependencyAssetName.Build))
+                            .ExcludeAssets(new DependencyAssets.None())
                             .Build())
                         .Build()
                 },
