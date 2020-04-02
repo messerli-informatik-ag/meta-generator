@@ -16,6 +16,20 @@ namespace Messerli.BackbonePluginTemplatePlugin.Variants.DatabaseAccessPlugin
             _templateFileProperty = templateFileProperty;
         }
 
+        private string DatabasePath => Path.Combine(_templateFileProperty.PluginPath, DatabasePath);
+
+        private string GuiPath => Path.Combine(_templateFileProperty.PluginPath, GuiFolder);
+
+        private string ViewPath => Path.Combine(GuiPath, ViewFolder);
+
+        private string RegistrarPath => Path.Combine(_templateFileProperty.PluginPath, RegistrarFolder);
+
+        private string ViewTemplatePath => Path.Combine(_templateFileProperty.PluginPath, TemplateFolder);
+
+        private string IconPath => Path.Combine(_templateFileProperty.PluginPath, PublicFolder, IconsFolder);
+
+        private string MigrationPath => Path.Combine(_templateFileProperty.PluginPath, MigrationFolder);
+
         public List<Task> CreateTemplateFiles()
             => new List<Task>
             {
@@ -24,32 +38,32 @@ namespace Messerli.BackbonePluginTemplatePlugin.Variants.DatabaseAccessPlugin
                 FromTemplate(Template.Module, new[] { _templateFileProperty.PluginPath, "Module.cs" }),
                 FromTemplate(Template.AssemblyInfo, new[] { _templateFileProperty.PluginPath, "AssemblyInfo.cs" }),
 
-                FromTemplate(Template.IPersonPersistence, new[] { _templateFileProperty.PluginPath, DatabaseFolder, "IPersonPersistence.cs" }),
-                FromTemplate(Template.PersonPersistence, new[] { _templateFileProperty.PluginPath, DatabaseFolder, "PersonPersistence.cs" }),
-                FromTemplate(Template.Person, new[] { _templateFileProperty.PluginPath, DatabaseFolder, "Person.cs" }),
+                FromTemplate(Template.IPersonPersistence, new[] { DatabasePath, "IPersonPersistence.cs" }),
+                FromTemplate(Template.PersonPersistence, new[] { DatabasePath, "PersonPersistence.cs" }),
+                FromTemplate(Template.Person, new[] { DatabasePath, "Person.cs" }),
 
-                FromTemplate(Template.IPresenter, new[] { _templateFileProperty.PluginPath, GuiFolder, ViewFolder, "IPresenter.cs" }),
-                FromTemplate(Template.Presenter, new[] { _templateFileProperty.PluginPath, GuiFolder, ViewFolder, "Presenter.cs" }),
-                FromTemplate(Template.IView, new[] { _templateFileProperty.PluginPath, GuiFolder, ViewFolder, "IView.cs" }),
-                FromTemplate(Template.View, new[] { _templateFileProperty.PluginPath, GuiFolder, ViewFolder, "View.cs" }),
-                FromTemplate(Template.ResponseRenderer, new[] { _templateFileProperty.PluginPath, GuiFolder, ViewFolder, "ResponseRenderer.cs" }),
-                FromTemplate(Template.ViewModel, new[] { _templateFileProperty.PluginPath, GuiFolder, ViewFolder, "ViewModel.cs" }),
-                FromTemplate(Template.PersonView, new[] { _templateFileProperty.PluginPath, GuiFolder, ViewFolder, "Person.cs" }),
+                FromTemplate(Template.IPresenter, new[] { ViewPath, "IPresenter.cs" }),
+                FromTemplate(Template.Presenter, new[] { ViewPath, "Presenter.cs" }),
+                FromTemplate(Template.IView, new[] { ViewPath, "IView.cs" }),
+                FromTemplate(Template.View, new[] { ViewPath, "View.cs" }),
+                FromTemplate(Template.ResponseRenderer, new[] { ViewPath, "ResponseRenderer.cs" }),
+                FromTemplate(Template.ViewModel, new[] { ViewPath, "ViewModel.cs" }),
+                FromTemplate(Template.PersonView, new[] { ViewPath, "Person.cs" }),
 
-                FromTemplate(Template.MigrationSql, new[] { _templateFileProperty.PluginPath, GuiFolder, ViewFolder, "0_create_database_access_plugin_template_entry.sql" }),
+                FromTemplate(Template.MigrationSql, new[] { MigrationPath, "0_create_database_access_plugin_template_entry.sql" }),
 
-                FromTemplate(Template.IController, new[] { _templateFileProperty.PluginPath, GuiFolder, "IController.cs" }),
-                FromTemplate(Template.Controller, new[] { _templateFileProperty.PluginPath, GuiFolder, "Controller.cs" }),
+                FromTemplate(Template.IController, new[] { GuiPath, "IController.cs" }),
+                FromTemplate(Template.Controller, new[] { GuiPath, "Controller.cs" }),
 
-                FromTemplate(Template.EndpointConstant, new[] { _templateFileProperty.PluginPath, RegistrarFolder, "EndpointConstant.cs" }),
-                FromTemplate(Template.INavigationRegistrar, new[] { _templateFileProperty.PluginPath, RegistrarFolder, "INavigationRenderer.cs" }),
-                FromTemplate(Template.NavigationRegistrar, new[] { _templateFileProperty.PluginPath, RegistrarFolder, "NavigationRenderer.cs" }),
-                FromTemplate(Template.IRouteRegistrar, new[] { _templateFileProperty.PluginPath, RegistrarFolder, "IRouteRenderer.cs" }),
-                FromTemplate(Template.RouteRegistrar, new[] { _templateFileProperty.PluginPath, RegistrarFolder, "RouteRegistrar.cs" }),
+                FromTemplate(Template.EndpointConstant, new[] { RegistrarPath, "EndpointConstant.cs" }),
+                FromTemplate(Template.INavigationRegistrar, new[] { RegistrarPath, "INavigationRenderer.cs" }),
+                FromTemplate(Template.NavigationRegistrar, new[] { RegistrarPath, "NavigationRenderer.cs" }),
+                FromTemplate(Template.IRouteRegistrar, new[] { RegistrarPath, "IRouteRenderer.cs" }),
+                FromTemplate(Template.RouteRegistrar, new[] { RegistrarPath, "RouteRegistrar.cs" }),
 
-                FromTemplate(Template.PluginTemplateMustache, new[] { _templateFileProperty.PluginPath, TemplateFolder, "PluginTemplate.mustache" }),
+                FromTemplate(Template.PluginTemplateMustache, new[] { ViewTemplatePath, "PluginTemplate.mustache" }),
 
-                FromTemplate(Template.Icon, new[] { _templateFileProperty.PluginPath, PublicFolder, IconsFolder, "hello-world.svg" }),
+                FromTemplate(Template.Icon, new[] { IconPath, "hello-world.svg" }),
 
                 FromTemplate(Template.TestProjectFile, new[] { _templateFileProperty.SolutionDirectory, $"{_templateFileProperty.PluginName}.{TestFolder}", $"{_templateFileProperty.PluginName}.csproj" }),
                 FromTemplate(Template.IntegrationTestSource, new[] { _templateFileProperty.SolutionDirectory, $"{_templateFileProperty.PluginName}.{TestFolder}", "IntegrationTests.cs" }),
