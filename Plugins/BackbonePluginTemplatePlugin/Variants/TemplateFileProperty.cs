@@ -19,5 +19,7 @@ namespace Messerli.BackbonePluginTemplatePlugin.Variants
         public string SolutionDirectory { get; }
 
         public string PluginName { get; }
+
+        public string PluginPath => SolutionDirectory + PluginName;
     }
 }

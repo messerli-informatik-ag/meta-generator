@@ -1,21 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Messerli.BackbonePluginTemplatePlugin.Variants.TemplateConstant;
 
 namespace Messerli.BackbonePluginTemplatePlugin.Variants.DatabaseAccessPlugin
 {
     public class PluginVariant : IPluginVariant
     {
-        private const string DatabaseFolder = "Database";
-        private const string GuiFolder = "Gui";
-        private const string ViewFolder = "View";
-        private const string PublicFolder = "Public";
-        private const string IconsFolder = "icons";
-        private const string RegistrarFolder = "Registrar";
-        private const string TemplateFolder = "Templates";
-        private const string TestFolder = "Test";
-
         private readonly TemplateFileProperty _templateFileProperty;
 
         public PluginVariant(TemplateFileProperty templateFileProperty)
@@ -26,40 +19,46 @@ namespace Messerli.BackbonePluginTemplatePlugin.Variants.DatabaseAccessPlugin
         public List<Task> CreateTemplateFiles()
             => new List<Task>
             {
-                _templateFileProperty.FileGenerator.FromTemplate(DatabaseAccessPlugin.Template.ProjectFile, Path.Combine(_templateFileProperty.SolutionDirectory, _templateFileProperty.PluginName, $"{_templateFileProperty.PluginName}.csproj"), Encoding.UTF8),
-                _templateFileProperty.FileGenerator.FromTemplate(DatabaseAccessPlugin.Template.Plugin, Path.Combine(_templateFileProperty.SolutionDirectory, _templateFileProperty.PluginName, "Plugin.cs"), Encoding.UTF8),
-                _templateFileProperty.FileGenerator.FromTemplate(DatabaseAccessPlugin.Template.Module, Path.Combine(_templateFileProperty.SolutionDirectory, _templateFileProperty.PluginName, "Module.cs"), Encoding.UTF8),
-                _templateFileProperty.FileGenerator.FromTemplate(DatabaseAccessPlugin.Template.AssemblyInfo, Path.Combine(_templateFileProperty.SolutionDirectory, _templateFileProperty.PluginName, "AssemblyInfo.cs"), Encoding.UTF8),
+                FromTemplate(Template.ProjectFile, new[] { _templateFileProperty.PluginPath, $"{_templateFileProperty.PluginName}.csproj" }),
+                FromTemplate(Template.Plugin, new[] { _templateFileProperty.PluginPath, "Plugin.cs" }),
+                FromTemplate(Template.Module, new[] { _templateFileProperty.PluginPath, "Module.cs" }),
+                FromTemplate(Template.AssemblyInfo, new[] { _templateFileProperty.PluginPath, "AssemblyInfo.cs" }),
 
-                _templateFileProperty.FileGenerator.FromTemplate(DatabaseAccessPlugin.Template.IPersonPersistence, Path.Combine(_templateFileProperty.SolutionDirectory, _templateFileProperty.PluginName, DatabaseFolder, "IPersonPersistence.cs"), Encoding.UTF8),
-                _templateFileProperty.FileGenerator.FromTemplate(DatabaseAccessPlugin.Template.PersonPersistence, Path.Combine(_templateFileProperty.SolutionDirectory, _templateFileProperty.PluginName, DatabaseFolder, "PersonPersistence.cs"), Encoding.UTF8),
-                _templateFileProperty.FileGenerator.FromTemplate(DatabaseAccessPlugin.Template.Person, Path.Combine(_templateFileProperty.SolutionDirectory, _templateFileProperty.PluginName, DatabaseFolder, "Person.cs"), Encoding.UTF8),
+                FromTemplate(Template.IPersonPersistence, new[] { _templateFileProperty.PluginPath, DatabaseFolder, "IPersonPersistence.cs" }),
+                FromTemplate(Template.PersonPersistence, new[] { _templateFileProperty.PluginPath, DatabaseFolder, "PersonPersistence.cs" }),
+                FromTemplate(Template.Person, new[] { _templateFileProperty.PluginPath, DatabaseFolder, "Person.cs" }),
 
-                _templateFileProperty.FileGenerator.FromTemplate(DatabaseAccessPlugin.Template.IPresenter, Path.Combine(_templateFileProperty.SolutionDirectory, _templateFileProperty.PluginName, GuiFolder, ViewFolder, "IPresenter.cs"), Encoding.UTF8),
-                _templateFileProperty.FileGenerator.FromTemplate(DatabaseAccessPlugin.Template.Presenter, Path.Combine(_templateFileProperty.SolutionDirectory, _templateFileProperty.PluginName, GuiFolder, ViewFolder, "Presenter.cs"), Encoding.UTF8),
-                _templateFileProperty.FileGenerator.FromTemplate(DatabaseAccessPlugin.Template.IView, Path.Combine(_templateFileProperty.SolutionDirectory, _templateFileProperty.PluginName, GuiFolder, ViewFolder, "IView.cs"), Encoding.UTF8),
-                _templateFileProperty.FileGenerator.FromTemplate(DatabaseAccessPlugin.Template.View, Path.Combine(_templateFileProperty.SolutionDirectory, _templateFileProperty.PluginName, GuiFolder, ViewFolder, "View.cs"), Encoding.UTF8),
-                _templateFileProperty.FileGenerator.FromTemplate(DatabaseAccessPlugin.Template.ResponseRenderer, Path.Combine(_templateFileProperty.SolutionDirectory, _templateFileProperty.PluginName, GuiFolder, ViewFolder, "ResponseRenderer.cs"), Encoding.UTF8),
-                _templateFileProperty.FileGenerator.FromTemplate(DatabaseAccessPlugin.Template.ViewModel, Path.Combine(_templateFileProperty.SolutionDirectory, _templateFileProperty.PluginName, GuiFolder, ViewFolder, "ViewModel.cs"), Encoding.UTF8),
-                _templateFileProperty.FileGenerator.FromTemplate(DatabaseAccessPlugin.Template.PersonView, Path.Combine(_templateFileProperty.SolutionDirectory, _templateFileProperty.PluginName, GuiFolder, ViewFolder, "Person.cs"), Encoding.UTF8),
+                FromTemplate(Template.IPresenter, new[] { _templateFileProperty.PluginPath, GuiFolder, ViewFolder, "IPresenter.cs" }),
+                FromTemplate(Template.Presenter, new[] { _templateFileProperty.PluginPath, GuiFolder, ViewFolder, "Presenter.cs" }),
+                FromTemplate(Template.IView, new[] { _templateFileProperty.PluginPath, GuiFolder, ViewFolder, "IView.cs" }),
+                FromTemplate(Template.View, new[] { _templateFileProperty.PluginPath, GuiFolder, ViewFolder, "View.cs" }),
+                FromTemplate(Template.ResponseRenderer, new[] { _templateFileProperty.PluginPath, GuiFolder, ViewFolder, "ResponseRenderer.cs" }),
+                FromTemplate(Template.ViewModel, new[] { _templateFileProperty.PluginPath, GuiFolder, ViewFolder, "ViewModel.cs" }),
+                FromTemplate(Template.PersonView, new[] { _templateFileProperty.PluginPath, GuiFolder, ViewFolder, "Person.cs" }),
 
-                _templateFileProperty.FileGenerator.FromTemplate(DatabaseAccessPlugin.Template.MigrationSql, Path.Combine(_templateFileProperty.SolutionDirectory, _templateFileProperty.PluginName, GuiFolder, ViewFolder, "0_create_database_access_plugin_template_entry.sql"), Encoding.UTF8),
+                FromTemplate(Template.MigrationSql, new[] { _templateFileProperty.PluginPath, GuiFolder, ViewFolder, "0_create_database_access_plugin_template_entry.sql" }),
 
-                _templateFileProperty.FileGenerator.FromTemplate(DatabaseAccessPlugin.Template.IController, Path.Combine(_templateFileProperty.SolutionDirectory, _templateFileProperty.PluginName, GuiFolder, "IController.cs"), Encoding.UTF8),
-                _templateFileProperty.FileGenerator.FromTemplate(DatabaseAccessPlugin.Template.Controller, Path.Combine(_templateFileProperty.SolutionDirectory, _templateFileProperty.PluginName, GuiFolder, "Controller.cs"), Encoding.UTF8),
+                FromTemplate(Template.IController, new[] { _templateFileProperty.PluginPath, GuiFolder, "IController.cs" }),
+                FromTemplate(Template.Controller, new[] { _templateFileProperty.PluginPath, GuiFolder, "Controller.cs" }),
 
-                _templateFileProperty.FileGenerator.FromTemplate(DatabaseAccessPlugin.Template.EndpointConstant, Path.Combine(_templateFileProperty.SolutionDirectory, _templateFileProperty.PluginName, RegistrarFolder, "EndpointConstant.cs"), Encoding.UTF8),
-                _templateFileProperty.FileGenerator.FromTemplate(DatabaseAccessPlugin.Template.INavigationRegistrar, Path.Combine(_templateFileProperty.SolutionDirectory, _templateFileProperty.PluginName, RegistrarFolder, "INavigationRenderer.cs"), Encoding.UTF8),
-                _templateFileProperty.FileGenerator.FromTemplate(DatabaseAccessPlugin.Template.NavigationRegistrar, Path.Combine(_templateFileProperty.SolutionDirectory, _templateFileProperty.PluginName, RegistrarFolder, "NavigationRenderer.cs"), Encoding.UTF8),
-                _templateFileProperty.FileGenerator.FromTemplate(DatabaseAccessPlugin.Template.IRouteRegistrar, Path.Combine(_templateFileProperty.SolutionDirectory, _templateFileProperty.PluginName, RegistrarFolder, "IRouteRenderer.cs"), Encoding.UTF8),
-                _templateFileProperty.FileGenerator.FromTemplate(DatabaseAccessPlugin.Template.RouteRegistrar, Path.Combine(_templateFileProperty.SolutionDirectory, _templateFileProperty.PluginName, RegistrarFolder, "RouteRegistrar.cs"), Encoding.UTF8),
+                FromTemplate(Template.EndpointConstant, new[] { _templateFileProperty.PluginPath, RegistrarFolder, "EndpointConstant.cs" }),
+                FromTemplate(Template.INavigationRegistrar, new[] { _templateFileProperty.PluginPath, RegistrarFolder, "INavigationRenderer.cs" }),
+                FromTemplate(Template.NavigationRegistrar, new[] { _templateFileProperty.PluginPath, RegistrarFolder, "NavigationRenderer.cs" }),
+                FromTemplate(Template.IRouteRegistrar, new[] { _templateFileProperty.PluginPath, RegistrarFolder, "IRouteRenderer.cs" }),
+                FromTemplate(Template.RouteRegistrar, new[] { _templateFileProperty.PluginPath, RegistrarFolder, "RouteRegistrar.cs" }),
 
-                _templateFileProperty.FileGenerator.FromTemplate(DatabaseAccessPlugin.Template.PluginTemplateMustache, Path.Combine(_templateFileProperty.SolutionDirectory, _templateFileProperty.PluginName, TemplateFolder, "PluginTemplate.mustache"), Encoding.UTF8),
+                FromTemplate(Template.PluginTemplateMustache, new[] { _templateFileProperty.PluginPath, TemplateFolder, "PluginTemplate.mustache" }),
 
-                _templateFileProperty.FileGenerator.FromTemplate(DatabaseAccessPlugin.Template.Icon, Path.Combine(_templateFileProperty.SolutionDirectory, _templateFileProperty.PluginName, PublicFolder, IconsFolder, "hello-world.svg"), Encoding.UTF8),
+                FromTemplate(Template.Icon, new[] { _templateFileProperty.PluginPath, PublicFolder, IconsFolder, "hello-world.svg" }),
 
-                _templateFileProperty.FileGenerator.FromTemplate(DatabaseAccessPlugin.Template.TestProjectFile, Path.Combine(_templateFileProperty.SolutionDirectory, $"{_templateFileProperty.PluginName}.{TestFolder}", $"{_templateFileProperty.PluginName}.csproj"), Encoding.UTF8),
-                _templateFileProperty.FileGenerator.FromTemplate(DatabaseAccessPlugin.Template.IntegrationTestSource, Path.Combine(_templateFileProperty.SolutionDirectory, $"{_templateFileProperty.PluginName}.{TestFolder}", "IntegrationTests.cs"), Encoding.UTF8),
+                FromTemplate(Template.TestProjectFile, new[] { _templateFileProperty.SolutionDirectory, $"{_templateFileProperty.PluginName}.{TestFolder}", $"{_templateFileProperty.PluginName}.csproj" }),
+                FromTemplate(Template.IntegrationTestSource, new[] { _templateFileProperty.SolutionDirectory, $"{_templateFileProperty.PluginName}.{TestFolder}", "IntegrationTests.cs" }),
             };
+
+        private Task FromTemplate(string templatePath, IEnumerable<string> relativePathToResult)
+            => _templateFileProperty.FileGenerator.FromTemplate(Template.PersonView, CombinePathEnumerable(relativePathToResult), Encoding.UTF8);
+
+        private static string CombinePathEnumerable(IEnumerable<string> paths)
+            => paths.Aggregate(string.Empty, Path.Combine);
     }
 }
