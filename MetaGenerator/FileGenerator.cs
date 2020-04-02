@@ -41,17 +41,17 @@ namespace Messerli.MetaGenerator
             await FromTemplateContent(content, destinationPath, encoding);
         }
 
-        public Task FromTemplateGlob(string glob)
-            => FromTemplateGlob(glob, new Dictionary<string, string>());
+        public Task FromTemplateGlob(string glob, string destinationDirectory)
+            => FromTemplateGlob(glob, destinationDirectory, new Dictionary<string, string>());
 
-        public Task FromTemplateGlob(string glob, IDictionary<string, string> fileNameTemplateValues)
-            => FromTemplateGlob(glob, fileNameTemplateValues, Encoding.UTF8);
+        public Task FromTemplateGlob(string glob, string destinationDirectory, IDictionary<string, string> fileNameTemplateValues)
+            => FromTemplateGlob(glob, destinationDirectory, fileNameTemplateValues, Encoding.UTF8);
 
-        public Task FromTemplateGlob(string glob, IDictionary<string, string> fileNameTemplateValues, Encoding encoding)
+        public Task FromTemplateGlob(string glob, string destinationDirectory, IDictionary<string, string> fileNameTemplateValues, Encoding encoding)
         {
             var globResults = _templateLoader.GetTemplatesFromGlob(glob);
 
-            var fromTemplate = CurryFromTemplate(fileNameTemplateValues, encoding);
+            var fromTemplate = CurryFromTemplate(fileNameTemplateValues, destinationDirectory, encoding);
             var tasks = globResults.Select(fromTemplate);
             return Task.WhenAll(tasks);
         }
@@ -65,19 +65,30 @@ namespace Messerli.MetaGenerator
             return File.WriteAllTextAsync(destinationPath, templateContent, encoding);
         }
 
-        private Func<Template, Task> CurryFromTemplate(IDictionary<string, string> fileNameTemplateValues, Encoding encoding)
+        private Func<Template, Task> CurryFromTemplate(IDictionary<string, string> fileNameTemplateValues, string destinationDirectory, Encoding encoding)
             => template =>
             {
                 var templateName = FillInFileNameTemplateValues(template.TemplateName, fileNameTemplateValues);
-                var destinationPath = ConvertTemplateNameToDestinationPath(templateName);
+                var destinationPath = ConvertTemplateNameToDestinationPath(templateName, destinationDirectory);
                 LogFileCreation(templateName, destinationPath);
                 return FromTemplateContent(template.Content, destinationPath, encoding);
             };
 
-        private static string ConvertTemplateNameToDestinationPath(string templateName)
-            => templateName
+        private static string ConvertTemplateNameToDestinationPath(string templateName, string destinationDirectory)
+        {
+            var stringBuilder = new StringBuilder(templateName);
+            var firstDelimiter = templateName.IndexOf(Path.DirectorySeparatorChar);
+            if (firstDelimiter > 0)
+            {
+                stringBuilder.Remove(0, firstDelimiter);
+            }
+
+            return stringBuilder
+                .Insert(0, destinationDirectory)
                 .Replace(".template", string.Empty)
-                .Replace(".mustache", string.Empty);
+                .Replace(".mustache", string.Empty)
+                .ToString();
+        }
 
         private static string FillInFileNameTemplateValues(string fileName, IDictionary<string, string> fileNameTemplateValues)
             => fileNameTemplateValues

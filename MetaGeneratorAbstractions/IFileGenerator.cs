@@ -10,10 +10,10 @@ namespace Messerli.MetaGeneratorAbstractions
 
         Task FromTemplate(string templatename, string destinationPath, Encoding encoding);
 
-        Task FromTemplateGlob(string glob);
+        Task FromTemplateGlob(string glob, string destinationDirectory);
 
-        Task FromTemplateGlob(string glob, IDictionary<string, string> fileNameTemplateValues);
+        Task FromTemplateGlob(string glob, string destinationDirectory, IDictionary<string, string> fileNameTemplateValues);
 
-        Task FromTemplateGlob(string glob, IDictionary<string, string> fileNameTemplateValues, Encoding encoding);
+        Task FromTemplateGlob(string glob, string destinationDirectory, IDictionary<string, string> fileNameTemplateValues, Encoding encoding);
     }
 }

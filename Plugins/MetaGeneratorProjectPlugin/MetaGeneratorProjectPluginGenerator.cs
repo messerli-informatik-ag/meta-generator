@@ -15,7 +15,6 @@ namespace Messerli.MetaGeneratorProjectPlugin
     internal class MetaGeneratorProjectPluginGenerator : IMetaGenerator
     {
         private const string VariableDeclarations = "templates\\VariableDeclarations.json";
-        private const string VariableDeclarationsTemplate = "templates\\VariableDeclarations.json.template";
 
         private const string GeneratorName = "GeneratorName";
         private const string KebabGeneratorName = "KebabGeneratorName";
@@ -61,16 +60,15 @@ namespace Messerli.MetaGeneratorProjectPlugin
         public void Generate()
         {
             _consoleWriter.WriteLine($"Creating the plugin '{_userInputProvider.Value(GeneratorName)}' for the project generator.");
+            var fileNameTemplateValues = new Dictionary<string, string>
+            {
+                { "fileExtension", "cs" },
+                { "generatorName", _userInputProvider.Value(GeneratorName) },
+            };
 
             var tasks = new List<Task>
             {
-                _fileGenerator.FromTemplateGlob("templates/**/*", new Dictionary<string, string>
-                {
-                    { "fileExtension", "cs" },
-                    { "generatorName", _userInputProvider.Value(GeneratorName) },
-                }),
-                _fileGenerator.FromTemplate(VariableDeclarationsTemplate, Path.Combine(GetPluginPath(), "templates", "VariableDeclarations.json"), new UTF8Encoding(false)),
-
+                _fileGenerator.FromTemplateGlob("templates/**/*.mustache", GetPluginPath(), fileNameTemplateValues),
                 _fileManipulator.AddProjectsToSolution(GetSolutionInfoBuilder().Build(), GetProjectInfoBuilder().Build().Yield()),
             };
 
