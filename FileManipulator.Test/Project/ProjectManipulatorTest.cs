@@ -59,6 +59,19 @@ namespace Messerli.FileManipulator.Test.Project
                         .AddPackageReference(new PackageReference("Bar", "2.0.0"))
                         .Build()
                 },
+                {
+                    $"<Project Sdk=\"Microsoft.NET.Sdk\">{NewLine}" +
+                    $"    <ItemGroup>{NewLine}" +
+                    $"        <PackageReference Include=\"Foo\" Version=\"1.0.0\" />{NewLine}" +
+                    $"    </ItemGroup>{NewLine}" +
+                    $"</Project>{NewLine}",
+                    $"<Project Sdk=\"Microsoft.NET.Sdk\">{NewLine}" +
+                    $"    <ItemGroup>{NewLine}" +
+                    $"        <PackageReference Include=\"Foo\" Version=\"1.0.0\" />{NewLine}" +
+                    $"    </ItemGroup>{NewLine}" +
+                    $"</Project>{NewLine}",
+                    new ProjectModificationBuilder().Build()
+                },
             };
 
         [Fact]
