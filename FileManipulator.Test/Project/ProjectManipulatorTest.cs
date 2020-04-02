@@ -25,8 +25,8 @@ namespace Messerli.FileManipulator.Test.Project
               $"</Project>{NewLine}";
 
         [Theory]
-        [MemberData(nameof(GetPackageReferenceModificationData))]
-        public async Task AddsPackageReferenceToExistingItemGroup(string expectedProject, string existingProject, ProjectModification modification)
+        [MemberData(nameof(GetModifications))]
+        public async Task AppliesModificationsSuccessfully(string expectedProject, string existingProject, ProjectModification modification)
         {
             using var testEnvironment = new TestEnvironmentProvider();
 
@@ -39,7 +39,7 @@ namespace Messerli.FileManipulator.Test.Project
             Assert.Equal(expectedProject, await File.ReadAllTextAsync(projectFilePath));
         }
 
-        public static TheoryData<string, string, ProjectModification> GetPackageReferenceModificationData()
+        public static TheoryData<string, string, ProjectModification> GetModifications()
             => new TheoryData<string, string, ProjectModification>
             {
                 {
@@ -98,7 +98,38 @@ namespace Messerli.FileManipulator.Test.Project
                             .Build())
                         .Build()
                 },
+                {
+                    $"<Project Sdk=\"Microsoft.NET.Sdk; Microsoft.Build.NoTargets\">{NewLine}" +
+                    $"</Project>{NewLine}",
+                    EmptyProject,
+                    new ProjectModificationBuilder()
+                        .AddSdk("Microsoft.Build.NoTargets")
+                        .Build()
+                },
+                {
+                    $"<Project Sdk=\"Microsoft.NET.Sdk\">{NewLine}" +
+                    $"</Project>{NewLine}",
+                    $"<Project>{NewLine}" +
+                    $"</Project>{NewLine}",
+                    new ProjectModificationBuilder()
+                        .AddSdk("Microsoft.NET.Sdk")
+                        .Build()
+                },
+                {
+                    $"<Project Sdk=\"Microsoft.NET.Sdk\">{NewLine}" +
+                    $"</Project>{NewLine}",
+                    EmptyProject,
+                    new ProjectModificationBuilder()
+                        .AddSdk("Microsoft.NET.Sdk")
+                        .Build()
+                },
             };
+
+        [Fact]
+        public void ThrowsWhenProjectFileDoesNotExist()
+        {
+            throw new NotImplementedException();
+        }
 
         [Fact]
         public void AddsPackageReferenceToProjectAndPackagesProps()
@@ -107,13 +138,7 @@ namespace Messerli.FileManipulator.Test.Project
         }
 
         [Fact]
-        public void AddsSdkToProjectWithExistingSdk()
-        {
-            throw new NotImplementedException();
-        }
-
-        [Fact]
-        public void AddsSdkToProjectWithNoExistingSdk()
+        public void ThrowsWhenPackagesPropsDoesNotExist()
         {
             throw new NotImplementedException();
         }

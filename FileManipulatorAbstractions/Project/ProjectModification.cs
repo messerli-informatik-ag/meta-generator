@@ -7,11 +7,14 @@ namespace Messerli.FileManipulatorAbstractions.Project
     /// </summary>
     public sealed class ProjectModification
     {
-        internal ProjectModification(IEnumerable<PackageReference> packageReferencesToAdd)
+        internal ProjectModification(IEnumerable<PackageReference> packageReferencesToAdd, IEnumerable<string> sdksToAdd)
         {
             PackageReferencesToAdd = packageReferencesToAdd;
+            SdksToAdd = sdksToAdd;
         }
 
         public IEnumerable<PackageReference> PackageReferencesToAdd { get; }
+
+        public IEnumerable<string> SdksToAdd { get; }
     }
 }

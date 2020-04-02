@@ -36,6 +36,7 @@ namespace Messerli.FileManipulator.Project
         {
             using var projectCollection = new ProjectCollection();
             var project = OpenProject(projectFilePath, projectCollection);
+            AddSdksToProject(project, modification.SdksToAdd);
             AddPackageReferencesToProject(project, modification.PackageReferencesToAdd);
             project.Save();
         }
@@ -45,6 +46,20 @@ namespace Messerli.FileManipulator.Project
             var projectRootElement = ProjectRootElement.Open(projectFilePath, projectCollection, preserveFormatting: true);
             return new MsBuildProject(projectRootElement);
         }
+
+        private static void AddSdksToProject(MsBuildProject project, IEnumerable<string> sdksToAdd)
+        {
+            var existingSdks = ParseSdkList(project.Xml.Sdk);
+            var sdks = existingSdks
+                .Concat(sdksToAdd)
+                .Distinct();
+            project.Xml.Sdk = string.Join($"{ListSeparator} ", sdks);
+        }
+
+        private static IEnumerable<string> ParseSdkList(string sdkList)
+            => sdkList == string.Empty
+                ? new string[0]
+                : sdkList.Split(ListSeparator).Select(s => s.Trim());
 
         private static void AddPackageReferencesToProject(MsBuildProject project, IEnumerable<PackageReference> packageReferences)
         {
