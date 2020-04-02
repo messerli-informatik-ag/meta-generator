@@ -1,6 +1,6 @@
 namespace Messerli.BackbonePluginTemplatePlugin.Variants
 {
-    internal interface ITemplatePathRetriever
+    internal interface IPathRetriever
     {
         public string GetPath(string fileName);
 
@@ -18,6 +18,6 @@ namespace Messerli.BackbonePluginTemplatePlugin.Variants
 
         public string GetViewTemplatePath(string fileName);
 
-        public string GetTestPath(string fileName);
+        public string GetTestPath(string pluginName, string fileName);
     }
 }
