@@ -15,16 +15,7 @@
     <Version>1.0.0</Version>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="templates\Application.Source.template" />
-    <None Remove="templates\CompositionRoot.Source.template" />
-    <None Remove="templates\Directory.Build.targets.template" />
-    <None Remove="templates\DotNetSdks.json" />
-    <None Remove="templates\gitignore.template" />
-    <None Remove="templates\IApplication.Source.template" />
-    <None Remove="templates\Packages.props.template" />
-    <None Remove="templates\Program.Source.template" />
-    <None Remove="templates\Project.csproj.template" />
-    <None Remove="templates\publish.ps1.template" />
+    <EmbeddedResource Include="templates\**\*" LogicalName="%(Identity)"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\CommandLineAbstractions\CommandLineAbstractions.csproj" />
@@ -32,23 +23,7 @@
     <ProjectReference Include="..\..\ToolLoaderAbstractions\ToolLoaderAbstractions.csproj" />
     <ProjectReference Include="..\..\VsSolution\VsSolution.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="templates\Application.Source.template" />
-    <EmbeddedResource Include="templates\CompositionRoot.Source.template" />
-    <EmbeddedResource Include="templates\Directory.Build.targets.template" />
-    <EmbeddedResource Include="templates\gitignore.template" />
-    <EmbeddedResource Include="templates\IApplication.Source.template" />
-    <EmbeddedResource Include="templates\Packages.props.template" />
-    <EmbeddedResource Include="templates\Program.Source.template" />
-    <EmbeddedResource Include="templates\Project.csproj.template" />
-    <EmbeddedResource Include="templates\publish.ps1.template" />
-    <EmbeddedResource Include="templates\DotNetSdks.json" />
-    <EmbeddedResource Include="templates\VariableDeclarations.json" />
-  </ItemGroup>
   <Import Project="..\..\Plugin.targets" />
-  <ItemGroup>
-    <EmbeddedResource Include="templates\global.json.template" />
-  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Autofac" />
     <PackageReference Include="LibGit2Sharp" />
