@@ -34,5 +34,6 @@
     <PackageReference Include="System.CommandLine" />
     <PackageReference Include="Funcky" />
     <PackageReference Include="Soltys.ChangeCase" />
+    <PackageReference Include="DotNet.Glob" />
   </ItemGroup>
 </Project>

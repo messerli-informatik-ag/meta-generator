@@ -8,6 +8,12 @@
         "resolved": "5.1.2",
         "contentHash": "iGEx5Cm6Uor6/bZkgCHHjJO8cEQvDSOxgzNmHGJgGOnLDCe0b8NpOlhotsqx8dFvBDCsEX/V3YGRR30sRQLsxw=="
       },
+      "DotNet.Glob": {
+        "type": "Direct",
+        "requested": "[3.0.9, 4.0.0)",
+        "resolved": "3.0.9",
+        "contentHash": "tfISNzB/4pmCCWFwaloMUaKddzLa0UJ6RxWSfVhY4a69smqhth3DlyM72/fFI2wsbHPbWQUFYan1F3YiOugkoA=="
+      },
       "Funcky": {
         "type": "Direct",
         "requested": "[1.5.1, 2.0.0)",
