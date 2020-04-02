@@ -2,10 +2,12 @@
 using System.IO;
 using System.Threading.Tasks;
 using Messerli.FileManipulator.Project;
+using Messerli.FileManipulator.Project.MsBuild;
 using Messerli.FileManipulatorAbstractions.Project;
 using Messerli.Test.Utility;
 using Xunit;
 using static System.Environment;
+using IProjectManipulator = Messerli.FileManipulatorAbstractions.Project.IProjectManipulator;
 
 namespace Messerli.FileManipulator.Test.Project
 {
@@ -35,7 +37,7 @@ namespace Messerli.FileManipulator.Test.Project
             var projectFilePath = Path.Combine(testEnvironment.RootDirectory, ProjectFileName);
             await File.WriteAllTextAsync(projectFilePath, existingProject);
 
-            var projectManipulator = new ProjectManipulator(new MicrosoftBuildAssemblyLoader());
+            var projectManipulator = CreateProjectManipulator();
             await projectManipulator.ManipulateProject(projectFilePath, modification);
 
             Assert.Equal(expectedProject, await File.ReadAllTextAsync(projectFilePath));
@@ -134,7 +136,7 @@ namespace Messerli.FileManipulator.Test.Project
 
             var projectFilePath = Path.Combine(testEnvironment.RootDirectory, ProjectFileName);
 
-            var projectManipulator = new ProjectManipulator(new MicrosoftBuildAssemblyLoader());
+            var projectManipulator = CreateProjectManipulator();
 
             var exception = await Assert.ThrowsAsync<ProjectManipulationException>(async () =>
             {
@@ -160,7 +162,7 @@ namespace Messerli.FileManipulator.Test.Project
             await File.WriteAllTextAsync(projectFilePath, existingProject);
             await File.WriteAllTextAsync(packagesPropsFilePath, existingPackagesProps);
 
-            var projectManipulator = new ProjectManipulator(new MicrosoftBuildAssemblyLoader());
+            var projectManipulator = CreateProjectManipulator();
             await projectManipulator.ManipulateProject(projectFilePath, modification);
 
             Assert.Equal(expectedProject, await File.ReadAllTextAsync(projectFilePath));
@@ -235,5 +237,10 @@ namespace Messerli.FileManipulator.Test.Project
         {
             throw new NotImplementedException();
         }
+
+        private static IProjectManipulator CreateProjectManipulator()
+            => new MsBuildProjectManipulatorFacade(
+                new MicrosoftBuildAssemblyLoader(),
+                new ProjectManipulator(new ProjectSdkManipulator()));
     }
 }

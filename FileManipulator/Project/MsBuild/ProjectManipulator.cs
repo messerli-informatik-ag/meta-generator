@@ -1,64 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using Messerli.FileManipulatorAbstractions.Project;
 using Microsoft.Build.Construction;
 using Microsoft.Build.Evaluation;
-using Microsoft.Build.Exceptions;
+using static Messerli.FileManipulator.Project.MsBuild.Constant;
 using MsBuildProject = Microsoft.Build.Evaluation.Project;
 
-namespace Messerli.FileManipulator.Project
+namespace Messerli.FileManipulator.Project.MsBuild
 {
-    public sealed class ProjectManipulator : IProjectManipulator
+    internal sealed class ProjectManipulator : IProjectManipulator
     {
-        private const string PackageReferenceTypeTag = "PackageReference";
-        private const string VersionMetadataAttribute = "Version";
-        private const string PrivateAssetsMetadataAttribute = "PrivateAssets";
-        private const string IncludeAssetsMetadataAttribute = "IncludeAssets";
-        private const string ExcludeAssetsMetadataAttribute = "ExcludeAssets";
-        private const char ListSeparator = ';';
         private const string CentralPackageVersionsSdk = "Microsoft.Build.CentralPackageVersions";
 
-        private readonly IMicrosoftBuildAssemblyLoader _microsoftBuildAssemblyLoader;
+        private readonly IProjectSdkManipulator _projectSdkManipulator;
 
-        public ProjectManipulator(IMicrosoftBuildAssemblyLoader microsoftBuildAssemblyLoader)
+        public ProjectManipulator(IProjectSdkManipulator projectSdkManipulator)
         {
-            _microsoftBuildAssemblyLoader = microsoftBuildAssemblyLoader;
+            _projectSdkManipulator = projectSdkManipulator;
         }
 
-        public Task ManipulateProject(string projectFilePath, ProjectModification modification)
-        {
-            _microsoftBuildAssemblyLoader.LoadMicrosoftBuildIfNecessary();
-            WrapExceptions(projectFilePath, () => ManipulateProjectInternal(projectFilePath, modification));
-            return Task.CompletedTask;
-        }
-
-        private static void WrapExceptions(string projectFilePath, Action action)
-        {
-            try
-            {
-                action();
-            }
-            catch (InvalidProjectFileException exception) when (exception.InnerException is FileNotFoundException)
-            {
-                throw new ProjectManipulationException(exception.InnerException, projectFilePath);
-            }
-            catch (Exception exception)
-            {
-                throw new ProjectManipulationException(exception, projectFilePath);
-            }
-        }
-
-        private static void ManipulateProjectInternal(string projectFilePath, ProjectModification modification)
+        public void ManipulateProject(string projectFilePath, ProjectModification modification)
         {
             using var projectCollection = new ProjectCollection();
             var project = OpenProject(projectFilePath, projectCollection);
             var centralPackagesFile = UseCentralPackageVersionsSdk(project) && HasCentralPackageVersionsEnabled(project)
                 ? OpenProject(GetCentralPackagesFile(project), projectCollection)
                 : null;
-            AddSdksToProject(project, modification.SdksToAdd);
+            _projectSdkManipulator.AddSdksToProject(project, modification.SdksToAdd);
             AddPackageReferencesToProject(project, centralPackagesFile, modification.PackageReferencesToAdd);
             project.Save();
             centralPackagesFile?.Save();
@@ -78,20 +47,6 @@ namespace Messerli.FileManipulator.Project
 
         private static string GetCentralPackagesFile(MsBuildProject project)
             => project.GetPropertyValue("CentralPackagesFile");
-
-        private static void AddSdksToProject(MsBuildProject project, IEnumerable<string> sdksToAdd)
-        {
-            var existingSdks = ParseSdkList(project.Xml.Sdk);
-            var sdks = existingSdks
-                .Concat(sdksToAdd)
-                .Distinct();
-            project.Xml.Sdk = string.Join($"{ListSeparator} ", sdks);
-        }
-
-        private static IEnumerable<string> ParseSdkList(string sdkList)
-            => sdkList == string.Empty
-                ? new string[0]
-                : sdkList.Split(ListSeparator).Select(s => s.Trim());
 
         private static void AddPackageReferencesToProject(MsBuildProject project, MsBuildProject? centralPackagesFile, IEnumerable<PackageReference> packageReferences)
         {

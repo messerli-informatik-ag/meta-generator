@@ -1,8 +1,8 @@
 ﻿using Microsoft.Build.Locator;
 
-namespace Messerli.FileManipulator
+namespace Messerli.FileManipulator.Project.MsBuild
 {
-    public sealed class MicrosoftBuildAssemblyLoader : IMicrosoftBuildAssemblyLoader
+    internal sealed class MicrosoftBuildAssemblyLoader : IMicrosoftBuildAssemblyLoader
     {
         public void LoadMicrosoftBuildIfNecessary()
         {

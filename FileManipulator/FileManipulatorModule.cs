@@ -12,8 +12,10 @@ namespace Messerli.FileManipulator
         {
             builder.RegisterType<GlobalJsonManipulator>().As<IGlobalJsonManipulator>();
             builder.RegisterType<FileOpeningBuilder>().As<IFileOpeningBuilder>();
-            builder.RegisterType<ProjectManipulator>().As<IProjectManipulator>();
-            builder.RegisterType<MicrosoftBuildAssemblyLoader>().As<IMicrosoftBuildAssemblyLoader>();
+            builder.RegisterType<MsBuildProjectManipulatorFacade>().As<IProjectManipulator>();
+            builder.RegisterType<Project.MsBuild.MicrosoftBuildAssemblyLoader>().As<Project.MsBuild.IMicrosoftBuildAssemblyLoader>();
+            builder.RegisterType<Project.MsBuild.ProjectManipulator>().As<Project.MsBuild.IProjectManipulator>();
+            builder.RegisterType<Project.MsBuild.ProjectSdkManipulator>().As<Project.MsBuild.IProjectSdkManipulator>();
         }
     }
 }
