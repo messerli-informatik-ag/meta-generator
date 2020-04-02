@@ -5,10 +5,6 @@ namespace Messerli.FileManipulatorAbstractions.Project
 {
     public abstract class DependencyAssets
     {
-        private DependencyAssets()
-        {
-        }
-
         public sealed class All : DependencyAssets
         {
         }

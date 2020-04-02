@@ -1,6 +1,7 @@
 ﻿using System;
 using Autofac;
 using Messerli.CompositionRoot;
+using Messerli.FileManipulatorAbstractions.Project;
 using Messerli.Test.Utility;
 using Xunit;
 
@@ -10,6 +11,9 @@ namespace Messerli.FileManipulator.Test
     {
         private readonly IContainer _container = new CompositionRootBuilder()
             .RegisterModule<FileManipulatorModule>()
+            .RegisterModule(new ModuleBuilder()
+                .RegisterMock<DependencyAssets>()
+                .Build())
             .Build();
 
         [Theory]
