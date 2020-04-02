@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Messerli.FileManipulator.Project;
 using Messerli.FileManipulatorAbstractions.Project;
+using Messerli.FileManipulatorAbstractions.Project.AssetList;
 using Messerli.Test.Utility;
 using Xunit;
 using static System.Environment;
@@ -12,6 +13,17 @@ namespace Messerli.FileManipulator.Test.Project
     public sealed class ProjectManipulatorTest
     {
         private const string ProjectFileName = "Foo.csproj";
+
+        private static readonly string EmptyProject =
+            $"<Project Sdk=\"Microsoft.NET.Sdk\">{NewLine}" +
+            $"</Project>{NewLine}";
+
+        private static readonly string ProjectWithFooDependency
+            = $"<Project Sdk=\"Microsoft.NET.Sdk\">{NewLine}" +
+              $"    <ItemGroup>{NewLine}" +
+              $"        <PackageReference Include=\"Foo\" Version=\"1.0.0\" />{NewLine}" +
+              $"    </ItemGroup>{NewLine}" +
+              $"</Project>{NewLine}";
 
         [Theory]
         [MemberData(nameof(GetPackageReferenceModificationData))]
@@ -38,13 +50,12 @@ namespace Messerli.FileManipulator.Test.Project
                     $"        <PackageReference Include=\"Foo\" Version=\"1.0.0\" />{NewLine}" +
                     $"    </ItemGroup>{NewLine}" +
                     $"</Project>{NewLine}",
-                    $"<Project Sdk=\"Microsoft.NET.Sdk\">{NewLine}" +
-                    $"    <ItemGroup>{NewLine}" +
-                    $"        <PackageReference Include=\"Foo\" Version=\"1.0.0\" />{NewLine}" +
-                    $"    </ItemGroup>{NewLine}" +
-                    $"</Project>{NewLine}",
+                    ProjectWithFooDependency,
                     new ProjectModificationBuilder()
-                        .AddPackageReference(new PackageReference("Bar", "2.0.0"))
+                        .AddPackageReference(new PackageReferenceBuilder()
+                            .Name("Bar")
+                            .Version("2.0.0")
+                            .Build())
                         .Build()
                 },
                 {
@@ -53,24 +64,40 @@ namespace Messerli.FileManipulator.Test.Project
                     $"    <PackageReference Include=\"Bar\" Version=\"2.0.0\" />{NewLine}" +
                     $"  </ItemGroup>{NewLine}" +
                     $"</Project>{NewLine}",
-                    $"<Project Sdk=\"Microsoft.NET.Sdk\">{NewLine}" +
-                    $"</Project>{NewLine}",
+                    EmptyProject,
                     new ProjectModificationBuilder()
-                        .AddPackageReference(new PackageReference("Bar", "2.0.0"))
+                        .AddPackageReference(new PackageReferenceBuilder()
+                            .Name("Bar")
+                            .Version("2.0.0")
+                            .Build())
                         .Build()
                 },
                 {
-                    $"<Project Sdk=\"Microsoft.NET.Sdk\">{NewLine}" +
-                    $"    <ItemGroup>{NewLine}" +
-                    $"        <PackageReference Include=\"Foo\" Version=\"1.0.0\" />{NewLine}" +
-                    $"    </ItemGroup>{NewLine}" +
-                    $"</Project>{NewLine}",
-                    $"<Project Sdk=\"Microsoft.NET.Sdk\">{NewLine}" +
-                    $"    <ItemGroup>{NewLine}" +
-                    $"        <PackageReference Include=\"Foo\" Version=\"1.0.0\" />{NewLine}" +
-                    $"    </ItemGroup>{NewLine}" +
-                    $"</Project>{NewLine}",
+                    ProjectWithFooDependency,
+                    ProjectWithFooDependency,
                     new ProjectModificationBuilder().Build()
+                },
+                {
+                    EmptyProject,
+                    EmptyProject,
+                    new ProjectModificationBuilder().Build()
+                },
+                {
+                    $"<Project Sdk=\"Microsoft.NET.Sdk\">{NewLine}" +
+                    $"  <ItemGroup>{NewLine}" +
+                    $"    <PackageReference Include=\"Bar\" Version=\"2.0.0\" PrivateAssets=\"all\" IncludeAssets=\"runtime;analyzers;build\" ExcludeAssets=\"none\" />{NewLine}" +
+                    $"  </ItemGroup>{NewLine}" +
+                    $"</Project>{NewLine}",
+                    EmptyProject,
+                    new ProjectModificationBuilder()
+                        .AddPackageReference(new PackageReferenceBuilder()
+                            .Name("Bar")
+                            .Version("2.0.0")
+                            .PrivateAssets(new All())
+                            .IncludeAssets(new List(AssetName.Runtime, AssetName.Analyzers, AssetName.Build))
+                            .ExcludeAssets(new None())
+                            .Build())
+                        .Build()
                 },
             };
 
