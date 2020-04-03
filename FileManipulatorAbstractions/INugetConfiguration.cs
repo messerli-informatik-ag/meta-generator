@@ -1,7 +1,7 @@
-﻿namespace Messerli.MetaGeneratorAbstractions.GlobalConfiguration
+﻿namespace Messerli.FileManipulatorAbstractions
 {
     public interface INugetConfiguration
     {
-        public IPackageSources PackageSources { get; }
+        public INugetPackageSources NugetPackageSources { get; }
     }
 }

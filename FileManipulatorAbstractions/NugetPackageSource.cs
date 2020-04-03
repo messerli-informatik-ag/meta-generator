@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Messerli.MetaGeneratorAbstractions.GlobalConfiguration
+﻿namespace Messerli.FileManipulatorAbstractions
 {
     public sealed class NugetPackageSource
     {

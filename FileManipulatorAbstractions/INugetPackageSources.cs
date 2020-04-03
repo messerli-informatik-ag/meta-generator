@@ -1,6 +1,6 @@
 ﻿namespace Messerli.FileManipulatorAbstractions
 {
-    public interface IPackageSources
+    public interface INugetPackageSources
     {
         void List(string configFile, string format);
 
