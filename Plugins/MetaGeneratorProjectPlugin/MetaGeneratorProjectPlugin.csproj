@@ -14,24 +14,11 @@
     <Version>1.0.0</Version>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="templates\generator.source.template" />
-    <None Remove="templates\module.source.template" />
-    <None Remove="templates\plugin.csproj.template" />
-    <None Remove="templates\publish.template" />
-    <None Remove="templates\VariableDeclarations.json" />
-    <None Remove="templates\VariableDeclarations.json.template" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\CommandLineAbstractions\CommandLineAbstractions.csproj" />
     <ProjectReference Include="..\..\MetaGeneratorAbstractions\MetaGeneratorAbstractions.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="templates\publish.template" />
-    <EmbeddedResource Include="templates\generator.source.template" />
-    <EmbeddedResource Include="templates\module.source.template" />
-    <EmbeddedResource Include="templates\plugin.csproj.template" />
-    <EmbeddedResource Include="templates\VariableDeclarations.json.template" />
-    <EmbeddedResource Include="templates\VariableDeclarations.json" />
+    <EmbeddedResource Include="templates\**\*" LogicalName="%(Identity)" />
   </ItemGroup>
   <Import Project="..\..\Plugin.targets" />
   <ItemGroup>

@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Messerli.CommandLineAbstractions;
@@ -27,14 +30,72 @@ namespace Messerli.MetaGenerator
             _consoleWriter = consoleWriter;
         }
 
-        public async Task FromTemplate(string templateName, string path, Encoding encoding)
+        public Task FromTemplate(string templatename, string destinationPath)
+            => FromTemplate(templatename, destinationPath, Encoding.UTF8);
+
+        public async Task FromTemplate(string templateName, string destinationPath, Encoding encoding)
         {
-            CreateMissingDirectories(path);
+            LogFileCreation(templateName, destinationPath);
 
-            _consoleWriter.WriteLine($"Generate file from template '{templateName}' in '{path}'");
-
-            await File.WriteAllTextAsync(path, await OutputFromTemplate(templateName), encoding);
+            var content = await OutputFromTemplate(templateName);
+            await FromTemplateContent(content, destinationPath, encoding);
         }
+
+        public Task FromTemplateGlob(string glob, string destinationDirectory)
+            => FromTemplateGlob(glob, destinationDirectory, new Dictionary<string, string>());
+
+        public Task FromTemplateGlob(string glob, string destinationDirectory, IDictionary<string, string> fileNameTemplateValues)
+            => FromTemplateGlob(glob, destinationDirectory, fileNameTemplateValues, Encoding.UTF8);
+
+        public Task FromTemplateGlob(string glob, string destinationDirectory, IDictionary<string, string> fileNameTemplateValues, Encoding encoding)
+        {
+            var globResults = _templateLoader.GetTemplatesFromGlob(glob);
+
+            var fromTemplate = CurryFromTemplate(fileNameTemplateValues, destinationDirectory, encoding);
+            var tasks = globResults.Select(fromTemplate);
+            return Task.WhenAll(tasks);
+        }
+
+        private void LogFileCreation(string templateName, string destinationPath)
+            => _consoleWriter.WriteLine($"Generate file from template '{templateName}' in '{destinationPath}'");
+
+        private static Task FromTemplateContent(string templateContent, string destinationPath, Encoding encoding)
+        {
+            CreateMissingDirectories(destinationPath);
+            return File.WriteAllTextAsync(destinationPath, templateContent, encoding);
+        }
+
+        private Func<Template, Task> CurryFromTemplate(IDictionary<string, string> fileNameTemplateValues, string destinationDirectory, Encoding encoding)
+            => template =>
+            {
+                var templateName = FillInFileNameTemplateValues(template.TemplateName, fileNameTemplateValues);
+                var destinationPath = ConvertTemplateNameToDestinationPath(templateName, destinationDirectory);
+                LogFileCreation(templateName, destinationPath);
+                return FromTemplateContent(template.Content, destinationPath, encoding);
+            };
+
+        private static string ConvertTemplateNameToDestinationPath(string templateName, string destinationDirectory)
+        {
+            var stringBuilder = new StringBuilder(templateName);
+            var firstDelimiter = templateName.IndexOf(Path.DirectorySeparatorChar);
+            if (firstDelimiter > 0)
+            {
+                stringBuilder.Remove(0, firstDelimiter);
+            }
+
+            return stringBuilder
+                .Insert(0, destinationDirectory)
+                .Replace(".template", string.Empty)
+                .Replace(".mustache", string.Empty)
+                .ToString();
+        }
+
+        private static string FillInFileNameTemplateValues(string fileName, IDictionary<string, string> fileNameTemplateValues)
+            => fileNameTemplateValues
+                .Aggregate(fileName, FillInFileNameTemplateValue);
+
+        private static string FillInFileNameTemplateValue(string fileName, KeyValuePair<string, string> fileNameTemplateValue)
+            => fileName.Replace($"{{{fileNameTemplateValue.Key}}}", fileNameTemplateValue.Value);
 
         private async Task<string> OutputFromTemplate(string templateName)
         {
@@ -46,20 +107,16 @@ namespace Messerli.MetaGenerator
         }
 
         private static void StubbleBuilderSettings(RendererSettingsBuilder settings)
-        {
-            settings.SetIgnoreCaseOnKeyLookup(false);
-        }
+            => settings.SetIgnoreCaseOnKeyLookup(false);
 
         private static RenderSettings TemplateRenderSettings()
-        {
-            return new RenderSettings
+            => new RenderSettings
             {
                 ThrowOnDataMiss = true,
                 SkipHtmlEncoding = true,
             };
-        }
 
-        private void CreateMissingDirectories(string path)
+        private static void CreateMissingDirectories(string path)
         {
             var folder = Path.GetDirectoryName(path);
 
