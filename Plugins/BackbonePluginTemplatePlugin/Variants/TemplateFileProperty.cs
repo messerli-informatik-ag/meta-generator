@@ -1,4 +1,5 @@
-﻿using Messerli.MetaGeneratorAbstractions;
+﻿using System.IO;
+using Messerli.MetaGeneratorAbstractions;
 
 namespace Messerli.BackbonePluginTemplatePlugin.Variants
 {
@@ -20,6 +21,6 @@ namespace Messerli.BackbonePluginTemplatePlugin.Variants
 
         public string PluginName { get; }
 
-        public string PluginPath => SolutionDirectory + PluginName;
+        public string PluginPath => Path.Combine(SolutionDirectory, PluginName);
     }
 }

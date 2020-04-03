@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Messerli.BackbonePluginTemplatePlugin.Variants;
-using Messerli.BackbonePluginTemplatePlugin.Variants.DatabaseAccessPlugin;
 using Messerli.CommandLineAbstractions;
 using Messerli.MetaGeneratorAbstractions;
 using Messerli.MetaGeneratorAbstractions.UserInput;
@@ -54,8 +53,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
         public void Generate()
         {
             _consoleWriter.WriteLine($"Creating Plugin: {PluginName}");
-            var tasks = CreatePluginVariant()
-                .CreateTemplateFiles();
+            var tasks = CreatePluginVariant();
 
             tasks.Add(_fileManipulator.AddProjectsToSolution(
                 GetSolutionInfoBuilder().Build(),
@@ -80,16 +78,28 @@ namespace Messerli.BackbonePluginTemplatePlugin
         private string GetTestProjectName()
             => $"{PluginName}.{TestFolder}";
 
-        private IPluginVariant CreatePluginVariant()
+        private List<Task> CreatePluginVariant()
         {
             var templateFileProperty = CreateTemplateFileProperty();
             return PluginVariant switch
             {
-                VariantType.MinimalPluginTemplate => new Variants.MinimalPlugin.PluginVariant(templateFileProperty),
-                VariantType.PluginTemplate => new Variants.ViewPlugin.PluginVariant(templateFileProperty),
-                VariantType.DatabaseAccessPluginTemplate => new PluginVariant(templateFileProperty),
+                VariantType.MinimalPluginTemplate => new Variants.MinimalPlugin.PluginVariant(templateFileProperty).CreateTemplateFiles(),
+                VariantType.PluginTemplate => new Variants.ViewPlugin.PluginVariant(templateFileProperty).CreateTemplateFiles(),
+                VariantType.DatabaseAccessPluginTemplate => new[] { CreateTemplateFiles(templateFileProperty) }.ToList(),
                 _ => throw new InvalidOperationException(),
             };
+        }
+
+        private static Task CreateTemplateFiles(TemplateFileProperty templateFileProperty)
+        {
+            var glob = $"templates/DatabaseAccessPluginTemplate1/**/*";
+            var destination = templateFileProperty.PluginPath;
+            var templateNameValues = new Dictionary<string, string>
+            {
+                { "fileExtension", "cs" },
+                { "pluginName", templateFileProperty.PluginName },
+            };
+            return templateFileProperty.FileGenerator.FromTemplateGlob(glob, destination, templateNameValues);
         }
 
         private SolutionInfo.Builder GetSolutionInfoBuilder()
