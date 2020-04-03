@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Messerli.Backbone.PluginSdk; Microsoft.Build.CentralPackageVersions">
+    <PropertyGroup>
+        <AssemblyName>Messerli.{{RepositoryName}}</AssemblyName>
+        <RootNamespace>Messerli.{{RepositoryName}}</RootNamespace>
+    </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <LangVersion>8.0</LangVersion>
+        <Nullable>enable</Nullable>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
+    <ItemGroup>
+        <None Update="Templates\**\*.mustache">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Autofac" />
+    </ItemGroup>
+</Project>

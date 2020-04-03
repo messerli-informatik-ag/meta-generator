@@ -1,0 +1,38 @@
+[
+  {
+    "Question": "Please enter the full path of the directory containing the solution you want to modify.",
+    "Name": "SolutionDirectory",
+    "Type": "ExistingPath",
+    "Validations": [
+      "InputValidations.AnySolutionExists"
+    ]
+  },
+  {
+    "Question": "Please enter the name of the new plugin. The name mustn't contain any spaces.",
+    "Name": "PluginName",
+    "Type": "String",
+    "Validations": [
+      "Validations.ValuePresent",
+      "Validations.NoWhiteSpace"
+    ]
+  },
+  {
+    "Question": "Please select a variant for your Backbone plugin.",
+    "Name": "PluginVariant",
+    "Type": "Selection",
+    "SelectionValues": [
+      {
+        "Value": 1,
+        "Description": "Minimal setup with completely empty implementation."
+      },
+      {
+        "Value": 2,
+        "Description": "Default setup for plugins with a controller, presenter, view and a view model."
+      },
+      {
+        "Value": 3,
+        "Description": "Advanced setup containing a DB access example."
+      }
+    ]
+  }
+]

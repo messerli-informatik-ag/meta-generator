@@ -1,0 +1,26 @@
+﻿using System;
+using System.Net.Http;
+using Messerli.Backbone.PluginTestServer;
+using Messerli.{{RepositoryName}};
+
+namespace {{RepositoryName}}.Test
+{
+    public sealed class IntegrationTests : IDisposable
+    {
+        private readonly IBackboneTestServer _server =
+            BackboneTestServer.Create(b => b
+                .PluginDllSelector(selector => selector.AddPlugin<Plugin>()));
+
+        private readonly HttpClient _client;
+
+        public IntegrationTests()
+        {
+            _client = _server.HttpClient;
+        }
+
+        public void Dispose()
+        {
+            _server.DisposeAsync().AsTask().Wait();
+        }
+    }
+}

@@ -1,0 +1,61 @@
+﻿using System;
+using System.Threading.Tasks;
+using Autofac;
+using Messerli.Backbone.PluginAbstractions;
+using Messerli.Backbone.PluginAbstractions.Http.Routing;
+using Messerli.Backbone.PluginAbstractions.Navigation;
+using Messerli.Backbone.PluginAbstractions.PageRendering;
+using Messerli.Backbone.PluginAbstractions.Persistence;
+using Messerli.{{RepositoryName}}.Registrar;
+
+namespace Messerli.{{RepositoryName}}
+{
+    [PluginIdentifier("DatabaseAccessPluginTemplate")]
+    public sealed class Plugin : IBackbonePlugin, IDisposable
+    {
+        private readonly IContainer _compositionRoot;
+
+        public Plugin(
+            IRouteRegistry routeRegistry,
+            IPersistenceContextBuilder persistenceContextBuilder,
+            PageRendererFactory pageRendererFactory,
+            INavigationRegistry navigationRegistry)
+        {
+            _compositionRoot =
+                BuildCompositionRoot(
+                    routeRegistry,
+                    persistenceContextBuilder,
+                    pageRendererFactory,
+                    navigationRegistry);
+        }
+
+        public void Dispose()
+            => _compositionRoot.Dispose();
+
+        public Task StartService()
+        {
+            _compositionRoot.Resolve<IRouteRegistrar>().RegisterRoutes();
+            _compositionRoot.Resolve<INavigationRegistrar>().RegisterNavigation();
+            return Task.CompletedTask;
+        }
+
+        private static IContainer BuildCompositionRoot(
+            IRouteRegistry routeRegistry,
+            IPersistenceContextBuilder persistenceContextBuilder,
+            PageRendererFactory pageRendererFactory,
+            INavigationRegistry navigationRegistry)
+        {
+            var pluginTemplateModule =
+                new Module(
+                    routeRegistry,
+                    persistenceContextBuilder,
+                    pageRendererFactory,
+                    navigationRegistry);
+
+            var builder = new ContainerBuilder();
+            builder.RegisterModule(pluginTemplateModule);
+
+            return builder.Build();
+        }
+    }
+}

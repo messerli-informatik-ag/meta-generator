@@ -1,0 +1,33 @@
+﻿using System.Threading.Tasks;
+using Messerli.Backbone.PluginAbstractions.Http;
+using Messerli.Backbone.PluginAbstractions.PageRendering;
+
+namespace Messerli.{{RepositoryName}}.Gui.View
+{
+    public sealed class Presenter : IPresenter
+    {
+        private const string PageTitle = "Hello World";
+        private const string Text = "Hello World";
+
+        private readonly IView _view;
+        private readonly PageRendererFactory _rendererFactory;
+
+        public Presenter(IView view, PageRendererFactory rendererFactory)
+        {
+            _view = view;
+            _rendererFactory = rendererFactory;
+        }
+
+        public Task<Response> PresentPluginTemplate(Request request)
+        {
+            var viewModel = new ViewModel(
+                text: Text,
+                pageTitle: PageTitle);
+            return _view.ShowPluginTemplate(
+                CreateTemplateRenderer(request), viewModel);
+        }
+
+        private IPageRenderer CreateTemplateRenderer(Request request)
+            => _rendererFactory(request);
+    }
+}
