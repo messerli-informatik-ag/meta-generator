@@ -68,9 +68,14 @@ namespace Messerli.BackbonePluginTemplatePlugin
         }
 
         private Task AddProjectsToSolution()
-            => _fileManipulator.AddProjectsToSolution(
-                GetSolutionInfo(),
-                new[] { GetProjectInfo(), GetProjectTestInfo() });
+        {
+            var solutionInfo = GetSolutionInfo();
+            var projectInfo = GetProjectInfo();
+            var projectTestInfo = GetProjectTestInfo();
+            return _fileManipulator.AddProjectsToSolution(
+                solutionInfo,
+                new[] { projectInfo, projectTestInfo });
+        }
 
         private static VariantType ParsePluginVariant(string variantType)
             => (VariantType)int.Parse(variantType);
