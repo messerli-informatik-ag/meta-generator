@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Funcky;
 using Messerli.FileManipulatorAbstractions.Project;
 using Microsoft.Build.Construction;
 using Microsoft.Build.Evaluation;
@@ -31,8 +33,28 @@ namespace Messerli.FileManipulator.Project.MsBuild
             var itemGroup = packagesProject.GetItemGroupWithItemOfTypeOrCreateNew(PackageReferenceTypeTag);
             foreach (var packageReference in packageReferences)
             {
-                AddPackageReference(itemGroup, packageReference);
+                Action action = CheckForConflict(packagesProject, packageReference) switch
+                {
+                    PackageReferenceConflictResult.NoExisting _ => () => AddPackageReference(itemGroup, packageReference),
+                    PackageReferenceConflictResult.ExistingIsCompatible _ => Functional.NoOperation,
+                    PackageReferenceConflictResult.ExistingIsIncompatible result => throw new ConflictingPackageReferenceException(packageReference, result.Version),
+                    var result => throw new InvalidOperationException($"Enum variant {result.GetType().Name} is not supported"),
+                };
+                action();
             }
+        }
+
+        private static PackageReferenceConflictResult CheckForConflict(MsBuildProject project, PackageReference packageReference)
+            => GetExistingPackageReference(project, packageReference) is { } existing
+                  ? ValidateExistingPackageReference(existing, packageReference)
+                  : new PackageReferenceConflictResult.NoExisting();
+
+        private static PackageReferenceConflictResult ValidateExistingPackageReference(ProjectItemElement item, PackageReference packageReference)
+        {
+            var existingVersion = GetVersionFromMetadata(item);
+            return existingVersion == packageReference.Version
+                ? (PackageReferenceConflictResult)new PackageReferenceConflictResult.ExistingIsCompatible()
+                : new PackageReferenceConflictResult.ExistingIsIncompatible(existingVersion);
         }
 
         private static void AddPackageReference(ProjectElementContainer itemGroup, PackageReference packageReference)
@@ -42,6 +64,20 @@ namespace Messerli.FileManipulator.Project.MsBuild
             itemGroup.AppendChild(centralPackageItem);
             centralPackageItem.AddMetadataAsAttribute(VersionMetadataAttribute, packageReference.Version);
         }
+
+        private static ProjectItemElement? GetExistingPackageReference(MsBuildProject project, PackageReference packageReference)
+            => project
+                .Xml
+                .Items
+                .Where(item => item.ItemType == PackageReferenceTypeTag)
+                .FirstOrDefault(item => item.Update == packageReference.Name);
+
+        private static string GetVersionFromMetadata(ProjectItemElement item)
+            => item.Metadata
+                .Where(m => m.Name == VersionMetadataAttribute)
+                .Select(m => m.Value)
+                .FirstOrDefault()
+                    ?? throw new InvalidOperationException($"Package reference '{item.Update}' is missing a version");
 
         private static bool HasCentralPackageVersionsEnabled(MsBuildProject project)
             => project.GetPropertyValue(EnableCentralPackageVersionsProperty) != FalseAsString;

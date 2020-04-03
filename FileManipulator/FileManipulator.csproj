@@ -21,5 +21,6 @@
         <!-- Source: https://docs.microsoft.com/en-us/visualstudio/msbuild/updating-an-existing-application?view=vs-2019#use-microsoftbuildlocator -->
         <PackageReference Include="Microsoft.Build" ExcludeAssets="runtime" />
         <PackageReference Include="Microsoft.Build.Locator" />
+        <PackageReference Include="Funcky" />
     </ItemGroup>
 </Project>

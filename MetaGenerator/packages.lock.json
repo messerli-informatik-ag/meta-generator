@@ -481,6 +481,7 @@
         "type": "Project",
         "dependencies": {
           "Autofac": "[5.1.2, 6.0.0)",
+          "Funcky": "[1.5.1, 2.0.0)",
           "Messerli.FileManipulatorAbstractions": "1.0.0",
           "Messerli.FileSystem": "[0.1.2, 0.2.0)",
           "Microsoft.Build": "[16.5.0, 17.0.0)",

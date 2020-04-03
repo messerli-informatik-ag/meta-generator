@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
 using Messerli.FileManipulator.Project;
 using Messerli.FileManipulator.Project.MsBuild;
@@ -17,8 +16,14 @@ namespace Messerli.FileManipulator.Test.Project
 
         private const string PackagesPropsFileName = "Packages.props";
 
+        private const string CentralPackageVersionsSdk = "Microsoft.Build.CentralPackageVersions/2.0.52";
+
         private static readonly string EmptyProject =
             $"<Project Sdk=\"Microsoft.NET.Sdk\">{NewLine}" +
+            $"</Project>{NewLine}";
+
+        private static readonly string EmptyProjectsWithCentralPackageVersionsSdk =
+            $"<Project Sdk=\"{CentralPackageVersionsSdk}\">{NewLine}" +
             $"</Project>{NewLine}";
 
         private static readonly string ProjectWithFooDependency
@@ -27,6 +32,21 @@ namespace Messerli.FileManipulator.Test.Project
               $"        <PackageReference Include=\"Foo\" Version=\"1.0.0\" />{NewLine}" +
               $"    </ItemGroup>{NewLine}" +
               $"</Project>{NewLine}";
+
+        private static readonly string EmptyPackageProps =
+            $"<Project>{NewLine}" +
+            $"</Project>{NewLine}";
+
+        private static readonly ProjectModification EmptyModification =
+            new ProjectModificationBuilder().Build();
+
+        private static readonly ProjectModification ModificationAddingBarPackageReference =
+            new ProjectModificationBuilder()
+                .AddPackageReference(new PackageReferenceBuilder()
+                    .Name("Bar")
+                    .Version("2.0.0")
+                    .Build())
+                .Build();
 
         [Theory]
         [MemberData(nameof(GetModifications))]
@@ -54,12 +74,7 @@ namespace Messerli.FileManipulator.Test.Project
                     $"    </ItemGroup>{NewLine}" +
                     $"</Project>{NewLine}",
                     ProjectWithFooDependency,
-                    new ProjectModificationBuilder()
-                        .AddPackageReference(new PackageReferenceBuilder()
-                            .Name("Bar")
-                            .Version("2.0.0")
-                            .Build())
-                        .Build()
+                    ModificationAddingBarPackageReference
                 },
                 {
                     $"<Project Sdk=\"Microsoft.NET.Sdk\">{NewLine}" +
@@ -68,22 +83,26 @@ namespace Messerli.FileManipulator.Test.Project
                     $"  </ItemGroup>{NewLine}" +
                     $"</Project>{NewLine}",
                     EmptyProject,
-                    new ProjectModificationBuilder()
-                        .AddPackageReference(new PackageReferenceBuilder()
-                            .Name("Bar")
-                            .Version("2.0.0")
-                            .Build())
-                        .Build()
+                    ModificationAddingBarPackageReference
+                },
+                {
+                    $"<Project Sdk=\"{CentralPackageVersionsSdk}\">{NewLine}" +
+                    $"  <ItemGroup>{NewLine}" +
+                    $"    <PackageReference Include=\"Bar\" Version=\"2.0.0\" />{NewLine}" +
+                    $"  </ItemGroup>{NewLine}" +
+                    $"</Project>{NewLine}",
+                    EmptyProjectsWithCentralPackageVersionsSdk,
+                    ModificationAddingBarPackageReference
                 },
                 {
                     ProjectWithFooDependency,
                     ProjectWithFooDependency,
-                    new ProjectModificationBuilder().Build()
+                    EmptyModification
                 },
                 {
                     EmptyProject,
                     EmptyProject,
-                    new ProjectModificationBuilder().Build()
+                    EmptyModification
                 },
                 {
                     $"<Project Sdk=\"Microsoft.NET.Sdk\">{NewLine}" +
@@ -125,6 +144,16 @@ namespace Messerli.FileManipulator.Test.Project
                     EmptyProject,
                     new ProjectModificationBuilder()
                         .AddSdk("Microsoft.NET.Sdk")
+                        .Build()
+                },
+                {
+                    ProjectWithFooDependency,
+                    ProjectWithFooDependency,
+                    new ProjectModificationBuilder()
+                        .AddPackageReference(new PackageReferenceBuilder()
+                            .Name("Foo")
+                            .Version("1.0.0")
+                            .Build())
                         .Build()
                 },
             };
@@ -173,7 +202,7 @@ namespace Messerli.FileManipulator.Test.Project
             => new TheoryData<string, string, string, string, ProjectModification>
             {
                 {
-                    $"<Project Sdk=\"Microsoft.NET.Sdk; Microsoft.Build.CentralPackageVersions/2.0.52\">{NewLine}" +
+                    $"<Project Sdk=\"Microsoft.NET.Sdk; {CentralPackageVersionsSdk}\">{NewLine}" +
                     $"    <ItemGroup>{NewLine}" +
                     $"        <PackageReference Include=\"Bar\" />{NewLine}" +
                     $"        <PackageReference Include=\"Foo\" />{NewLine}" +
@@ -185,7 +214,7 @@ namespace Messerli.FileManipulator.Test.Project
                     $"        <PackageReference Update=\"Bar\" Version=\"2.0.0\" />{NewLine}" +
                     $"    </ItemGroup>{NewLine}" +
                     $"</Project>{NewLine}",
-                    $"<Project Sdk=\"Microsoft.NET.Sdk; Microsoft.Build.CentralPackageVersions/2.0.52\">{NewLine}" +
+                    $"<Project Sdk=\"Microsoft.NET.Sdk; {CentralPackageVersionsSdk}\">{NewLine}" +
                     $"    <ItemGroup>{NewLine}" +
                     $"        <PackageReference Include=\"Foo\" />{NewLine}" +
                     $"    </ItemGroup>{NewLine}" +
@@ -195,16 +224,10 @@ namespace Messerli.FileManipulator.Test.Project
                     $"        <PackageReference Update=\"Foo\" Version=\"1.0.0\" />{NewLine}" +
                     $"    </ItemGroup>{NewLine}" +
                     $"</Project>{NewLine}",
-                    new ProjectModificationBuilder()
-                        .AddPackageReference(
-                            new PackageReferenceBuilder()
-                                .Name("Bar")
-                                .Version("2.0.0")
-                                .Build())
-                        .Build()
+                    ModificationAddingBarPackageReference
                 },
                 {
-                    $"<Project Sdk=\"Microsoft.NET.Sdk; Microsoft.Build.CentralPackageVersions/2.0.52\">{NewLine}" +
+                    $"<Project Sdk=\"Microsoft.NET.Sdk; {CentralPackageVersionsSdk}\">{NewLine}" +
                     $"    <ItemGroup>{NewLine}" +
                     $"        <PackageReference Include=\"Messerli.CodeStyle\" PrivateAssets=\"all\" />{NewLine}" +
                     $"        <PackageReference Include=\"Messerli.IO\" />{NewLine}" +
@@ -215,7 +238,7 @@ namespace Messerli.FileManipulator.Test.Project
                     $"    <PackageReference Update=\"Messerli.IO\" Version=\"0.1.0\" />{NewLine}" +
                     $"  </ItemGroup>{NewLine}" +
                     $"</Project>{NewLine}",
-                    $"<Project Sdk=\"Microsoft.NET.Sdk; Microsoft.Build.CentralPackageVersions/2.0.52\">{NewLine}" +
+                    $"<Project Sdk=\"Microsoft.NET.Sdk; {CentralPackageVersionsSdk}\">{NewLine}" +
                     $"    <ItemGroup>{NewLine}" +
                     $"        <PackageReference Include=\"Messerli.CodeStyle\" PrivateAssets=\"all\" />{NewLine}" +
                     $"    </ItemGroup>{NewLine}" +
@@ -230,12 +253,135 @@ namespace Messerli.FileManipulator.Test.Project
                                 .Build())
                         .Build()
                 },
+                {
+                    $"<Project Sdk=\"{CentralPackageVersionsSdk}\">{NewLine}" +
+                    $"    <ItemGroup>{NewLine}" +
+                    $"        <PackageReference Include=\"Messerli.IO\" />{NewLine}" +
+                    $"    </ItemGroup>{NewLine}" +
+                    $"</Project>{NewLine}",
+                    $"<Project>{NewLine}" +
+                    $"    <ItemGroup>{NewLine}" +
+                    $"        <PackageReference Update=\"Messerli.IO\" Version=\"0.1.0\" />{NewLine}" +
+                    $"    </ItemGroup>{NewLine}" +
+                    $"</Project>{NewLine}",
+                    $"<Project Sdk=\"{CentralPackageVersionsSdk}\">{NewLine}" +
+                    $"    <ItemGroup>{NewLine}" +
+                    $"        <PackageReference Include=\"Messerli.IO\" />{NewLine}" +
+                    $"    </ItemGroup>{NewLine}" +
+                    $"</Project>{NewLine}",
+                    $"<Project>{NewLine}" +
+                    $"    <ItemGroup>{NewLine}" +
+                    $"        <PackageReference Update=\"Messerli.IO\" Version=\"0.1.0\" />{NewLine}" +
+                    $"    </ItemGroup>{NewLine}" +
+                    $"</Project>{NewLine}",
+                    new ProjectModificationBuilder()
+                        .AddPackageReference(
+                            new PackageReferenceBuilder()
+                                .Name("Messerli.IO")
+                                .Version("0.1.0")
+                                .Build())
+                        .Build()
+                },
+                {
+                    $"<Project Sdk=\"{CentralPackageVersionsSdk}\">{NewLine}" +
+                    $"  <ItemGroup>{NewLine}" +
+                    $"    <PackageReference Include=\"Messerli.IO\" />{NewLine}" +
+                    $"  </ItemGroup>{NewLine}" +
+                    $"</Project>{NewLine}",
+                    $"<Project>{NewLine}" +
+                    $"    <ItemGroup>{NewLine}" +
+                    $"        <PackageReference Update=\"Messerli.IO\" Version=\"0.1.0\" />{NewLine}" +
+                    $"    </ItemGroup>{NewLine}" +
+                    $"</Project>{NewLine}",
+                    EmptyProjectsWithCentralPackageVersionsSdk,
+                    $"<Project>{NewLine}" +
+                    $"    <ItemGroup>{NewLine}" +
+                    $"        <PackageReference Update=\"Messerli.IO\" Version=\"0.1.0\" />{NewLine}" +
+                    $"    </ItemGroup>{NewLine}" +
+                    $"</Project>{NewLine}",
+                    new ProjectModificationBuilder()
+                        .AddPackageReference(
+                            new PackageReferenceBuilder()
+                                .Name("Messerli.IO")
+                                .Version("0.1.0")
+                                .Build())
+                        .Build()
+                },
             };
 
         [Fact]
-        public void ThrowsWhenPackagesPropsDoesNotExist()
+        public async Task ThrowsWhenAddingPackageVersionWithConflictingVersion()
         {
-            throw new NotImplementedException();
+            using var testEnvironment = new TestEnvironmentProvider();
+
+            const string packageName = "Foo";
+            const string packageVersionOne = "1.0.0";
+            const string packageVersionTwo = "1.0.1";
+
+            var projectFilePath = Path.Combine(testEnvironment.RootDirectory, ProjectFileName);
+            await File.WriteAllTextAsync(projectFilePath, EmptyProjectsWithCentralPackageVersionsSdk);
+
+            var projectManipulator = CreateProjectManipulator();
+
+            await projectManipulator.ManipulateProject(
+                projectFilePath,
+                new ProjectModificationBuilder()
+                    .AddPackageReference(new PackageReferenceBuilder()
+                        .Name(packageName)
+                        .Version(packageVersionOne)
+                        .Build())
+                    .Build());
+
+            await Assert.ThrowsAsync<ProjectManipulationException>(async () =>
+                {
+                    await projectManipulator.ManipulateProject(
+                        projectFilePath,
+                        new ProjectModificationBuilder()
+                            .AddPackageReference(new PackageReferenceBuilder()
+                                .Name(packageName)
+                                .Version(packageVersionTwo)
+                                .Build())
+                            .Build());
+                });
+        }
+
+        [Fact]
+        public async Task ThrowsWhenAddingPackageVersionWithConflictingVersionToProjectUsingCentralPackageVersionsSdk()
+        {
+            using var testEnvironment = new TestEnvironmentProvider();
+
+            const string packageName = "Foo";
+            const string packageVersionOne = "1.0.0";
+            const string packageVersionTwo = "1.0.1";
+
+            var projectFilePath = Path.Combine(testEnvironment.RootDirectory, ProjectFileName);
+            var packagesPropsFilePath = Path.Combine(testEnvironment.RootDirectory, PackagesPropsFileName);
+
+            await File.WriteAllTextAsync(projectFilePath, EmptyProjectsWithCentralPackageVersionsSdk);
+            await File.WriteAllTextAsync(packagesPropsFilePath, EmptyPackageProps);
+
+            var projectManipulator = CreateProjectManipulator();
+
+            await projectManipulator.ManipulateProject(
+                projectFilePath,
+                new ProjectModificationBuilder()
+                    .AddPackageReference(new PackageReferenceBuilder()
+                        .Name(packageName)
+                        .Version(packageVersionOne)
+                        .Build())
+                    .Build());
+
+            await Assert.ThrowsAsync<ProjectManipulationException>(async () =>
+            {
+                await projectManipulator.ManipulateProject(
+                    projectFilePath,
+                    new ProjectModificationBuilder()
+                        .AddPackageReference(new PackageReferenceBuilder()
+                            .Name(packageName)
+                            .Version(packageVersionTwo)
+                            .Build())
+                        .Build());
+            });
         }
 
         private static IProjectManipulator CreateProjectManipulator()
@@ -243,6 +389,7 @@ namespace Messerli.FileManipulator.Test.Project
                 new MicrosoftBuildAssemblyLoader(),
                 new ProjectManipulator(
                     new ProjectSdkManipulator(),
-                    new CentralPackageVersionsManipulator()));
+                    new CentralPackageVersionsManipulator(),
+                    new PackageReferenceConflictChecker()));
     }
 }

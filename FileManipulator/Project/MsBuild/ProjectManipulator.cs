@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Funcky;
 using Messerli.FileManipulatorAbstractions.Project;
 using Microsoft.Build.Construction;
 using Microsoft.Build.Evaluation;
@@ -15,12 +16,16 @@ namespace Messerli.FileManipulator.Project.MsBuild
 
         private readonly ICentralPackageVersionsManipulator _centralPackageVersionsManipulator;
 
+        private readonly IPackageReferenceConflictChecker _packageReferenceConflictChecker;
+
         public ProjectManipulator(
             IProjectSdkManipulator projectSdkManipulator,
-            ICentralPackageVersionsManipulator centralPackageVersionsManipulator)
+            ICentralPackageVersionsManipulator centralPackageVersionsManipulator,
+            IPackageReferenceConflictChecker packageReferenceConflictChecker)
         {
             _projectSdkManipulator = projectSdkManipulator;
             _centralPackageVersionsManipulator = centralPackageVersionsManipulator;
+            _packageReferenceConflictChecker = packageReferenceConflictChecker;
         }
 
         private delegate void AddVersionMetadata(ProjectItemElement item, PackageReference packageReference);
@@ -51,15 +56,29 @@ namespace Messerli.FileManipulator.Project.MsBuild
 
             var itemGroup = project.GetItemGroupWithItemOfTypeOrCreateNew(PackageReferenceTypeTag);
 
+            void AddPackageReferenceCurried(PackageReference packageReference) => AddPackageReference(itemGroup, packageReference, addVersionMetadataToItem);
+
             foreach (var packageReference in packageReferences)
             {
-                AddPackageReference(itemGroup, packageReference, addVersionMetadataToItem);
+                AddPackageReferenceWithValidation(project, packageReference, AddPackageReferenceCurried);
             }
 
             if (usesCentralPackages)
             {
                 _centralPackageVersionsManipulator.AddPackageReferencesToGlobalPackages(project, packageReferences);
             }
+        }
+
+        private void AddPackageReferenceWithValidation(MsBuildProject project, PackageReference packageReference, Action<PackageReference> addPackageReference)
+        {
+            Action action = _packageReferenceConflictChecker.CheckForConflict(project, packageReference) switch
+            {
+                PackageReferenceConflictResult.NoExisting _ => () => addPackageReference(packageReference),
+                PackageReferenceConflictResult.ExistingIsIncompatible result => () => throw new ConflictingPackageReferenceException(packageReference, result.Version),
+                PackageReferenceConflictResult.ExistingIsCompatible _ => Functional.NoOperation,
+                var result => throw new InvalidOperationException($"Enum variant {result.GetType().Name} is not supported"),
+            };
+            action();
         }
 
         private static void AddPackageReference(ProjectItemGroupElement itemGroup, PackageReference packageReference, AddVersionMetadata addVersionMetadata)

@@ -17,6 +17,7 @@ namespace Messerli.FileManipulator
             builder.RegisterType<Project.MsBuild.ProjectManipulator>().As<Project.MsBuild.IProjectManipulator>();
             builder.RegisterType<Project.MsBuild.ProjectSdkManipulator>().As<Project.MsBuild.IProjectSdkManipulator>();
             builder.RegisterType<Project.MsBuild.CentralPackageVersionsManipulator>().As<Project.MsBuild.ICentralPackageVersionsManipulator>();
+            builder.RegisterType<Project.MsBuild.PackageReferenceConflictChecker>().As<Project.MsBuild.IPackageReferenceConflictChecker>();
         }
     }
 }
