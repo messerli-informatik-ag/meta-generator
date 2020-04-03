@@ -66,13 +66,13 @@ namespace Messerli.MetaGeneratorProjectPlugin
                 { "generatorName", _userInputProvider.Value(GeneratorName) },
             };
 
-            var tasks = new List<Task>
+            var tasks = new[]
             {
                 _fileGenerator.FromTemplateGlob("templates/**/*.mustache", GetPluginPath(), fileNameTemplateValues),
                 _fileManipulator.AddProjectsToSolution(GetSolutionInfoBuilder().Build(), GetProjectInfoBuilder().Build().Yield()),
             };
 
-            Task.WaitAll(tasks.ToArray());
+            Task.WaitAll(tasks);
         }
 
         public void TearDown()
