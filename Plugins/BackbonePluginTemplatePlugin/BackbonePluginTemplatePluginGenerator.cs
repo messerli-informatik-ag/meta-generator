@@ -93,7 +93,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
         private static Task CreateTemplateFiles(TemplateFileProperty templateFileProperty)
         {
             var glob = $"templates/DatabaseAccessPluginTemplate/**/*";
-            var destination = templateFileProperty.PluginPath;
+            var destination = templateFileProperty.SolutionDirectory;
             var templateNameValues = new Dictionary<string, string>
             {
                 { "fileExtension", "cs" },

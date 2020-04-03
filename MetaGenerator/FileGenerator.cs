@@ -50,10 +50,20 @@ namespace Messerli.MetaGenerator
         public Task FromTemplateGlob(string glob, string destinationDirectory, IDictionary<string, string> fileNameTemplateValues, Encoding encoding)
         {
             var globResults = _templateLoader.GetTemplatesFromGlob(glob);
+            var globResultsWithoutHardCodedPath = RemoveHardCodedPathPrefixFromTemplateNames(glob, globResults);
 
             var fromTemplate = CurryFromTemplate(fileNameTemplateValues, destinationDirectory, encoding);
-            var tasks = globResults.Select(fromTemplate);
+            var tasks = globResultsWithoutHardCodedPath.Select(fromTemplate);
             return Task.WhenAll(tasks);
+        }
+
+        private static IEnumerable<Template> RemoveHardCodedPathPrefixFromTemplateNames(string glob, IEnumerable<Template> templates)
+        {
+            var variablePathBegin = glob.IndexOf("/*", StringComparison.Ordinal);
+            return variablePathBegin <= 0
+                ? templates
+                : templates.Select(template =>
+                    new Template(template.TemplateName.Substring(variablePathBegin), template.Content));
         }
 
         private void LogFileCreation(string templateName, string destinationPath)
