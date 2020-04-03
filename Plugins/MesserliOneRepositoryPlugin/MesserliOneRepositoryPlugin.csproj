@@ -15,7 +15,7 @@
     <Version>1.0.0</Version>
   </PropertyGroup>
   <ItemGroup>
-    <EmbeddedResource Include="templates\**\*" LogicalName="%(Identity)"/>
+    <EmbeddedResource Include="templates\**\*"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\CommandLineAbstractions\CommandLineAbstractions.csproj" />
