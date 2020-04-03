@@ -2,8 +2,6 @@
 {
     public interface INugetPackageSources
     {
-        void List(string configFile, string format);
-
         void Add(string configFile, NugetPackageSource packageSource);
 
         void Update(string configFile, NugetPackageSource packageSource);
