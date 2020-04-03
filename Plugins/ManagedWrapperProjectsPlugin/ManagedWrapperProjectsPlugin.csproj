@@ -11,40 +11,12 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="templates\FilesToSign.template" />
-    <None Remove="templates\packages.config,template" />
-    <None Remove="templates\ProjectDebug.props.template" />
-    <None Remove="templates\ProjectName.vcxproj.filters.template" />
-    <None Remove="templates\ProjectName.vcxproj.template" />
-    <None Remove="templates\ProjectRelease.props.template" />
-    <None Remove="templates\Sample.Header.template" />
-    <None Remove="templates\Sample.Source.template" />
-    <None Remove="templates\stdafx.Header.template" />
-    <None Remove="templates\stdafx.Source.template" />
-    <None Remove="templates\UseProject.props.template" />
-    <None Remove="templates\Version.Header.template" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="templates\FilesToSign.template" />
-    <EmbeddedResource Include="templates\packages.config,template" />
-    <EmbeddedResource Include="templates\ProjectDebug.props.template" />
-    <EmbeddedResource Include="templates\ProjectRelease.props.template" />
-    <EmbeddedResource Include="templates\Sample.Header.template" />
-    <EmbeddedResource Include="templates\Sample.Source.template" />
-    <EmbeddedResource Include="templates\UseProject.props.template" />
-    <EmbeddedResource Include="templates\Version.Header.template" />
+    <EmbeddedResource Include="templates\**\*"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\CommandLineAbstractions\CommandLineAbstractions.csproj" />
     <ProjectReference Include="..\..\MetaGeneratorAbstractions\MetaGeneratorAbstractions.csproj" />
     <ProjectReference Include="..\..\ToolLoaderAbstractions\ToolLoaderAbstractions.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="templates\ProjectName.vcxproj.filters.template" />
-    <EmbeddedResource Include="templates\ProjectName.vcxproj.template" />
-    <EmbeddedResource Include="templates\stdafx.Header.template" />
-    <EmbeddedResource Include="templates\stdafx.Source.template" />
-    <EmbeddedResource Include="templates\VariableDeclarations.json" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Autofac" />
