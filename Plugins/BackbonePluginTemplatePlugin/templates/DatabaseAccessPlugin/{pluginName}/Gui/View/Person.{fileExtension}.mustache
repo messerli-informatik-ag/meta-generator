@@ -1,0 +1,24 @@
+﻿#pragma warning disable CS0660, CS0661
+
+namespace Messerli.{{RepositoryName}}.Gui.View
+{
+    [Equals]
+    public sealed class Person
+    {
+        public Person(
+            string surname,
+            string firstname)
+        {
+            Surname = surname;
+            FirstName = firstname;
+        }
+
+        public string Surname { get; }
+
+        public string FirstName { get; }
+
+        public static bool operator ==(Person left, Person right) => Operator.Weave(left, right);
+
+        public static bool operator !=(Person left, Person right) => Operator.Weave(left, right);
+    }
+}

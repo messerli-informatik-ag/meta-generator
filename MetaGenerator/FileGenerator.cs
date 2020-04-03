@@ -50,10 +50,20 @@ namespace Messerli.MetaGenerator
         public Task FromTemplateGlob(string glob, string destinationDirectory, IDictionary<string, string> fileNameTemplateValues, Encoding encoding)
         {
             var globResults = _templateLoader.GetTemplatesFromGlob(glob);
+            var globResultsWithoutHardCodedPath = RemoveHardCodedPathPrefixFromTemplateNames(glob, globResults);
 
             var fromTemplate = CurryFromTemplate(fileNameTemplateValues, destinationDirectory, encoding);
-            var tasks = globResults.Select(fromTemplate);
+            var tasks = globResultsWithoutHardCodedPath.Select(fromTemplate);
             return Task.WhenAll(tasks);
+        }
+
+        private static IEnumerable<Template> RemoveHardCodedPathPrefixFromTemplateNames(string glob, IEnumerable<Template> templates)
+        {
+            var variablePathBegin = glob.IndexOf("/*", StringComparison.Ordinal);
+            return variablePathBegin <= 0
+                ? templates
+                : templates.Select(template =>
+                    new Template(template.TemplateName.Substring(variablePathBegin), template.Content));
         }
 
         private void LogFileCreation(string templateName, string destinationPath)
@@ -68,10 +78,10 @@ namespace Messerli.MetaGenerator
         private Func<Template, Task> CurryFromTemplate(IDictionary<string, string> fileNameTemplateValues, string destinationDirectory, Encoding encoding)
             => template =>
             {
-                var templateName = FillInFileNameTemplateValues(template.TemplateName, fileNameTemplateValues);
-                var destinationPath = ConvertTemplateNameToDestinationPath(templateName, destinationDirectory);
-                LogFileCreation(templateName, destinationPath);
-                return FromTemplateContent(template.Content, destinationPath, encoding);
+                var pathWithPlaceholders = ConvertTemplateNameToDestinationPath(template.TemplateName, destinationDirectory);
+                var finalPath = FillInFileNameTemplateValues(pathWithPlaceholders, fileNameTemplateValues);
+                LogFileCreation(template.TemplateName, finalPath);
+                return FromTemplateContent(template.Content, finalPath, encoding);
             };
 
         private static string ConvertTemplateNameToDestinationPath(string templateName, string destinationDirectory)

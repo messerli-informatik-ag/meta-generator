@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using DotNet.Globbing;
 using Funcky.Monads;
 using Messerli.MetaGeneratorAbstractions;
