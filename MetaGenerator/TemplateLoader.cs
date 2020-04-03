@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
+using DotNet.Globbing;
 using Funcky.Monads;
 using Messerli.MetaGeneratorAbstractions;
 
@@ -25,6 +28,15 @@ namespace Messerli.MetaGenerator
             }
 
             throw new Exception($"There is no template resource with the name {templateName}");
+        }
+
+        public IEnumerable<Template> GetTemplatesFromGlob(string glob)
+        {
+            var globMatcher = Glob.Parse(glob);
+            return _assemblyProvider.PluginAssembly
+                .GetManifestResourceNames()
+                .Where(resourceName => globMatcher.IsMatch(resourceName))
+                .Select(templateName => new Template(templateName, GetTemplate(templateName)));
         }
 
         public Stream? GetTemplateStream(string templateName)

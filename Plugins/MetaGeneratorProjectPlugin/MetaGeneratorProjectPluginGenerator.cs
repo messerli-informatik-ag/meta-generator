@@ -14,12 +14,7 @@ namespace Messerli.MetaGeneratorProjectPlugin
 {
     internal class MetaGeneratorProjectPluginGenerator : IMetaGenerator
     {
-        private const string VariableDeclarations = "Messerli.MetaGeneratorProjectPlugin.templates.VariableDeclarations.json";
-        private const string VariableDeclarationsTemplate = "Messerli.MetaGeneratorProjectPlugin.templates.VariableDeclarations.json.template";
-        private const string PluginProjectFileTemplate = "Messerli.MetaGeneratorProjectPlugin.templates.plugin.csproj.template";
-        private const string GeneratorFileTemplate = "Messerli.MetaGeneratorProjectPlugin.templates.generator.source.template";
-        private const string ModuleFileTemplate = "Messerli.MetaGeneratorProjectPlugin.templates.module.source.template";
-        private const string PublishScript = "Messerli.MetaGeneratorProjectPlugin.templates.publish.template";
+        private const string VariableDeclarations = "templates\\VariableDeclarations.json";
 
         private const string GeneratorName = "GeneratorName";
         private const string KebabGeneratorName = "KebabGeneratorName";
@@ -65,15 +60,15 @@ namespace Messerli.MetaGeneratorProjectPlugin
         public void Generate()
         {
             _consoleWriter.WriteLine($"Creating the plugin '{_userInputProvider.Value(GeneratorName)}' for the project generator.");
+            var fileNameTemplateValues = new Dictionary<string, string>
+            {
+                { "fileExtension", "cs" },
+                { "generatorName", _userInputProvider.Value(GeneratorName) },
+            };
 
             var tasks = new List<Task>
             {
-                _fileGenerator.FromTemplate(PluginProjectFileTemplate, Path.Combine(GetPluginPath(), $"{_userInputProvider.Value(GeneratorName)}.csproj"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(GeneratorFileTemplate, Path.Combine(GetPluginPath(), $"{_userInputProvider.Value(GeneratorName)}Generator.cs"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(ModuleFileTemplate, Path.Combine(GetPluginPath(), $"{_userInputProvider.Value(GeneratorName)}Module.cs"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(VariableDeclarationsTemplate, Path.Combine(GetPluginPath(), "templates", "VariableDeclarations.json"), new UTF8Encoding(false)),
-
-                _fileManipulator.AppendTemplate(PublishScript, Path.Combine(GetSolutionPath(), "publish.ps1")),
+                _fileGenerator.FromTemplateGlob("templates/**/*.mustache", GetPluginPath(), fileNameTemplateValues),
                 _fileManipulator.AddProjectsToSolution(GetSolutionInfoBuilder().Build(), GetProjectInfoBuilder().Build().Yield()),
             };
 
