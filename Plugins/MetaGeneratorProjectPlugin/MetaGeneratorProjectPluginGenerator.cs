@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using Funcky.Extensions;
 using LibGit2Sharp;
 using Messerli.CommandLineAbstractions;
 using Messerli.MetaGeneratorAbstractions;
 using Messerli.MetaGeneratorAbstractions.UserInput;
-using Messerli.VsSolution.Model;
 using Soltys.ChangeCase;
 
 namespace Messerli.MetaGeneratorProjectPlugin
