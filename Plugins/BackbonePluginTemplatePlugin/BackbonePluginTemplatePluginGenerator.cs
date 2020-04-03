@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Messerli.BackbonePluginTemplatePlugin.Variants;
 using Messerli.CommandLineAbstractions;
 using Messerli.MetaGeneratorAbstractions;
 using Messerli.MetaGeneratorAbstractions.UserInput;
@@ -53,11 +52,13 @@ namespace Messerli.BackbonePluginTemplatePlugin
         public void Generate()
         {
             _consoleWriter.WriteLine($"Creating Plugin: {PluginName}");
-            var tasks = CreatePluginVariant();
-
-            tasks.Add(_fileManipulator.AddProjectsToSolution(
-                GetSolutionInfoBuilder().Build(),
-                new[] { GetProjectInfoBuilder().Build(), GetProjectTestInfoBuilder().Build() }));
+            var templateFileCreationTask = CreateTemplateFilesForSelection();
+            var solutionModificationTask = AddProjectsToSolution();
+            var tasks = new[]
+            {
+                templateFileCreationTask,
+                solutionModificationTask,
+            };
 
             Task.WaitAll(tasks.ToArray());
         }
@@ -65,6 +66,11 @@ namespace Messerli.BackbonePluginTemplatePlugin
         public void TearDown()
         {
         }
+
+        private Task AddProjectsToSolution()
+            => _fileManipulator.AddProjectsToSolution(
+                GetSolutionInfo(),
+                new[] { GetProjectInfo(), GetProjectTestInfo() });
 
         private static VariantType ParsePluginVariant(string variantType)
             => (VariantType)int.Parse(variantType);
@@ -78,46 +84,39 @@ namespace Messerli.BackbonePluginTemplatePlugin
         private string GetTestProjectName()
             => $"{PluginName}.{TestFolder}";
 
-        private List<Task> CreatePluginVariant()
+        private Task CreateTemplateFilesForSelection()
         {
-            var templateFileProperty = CreateTemplateFileProperty();
-            return PluginVariant switch
-            {
-                VariantType.MinimalPluginTemplate => new Variants.MinimalPlugin.PluginVariant(templateFileProperty).CreateTemplateFiles(),
-                VariantType.PluginTemplate => new Variants.ViewPlugin.PluginVariant(templateFileProperty).CreateTemplateFiles(),
-                VariantType.DatabaseAccessPluginTemplate => new[] { CreateTemplateFiles(templateFileProperty) }.ToList(),
-                _ => throw new InvalidOperationException(),
-            };
+            var templateName = PluginVariant.ToString();
+            return CreateTemplateFiles(templateName);
         }
 
-        private static Task CreateTemplateFiles(TemplateFileProperty templateFileProperty)
+        private Task CreateTemplateFiles(string templateName)
         {
-            var glob = $"templates/DatabaseAccessPluginTemplate/**/*";
-            var destination = templateFileProperty.SolutionDirectory;
+            var glob = $"templates/{templateName}/**/*";
             var templateNameValues = new Dictionary<string, string>
             {
                 { "fileExtension", "cs" },
                 { "templateFileExtension", "mustache" },
-                { "pluginName", templateFileProperty.PluginName },
+                { "pluginName", PluginName },
             };
-            return templateFileProperty.FileGenerator.FromTemplateGlob(glob, destination, templateNameValues);
+            return _fileGenerator.FromTemplateGlob(glob, SolutionDirectory, templateNameValues);
         }
 
-        private SolutionInfo.Builder GetSolutionInfoBuilder()
+        private SolutionInfo GetSolutionInfo()
             => new SolutionInfo.Builder()
-                .WithPath(Directory.GetFiles(SolutionDirectory, "*.sln").FirstOrDefault());
+                .WithPath(Directory.GetFiles(SolutionDirectory, "*.sln").FirstOrDefault())
+                .Build();
 
-        private ProjectInfo.Builder GetProjectInfoBuilder()
+        private ProjectInfo GetProjectInfo()
             => new ProjectInfo.Builder()
                 .WithName(PluginName)
-                .WithPath(Path.Combine(GetRepositoryPath(), $"{PluginName}.{ProjectFileExtension}"));
+                .WithPath(Path.Combine(GetRepositoryPath(), $"{PluginName}.{ProjectFileExtension}"))
+                .Build();
 
-        private ProjectInfo.Builder GetProjectTestInfoBuilder()
+        private ProjectInfo GetProjectTestInfo()
             => new ProjectInfo.Builder()
                 .WithName(GetTestProjectName())
-                .WithPath(Path.Combine(GetTestRepositoryPath(), $"{PluginName}.{ProjectFileExtension}"));
-
-        private TemplateFileProperty CreateTemplateFileProperty()
-            => new TemplateFileProperty(_fileGenerator, SolutionDirectory, PluginName);
+                .WithPath(Path.Combine(GetTestRepositoryPath(), $"{PluginName}.{ProjectFileExtension}"))
+                .Build();
     }
 }
