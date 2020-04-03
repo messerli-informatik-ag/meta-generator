@@ -14,8 +14,7 @@
     <None Remove="templates\**\*.template" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="templates\**\*.template" />
-    <EmbeddedResource Include="templates\**\*.mustache" />
+    <EmbeddedResource Include="templates\**\*.mustache" LogicalName="%(Identity)"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\CommandLineAbstractions\CommandLineAbstractions.csproj" />
