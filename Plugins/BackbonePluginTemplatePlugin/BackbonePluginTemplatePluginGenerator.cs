@@ -80,10 +80,10 @@ namespace Messerli.BackbonePluginTemplatePlugin
         private static VariantType ParsePluginVariant(string variantType)
             => (VariantType)int.Parse(variantType);
 
-        private string GetRepositoryPath()
+        private string GetProjectPath()
             => Path.Combine(SolutionDirectory, PluginName);
 
-        private string GetTestRepositoryPath()
+        private string GetTestProjectPath()
             => Path.Combine(SolutionDirectory, GetTestProjectName());
 
         private string GetTestProjectName()
@@ -113,15 +113,26 @@ namespace Messerli.BackbonePluginTemplatePlugin
                 .Build();
 
         private ProjectInfo GetProjectInfo()
-            => new ProjectInfo.Builder()
+        {
+            var projectPath = GetProjectPath();
+            var projectFileName = $"{PluginName}.{ProjectFileExtension}";
+            var projectFilePath = Path.Combine(projectPath, projectFileName);
+            return new ProjectInfo.Builder()
                 .WithName(PluginName)
-                .WithPath(Path.Combine(GetRepositoryPath(), $"{PluginName}.{ProjectFileExtension}"))
+                .WithPath(projectFilePath)
                 .Build();
+        }
 
         private ProjectInfo GetProjectTestInfo()
-            => new ProjectInfo.Builder()
+        {
+            var testProjectName = GetTestProjectName();
+            var testProjectPath = GetTestProjectPath();
+            var projectFileName = $"{testProjectName}.{ProjectFileExtension}";
+            var testProjectFilePath = Path.Combine(testProjectPath, projectFileName);
+            return new ProjectInfo.Builder()
                 .WithName(GetTestProjectName())
-                .WithPath(Path.Combine(GetTestRepositoryPath(), $"{PluginName}.{ProjectFileExtension}"))
+                .WithPath(testProjectFilePath)
                 .Build();
+        }
     }
 }
