@@ -8,7 +8,7 @@ namespace Messerli.FileManipulator
 {
     public delegate ILogger GetLogger();
 
-    public sealed class NugetPackageSources : INugetPackageSources
+    public sealed class NugetPackageSourceManipulator : INugetPackageSourceManipulator
     {
         private const string MinimalNugetConfigContent =
             "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
@@ -17,7 +17,7 @@ namespace Messerli.FileManipulator
 
         private readonly Func<ILogger> _getLogger;
 
-        public NugetPackageSources(GetLogger getLogger)
+        public NugetPackageSourceManipulator(GetLogger getLogger)
         {
             _getLogger = () => getLogger();
         }

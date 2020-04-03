@@ -167,7 +167,7 @@ namespace Messerli.FileManipulator.Test
         private void TestPackageSourceCall(
             string fileContent,
             string expectedFileContent,
-            Action<INugetPackageSources, string> packageSourceAction)
+            Action<INugetPackageSourceManipulator, string> packageSourceAction)
         {
             using var testEnvironment = new TestEnvironmentProvider();
             CreateNugetTestFile(testEnvironment, fileContent);
@@ -178,8 +178,8 @@ namespace Messerli.FileManipulator.Test
             Assert.Equal(expectedFileContent, ReadNugetTestFile(testEnvironment));
         }
 
-        private static INugetPackageSources CreateNugetPackageSources(ILogger? logger = null)
-            => new NugetPackageSources(() => logger ?? new Mock<ILogger>().Object);
+        private static INugetPackageSourceManipulator CreateNugetPackageSources(ILogger? logger = null)
+            => new NugetPackageSourceManipulator(() => logger ?? new Mock<ILogger>().Object);
 
         private static string GetNugetFilePath(TestEnvironmentProvider testEnvironmentProvider)
             => Path.Combine(testEnvironmentProvider.RootDirectory, "nuget.config");
