@@ -68,10 +68,10 @@ namespace Messerli.MetaGenerator
         private Func<Template, Task> CurryFromTemplate(IDictionary<string, string> fileNameTemplateValues, string destinationDirectory, Encoding encoding)
             => template =>
             {
-                var templateName = FillInFileNameTemplateValues(template.TemplateName, fileNameTemplateValues);
-                var destinationPath = ConvertTemplateNameToDestinationPath(templateName, destinationDirectory);
-                LogFileCreation(templateName, destinationPath);
-                return FromTemplateContent(template.Content, destinationPath, encoding);
+                var pathWithPlaceholders = ConvertTemplateNameToDestinationPath(template.TemplateName, destinationDirectory);
+                var finalPath = FillInFileNameTemplateValues(pathWithPlaceholders, fileNameTemplateValues);
+                LogFileCreation(template.TemplateName, finalPath);
+                return FromTemplateContent(template.Content, finalPath, encoding);
             };
 
         private static string ConvertTemplateNameToDestinationPath(string templateName, string destinationDirectory)
