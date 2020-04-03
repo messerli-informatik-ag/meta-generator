@@ -12,8 +12,9 @@ namespace Messerli.BackbonePluginTemplatePlugin
 {
     public class BackbonePluginTemplatePluginGenerator : IMetaGenerator
     {
-        private const string TestFolder = "Test";
+        private const string TestDirectorySuffix = "Test";
         private const string ProjectFileExtension = "csproj";
+        private const string SolutionFileExtension = "sln";
 
         private readonly IConsoleWriter _consoleWriter;
         private readonly IFileGenerator _fileGenerator;
@@ -87,7 +88,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
             => Path.Combine(SolutionDirectory, GetTestProjectName());
 
         private string GetTestProjectName()
-            => $"{PluginName}.{TestFolder}";
+            => $"{PluginName}.{TestDirectorySuffix}";
 
         private Task CreateTemplateFilesForSelection()
         {
@@ -109,7 +110,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
 
         private SolutionInfo GetSolutionInfo()
             => new SolutionInfo.Builder()
-                .WithPath(Directory.GetFiles(SolutionDirectory, "*.sln").FirstOrDefault())
+                .WithPath(Directory.GetFiles(SolutionDirectory, $"*.{SolutionFileExtension}").FirstOrDefault())
                 .Build();
 
         private ProjectInfo GetProjectInfo()
