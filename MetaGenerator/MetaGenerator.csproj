@@ -21,6 +21,8 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommandLine\CommandLine.csproj" />
+    <ProjectReference Include="..\FileManipulatorAbstractions\FileManipulatorAbstractions.csproj" />
+    <ProjectReference Include="..\FileManipulator\FileManipulator.csproj" />
     <ProjectReference Include="..\MetaGeneratorAbstractions\MetaGeneratorAbstractions.csproj" />
     <ProjectReference Include="..\ToolLoader\ToolLoader.csproj" />
     <ProjectReference Include="..\VsSolution\VsSolution.csproj" />
@@ -32,5 +34,6 @@
     <PackageReference Include="System.CommandLine" />
     <PackageReference Include="Funcky" />
     <PackageReference Include="Soltys.ChangeCase" />
+    <PackageReference Include="DotNet.Glob" />
   </ItemGroup>
 </Project>

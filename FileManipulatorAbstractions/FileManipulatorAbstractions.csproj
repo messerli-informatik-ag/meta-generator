@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk; Microsoft.Build.CentralPackageVersions">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AssemblyName>Messerli.FileManipulatorAbstractions</AssemblyName>
+    <RootNamespace>Messerli.FileManipulatorAbstractions</RootNamespace>
+    <LangVersion>8.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <NullableContextOptions>enable</NullableContextOptions>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Collections.Immutable" />
+  </ItemGroup>
+</Project>
