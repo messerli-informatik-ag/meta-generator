@@ -72,6 +72,11 @@
           "System.Runtime": "4.3.0"
         }
       },
+      "System.Collections.Immutable": {
+        "type": "Transitive",
+        "resolved": "1.7.0",
+        "contentHash": "RVSM6wZUo6L2y6P3vN6gjUtyJ2IF2RVtrepF3J7nrDKfFQd5u/SnSUFclchYQis8/k5scHy9E+fVeKVQLnnkzw=="
+      },
       "System.Runtime": {
         "type": "Transitive",
         "resolved": "4.3.0",
@@ -105,6 +110,12 @@
         "type": "Project",
         "dependencies": {
           "Funcky": "[1.5.1, 2.0.0)"
+        }
+      },
+      "Messerli.FileManipulatorAbstractions": {
+        "type": "Project",
+        "dependencies": {
+          "System.Collections.Immutable": "[1.7.0, 2.0.0)"
         }
       },
       "metageneratorabstractions": {

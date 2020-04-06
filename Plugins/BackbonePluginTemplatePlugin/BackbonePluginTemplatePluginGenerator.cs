@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Messerli.CommandLineAbstractions;
+using Messerli.FileManipulatorAbstractions;
 using Messerli.MetaGeneratorAbstractions;
 using Messerli.MetaGeneratorAbstractions.UserInput;
 
@@ -17,17 +18,23 @@ namespace Messerli.BackbonePluginTemplatePlugin
         private readonly IConsoleWriter _consoleWriter;
         private readonly IFileGenerator _fileGenerator;
         private readonly IFileManipulator _fileManipulator;
+        private readonly INugetConfigurationManipulator _nugetConfigurationManipulator;
+        private readonly INugetPackageSourceManipulator _nugetPackageSourceManipulator;
         private readonly IUserInputProvider _userInputProvider;
 
         public BackbonePluginTemplatePluginGenerator(
             IConsoleWriter consoleWriter,
             IFileGenerator fileGenerator,
             IFileManipulator fileManipulator,
+            INugetConfigurationManipulator nugetConfigurationManipulator,
+            INugetPackageSourceManipulator nugetPackageSourceManipulator,
             IUserInputProvider userInputProvider)
         {
             _consoleWriter = consoleWriter;
             _fileGenerator = fileGenerator;
             _fileManipulator = fileManipulator;
+            _nugetConfigurationManipulator = nugetConfigurationManipulator;
+            _nugetPackageSourceManipulator = nugetPackageSourceManipulator;
             _userInputProvider = userInputProvider;
         }
 
@@ -53,10 +60,12 @@ namespace Messerli.BackbonePluginTemplatePlugin
             _consoleWriter.WriteLine($"Creating Plugin: {PluginName}");
             var templateFileCreationTask = CreateTemplateFilesForSelection();
             var solutionModificationTask = AddProjectsToSolution();
+            var nugetConfigTask = AddInternalNugetServerToNugetConfig();
             var tasks = new[]
             {
                 templateFileCreationTask,
                 solutionModificationTask,
+                nugetConfigTask,
             };
 
             Task.WaitAll(tasks.ToArray());
@@ -75,6 +84,23 @@ namespace Messerli.BackbonePluginTemplatePlugin
                 solutionInfo,
                 new[] { projectInfo, projectTestInfo });
         }
+
+        private Task AddInternalNugetServerToNugetConfig()
+        {
+            var nugetConfigFileName = "NuGet.config";
+            var nugetConfigFilePath = Path.Combine(SolutionDirectory, nugetConfigFileName);
+
+            var nugetConfigModification = CreateInternalNugetServerModification();
+            return _nugetConfigurationManipulator.ModifyNugetConfiguration(nugetConfigFilePath, nugetConfigModification);
+        }
+
+        private NugetConfigurationModification CreateInternalNugetServerModification()
+            => new NugetConfigurationModificationBuilder(_nugetPackageSourceManipulator)
+                .AddPackageSource(CreateInternalNugetServer())
+                .Build();
+
+        private NugetPackageSource CreateInternalNugetServer()
+            => new NugetPackageSource("Internal Nuget Server", "https://nuget.messerli.ch/v3/index.json");
 
         private static VariantType ParsePluginVariant(string variantType)
             => (VariantType)int.Parse(variantType);

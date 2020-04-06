@@ -18,6 +18,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\CommandLineAbstractions\CommandLineAbstractions.csproj" />
+    <ProjectReference Include="..\..\FileManipulatorAbstractions\FileManipulatorAbstractions.csproj" />
     <ProjectReference Include="..\..\MetaGeneratorAbstractions\MetaGeneratorAbstractions.csproj" />
     <ProjectReference Include="..\..\ToolLoaderAbstractions\ToolLoaderAbstractions.csproj" />
     <ProjectReference Include="..\..\VsSolution\VsSolution.csproj" />
