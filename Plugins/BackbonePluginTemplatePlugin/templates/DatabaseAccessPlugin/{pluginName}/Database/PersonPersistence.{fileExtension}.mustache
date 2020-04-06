@@ -1,0 +1,29 @@
+﻿using System.Linq;
+using Messerli.Backbone.PluginAbstractions.Persistence;
+using Messerli.{{RepositoryName}}.Database;
+
+namespace Messerli.{{RepositoryName}}.Database
+{
+    public sealed class PersonPersistence : IPersonPersistence
+    {
+        private readonly IPersistenceContextBuilder _persistenceContextBuilder;
+
+        public PersonPersistence(IPersistenceContextBuilder persistanceContextBuilder)
+        {
+            _persistenceContextBuilder = persistanceContextBuilder;
+        }
+
+        public IQueryable<Person> GetPersonEntries()
+        {
+            using var context = CreatePersistenceContext();
+            return context.GetQueryable<Person>()
+                .ToArray()
+                .AsQueryable();
+        }
+
+        private IPersistenceContext CreatePersistenceContext()
+            => _persistenceContextBuilder
+                .AddEntityType<Person>()
+                .Build();
+    }
+}

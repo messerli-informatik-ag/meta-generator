@@ -1,0 +1,24 @@
+﻿using Messerli.Backbone.PluginAbstractions.Http.Routing;
+using Messerli.{{RepositoryName}}.Gui;
+
+namespace Messerli.{{RepositoryName}}.Registrar
+{
+    internal sealed class RouteRegistrar : IRouteRegistrar
+    {
+        private readonly IRouteRegistry _routeRegistry;
+
+        private readonly IController _controller;
+
+        public RouteRegistrar(
+            IRouteRegistry routeRegistry,
+            IController controller)
+        {
+            _routeRegistry = routeRegistry;
+            _controller = controller;
+        }
+
+        public void RegisterRoutes()
+            => _routeRegistry
+                .Register(EndpointConstant.HelloWorldPage, _controller.GetPluginTemplateResponse);
+    }
+}

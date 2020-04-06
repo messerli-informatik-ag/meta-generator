@@ -1,0 +1,15 @@
+﻿using System.Threading.Tasks;
+using Messerli.Backbone.PluginAbstractions.Http;
+using Messerli.Backbone.PluginAbstractions.PageRendering;
+using static Messerli.{{RepositoryName}}.Gui.View.ResponseRenderer;
+
+namespace Messerli.{{RepositoryName}}.Gui.View
+{
+    public sealed class View : IView
+    {
+        public const string PluginTemplateName = "PluginTemplate";
+
+        public async Task<Response> ShowPluginTemplate(IPageRenderer renderer, ViewModel viewModel)
+            => await RenderResponse(renderer, viewModel.PageTitle, PluginTemplateName, viewModel);
+    }
+}
