@@ -2,13 +2,13 @@
 using Messerli.Backbone.PluginAbstractions.Http.Routing;
 using Messerli.Backbone.PluginAbstractions.Navigation;
 using Messerli.Backbone.PluginAbstractions.PageRendering;
-using Messerli.{{RepositoryName}}.PluginTemplate.Gui;
-using Messerli.{{RepositoryName}}.PluginTemplate.Gui.View;
-using Messerli.{{RepositoryName}}.PluginTemplate.Registrar;
+using Messerli.{{PluginName}}.PluginTemplate.Gui;
+using Messerli.{{PluginName}}.PluginTemplate.Gui.View;
+using Messerli.{{PluginName}}.PluginTemplate.Registrar;
 
-namespace Messerli.{{RepositoryName}}
+namespace Messerli.{{PluginName}}
 {
-    internal sealed class {{RepositoryName}}Module : Module
+    internal sealed class {{PluginName}}Module : Module
     {
         private readonly IRouteRegistry _routeRegistry;
 
@@ -16,7 +16,7 @@ namespace Messerli.{{RepositoryName}}
 
         private readonly INavigationRegistry _navigationRegistry;
 
-        public {{RepositoryName}}Module(
+        public {{PluginName}}Module(
             IRouteRegistry routeRegistry,
             PageRendererFactory pageRendererFactory,
             INavigationRegistry navigationRegistry)
