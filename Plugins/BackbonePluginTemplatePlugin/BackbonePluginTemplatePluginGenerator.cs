@@ -20,6 +20,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
         private readonly IFileManipulator _fileManipulator;
         private readonly INugetConfigurationManipulator _nugetConfigurationManipulator;
         private readonly INugetPackageSourceManipulator _nugetPackageSourceManipulator;
+        private readonly IGlobalJsonManipulator _globalJsonManipulator;
         private readonly IUserInputProvider _userInputProvider;
 
         public BackbonePluginTemplatePluginGenerator(
@@ -28,6 +29,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
             IFileManipulator fileManipulator,
             INugetConfigurationManipulator nugetConfigurationManipulator,
             INugetPackageSourceManipulator nugetPackageSourceManipulator,
+            IGlobalJsonManipulator globalJsonManipulator,
             IUserInputProvider userInputProvider)
         {
             _consoleWriter = consoleWriter;
@@ -35,6 +37,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
             _fileManipulator = fileManipulator;
             _nugetConfigurationManipulator = nugetConfigurationManipulator;
             _nugetPackageSourceManipulator = nugetPackageSourceManipulator;
+            _globalJsonManipulator = globalJsonManipulator;
             _userInputProvider = userInputProvider;
         }
 
@@ -61,6 +64,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
             var templateFileCreationTask = CreateTemplateFilesForSelection();
             var solutionModificationTask = AddProjectsToSolution();
             var nugetConfigTask = AddInternalNugetServerToNugetConfig();
+            var msbuildSdkTask = AddMsBuildSdkToGlobalJson();
             var tasks = new[]
             {
                 templateFileCreationTask,
@@ -101,6 +105,27 @@ namespace Messerli.BackbonePluginTemplatePlugin
 
         private NugetPackageSource CreateInternalNugetServer()
             => new NugetPackageSource("Internal Nuget Server", "https://nuget.messerli.ch/v3/index.json");
+
+        private Task AddMsBuildSdkToGlobalJson()
+        {
+            var globalJsonFileName = "global.json";
+            var globalJsonFilePath = Path.Combine(SolutionDirectory, globalJsonFileName);
+
+            var globalJsonModification = CreateMsBuildSdk();
+            return _globalJsonManipulator.ModifyGlobalJson(globalJsonFilePath, globalJsonModification);
+        }
+
+        private GlobalJsonModification CreateMsBuildSdk()
+            => new GlobalJsonModificationBuilder()
+                .AddMsBuildSdk(CreateBackbonePluginSdk())
+                .AddMsBuildSdk(CreateCentralPackageVersionSdk())
+                .Build();
+
+        private MsBuildSdk CreateBackbonePluginSdk()
+            => new MsBuildSdk("Messerli.Backbone.PluginSdk", "0.1.0");
+
+        private MsBuildSdk CreateCentralPackageVersionSdk()
+            => new MsBuildSdk("Microsoft.Build.CentralPackageVersions", "2.0.52");
 
         private static VariantType ParsePluginVariant(string variantType)
             => (VariantType)int.Parse(variantType);
