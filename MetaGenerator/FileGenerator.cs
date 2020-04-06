@@ -35,9 +35,14 @@ namespace Messerli.MetaGenerator
 
         public async Task FromTemplate(string templateName, string destinationPath, Encoding encoding)
         {
+            await FromTemplate(templateName, _templateLoader.GetTemplate(templateName), destinationPath, encoding);
+        }
+
+        public async Task FromTemplate(string templateName, string templateContent, string destinationPath, Encoding encoding)
+        {
             LogFileCreation(templateName, destinationPath);
 
-            var content = await OutputFromTemplate(templateName);
+            var content = await OutputFromTemplate(templateContent);
             await FromTemplateContent(content, destinationPath, encoding);
         }
 
@@ -80,8 +85,7 @@ namespace Messerli.MetaGenerator
             {
                 var pathWithPlaceholders = ConvertTemplateNameToDestinationPath(template.TemplateName, destinationDirectory);
                 var finalPath = FillInFileNameTemplateValues(pathWithPlaceholders, fileNameTemplateValues);
-                LogFileCreation(template.TemplateName, finalPath);
-                return FromTemplateContent(template.Content, finalPath, encoding);
+                return FromTemplate(template.TemplateName, template.Content, finalPath, encoding);
             };
 
         private static string ConvertTemplateNameToDestinationPath(string templateName, string destinationDirectory)
@@ -107,13 +111,13 @@ namespace Messerli.MetaGenerator
         private static string FillInFileNameTemplateValue(string fileName, KeyValuePair<string, string> fileNameTemplateValue)
             => fileName.Replace($"{{{fileNameTemplateValue.Key}}}", fileNameTemplateValue.Value);
 
-        private async Task<string> OutputFromTemplate(string templateName)
+        private async Task<string> OutputFromTemplate(string content)
         {
             var stubble = _stubbleBuilder
                 .Configure(StubbleBuilderSettings)
                 .Build();
 
-            return await stubble.RenderAsync(_templateLoader.GetTemplate(templateName), _variableProvider.GetVariableValues(), TemplateRenderSettings());
+            return await stubble.RenderAsync(content, _variableProvider.GetVariableValues(), TemplateRenderSettings());
         }
 
         private static void StubbleBuilderSettings(RendererSettingsBuilder settings)
