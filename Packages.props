@@ -20,5 +20,6 @@
 		<PackageReference Update="Messerli.Test.Utility" Version="[0.7.2, 0.8)" />
 		<PackageReference Update="Newtonsoft.Json" Version="[12.0.3, 13)" />
 		<PackageReference Update="DotNet.Glob" Version="[3.0.9, 4)" />
+		<PackageReference Update="NuGet.Commands" Version="[5.5.0, 6)" />
 	</ItemGroup>
 </Project>
