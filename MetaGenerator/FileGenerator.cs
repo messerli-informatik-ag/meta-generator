@@ -33,10 +33,8 @@ namespace Messerli.MetaGenerator
         public Task FromTemplate(string templatename, string destinationPath)
             => FromTemplate(templatename, destinationPath, Encoding.UTF8);
 
-        public async Task FromTemplate(string templateName, string destinationPath, Encoding encoding)
-        {
-            await FromTemplate(templateName, _templateLoader.GetTemplate(templateName), destinationPath, encoding);
-        }
+        public Task FromTemplate(string templateName, string destinationPath, Encoding encoding)
+            => FromTemplate(templateName, _templateLoader.GetTemplate(templateName), destinationPath, encoding);
 
         public async Task FromTemplate(string templateName, string templateContent, string destinationPath, Encoding encoding)
         {
