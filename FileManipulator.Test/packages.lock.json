@@ -14,9 +14,9 @@
       },
       "Messerli.Test.Utility": {
         "type": "Direct",
-        "requested": "[0.7.2, 0.8.0)",
-        "resolved": "0.7.2",
-        "contentHash": "izM+mPh04faOxYb0sgRBAKzWg9KbMaDzGzPlJOVi6wQe/nVYE4FQj0N5vYFsGuv6AAr8BL6u1akdApxfVtXzuw==",
+        "requested": "[0.8.0, 0.9.0)",
+        "resolved": "0.8.0",
+        "contentHash": "HgG7MWcwZNWGjfGWTUj/RCoquWk4Mba0lPqjvReDt53MQ33oFSK89RWZT2fWoBhHzJ7dwJkKghKkhPfCLU8qfA==",
         "dependencies": {
           "Autofac": "[5.1.2, 6.0.0)",
           "Messerli.CompositionRoot": "[0.2.0, 0.3.0)",

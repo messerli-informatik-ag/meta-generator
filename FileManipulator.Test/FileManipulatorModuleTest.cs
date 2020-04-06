@@ -1,6 +1,5 @@
 ﻿using System;
 using Autofac;
-using Autofac.Core;
 using Messerli.CompositionRoot;
 using Messerli.FileManipulatorAbstractions;
 using Messerli.FileManipulatorAbstractions.Project;
@@ -13,23 +12,13 @@ namespace Messerli.FileManipulator.Test
     {
         private readonly IContainer _container = new CompositionRootBuilder()
             .RegisterModule<FileManipulatorModule>()
-            .RegisterModule(new ModuleBuilder()
-                .RegisterMock<DependencyAssets>()
-                .Build())
-            .RegisterModule(NotToBeRegisteredModule)
             .Build();
-
-        private static readonly IModule NotToBeRegisteredModule =
-            new ModuleBuilder()
-                .RegisterMock<NugetPackageSourceManipulationAction>()
-                .Build();
 
         [Theory]
         [TypesThatNeedToBeImplementedInAssemblyData("Messerli.FileManipulatorAbstractions")]
-        public void TypesFromAssemblyCanBeResolved(Type type)
-        {
-            _container.Resolve(type);
-        }
+        [ExcludedTypes(typeof(DependencyAssets))]
+        [ExcludedTypes(typeof(NugetPackageSourceManipulationAction))]
+        public void TypesFromAssemblyCanBeResolved(Type type) => _container.Resolve(type);
 
         [Fact]
         public void RegisteredTypesCanBeResolved()
