@@ -1,0 +1,27 @@
+﻿using System;
+using Messerli.Backbone.PluginAbstractions.Http.Routing;
+using Messerli.Backbone.PluginAbstractions.Navigation;
+
+namespace Messerli.{{RepositoryName}}.Registrar
+{
+    internal sealed class NavigationRegistrar : INavigationRegistrar
+    {
+        private readonly INavigationRegistry _navigationRegistry;
+
+        public NavigationRegistrar(INavigationRegistry navigationRegistry)
+        {
+            _navigationRegistry = navigationRegistry;
+        }
+
+        public void RegisterNavigation()
+            => _navigationRegistry
+                .Register(
+                    NavigationBar.Global,
+                    new Endpoint[0],
+                    new NavigationItemBuilder()
+                        .Text(new Text("Hello World"))
+                        .IconUri(new Uri("/database-access-plugin-template/assets/icons/hello-world.svg#icon", UriKind.Relative))
+                        .Endpoint(EndpointConstant.HelloWorldPage)
+                        .Build());
+    }
+}

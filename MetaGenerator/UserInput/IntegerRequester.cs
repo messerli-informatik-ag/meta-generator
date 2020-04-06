@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Funcky;
 using Funcky.Monads;
 using Messerli.MetaGeneratorAbstractions.UserInput;
 

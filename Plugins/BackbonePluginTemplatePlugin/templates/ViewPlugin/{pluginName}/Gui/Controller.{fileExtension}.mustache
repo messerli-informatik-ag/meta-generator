@@ -1,0 +1,20 @@
+﻿using System.Threading.Tasks;
+using Messerli.Backbone.PluginAbstractions.Http;
+using Messerli.{{RepositoryName}}.Gui.View;
+
+namespace Messerli.{{RepositoryName}}.Gui
+{
+    public sealed class Controller : IController
+    {
+        private readonly IPresenter _presenter;
+
+        public Controller(
+            IPresenter presenter)
+        {
+            _presenter = presenter;
+        }
+
+        public Task<Response> GetPluginTemplateResponse(Request request)
+            => _presenter.PresentPluginTemplate(request);
+    }
+}

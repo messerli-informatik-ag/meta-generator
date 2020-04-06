@@ -1,0 +1,16 @@
+﻿using System;
+using System.Threading.Tasks;
+using Messerli.Backbone.PluginAbstractions;
+
+namespace Messerli.{{RepositoryName}}
+{
+    [PluginIdentifier("MinimalPluginTemplate")]
+    public sealed class Plugin : IBackbonePlugin
+    {
+        public Task StartService()
+            => throw new NotImplementedException();
+
+        public Task ReloadService()
+            => throw new NotImplementedException();
+    }
+}

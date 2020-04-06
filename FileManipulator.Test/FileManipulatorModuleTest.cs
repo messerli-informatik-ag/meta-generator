@@ -1,6 +1,8 @@
 ﻿using System;
 using Autofac;
+using Autofac.Core;
 using Messerli.CompositionRoot;
+using Messerli.FileManipulatorAbstractions;
 using Messerli.FileManipulatorAbstractions.Project;
 using Messerli.Test.Utility;
 using Xunit;
@@ -14,7 +16,13 @@ namespace Messerli.FileManipulator.Test
             .RegisterModule(new ModuleBuilder()
                 .RegisterMock<DependencyAssets>()
                 .Build())
+            .RegisterModule(NotToBeRegisteredModule)
             .Build();
+
+        private static readonly IModule NotToBeRegisteredModule =
+            new ModuleBuilder()
+                .RegisterMock<NugetPackageSourceManipulationAction>()
+                .Build();
 
         [Theory]
         [TypesThatNeedToBeImplementedInAssemblyData("Messerli.FileManipulatorAbstractions")]

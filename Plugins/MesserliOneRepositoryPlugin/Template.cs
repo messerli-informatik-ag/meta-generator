@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Messerli.MesserliOneRepositoryPlugin
+﻿namespace Messerli.MesserliOneRepositoryPlugin
 {
     internal static class Template
     {

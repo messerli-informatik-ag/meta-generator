@@ -1,0 +1,41 @@
+﻿using System.Threading.Tasks;
+using Messerli.Backbone.PluginAbstractions.Http;
+using Messerli.Backbone.PluginAbstractions.Http.ResponseBody;
+using Messerli.Backbone.PluginAbstractions.PageRendering;
+using Messerli.Backbone.PluginAbstractions.PageRendering.Layout;
+
+namespace Messerli.{{RepositoryName}}.Gui.View
+{
+    internal static class ResponseRenderer
+    {
+        internal static async Task<Response> RenderResponse(
+            IPageRenderer renderer,
+            string pageTitle,
+            string templateName,
+            object viewModel)
+        {
+            var templatePath = GetTemplatePath(templateName);
+            var responseBody = await RenderResponseBody(renderer, pageTitle, templatePath, viewModel);
+            return new ResponseBuilder()
+                .Body(responseBody)
+                .Build();
+        }
+
+        private static string GetTemplatePath(string templateName)
+            => $"Templates/{templateName}.mustache";
+
+        private static async Task<IBodyVariant> RenderResponseBody(
+            IPageRenderer renderer,
+            string pageTitle,
+            string templatePath,
+            object viewModel)
+        {
+            var view = await renderer.RenderPage(new PageModelBuilder()
+                .Title(pageTitle)
+                .Layout(new DefaultWithSmallContent())
+                .Content(new PageContent(templatePath, viewModel))
+                .Build());
+            return new Html(view);
+        }
+    }
+}

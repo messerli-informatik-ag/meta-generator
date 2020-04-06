@@ -3,6 +3,7 @@ using Messerli.FileManipulator.Project;
 using Messerli.FileManipulatorAbstractions;
 using Messerli.FileManipulatorAbstractions.Project;
 using Messerli.FileSystem;
+using NuGet.Common;
 
 namespace Messerli.FileManipulator
 {
@@ -12,6 +13,9 @@ namespace Messerli.FileManipulator
         {
             builder.RegisterType<GlobalJsonManipulator>().As<IGlobalJsonManipulator>();
             builder.RegisterType<FileOpeningBuilder>().As<IFileOpeningBuilder>();
+            builder.RegisterType<NugetConfigurationManipulator>().As<INugetConfigurationManipulator>();
+            builder.RegisterType<NugetPackageSourceManipulator>().As<INugetPackageSourceManipulator>();
+            builder.RegisterType<NullLogger>().As<ILogger>();
             builder.RegisterType<MsBuildProjectManipulatorFacade>().As<IProjectManipulator>();
             builder.RegisterType<Project.MsBuild.MicrosoftBuildAssemblyLoader>().As<Project.MsBuild.IMicrosoftBuildAssemblyLoader>();
             builder.RegisterType<Project.MsBuild.ProjectManipulator>().As<Project.MsBuild.IProjectManipulator>();

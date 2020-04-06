@@ -1,0 +1,26 @@
+﻿using System.Collections.Generic;
+
+#pragma warning disable CS0660, CS0661
+
+namespace Messerli.{{RepositoryName}}.Gui.View
+{
+    [Equals]
+    public sealed class ViewModel
+    {
+        public ViewModel(
+            IEnumerable<Person> entries,
+            string pageTitle)
+        {
+            People = entries;
+            PageTitle = pageTitle;
+        }
+
+        public IEnumerable<Person> People { get; }
+
+        public string PageTitle { get; }
+
+        public static bool operator ==(ViewModel left, ViewModel right) => Operator.Weave(left, right);
+
+        public static bool operator !=(ViewModel left, ViewModel right) => Operator.Weave(left, right);
+    }
+}

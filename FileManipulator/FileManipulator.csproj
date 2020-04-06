@@ -18,6 +18,7 @@
         <PackageReference Include="Autofac" />
         <PackageReference Include="Messerli.FileSystem" />
         <PackageReference Include="Newtonsoft.Json" />
+        <PackageReference Include="NuGet.Commands" />
         <!-- Source: https://docs.microsoft.com/en-us/visualstudio/msbuild/updating-an-existing-application?view=vs-2019#use-microsoftbuildlocator -->
         <PackageReference Include="Microsoft.Build" ExcludeAssets="runtime" />
         <PackageReference Include="Microsoft.Build.Locator" />

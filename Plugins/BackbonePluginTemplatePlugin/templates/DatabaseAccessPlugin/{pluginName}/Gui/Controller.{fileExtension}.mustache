@@ -1,0 +1,30 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Messerli.Backbone.PluginAbstractions.Http;
+using Messerli.{{RepositoryName}}.Database;
+using Messerli.{{RepositoryName}}.Gui.View;
+
+namespace Messerli.{{RepositoryName}}.Gui
+{
+    public sealed class Controller : IController
+    {
+        private readonly IPresenter _presenter;
+
+        private readonly IPersonPersistence _templatePersistance;
+
+        public Controller(
+            IPresenter presenter,
+            IPersonPersistence templatePersistence)
+        {
+            _presenter = presenter;
+            _templatePersistance = templatePersistence;
+        }
+
+        public Task<Response> GetPluginTemplateResponse(Request request)
+            => _presenter.PresentPluginTemplate(request, GetPersonEntries());
+
+        private IEnumerable<Database.Person> GetPersonEntries()
+            => _templatePersistance.GetPersonEntries();
+    }
+}

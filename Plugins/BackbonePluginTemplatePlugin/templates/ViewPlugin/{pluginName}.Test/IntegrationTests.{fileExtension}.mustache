@@ -1,0 +1,43 @@
+﻿using System;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Messerli.Backbone.PluginTestServer;
+using Messerli.{{RepositoryName}}.Registrar;
+using Xunit;
+
+namespace Messerli.{{RepositoryName}}.Test
+{
+    public sealed class IntegrationTests : IDisposable
+    {
+        private readonly IBackboneTestServer _server =
+            BackboneTestServer.Create(b => b
+                .PluginDllSelector(selector => selector.AddPlugin<Plugin>()));
+
+        private readonly HttpClient _client;
+
+        public IntegrationTests()
+        {
+            _client = _server.HttpClient;
+        }
+
+        [Fact]
+        public async Task ReturnsNotFoundPageAsync()
+        {
+            using var response = await _client.GetAsync("/foo");
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task RoutesRegisteredPluginRoutes()
+        {
+            using var response = await _client.GetAsync(EndpointConstant.HelloWorldRoute);
+            var result = await response.Content.ReadAsStringAsync();
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(result);
+        }
+
+        public void Dispose()
+            => _server.DisposeAsync().AsTask().Wait();
+    }
+}
