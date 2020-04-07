@@ -134,7 +134,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
         private static VariantType ParsePluginVariant(string variantType)
             => (VariantType)int.Parse(variantType);
 
-        private static bool ParseCentralPackageVersions(string input)
+        private static bool ParseUsesCentralPackageVersions(string input)
             => bool.TryParse(input, out var addCentralPackageVersions)
                 ? addCentralPackageVersions
                 : throw new InvalidOperationException("Unable to convert user input CentralPackageVersions to bool");
