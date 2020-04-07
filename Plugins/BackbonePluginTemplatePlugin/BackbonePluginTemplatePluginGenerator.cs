@@ -105,6 +105,8 @@ namespace Messerli.BackbonePluginTemplatePlugin
             {
                 dotnet.Execute(new[] { "new", "tool-manifest" }, SolutionDirectory);
             }
+
+            dotnet.Execute(new[] { "tool", "install", "backbone" }, SolutionDirectory);
         }
 
         private Task AddProjectsToSolution()
