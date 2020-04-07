@@ -24,6 +24,10 @@ namespace Messerli.BackbonePluginTemplatePlugin
         private readonly IGlobalJsonManipulator _globalJsonManipulator;
         private readonly IUserInputProvider _userInputProvider;
 
+        private static readonly MsBuildSdk BackbonePluginSdk = new MsBuildSdk("Messerli.Backbone.PluginSdk", "0.3.0");
+        private static readonly MsBuildSdk CentralPackageVersionsSdk = new MsBuildSdk("Microsoft.Build.CentralPackageVersions", "2.0.52");
+        private static readonly NugetPackageSource InternalNugetServer = new NugetPackageSource("Internal Nuget Server", "https://nuget.messerli.ch/v3/index.json");
+
         public BackbonePluginTemplatePluginGenerator(
             IConsoleWriter consoleWriter,
             IFileGenerator fileGenerator,
@@ -104,11 +108,8 @@ namespace Messerli.BackbonePluginTemplatePlugin
 
         private NugetConfigurationModification CreateInternalNugetServerModification()
             => new NugetConfigurationModificationBuilder(_nugetPackageSourceManipulator)
-                .AddPackageSource(CreateInternalNugetServer())
+                .AddPackageSource(InternalNugetServer)
                 .Build();
-
-        private NugetPackageSource CreateInternalNugetServer()
-            => new NugetPackageSource("Internal Nuget Server", "https://nuget.messerli.ch/v3/index.json");
 
         private Task AddMsBuildSdkToGlobalJson()
         {
@@ -121,20 +122,14 @@ namespace Messerli.BackbonePluginTemplatePlugin
 
         private GlobalJsonModification CreateMsBuildSdk()
         {
-            var globalJsonModificationBuilder = new GlobalJsonModificationBuilder().AddMsBuildSdk(CreateBackbonePluginSdk());
+            var globalJsonModificationBuilder = new GlobalJsonModificationBuilder().AddMsBuildSdk(BackbonePluginSdk);
             if (UsesCentralPackageVersionsSdk)
             {
-                globalJsonModificationBuilder = globalJsonModificationBuilder.AddMsBuildSdk(CreateCentralPackageVersionsSdk());
+                globalJsonModificationBuilder = globalJsonModificationBuilder.AddMsBuildSdk(CentralPackageVersionsSdk);
             }
 
             return globalJsonModificationBuilder.Build();
         }
-
-        private MsBuildSdk CreateBackbonePluginSdk()
-            => new MsBuildSdk("Messerli.Backbone.PluginSdk", "0.3.0");
-
-        private MsBuildSdk CreateCentralPackageVersionsSdk()
-            => new MsBuildSdk("Microsoft.Build.CentralPackageVersions", "2.0.52");
 
         private static VariantType ParsePluginVariant(string variantType)
             => (VariantType)int.Parse(variantType);
