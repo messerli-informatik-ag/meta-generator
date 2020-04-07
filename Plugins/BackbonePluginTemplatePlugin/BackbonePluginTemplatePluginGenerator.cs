@@ -88,7 +88,6 @@ namespace Messerli.BackbonePluginTemplatePlugin
 
         public void TearDown()
         {
-            _dotnetToolInstaller.InstallTool(SolutionDirectory, "backbone", null);
         }
 
         private Task AddProjectsToSolution()
