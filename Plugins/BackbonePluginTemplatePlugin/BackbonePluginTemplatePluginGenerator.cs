@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -51,6 +52,8 @@ namespace Messerli.BackbonePluginTemplatePlugin
 
         private string SolutionDirectory => _userInputProvider.Value(VariableConstant.SolutionDirectory);
 
+        private bool UsesCentralPackageVersionsSdk => ParseCentralPackageVersions(_userInputProvider.Value(VariableConstant.UsesCentralPackageVersions));
+
         public void Register()
             => _userInputProvider.RegisterVariablesFromTemplate(Template.VariableDeclarations);
 
@@ -70,6 +73,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
                 templateFileCreationTask,
                 solutionModificationTask,
                 nugetConfigTask,
+                msbuildSdkTask,
             };
 
             Task.WaitAll(tasks.ToArray());
@@ -116,19 +120,29 @@ namespace Messerli.BackbonePluginTemplatePlugin
         }
 
         private GlobalJsonModification CreateMsBuildSdk()
-            => new GlobalJsonModificationBuilder()
-                .AddMsBuildSdk(CreateBackbonePluginSdk())
-                .AddMsBuildSdk(CreateCentralPackageVersionSdk())
-                .Build();
+        {
+            var globalJsonModificationBuilder = new GlobalJsonModificationBuilder().AddMsBuildSdk(CreateBackbonePluginSdk());
+            if (UsesCentralPackageVersionsSdk)
+            {
+                globalJsonModificationBuilder = globalJsonModificationBuilder.AddMsBuildSdk(CreateCentralPackageVersionsSdk());
+            }
+
+            return globalJsonModificationBuilder.Build();
+        }
 
         private MsBuildSdk CreateBackbonePluginSdk()
             => new MsBuildSdk("Messerli.Backbone.PluginSdk", "0.3.0");
 
-        private MsBuildSdk CreateCentralPackageVersionSdk()
+        private MsBuildSdk CreateCentralPackageVersionsSdk()
             => new MsBuildSdk("Microsoft.Build.CentralPackageVersions", "2.0.52");
 
         private static VariantType ParsePluginVariant(string variantType)
             => (VariantType)int.Parse(variantType);
+
+        private static bool ParseCentralPackageVersions(string input)
+            => bool.TryParse(input, out var addCentralPackageVersions)
+                ? addCentralPackageVersions
+                : throw new InvalidOperationException("Unable to convert user input CentralPackageVersions to bool");
 
         private string GetProjectPath()
             => Path.Combine(SolutionDirectory, PluginName);
