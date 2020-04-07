@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Messerli.CommandLineAbstractions;
 using Messerli.FileManipulatorAbstractions;
+using Messerli.FileManipulatorAbstractions.Project;
 using Messerli.MetaGeneratorAbstractions;
 using Messerli.MetaGeneratorAbstractions.UserInput;
 
@@ -23,6 +24,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
         private readonly INugetPackageSourceManipulator _nugetPackageSourceManipulator;
         private readonly IGlobalJsonManipulator _globalJsonManipulator;
         private readonly IUserInputProvider _userInputProvider;
+        private readonly IProjectManipulator _projectManipulator;
 
         private static readonly MsBuildSdk BackbonePluginSdk = new MsBuildSdk("Messerli.Backbone.PluginSdk", "0.3.0");
         private static readonly MsBuildSdk CentralPackageVersionsSdk = new MsBuildSdk("Microsoft.Build.CentralPackageVersions", "2.0.52");
@@ -35,7 +37,8 @@ namespace Messerli.BackbonePluginTemplatePlugin
             INugetConfigurationManipulator nugetConfigurationManipulator,
             INugetPackageSourceManipulator nugetPackageSourceManipulator,
             IGlobalJsonManipulator globalJsonManipulator,
-            IUserInputProvider userInputProvider)
+            IUserInputProvider userInputProvider,
+            IProjectManipulator projectManipulator)
         {
             _consoleWriter = consoleWriter;
             _fileGenerator = fileGenerator;
@@ -44,6 +47,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
             _nugetPackageSourceManipulator = nugetPackageSourceManipulator;
             _globalJsonManipulator = globalJsonManipulator;
             _userInputProvider = userInputProvider;
+            _projectManipulator = projectManipulator;
         }
 
         public string Description => "Create a new Backbone Plugin";
@@ -70,14 +74,15 @@ namespace Messerli.BackbonePluginTemplatePlugin
             _consoleWriter.WriteLine($"Creating Plugin: {PluginName}");
             var templateFileCreationTask = CreateTemplateFilesForSelection();
             var solutionModificationTask = AddProjectsToSolution();
-            var nugetConfigTask = AddInternalNugetServerToNugetConfig();
-            var msbuildSdkTask = AddMsBuildSdkToGlobalJson();
+            var nugetConfigModificationTask = AddInternalNugetServerToNugetConfig();
+            var globalJsonModificationTask = AddMsBuildSdkToGlobalJson();
+            var projectModificationtask = AddProjectReferences();
             var tasks = new[]
             {
                 templateFileCreationTask,
                 solutionModificationTask,
-                nugetConfigTask,
-                msbuildSdkTask,
+                nugetConfigModificationTask,
+                globalJsonModificationTask,
             };
 
             Task.WaitAll(tasks.ToArray());
@@ -130,6 +135,70 @@ namespace Messerli.BackbonePluginTemplatePlugin
 
             return globalJsonModificationBuilder.Build();
         }
+
+        private Task AddProjectReferences()
+        {
+            const string packagesPropsFileName = "Packages.props";
+            var packagesPropsFilePath = Path.Combine(SolutionDirectory, packagesPropsFileName);
+            var packagesReferences = CreateProjectPackagesReferences();
+
+            return _projectManipulator.ManipulateProject(packagesPropsFilePath, packagesReferences);
+        }
+
+        private ProjectModification CreateProjectPackagesReferences()
+        {
+            var projectModificationBuilder = new ProjectModificationBuilder();
+            projectModificationBuilder = projectModificationBuilder.AddPackageReferences(CreateMinimalProjectPackageReference());
+
+            if (PluginVariant != VariantType.MinimalPlugin)
+            {
+                projectModificationBuilder = projectModificationBuilder.AddPackageReferences(CreateExtendedProjectPackageReference());
+            }
+
+            return projectModificationBuilder.Build();
+        }
+
+        private IEnumerable<PackageReference> CreateMinimalProjectPackageReference()
+            => new[]
+            {
+                new PackageReferenceBuilder()
+                    .Name("Messerli.Backbone.PluginTestServer")
+                    .Version("[0.3.0, 0.4)")
+                    .Build(),
+                new PackageReferenceBuilder()
+                    .Name("Messerli.Backbone.PluginTestUtility")
+                    .Version("[0.3.0, 0.4)")
+                    .Build(),
+                new PackageReferenceBuilder()
+                    .Name("xunit")
+                    .Version("[2.4.1, 3)")
+                    .Build(),
+                new PackageReferenceBuilder()
+                    .Name("xunit.runner.visualstudio")
+                    .Version("[2.4.1, 3)")
+                    .Build(),
+                new PackageReferenceBuilder()
+                    .Name("Messerli.CodeStyle")
+                    .Version("1.0.1")
+                    .Build(),
+            };
+
+        private IEnumerable<PackageReference> CreateExtendedProjectPackageReference()
+            => new[]
+            {
+                new PackageReferenceBuilder()
+                    .Name("Autofac")
+                    .Version("[5.1.2, 6)")
+                    .Build(),
+                new PackageReferenceBuilder()
+                    .Name("Equals.Fody")
+                    .Version("[4.0.1, 5)")
+                    .Build(),
+                new PackageReferenceBuilder()
+                    .Name("Fody")
+                    .Version("[6.1.1, 7)")
+                    .Build(),
+            };
 
         private static VariantType ParsePluginVariant(string variantType)
             => (VariantType)int.Parse(variantType);
