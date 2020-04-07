@@ -19,6 +19,11 @@ namespace Messerli.MetaGenerator
             _tools.VerifyTools();
         }
 
+        public void InstallTool(string path, string toolName)
+        {
+            InstallTool(path, toolName, null);
+        }
+
         public void InstallTool(string path, string toolName, string? version)
         {
             const string dotnetToolsFileName = "dotnet-tools.json";
