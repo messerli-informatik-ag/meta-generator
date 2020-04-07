@@ -99,7 +99,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
 
         private Task AddInternalNugetServerToNugetConfig()
         {
-            var nugetConfigFileName = "NuGet.config";
+            const string nugetConfigFileName = "NuGet.config";
             var nugetConfigFilePath = Path.Combine(SolutionDirectory, nugetConfigFileName);
 
             var nugetConfigModification = CreateInternalNugetServerModification();
@@ -113,7 +113,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
 
         private Task AddMsBuildSdkToGlobalJson()
         {
-            var globalJsonFileName = "global.json";
+            const string globalJsonFileName = "global.json";
             var globalJsonFilePath = Path.Combine(SolutionDirectory, globalJsonFileName);
 
             var globalJsonModification = CreateMsBuildSdk();
