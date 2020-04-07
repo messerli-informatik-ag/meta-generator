@@ -57,6 +57,8 @@ namespace Messerli.MetaGenerator
 
             _builder.RegisterType<ExecutingPluginAssemblyProvider>().As<IExecutingPluginAssemblyProvider>().InstancePerLifetimeScope();
 
+            _builder.RegisterType<DotnetToolInstaller>().As<IDotnetToolInstaller>();
+
             RegisterVariableRequesters();
 
             return this;
