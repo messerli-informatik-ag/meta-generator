@@ -7,6 +7,7 @@ using Messerli.CommandLineAbstractions;
 using Messerli.FileManipulatorAbstractions;
 using Messerli.MetaGeneratorAbstractions;
 using Messerli.MetaGeneratorAbstractions.UserInput;
+using Messerli.ToolLoaderAbstractions;
 
 namespace Messerli.BackbonePluginTemplatePlugin
 {
@@ -15,6 +16,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
         private const string TestDirectorySuffix = "Test";
         private const string ProjectFileExtension = "csproj";
         private const string SolutionFileExtension = "sln";
+        private const string Dotnet = "dotnet";
 
         private readonly IConsoleWriter _consoleWriter;
         private readonly IFileGenerator _fileGenerator;
@@ -23,6 +25,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
         private readonly INugetPackageSourceManipulator _nugetPackageSourceManipulator;
         private readonly IGlobalJsonManipulator _globalJsonManipulator;
         private readonly IUserInputProvider _userInputProvider;
+        private readonly ITools _tools;
 
         private static readonly MsBuildSdk BackbonePluginSdk = new MsBuildSdk("Messerli.Backbone.PluginSdk", "0.3.0");
         private static readonly MsBuildSdk CentralPackageVersionsSdk = new MsBuildSdk("Microsoft.Build.CentralPackageVersions", "2.0.52");
@@ -35,7 +38,8 @@ namespace Messerli.BackbonePluginTemplatePlugin
             INugetConfigurationManipulator nugetConfigurationManipulator,
             INugetPackageSourceManipulator nugetPackageSourceManipulator,
             IGlobalJsonManipulator globalJsonManipulator,
-            IUserInputProvider userInputProvider)
+            IUserInputProvider userInputProvider,
+            ITools tools)
         {
             _consoleWriter = consoleWriter;
             _fileGenerator = fileGenerator;
@@ -44,6 +48,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
             _nugetPackageSourceManipulator = nugetPackageSourceManipulator;
             _globalJsonManipulator = globalJsonManipulator;
             _userInputProvider = userInputProvider;
+            _tools = tools;
         }
 
         public string Description => "Create a new Backbone Plugin";
@@ -59,7 +64,12 @@ namespace Messerli.BackbonePluginTemplatePlugin
         private bool UsesCentralPackageVersionsSdk => ParseUsesCentralPackageVersions(_userInputProvider.Value(VariableConstant.UsesCentralPackageVersions));
 
         public void Register()
-            => _userInputProvider.RegisterVariablesFromTemplate(Template.VariableDeclarations);
+        {
+            _tools.RegisterTool(Dotnet, "dotnet.exe");
+            _tools.VerifyTools();
+
+            _userInputProvider.RegisterVariablesFromTemplate(Template.VariableDeclarations);
+        }
 
         public void Prepare()
         {
@@ -85,6 +95,16 @@ namespace Messerli.BackbonePluginTemplatePlugin
 
         public void TearDown()
         {
+            var dotnet = _tools.GetTool(Dotnet);
+
+            const string dotnetToolsFileName = "dotnet-tools.json";
+            var hasDotnetToolManifest = Directory.GetFiles(SolutionDirectory, dotnetToolsFileName, SearchOption.AllDirectories)
+                .Any();
+
+            if (!hasDotnetToolManifest)
+            {
+                dotnet.Execute(new[] { "new", "tool-manifest" }, SolutionDirectory);
+            }
         }
 
         private Task AddProjectsToSolution()
