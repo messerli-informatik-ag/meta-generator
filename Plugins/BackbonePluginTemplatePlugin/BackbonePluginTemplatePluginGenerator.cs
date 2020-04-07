@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Messerli.CommandLineAbstractions;
+using Messerli.FileManipulatorAbstractions;
 using Messerli.MetaGeneratorAbstractions;
 using Messerli.MetaGeneratorAbstractions.UserInput;
 
@@ -17,17 +19,30 @@ namespace Messerli.BackbonePluginTemplatePlugin
         private readonly IConsoleWriter _consoleWriter;
         private readonly IFileGenerator _fileGenerator;
         private readonly IFileManipulator _fileManipulator;
+        private readonly INugetConfigurationManipulator _nugetConfigurationManipulator;
+        private readonly INugetPackageSourceManipulator _nugetPackageSourceManipulator;
+        private readonly IGlobalJsonManipulator _globalJsonManipulator;
         private readonly IUserInputProvider _userInputProvider;
+
+        private static readonly MsBuildSdk BackbonePluginSdk = new MsBuildSdk("Messerli.Backbone.PluginSdk", "0.3.0");
+        private static readonly MsBuildSdk CentralPackageVersionsSdk = new MsBuildSdk("Microsoft.Build.CentralPackageVersions", "2.0.52");
+        private static readonly NugetPackageSource InternalNugetServer = new NugetPackageSource("Internal Nuget Server", "https://nuget.messerli.ch/v3/index.json");
 
         public BackbonePluginTemplatePluginGenerator(
             IConsoleWriter consoleWriter,
             IFileGenerator fileGenerator,
             IFileManipulator fileManipulator,
+            INugetConfigurationManipulator nugetConfigurationManipulator,
+            INugetPackageSourceManipulator nugetPackageSourceManipulator,
+            IGlobalJsonManipulator globalJsonManipulator,
             IUserInputProvider userInputProvider)
         {
             _consoleWriter = consoleWriter;
             _fileGenerator = fileGenerator;
             _fileManipulator = fileManipulator;
+            _nugetConfigurationManipulator = nugetConfigurationManipulator;
+            _nugetPackageSourceManipulator = nugetPackageSourceManipulator;
+            _globalJsonManipulator = globalJsonManipulator;
             _userInputProvider = userInputProvider;
         }
 
@@ -41,6 +56,8 @@ namespace Messerli.BackbonePluginTemplatePlugin
 
         private string SolutionDirectory => _userInputProvider.Value(VariableConstant.SolutionDirectory);
 
+        private bool UsesCentralPackageVersionsSdk => ParseUsesCentralPackageVersions(_userInputProvider.Value(VariableConstant.UsesCentralPackageVersions));
+
         public void Register()
             => _userInputProvider.RegisterVariablesFromTemplate(Template.VariableDeclarations);
 
@@ -53,10 +70,14 @@ namespace Messerli.BackbonePluginTemplatePlugin
             _consoleWriter.WriteLine($"Creating Plugin: {PluginName}");
             var templateFileCreationTask = CreateTemplateFilesForSelection();
             var solutionModificationTask = AddProjectsToSolution();
+            var nugetConfigTask = AddInternalNugetServerToNugetConfig();
+            var msbuildSdkTask = AddMsBuildSdkToGlobalJson();
             var tasks = new[]
             {
                 templateFileCreationTask,
                 solutionModificationTask,
+                nugetConfigTask,
+                msbuildSdkTask,
             };
 
             Task.WaitAll(tasks.ToArray());
@@ -76,8 +97,47 @@ namespace Messerli.BackbonePluginTemplatePlugin
                 new[] { projectInfo, projectTestInfo });
         }
 
+        private Task AddInternalNugetServerToNugetConfig()
+        {
+            const string nugetConfigFileName = "NuGet.config";
+            var nugetConfigFilePath = Path.Combine(SolutionDirectory, nugetConfigFileName);
+
+            var nugetConfigModification = CreateInternalNugetServerModification();
+            return _nugetConfigurationManipulator.ModifyNugetConfiguration(nugetConfigFilePath, nugetConfigModification);
+        }
+
+        private NugetConfigurationModification CreateInternalNugetServerModification()
+            => new NugetConfigurationModificationBuilder(_nugetPackageSourceManipulator)
+                .AddPackageSource(InternalNugetServer)
+                .Build();
+
+        private Task AddMsBuildSdkToGlobalJson()
+        {
+            const string globalJsonFileName = "global.json";
+            var globalJsonFilePath = Path.Combine(SolutionDirectory, globalJsonFileName);
+
+            var globalJsonModification = CreateMsBuildSdk();
+            return _globalJsonManipulator.ModifyGlobalJson(globalJsonFilePath, globalJsonModification);
+        }
+
+        private GlobalJsonModification CreateMsBuildSdk()
+        {
+            var globalJsonModificationBuilder = new GlobalJsonModificationBuilder().AddMsBuildSdk(BackbonePluginSdk);
+            if (UsesCentralPackageVersionsSdk)
+            {
+                globalJsonModificationBuilder = globalJsonModificationBuilder.AddMsBuildSdk(CentralPackageVersionsSdk);
+            }
+
+            return globalJsonModificationBuilder.Build();
+        }
+
         private static VariantType ParsePluginVariant(string variantType)
             => (VariantType)int.Parse(variantType);
+
+        private static bool ParseUsesCentralPackageVersions(string input)
+            => bool.TryParse(input, out var addCentralPackageVersions)
+                ? addCentralPackageVersions
+                : throw new InvalidOperationException("Unable to convert user input CentralPackageVersions to bool");
 
         private string GetProjectPath()
             => Path.Combine(SolutionDirectory, PluginName);
