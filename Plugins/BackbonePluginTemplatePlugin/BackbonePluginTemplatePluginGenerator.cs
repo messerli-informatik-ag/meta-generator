@@ -56,7 +56,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
 
         private string SolutionDirectory => _userInputProvider.Value(VariableConstant.SolutionDirectory);
 
-        private bool UsesCentralPackageVersionsSdk => ParseCentralPackageVersions(_userInputProvider.Value(VariableConstant.UsesCentralPackageVersions));
+        private bool UsesCentralPackageVersionsSdk => ParseUsesCentralPackageVersions(_userInputProvider.Value(VariableConstant.UsesCentralPackageVersions));
 
         public void Register()
             => _userInputProvider.RegisterVariablesFromTemplate(Template.VariableDeclarations);
