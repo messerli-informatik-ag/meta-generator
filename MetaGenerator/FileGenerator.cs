@@ -33,13 +33,8 @@ namespace Messerli.MetaGenerator
         public Task FromTemplate(string templatename, string destinationPath)
             => FromTemplate(templatename, destinationPath, Encoding.UTF8);
 
-        public async Task FromTemplate(string templateName, string destinationPath, Encoding encoding)
-        {
-            LogFileCreation(templateName, destinationPath);
-
-            var content = await OutputFromTemplate(templateName);
-            await FromTemplateContent(content, destinationPath, encoding);
-        }
+        public Task FromTemplate(string templateName, string destinationPath, Encoding encoding)
+            => FromTemplate(templateName, _templateLoader.GetTemplate(templateName), destinationPath, encoding);
 
         public Task FromTemplateGlob(string glob, string destinationDirectory)
             => FromTemplateGlob(glob, destinationDirectory, new Dictionary<string, string>());
@@ -66,6 +61,14 @@ namespace Messerli.MetaGenerator
                     new Template(template.TemplateName.Substring(variablePathBegin), template.Content));
         }
 
+        private async Task FromTemplate(string templateName, string templateContent, string destinationPath, Encoding encoding)
+        {
+            LogFileCreation(templateName, destinationPath);
+
+            var content = await OutputFromTemplate(templateContent);
+            await FromTemplateContent(content, destinationPath, encoding);
+        }
+
         private void LogFileCreation(string templateName, string destinationPath)
             => _consoleWriter.WriteLine($"Generate file from template '{templateName}' in '{destinationPath}'");
 
@@ -80,8 +83,7 @@ namespace Messerli.MetaGenerator
             {
                 var pathWithPlaceholders = ConvertTemplateNameToDestinationPath(template.TemplateName, destinationDirectory);
                 var finalPath = FillInFileNameTemplateValues(pathWithPlaceholders, fileNameTemplateValues);
-                LogFileCreation(template.TemplateName, finalPath);
-                return FromTemplateContent(template.Content, finalPath, encoding);
+                return FromTemplate(template.TemplateName, template.Content, finalPath, encoding);
             };
 
         private static string ConvertTemplateNameToDestinationPath(string templateName, string destinationDirectory)
@@ -107,13 +109,13 @@ namespace Messerli.MetaGenerator
         private static string FillInFileNameTemplateValue(string fileName, KeyValuePair<string, string> fileNameTemplateValue)
             => fileName.Replace($"{{{fileNameTemplateValue.Key}}}", fileNameTemplateValue.Value);
 
-        private async Task<string> OutputFromTemplate(string templateName)
+        private async Task<string> OutputFromTemplate(string content)
         {
             var stubble = _stubbleBuilder
                 .Configure(StubbleBuilderSettings)
                 .Build();
 
-            return await stubble.RenderAsync(_templateLoader.GetTemplate(templateName), _variableProvider.GetVariableValues(), TemplateRenderSettings());
+            return await stubble.RenderAsync(content, _variableProvider.GetVariableValues(), TemplateRenderSettings());
         }
 
         private static void StubbleBuilderSettings(RendererSettingsBuilder settings)
