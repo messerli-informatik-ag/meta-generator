@@ -122,7 +122,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
                 .Build();
 
         private MsBuildSdk CreateBackbonePluginSdk()
-            => new MsBuildSdk("Messerli.Backbone.PluginSdk", "0.1.0");
+            => new MsBuildSdk("Messerli.Backbone.PluginSdk", "0.3.0");
 
         private MsBuildSdk CreateCentralPackageVersionSdk()
             => new MsBuildSdk("Microsoft.Build.CentralPackageVersions", "2.0.52");
