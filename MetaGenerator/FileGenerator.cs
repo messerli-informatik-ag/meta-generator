@@ -36,14 +36,6 @@ namespace Messerli.MetaGenerator
         public Task FromTemplate(string templateName, string destinationPath, Encoding encoding)
             => FromTemplate(templateName, _templateLoader.GetTemplate(templateName), destinationPath, encoding);
 
-        public async Task FromTemplate(string templateName, string templateContent, string destinationPath, Encoding encoding)
-        {
-            LogFileCreation(templateName, destinationPath);
-
-            var content = await OutputFromTemplate(templateContent);
-            await FromTemplateContent(content, destinationPath, encoding);
-        }
-
         public Task FromTemplateGlob(string glob, string destinationDirectory)
             => FromTemplateGlob(glob, destinationDirectory, new Dictionary<string, string>());
 
@@ -67,6 +59,14 @@ namespace Messerli.MetaGenerator
                 ? templates
                 : templates.Select(template =>
                     new Template(template.TemplateName.Substring(variablePathBegin), template.Content));
+        }
+
+        private async Task FromTemplate(string templateName, string templateContent, string destinationPath, Encoding encoding)
+        {
+            LogFileCreation(templateName, destinationPath);
+
+            var content = await OutputFromTemplate(templateContent);
+            await FromTemplateContent(content, destinationPath, encoding);
         }
 
         private void LogFileCreation(string templateName, string destinationPath)
