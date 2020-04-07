@@ -17,7 +17,7 @@
         ]
     },
     {
-        "Question": "Will you use Microsoft.Build.CentralPackageVersions? (y/n) The Microsoft.Build.CentralPackageVersions MSBuild project SDK allows project tree owners to manage their NuGet package versions in one place. Stock NuGet requires that each project contain a version. You can also use MSBuild properties to manage versions.",
+        "Question": "Should the new project use Microsoft.Build.CentralPackageVersions? (y/n) The Microsoft.Build.CentralPackageVersions MSBuild project SDK allows project tree owners to manage their NuGet package versions in one place. Stock NuGet requires that each project contain a version.",
         "Name": "UsesCentralPackageVersions",
         "Type": "Bool"
     },
