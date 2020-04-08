@@ -26,11 +26,8 @@ namespace Messerli.MetaGenerator
 
         public void InstallTool(string path, string toolName, string? version)
         {
-            const string dotnetToolsFileName = "dotnet-tools.json";
             var dotnet = _tools.GetTool("dotnet.exe");
-
-            var hasDotnetToolManifest = Directory.GetFiles(path, dotnetToolsFileName, SearchOption.AllDirectories)
-                .Any();
+            var hasDotnetToolManifest = HasDotNetToolManifest(path);
 
             if (!hasDotnetToolManifest)
             {
@@ -38,6 +35,14 @@ namespace Messerli.MetaGenerator
             }
 
             dotnet.Execute(GetToolInstallArguments(toolName, version), path);
+        }
+
+        private static bool HasDotNetToolManifest(string path)
+        {
+            const string dotnetToolsFileName = "dotnet-tools.json";
+            var hasDotnetToolManifest = Directory.GetFiles(path, dotnetToolsFileName, SearchOption.AllDirectories)
+                .Any();
+            return hasDotnetToolManifest;
         }
 
         private IEnumerable<string> GetToolInstallArguments(string toolName, string? version)
