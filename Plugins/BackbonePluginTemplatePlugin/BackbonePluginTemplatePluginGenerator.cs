@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Messerli.CommandLineAbstractions;
 using Messerli.FileManipulatorAbstractions;
+using Messerli.FileManipulatorAbstractions.Project;
 using Messerli.MetaGeneratorAbstractions;
 using Messerli.MetaGeneratorAbstractions.UserInput;
 
@@ -15,6 +16,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
         private const string TestDirectorySuffix = "Test";
         private const string ProjectFileExtension = "csproj";
         private const string SolutionFileExtension = "sln";
+        private const string CentralPackageVersionsSdkName = "Microsoft.Build.CentralPackageVersions";
 
         private readonly IConsoleWriter _consoleWriter;
         private readonly IFileGenerator _fileGenerator;
@@ -23,11 +25,55 @@ namespace Messerli.BackbonePluginTemplatePlugin
         private readonly INugetPackageSourceManipulator _nugetPackageSourceManipulator;
         private readonly IGlobalJsonManipulator _globalJsonManipulator;
         private readonly IUserInputProvider _userInputProvider;
-        private readonly IDotnetToolInstaller _dotnetToolInstaller;
+        private readonly IProjectManipulator _projectManipulator;
 
         private static readonly MsBuildSdk BackbonePluginSdk = new MsBuildSdk("Messerli.Backbone.PluginSdk", "0.3.0");
-        private static readonly MsBuildSdk CentralPackageVersionsSdk = new MsBuildSdk("Microsoft.Build.CentralPackageVersions", "2.0.52");
+        private static readonly MsBuildSdk CentralPackageVersionsSdk = new MsBuildSdk(CentralPackageVersionsSdkName, "2.0.52");
         private static readonly NugetPackageSource InternalNugetServer = new NugetPackageSource("Internal Nuget Server", "https://nuget.messerli.ch/v3/index.json");
+
+        private static readonly PackageReference AutofacPackageReference =
+            new PackageReferenceBuilder()
+                .Name("Autofac")
+                .Version("[5.1.2, 6)")
+                .Build();
+
+        private static readonly PackageReference FodyPackageReference =
+            new PackageReferenceBuilder()
+                .Name("Fody")
+                .Version("[6.1.1, 7)")
+                .PrivateAssets(new DependencyAssets.All())
+                .Build();
+
+        private static readonly PackageReference EqualsFobyPackageReference =
+            new PackageReferenceBuilder()
+                .Name("Equals.Fody")
+                .Version("[4.0.1, 5)")
+                .PrivateAssets(new DependencyAssets.All())
+                .Build();
+
+        private static readonly PackageReference MesserliBackbonePluginTestServerPackageReference =
+            new PackageReferenceBuilder()
+                .Name("Messerli.Backbone.PluginTestServer")
+                .Version("[0.3.0, 0.4)")
+                .Build();
+
+        private static readonly PackageReference MesserliBackbonePluginTestUtilityPackageReference =
+            new PackageReferenceBuilder()
+                .Name("Messerli.Backbone.PluginTestUtility")
+                .Version("[0.3.0, 0.4)")
+                .Build();
+
+        private static readonly PackageReference XunitPackageReference =
+            new PackageReferenceBuilder()
+                .Name("xunit")
+                .Version("[2.4.1, 3)")
+                .Build();
+
+        private static readonly PackageReference XunitrunnervisualstudioPackageReference =
+            new PackageReferenceBuilder()
+                .Name("xunit.runner.visualstudio")
+                .Version("[2.4.1, 3)")
+                .Build();
 
         public BackbonePluginTemplatePluginGenerator(
             IConsoleWriter consoleWriter,
@@ -37,7 +83,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
             INugetPackageSourceManipulator nugetPackageSourceManipulator,
             IGlobalJsonManipulator globalJsonManipulator,
             IUserInputProvider userInputProvider,
-            IDotnetToolInstaller dotnetToolInstaller)
+            IProjectManipulator projectManipulator)
         {
             _consoleWriter = consoleWriter;
             _fileGenerator = fileGenerator;
@@ -46,7 +92,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
             _nugetPackageSourceManipulator = nugetPackageSourceManipulator;
             _globalJsonManipulator = globalJsonManipulator;
             _userInputProvider = userInputProvider;
-            _dotnetToolInstaller = dotnetToolInstaller;
+            _projectManipulator = projectManipulator;
         }
 
         public string Description => "Create a new Backbone Plugin";
@@ -71,19 +117,18 @@ namespace Messerli.BackbonePluginTemplatePlugin
         public void Generate()
         {
             _consoleWriter.WriteLine($"Creating Plugin: {PluginName}");
-            var templateFileCreationTask = CreateTemplateFilesForSelection();
-            var solutionModificationTask = AddProjectsToSolution();
-            var nugetConfigTask = AddInternalNugetServerToNugetConfig();
-            var msbuildSdkTask = AddMsBuildSdkToGlobalJson();
-            var tasks = new[]
-            {
-                templateFileCreationTask,
-                solutionModificationTask,
-                nugetConfigTask,
-                msbuildSdkTask,
-            };
 
-            Task.WaitAll(tasks.ToArray());
+            GenerateAsync().Wait();
+        }
+
+        public async Task GenerateAsync()
+        {
+            await CreateTemplateFilesForSelection();
+            await AddProjectsToSolution();
+            await AddInternalNugetServerToNugetConfig();
+            await AddMsBuildSdkToGlobalJson();
+            await AddProjectReferences();
+            await AddTestProjectReferences();
         }
 
         public void TearDown()
@@ -126,6 +171,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
         private GlobalJsonModification CreateMsBuildSdk()
         {
             var globalJsonModificationBuilder = new GlobalJsonModificationBuilder().AddMsBuildSdk(BackbonePluginSdk);
+
             if (UsesCentralPackageVersionsSdk)
             {
                 globalJsonModificationBuilder = globalJsonModificationBuilder.AddMsBuildSdk(CentralPackageVersionsSdk);
@@ -133,6 +179,65 @@ namespace Messerli.BackbonePluginTemplatePlugin
 
             return globalJsonModificationBuilder.Build();
         }
+
+        private Task AddProjectReferences()
+        {
+            var modification = CreateProjectModification();
+            return _projectManipulator.ManipulateProject(GetProjectFilePath(), modification);
+        }
+
+        private Task AddTestProjectReferences()
+        {
+            var modification = CreateTestProjectModification();
+            return _projectManipulator.ManipulateProject(GetTestProjectFilePath(), modification);
+        }
+
+        private ProjectModification CreateProjectModification()
+        {
+            var projectModificationBuilder = new ProjectModificationBuilder();
+
+            if (PluginVariant != VariantType.MinimalPlugin)
+            {
+                projectModificationBuilder = projectModificationBuilder.AddPackageReferences(CreateExtendedProjectPackageReferences());
+            }
+
+            if (UsesCentralPackageVersionsSdk)
+            {
+                projectModificationBuilder = projectModificationBuilder.AddSdk(CentralPackageVersionsSdkName);
+            }
+
+            return projectModificationBuilder.Build();
+        }
+
+        private ProjectModification CreateTestProjectModification()
+        {
+            var projectModificationBuilder = new ProjectModificationBuilder()
+                .AddPackageReferences(CreateTestProjectPackageReferences());
+
+            if (UsesCentralPackageVersionsSdk)
+            {
+                projectModificationBuilder = projectModificationBuilder.AddSdk(CentralPackageVersionsSdkName);
+            }
+
+            return projectModificationBuilder.Build();
+        }
+
+        private static IEnumerable<PackageReference> CreateExtendedProjectPackageReferences()
+            => new[]
+            {
+                AutofacPackageReference,
+                FodyPackageReference,
+                EqualsFobyPackageReference,
+            };
+
+        private static IEnumerable<PackageReference> CreateTestProjectPackageReferences()
+            => new[]
+            {
+                MesserliBackbonePluginTestServerPackageReference,
+                MesserliBackbonePluginTestUtilityPackageReference,
+                XunitPackageReference,
+                XunitrunnervisualstudioPackageReference,
+            };
 
         private static VariantType ParsePluginVariant(string variantType)
             => (VariantType)int.Parse(variantType);
@@ -145,11 +250,26 @@ namespace Messerli.BackbonePluginTemplatePlugin
         private string GetProjectPath()
             => Path.Combine(SolutionDirectory, PluginName);
 
+        private string GetProjectFilePath()
+        {
+            var projectPath = GetProjectPath();
+            var projectFileName = $"{PluginName}.{ProjectFileExtension}";
+            return Path.Combine(projectPath, projectFileName);
+        }
+
         private string GetTestProjectPath()
             => Path.Combine(SolutionDirectory, GetTestProjectName());
 
         private string GetTestProjectName()
             => $"{PluginName}.{TestDirectorySuffix}";
+
+        private string GetTestProjectFilePath()
+        {
+            var testProjectName = GetTestProjectName();
+            var testProjectPath = GetTestProjectPath();
+            var testProjectFileName = $"{testProjectName}.{ProjectFileExtension}";
+            return Path.Combine(testProjectPath, testProjectFileName);
+        }
 
         private Task CreateTemplateFilesForSelection()
         {
@@ -176,9 +296,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
 
         private ProjectInfo GetProjectInfo()
         {
-            var projectPath = GetProjectPath();
-            var projectFileName = $"{PluginName}.{ProjectFileExtension}";
-            var projectFilePath = Path.Combine(projectPath, projectFileName);
+            var projectFilePath = GetProjectFilePath();
             return new ProjectInfo.Builder()
                 .WithName(PluginName)
                 .WithPath(projectFilePath)
@@ -187,10 +305,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
 
         private ProjectInfo GetProjectTestInfo()
         {
-            var testProjectName = GetTestProjectName();
-            var testProjectPath = GetTestProjectPath();
-            var projectFileName = $"{testProjectName}.{ProjectFileExtension}";
-            var testProjectFilePath = Path.Combine(testProjectPath, projectFileName);
+            var testProjectFilePath = GetTestProjectFilePath();
             return new ProjectInfo.Builder()
                 .WithName(GetTestProjectName())
                 .WithPath(testProjectFilePath)
