@@ -117,23 +117,18 @@ namespace Messerli.BackbonePluginTemplatePlugin
         public void Generate()
         {
             _consoleWriter.WriteLine($"Creating Plugin: {PluginName}");
-            var templateFileCreationTask = CreateTemplateFilesForSelection();
-            var solutionModificationTask = AddProjectsToSolution();
-            var nugetConfigModificationTask = AddInternalNugetServerToNugetConfig();
-            var globalJsonModificationTask = AddMsBuildSdkToGlobalJson();
-            var projectModificationTask = AddProjectReferences();
-            var testProjectModificationTask = AddTestProjectReferences();
-            var tasks = new[]
-            {
-                templateFileCreationTask,
-                solutionModificationTask,
-                nugetConfigModificationTask,
-                globalJsonModificationTask,
-                projectModificationTask,
-                testProjectModificationTask,
-            };
 
-            Task.WaitAll(tasks.ToArray());
+            GenerateAsync().Wait();
+        }
+
+        public async Task GenerateAsync()
+        {
+            await CreateTemplateFilesForSelection();
+            await AddProjectsToSolution();
+            await AddInternalNugetServerToNugetConfig();
+            await AddMsBuildSdkToGlobalJson();
+            await AddProjectReferences();
+            await AddTestProjectReferences();
         }
 
         public void TearDown()
