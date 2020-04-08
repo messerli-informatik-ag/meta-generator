@@ -22,20 +22,14 @@ namespace Messerli.MetaGenerator
 
         public void InstallTool(string path, string toolName)
         {
-            InstallTool(path, toolName, null);
+            AddToolManifestIfNotExists(path);
+            Execute(GetToolInstallArguments(toolName), path);
         }
 
-        public void InstallTool(string path, string toolName, string? version)
+        public void InstallTool(string path, string toolName, string version)
         {
-            var dotnet = _tools.GetTool(Dotnet);
-            var hasDotnetToolManifest = HasDotNetToolManifest(path);
-
-            if (!hasDotnetToolManifest)
-            {
-                dotnet.Execute(new[] { "new", "tool-manifest" }, path);
-            }
-
-            dotnet.Execute(GetToolInstallArguments(toolName, version), path);
+            AddToolManifestIfNotExists(path);
+            Execute(GetToolInstallArguments(toolName, version), path);
         }
 
         private static bool HasDotNetToolManifest(string path)
@@ -46,25 +40,48 @@ namespace Messerli.MetaGenerator
             return hasDotnetToolManifest;
         }
 
-        private IEnumerable<string> GetToolInstallArguments(string toolName, string? version)
+        private void AddToolManifestIfNotExists(string path)
         {
-            var toolArguments = new List<string>
+            var hasDotnetToolManifest = HasDotNetToolManifest(path);
+            if (!hasDotnetToolManifest)
+            {
+                Execute(GetNewToolManifestArguments(), path);
+            }
+        }
+
+        private void Execute(IEnumerable<string> arguments, string path)
+        {
+            var dotnet = _tools.GetTool(Dotnet);
+            dotnet.Execute(arguments, path);
+        }
+
+        private static IEnumerable<string> GetToolInstallArguments(string toolName, string version)
+        {
+            var arguments = GetToolInstallArguments(toolName);
+            arguments = arguments.Concat(GetVersionArguments(version));
+            return arguments;
+        }
+
+        private static IEnumerable<string> GetNewToolManifestArguments()
+            => new[]
+            {
+                "new",
+                "tool-manifest",
+            };
+
+        private static IEnumerable<string> GetToolInstallArguments(string toolName)
+            => new[]
             {
                 "tool",
                 "install",
                 toolName,
             };
-            toolArguments.AddRange(GetVersionArguments(version));
-            return toolArguments;
-        }
 
-        private IEnumerable<string> GetVersionArguments(string? version)
-            => version is { }
-                ? new List<string>()
-                : new List<string>
-                {
-                    "--version",
-                    version!,
-                };
+        private static IEnumerable<string> GetVersionArguments(string version)
+            => new[]
+            {
+                "--version",
+                version,
+            };
     }
 }
