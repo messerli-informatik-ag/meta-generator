@@ -132,6 +132,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
         private GlobalJsonModification CreateMsBuildSdk()
         {
             var globalJsonModificationBuilder = new GlobalJsonModificationBuilder().AddMsBuildSdk(BackbonePluginSdk);
+
             if (UsesCentralPackageVersionsSdk)
             {
                 globalJsonModificationBuilder = globalJsonModificationBuilder.AddMsBuildSdk(CentralPackageVersionsSdk);
