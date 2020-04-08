@@ -63,13 +63,13 @@ namespace Messerli.BackbonePluginTemplatePlugin
                 .Version("[0.3.0, 0.4)")
                 .Build();
 
-        private static readonly PackageReference xunitPackageReference =
+        private static readonly PackageReference XunitPackageReference =
             new PackageReferenceBuilder()
                 .Name("xunit")
                 .Version("[2.4.1, 3)")
                 .Build();
 
-        private static readonly PackageReference xunitrunnervisualstudioPackageReference =
+        private static readonly PackageReference XunitrunnervisualstudioPackageReference =
             new PackageReferenceBuilder()
                 .Name("xunit.runner.visualstudio")
                 .Version("[2.4.1, 3)")
@@ -235,8 +235,8 @@ namespace Messerli.BackbonePluginTemplatePlugin
             {
                 MesserliBackbonePluginTestServerPackageReference,
                 MesserliBackbonePluginTestUtilityPackageReference,
-                xunitPackageReference,
-                xunitrunnervisualstudioPackageReference,
+                XunitPackageReference,
+                XunitrunnervisualstudioPackageReference,
             };
 
         private static VariantType ParsePluginVariant(string variantType)
