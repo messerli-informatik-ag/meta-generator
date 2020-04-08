@@ -156,6 +156,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
         private ProjectModification CreateProjectModification()
         {
             var projectModificationBuilder = new ProjectModificationBuilder();
+
             if (PluginVariant != VariantType.MinimalPlugin)
             {
                 projectModificationBuilder = projectModificationBuilder.AddPackageReferences(CreateExtendedProjectPackageReferences());
@@ -171,8 +172,8 @@ namespace Messerli.BackbonePluginTemplatePlugin
 
         private ProjectModification CreateTestProjectModification()
         {
-            var projectModificationBuilder = new ProjectModificationBuilder();
-            projectModificationBuilder = projectModificationBuilder.AddPackageReferences(CreateTestProjectPackageReferences());
+            var projectModificationBuilder = new ProjectModificationBuilder()
+                .AddPackageReferences(CreateTestProjectPackageReferences());
 
             if (UsesCentralPackageVersionsSdk)
             {
