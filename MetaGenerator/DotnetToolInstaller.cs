@@ -57,8 +57,7 @@ namespace Messerli.MetaGenerator
         private static IEnumerable<string> GetToolInstallArguments(string toolName, string version)
         {
             var arguments = GetToolInstallArguments(toolName);
-            arguments = arguments.Concat(GetVersionArguments(version));
-            return arguments;
+            return arguments.Concat(GetVersionArguments(version));
         }
 
         private static IEnumerable<string> GetNewToolManifestArguments()
