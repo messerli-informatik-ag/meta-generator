@@ -16,6 +16,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
         private const string TestDirectorySuffix = "Test";
         private const string ProjectFileExtension = "csproj";
         private const string SolutionFileExtension = "sln";
+        private const string CentralPackageVersions = "Microsoft.Build.CentralPackageVersions";
 
         private readonly IConsoleWriter _consoleWriter;
         private readonly IFileGenerator _fileGenerator;
@@ -159,13 +160,26 @@ namespace Messerli.BackbonePluginTemplatePlugin
                 projectModificationBuilder = projectModificationBuilder.AddPackageReferences(CreateExtendedProjectPackageReferences());
             }
 
+            if (UsesCentralPackageVersionsSdk)
+            {
+                projectModificationBuilder = projectModificationBuilder.AddSdk(CentralPackageVersions);
+            }
+
             return projectModificationBuilder.Build();
         }
 
-        private static ProjectModification CreateTestProjectModification()
-            => new ProjectModificationBuilder()
-                .AddPackageReferences(CreateTestProjectPackageReferences())
-                .Build();
+        private ProjectModification CreateTestProjectModification()
+        {
+            var projectModificationBuilder = new ProjectModificationBuilder();
+            projectModificationBuilder = projectModificationBuilder.AddPackageReferences(CreateTestProjectPackageReferences());
+
+            if (UsesCentralPackageVersionsSdk)
+            {
+                projectModificationBuilder = projectModificationBuilder.AddSdk(CentralPackageVersions);
+            }
+
+            return projectModificationBuilder.Build();
+        }
 
         private static IEnumerable<PackageReference> CreateExtendedProjectPackageReferences()
             => new[]
