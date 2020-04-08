@@ -31,6 +31,50 @@ namespace Messerli.BackbonePluginTemplatePlugin
         private static readonly MsBuildSdk CentralPackageVersionsSdk = new MsBuildSdk(CentralPackageVersionsSdkName, "2.0.52");
         private static readonly NugetPackageSource InternalNugetServer = new NugetPackageSource("Internal Nuget Server", "https://nuget.messerli.ch/v3/index.json");
 
+        private static readonly PackageReference AutofacPackageReference =
+            new PackageReferenceBuilder()
+                .Name("Autofac")
+                .Version("[5.1.2, 6)")
+                .Build();
+
+        private static readonly PackageReference FodyPackageReference =
+            new PackageReferenceBuilder()
+                .Name("Fody")
+                .Version("[6.1.1, 7)")
+                .PrivateAssets(new DependencyAssets.All())
+                .Build();
+
+        private static readonly PackageReference EqualsFobyPackageReference =
+            new PackageReferenceBuilder()
+                .Name("Equals.Fody")
+                .Version("[4.0.1, 5)")
+                .PrivateAssets(new DependencyAssets.All())
+                .Build();
+
+        private static readonly PackageReference MesserliBackbonePluginTestServerPackageReference =
+            new PackageReferenceBuilder()
+                .Name("Messerli.Backbone.PluginTestServer")
+                .Version("[0.3.0, 0.4)")
+                .Build();
+
+        private static readonly PackageReference MesserliBackbonePluginTestUtilityPackageReference =
+            new PackageReferenceBuilder()
+                .Name("Messerli.Backbone.PluginTestUtility")
+                .Version("[0.3.0, 0.4)")
+                .Build();
+
+        private static readonly PackageReference xunitPackageReference =
+            new PackageReferenceBuilder()
+                .Name("xunit")
+                .Version("[2.4.1, 3)")
+                .Build();
+
+        private static readonly PackageReference xunitrunnervisualstudioPackageReference =
+            new PackageReferenceBuilder()
+                .Name("xunit.runner.visualstudio")
+                .Version("[2.4.1, 3)")
+                .Build();
+
         public BackbonePluginTemplatePluginGenerator(
             IConsoleWriter consoleWriter,
             IFileGenerator fileGenerator,
@@ -186,41 +230,18 @@ namespace Messerli.BackbonePluginTemplatePlugin
         private static IEnumerable<PackageReference> CreateExtendedProjectPackageReferences()
             => new[]
             {
-                new PackageReferenceBuilder()
-                    .Name("Autofac")
-                    .Version("[5.1.2, 6)")
-                    .Build(),
-                new PackageReferenceBuilder()
-                    .Name("Fody")
-                    .Version("[6.1.1, 7)")
-                    .PrivateAssets(new DependencyAssets.All())
-                    .Build(),
-                new PackageReferenceBuilder()
-                    .Name("Equals.Fody")
-                    .Version("[4.0.1, 5)")
-                    .PrivateAssets(new DependencyAssets.All())
-                    .Build(),
+                AutofacPackageReference,
+                FodyPackageReference,
+                EqualsFobyPackageReference,
             };
 
         private static IEnumerable<PackageReference> CreateTestProjectPackageReferences()
             => new[]
             {
-                new PackageReferenceBuilder()
-                    .Name("Messerli.Backbone.PluginTestServer")
-                    .Version("[0.3.0, 0.4)")
-                    .Build(),
-                new PackageReferenceBuilder()
-                    .Name("Messerli.Backbone.PluginTestUtility")
-                    .Version("[0.3.0, 0.4)")
-                    .Build(),
-                new PackageReferenceBuilder()
-                    .Name("xunit")
-                    .Version("[2.4.1, 3)")
-                    .Build(),
-                new PackageReferenceBuilder()
-                    .Name("xunit.runner.visualstudio")
-                    .Version("[2.4.1, 3)")
-                    .Build(),
+                MesserliBackbonePluginTestServerPackageReference,
+                MesserliBackbonePluginTestUtilityPackageReference,
+                xunitPackageReference,
+                xunitrunnervisualstudioPackageReference,
             };
 
         private static VariantType ParsePluginVariant(string variantType)
