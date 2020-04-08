@@ -23,6 +23,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
         private readonly INugetPackageSourceManipulator _nugetPackageSourceManipulator;
         private readonly IGlobalJsonManipulator _globalJsonManipulator;
         private readonly IUserInputProvider _userInputProvider;
+        private readonly IDotnetToolInstaller _dotnetToolInstaller;
 
         private static readonly MsBuildSdk BackbonePluginSdk = new MsBuildSdk("Messerli.Backbone.PluginSdk", "0.3.0");
         private static readonly MsBuildSdk CentralPackageVersionsSdk = new MsBuildSdk("Microsoft.Build.CentralPackageVersions", "2.0.52");
@@ -35,7 +36,8 @@ namespace Messerli.BackbonePluginTemplatePlugin
             INugetConfigurationManipulator nugetConfigurationManipulator,
             INugetPackageSourceManipulator nugetPackageSourceManipulator,
             IGlobalJsonManipulator globalJsonManipulator,
-            IUserInputProvider userInputProvider)
+            IUserInputProvider userInputProvider,
+            IDotnetToolInstaller dotnetToolInstaller)
         {
             _consoleWriter = consoleWriter;
             _fileGenerator = fileGenerator;
@@ -44,6 +46,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
             _nugetPackageSourceManipulator = nugetPackageSourceManipulator;
             _globalJsonManipulator = globalJsonManipulator;
             _userInputProvider = userInputProvider;
+            _dotnetToolInstaller = dotnetToolInstaller;
         }
 
         public string Description => "Create a new Backbone Plugin";
