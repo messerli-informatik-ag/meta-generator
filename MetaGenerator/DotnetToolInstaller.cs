@@ -35,9 +35,8 @@ namespace Messerli.MetaGenerator
         private static bool HasDotNetToolManifest(string path)
         {
             const string dotnetToolsFileName = "dotnet-tools.json";
-            var hasDotnetToolManifest = Directory.GetFiles(path, dotnetToolsFileName, SearchOption.AllDirectories)
+            return Directory.GetFiles(path, dotnetToolsFileName, SearchOption.AllDirectories)
                 .Any();
-            return hasDotnetToolManifest;
         }
 
         private void AddToolManifestIfNotExists(string path)
