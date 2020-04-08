@@ -142,7 +142,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
 
         private Task AddProjectReferences()
         {
-            var packagesReferences = CreateProjectPackagesReferences();
+            var packagesReferences = CreateProjectModification();
             return _projectManipulator.ManipulateProject(GetProjectFilePath(), packagesReferences);
         }
 
@@ -152,7 +152,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
             return _projectManipulator.ManipulateProject(GetTestProjectFilePath(), testProjectModification);
         }
 
-        private ProjectModification CreateProjectPackagesReferences()
+        private ProjectModification CreateProjectModification()
         {
             var projectModificationBuilder = new ProjectModificationBuilder();
             if (PluginVariant != VariantType.MinimalPlugin)
