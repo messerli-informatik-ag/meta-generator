@@ -40,6 +40,7 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ManagedWrapperProjectsPlugin", "Plugins\ManagedWrapperProjectsPlugin\ManagedWrapperProjectsPlugin.csproj", "{DB3EF7E4-220A-405F-82CC-9F1E9B7B71A9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackbonePluginTemplatePlugin", "Plugins\BackbonePluginTemplatePlugin\BackbonePluginTemplatePlugin.csproj", "{C9B0494F-5F2F-4C22-B4DE-4EBDF46D8B9C}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileManipulator", "FileManipulator\FileManipulator.csproj", "{1E03BF1E-C0B4-4317-A5F6-C88F9C24EA93}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileManipulatorAbstractions", "FileManipulatorAbstractions\FileManipulatorAbstractions.csproj", "{2CE393CD-227E-4C53-9216-FAFED37FED45}"
