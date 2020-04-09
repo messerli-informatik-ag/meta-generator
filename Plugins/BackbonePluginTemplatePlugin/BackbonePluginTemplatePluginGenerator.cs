@@ -28,7 +28,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
         private readonly IProjectManipulator _projectManipulator;
         private readonly IDotnetToolInstaller _dotnetToolInstaller;
 
-        private static readonly MsBuildSdk BackbonePluginSdk = new MsBuildSdk("Messerli.Backbone.PluginSdk", "0.3.0");
+        private static readonly MsBuildSdk BackbonePluginSdk = new MsBuildSdk("Messerli.Backbone.PluginSdk", "0.4.0");
         private static readonly MsBuildSdk CentralPackageVersionsSdk = new MsBuildSdk(CentralPackageVersionsSdkName, "2.0.52");
         private static readonly NugetPackageSource InternalNugetServer = new NugetPackageSource("Internal Nuget Server", "https://nuget.messerli.ch/v3/index.json");
 

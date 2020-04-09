@@ -20,7 +20,7 @@
 	<Target Name="CopyPlugin" AfterTargets="PostBuildEvent" DependsOnTargets="$(_PublishTargets)">
 		<Error Text="Plugins must be publishable" Condition="$(IsPublishable) != 'true'" />
 
-		<CreateItem Include="$(PublishDir)/**/*" Exclude="$(PublishDir)/Messerli.Backbone.PluginAbstractions.*">
+		<CreateItem Include="$(PublishDir)/**/*" Exclude="$(PublishDir)/Messerli.Backbone.PluginAbstractions.V0.*">
 			<Output TaskParameter="Include" ItemName="_PluginFiles"/>
 		</CreateItem>
 
