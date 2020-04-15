@@ -8,6 +8,8 @@ namespace Messerli.MetaGenerator
     {
         private Assembly? _pluginAssembly;
 
+        public bool HasPluginContext => _pluginAssembly != null;
+
         Assembly IExecutingPluginAssemblyProvider.PluginAssembly
         {
             get => _pluginAssembly ?? throw new Exception("No plugin has been set.");

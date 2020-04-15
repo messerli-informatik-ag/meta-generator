@@ -831,6 +831,7 @@
         "dependencies": {
           "Autofac": "[5.1.2, 6.0.0)",
           "CommandLineAbstractions": "1.0.0",
+          "MetaGeneratorAbstractions": "1.0.0",
           "ToolLoaderAbstractions": "1.0.0"
         }
       },
