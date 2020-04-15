@@ -291,7 +291,6 @@ namespace Messerli.BackbonePluginTemplatePlugin
                 { "fileExtension", "cs" },
                 { "templateFileExtension", "mustache" },
                 { "pluginName", PluginName },
-                { "svgFileExtension", "svg" },
             };
             return _fileGenerator.FromTemplateGlob(glob, SolutionDirectory, templateNameValues);
         }
