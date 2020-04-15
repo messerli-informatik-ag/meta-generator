@@ -8,7 +8,7 @@ namespace Messerli.MetaGenerator
     {
         private Assembly? _pluginAssembly;
 
-        public bool HasPluginContext => _pluginAssembly != null;
+        public bool HasPluginContext => _pluginAssembly is { };
 
         Assembly IExecutingPluginAssemblyProvider.PluginAssembly
         {
