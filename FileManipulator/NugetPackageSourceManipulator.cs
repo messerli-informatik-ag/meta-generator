@@ -3,6 +3,7 @@ using System.IO;
 using Messerli.FileManipulatorAbstractions;
 using NuGet.Commands;
 using NuGet.Common;
+using NuGet.Configuration;
 
 namespace Messerli.FileManipulator
 {
@@ -24,20 +25,14 @@ namespace Messerli.FileManipulator
 
         public void Add(string configFile, NugetPackageSource packageSource)
         {
-            var addSourceArgs = new AddSourceArgs
+            if (!ExistsPackageSource(configFile, packageSource))
             {
-                Configfile = configFile,
-
-                Name = packageSource.Name,
-                Password = packageSource.Password,
-                Source = packageSource.Source,
-                Username = packageSource.Username,
-                ValidAuthenticationTypes = packageSource.ValidAuthenticationTypes,
-                StorePasswordInClearText = packageSource.StorePasswordInClearText,
-            };
-
-            CreateMinimalConfigIfNotExistOrIsEmpty(configFile);
-            AddSourceRunner.Run(addSourceArgs, _getLogger);
+                AddNew(configFile, packageSource);
+            }
+            else
+            {
+                Update(configFile, packageSource);
+            }
         }
 
         public void Update(string configFile, NugetPackageSource packageSource)
@@ -96,6 +91,36 @@ namespace Messerli.FileManipulator
             {
                 File.WriteAllText(configFile, MinimalNugetConfigContent);
             }
+        }
+
+        private void AddNew(string configFile, NugetPackageSource packageSource)
+        {
+            var addSourceArgs = new AddSourceArgs
+            {
+                Configfile = configFile,
+
+                Name = packageSource.Name,
+                Password = packageSource.Password,
+                Source = packageSource.Source,
+                Username = packageSource.Username,
+                ValidAuthenticationTypes = packageSource.ValidAuthenticationTypes,
+                StorePasswordInClearText = packageSource.StorePasswordInClearText,
+            };
+
+            CreateMinimalConfigIfNotExistOrIsEmpty(configFile);
+            AddSourceRunner.Run(addSourceArgs, _getLogger);
+        }
+
+        private static bool ExistsPackageSource(string configFile, NugetPackageSource packageSource)
+        {
+            var configFileFullPath = Path.GetFullPath(configFile);
+            var configDirectory = Path.GetDirectoryName(configFileFullPath);
+            var configFileName = Path.GetFileName(configFileFullPath);
+
+            var settings = Settings.LoadSpecificSettings(configDirectory, configFileName);
+            var existsPackageSource = new PackageSourceProvider(settings).GetPackageSourceBySource(packageSource.Source);
+
+            return existsPackageSource is { };
         }
     }
 }
