@@ -64,6 +64,13 @@ namespace Messerli.BackbonePluginTemplatePlugin
                 .Version("[0.4.1, 0.5)")
                 .Build();
 
+        private static readonly PackageReference MesserliCodeStyle =
+            new PackageReferenceBuilder()
+                .Name("Messerli.CodeStyle")
+                .Version("[1.1.0, 1.2)")
+                .PrivateAssets(new DependencyAssets.All())
+                .Build();
+
         private static readonly PackageReference XunitPackageReference =
             new PackageReferenceBuilder()
                 .Name("xunit")
@@ -237,6 +244,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
                 AutofacPackageReference,
                 FodyPackageReference,
                 EqualsFobyPackageReference,
+                MesserliCodeStyle,
             };
 
         private static IEnumerable<PackageReference> CreateTestProjectPackageReferences()
@@ -244,6 +252,7 @@ namespace Messerli.BackbonePluginTemplatePlugin
             {
                 MesserliBackbonePluginTestServerPackageReference,
                 MesserliBackbonePluginTestUtilityPackageReference,
+                MesserliCodeStyle,
                 XunitPackageReference,
                 XunitrunnervisualstudioPackageReference,
             };
