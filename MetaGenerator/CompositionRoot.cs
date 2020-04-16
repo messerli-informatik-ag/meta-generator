@@ -76,29 +76,23 @@ namespace Messerli.MetaGenerator
 
         public CompositionRoot RegisterPlugins()
         {
-            GetExecutableDirectory()
-                .Match(
-                    () => throw new Exception("Failed to get directory of executable."),
-                    executablePath =>
-                    {
-                        var pluginsPath = VerifyExistence(Path.Combine(executablePath, "plugins"));
-                        foreach (var pluginPath in Directory.GetDirectories(pluginsPath, "*"))
-                        {
-                            var pluginName = Path.GetRelativePath(pluginsPath, pluginPath);
-                            var pluginDllPath = Path.Combine(pluginPath, $"{pluginName}.dll");
-                            var loadContext = new PluginLoadContext(pluginDllPath);
+            var pluginsPath = CreateFolderWhenNecessary(Path.Combine(GetExecutableDirectory(), "plugins"));
 
-                            var assembly = loadContext.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(pluginDllPath)));
-                            var registrar = _builder.RegisterAssemblyModules(assembly);
-                        }
-                    });
+            foreach (var pluginPath in Directory.GetDirectories(pluginsPath, "*"))
+            {
+                var pluginName = Path.GetRelativePath(pluginsPath, pluginPath);
+                var pluginDllPath = Path.Combine(pluginPath, $"{pluginName}.dll");
+                var loadContext = new PluginLoadContext(pluginDllPath);
+
+                var assembly = loadContext.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(pluginDllPath)));
+                _ = _builder.RegisterAssemblyModules(assembly);
+            }
 
             return this;
         }
 
-        private string VerifyExistence(string pluginsPath)
+        private string CreateFolderWhenNecessary(string pluginsPath)
         {
-            Console.WriteLine(pluginsPath);
             if (Directory.Exists(pluginsPath) == false)
             {
                 Directory.CreateDirectory(pluginsPath);

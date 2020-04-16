@@ -111,7 +111,10 @@ namespace Messerli.BackbonePluginTemplatePlugin
         private bool UsesCentralPackageVersionsSdk => ParseUsesCentralPackageVersions(_userInputProvider.Value(VariableConstant.UsesCentralPackageVersions));
 
         public void Register()
-            => _userInputProvider.RegisterVariablesFromTemplate(Template.VariableDeclarations);
+        {
+            _dotnetToolInstaller.RegisterTool();
+            _userInputProvider.RegisterVariablesFromTemplate(Template.VariableDeclarations);
+        }
 
         public void Prepare()
         {
