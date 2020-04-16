@@ -38,7 +38,10 @@ namespace Messerli.VsSolution.Parser
         private static void ParseVersionComment(TokenWalker tokenWalker)
         {
             // we treat this as a comment and ignore anything in this line.
-            tokenWalker.Consume<HashToken>();
+            if (tokenWalker.NextIs<HashToken>())
+            {
+                tokenWalker.Consume<HashToken>();
+            }
 
             while (!tokenWalker.NextIs<NewLineToken>())
             {
