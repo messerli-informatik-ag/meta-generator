@@ -2,32 +2,26 @@ using Autofac;
 using Messerli.Backbone.PluginAbstractions.V0.Http.Routing;
 using Messerli.Backbone.PluginAbstractions.V0.Navigation;
 using Messerli.Backbone.PluginAbstractions.V0.PageRendering;
-using Messerli.Backbone.PluginAbstractions.V0.Persistence;
-using Messerli.{{PluginName}}.Database;
 using Messerli.{{PluginName}}.Gui;
 using Messerli.{{PluginName}}.Gui.View;
 using Messerli.{{PluginName}}.Registrar;
 
 namespace Messerli.{{PluginName}}
 {
-    internal sealed class Module : Autofac.Module
+    internal sealed class {{PluginName}}Module : Module
     {
         private readonly IRouteRegistry _routeRegistry;
-
-        private readonly IPersistenceContextBuilder _persistenceContextBuilder;
 
         private readonly PageRendererFactory _pageRendererFactory;
 
         private readonly INavigationRegistry _navigationRegistry;
 
-        public Module(
+        public {{PluginName}}Module(
             IRouteRegistry routeRegistry,
-            IPersistenceContextBuilder persistenceContextBuilder,
             PageRendererFactory pageRendererFactory,
             INavigationRegistry navigationRegistry)
         {
             _routeRegistry = routeRegistry;
-            _persistenceContextBuilder = persistenceContextBuilder;
             _pageRendererFactory = pageRendererFactory;
             _navigationRegistry = navigationRegistry;
         }
@@ -35,7 +29,6 @@ namespace Messerli.{{PluginName}}
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterInstance(_routeRegistry);
-            builder.RegisterInstance(_persistenceContextBuilder);
             builder.RegisterInstance(_pageRendererFactory);
             builder.RegisterInstance(_navigationRegistry);
 
@@ -44,7 +37,6 @@ namespace Messerli.{{PluginName}}
             builder.RegisterType<View>().As<IView>();
             builder.RegisterType<Presenter>().As<IPresenter>();
             builder.RegisterType<NavigationRegistrar>().As<INavigationRegistrar>();
-            builder.RegisterType<PersonPersistence>().As<IPersonPersistence>();
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Messerli.MetaGenerator
 {
     public class DotnetToolInstaller : IDotnetToolInstaller
     {
-        private const string Dotnet = "dotnetToolInstaller";
+        private const string Dotnet = "dotnet";
         private const string DotnetExe = "dotnet.exe";
 
         private readonly ITools _tools;
@@ -16,9 +16,10 @@ namespace Messerli.MetaGenerator
         public DotnetToolInstaller(ITools tools)
         {
             _tools = tools;
-            _tools.RegisterTool(Dotnet, DotnetExe);
-            _tools.VerifyTools();
         }
+
+        public void RegisterTool()
+            => _tools.RegisterTool(Dotnet, DotnetExe);
 
         public void InstallTool(string path, string toolName)
         {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Messerli.Backbone.PluginAbstractions.V0.Http.Routing;
 using Messerli.Backbone.PluginAbstractions.V0.Navigation;
 
@@ -20,7 +20,7 @@ namespace Messerli.{{PluginName}}.Registrar
                     new Endpoint[0],
                     new NavigationItemBuilder()
                         .Text(new Text("Hello World"))
-                        .IconUri(new Uri("/database-access-plugin-template/assets/icons/hello-world.svg#icon", UriKind.Relative))
+                        .IconUrl("/database-access-plugin-template/assets/icons/hello-world.svg#icon")
                         .Endpoint(EndpointConstant.HelloWorldPage)
                         .Build());
     }
