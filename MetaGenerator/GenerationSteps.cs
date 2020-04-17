@@ -17,14 +17,16 @@ namespace Messerli.MetaGenerator
         private readonly ITools _tools;
         private readonly ITimeKeeper _timeKeeper;
         private readonly IConsoleWriter _consoleWriter;
+        private readonly IExceptionFormatter _exceptionFormatter;
 
-        public GenerationSteps(IUserInputProvider userInputProvider, IExecutingPluginAssemblyProvider assemblyProvider, ITools tools, ITimeKeeper timeKeeper, IConsoleWriter consoleWriter)
+        public GenerationSteps(IUserInputProvider userInputProvider, IExecutingPluginAssemblyProvider assemblyProvider, ITools tools, ITimeKeeper timeKeeper, IConsoleWriter consoleWriter, IExceptionFormatter exceptionFormatter)
         {
             _userInputProvider = userInputProvider;
             _assemblyProvider = assemblyProvider;
             _tools = tools;
             _timeKeeper = timeKeeper;
             _consoleWriter = consoleWriter;
+            _exceptionFormatter = exceptionFormatter;
         }
 
         public int Execute(IMetaGenerator metaTypeGenerator, InvocationContext context)
@@ -54,14 +56,8 @@ namespace Messerli.MetaGenerator
             }
             catch (System.Exception exception)
             {
-                _consoleWriter.WriteLine(exception.Message.Pastel(Color.OrangeRed));
+                _exceptionFormatter.FormatException(exception);
                 result = ExitCode.ExceptionOccured;
-#if DEBUG
-                if (exception.StackTrace != null)
-                {
-                    _consoleWriter.WriteLine(exception.StackTrace);
-                }
-#endif
             }
 
             return result;

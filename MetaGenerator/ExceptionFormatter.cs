@@ -1,0 +1,40 @@
+﻿using System;
+using System.Drawing;
+using Messerli.CommandLineAbstractions;
+using Messerli.MetaGeneratorAbstractions;
+using Pastel;
+
+namespace Messerli.MetaGenerator
+{
+    internal class ExceptionFormatter : IExceptionFormatter
+    {
+        private readonly IConsoleWriter _consoleWriter;
+        private readonly IGlobalOptions _globalOptions;
+        private readonly IExecutingPluginAssemblyProvider _executingPluginAssemblyProvider;
+
+        public ExceptionFormatter(IConsoleWriter consoleWriter, IGlobalOptions globalOptions, IExecutingPluginAssemblyProvider executingPluginAssemblyProvider)
+        {
+            _consoleWriter = consoleWriter;
+            _globalOptions = globalOptions;
+            _executingPluginAssemblyProvider = executingPluginAssemblyProvider;
+        }
+
+        public void FormatException(Exception exception)
+        {
+            _consoleWriter.WriteLine($"Exception in plugin: {Plugin()}");
+            _consoleWriter.WriteLine(exception.Message.Pastel(Color.OrangeRed));
+
+            if (_globalOptions.Verbose && exception.StackTrace != null)
+            {
+                _consoleWriter.WriteLine(exception.StackTrace);
+            }
+        }
+
+        private string Plugin()
+        {
+            return _executingPluginAssemblyProvider.HasPluginContext
+                ? _executingPluginAssemblyProvider.PluginAssembly.GetName().Name!
+                : "MetaGenerator.exe";
+        }
+    }
+}

@@ -36,12 +36,17 @@ namespace Messerli.MetaGenerator
         {
             var command = new Command(generator.Name, generator.Description)
             {
-                Handler = CommandHandler.Create<InvocationContext>(context => { context.ResultCode = _pluginSelection.StartPlugin(context, generator.Name); }),
+                Handler = CommandHandler.Create<InvocationContext>(context => { HandleContext(context, generator); }),
             };
 
             _userInputProvider.GetUserInputDescriptions().Each(variable => command.AddOption(CreateOption(variable)));
 
             return command;
+        }
+
+        private void HandleContext(InvocationContext context, IMetaGenerator generator)
+        {
+            context.ResultCode = _pluginSelection.StartPlugin(context, generator.Name);
         }
 
         private IMetaGenerator RegisterPluginVariables(IMetaGenerator generator)

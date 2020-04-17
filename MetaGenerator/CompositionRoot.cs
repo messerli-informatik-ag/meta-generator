@@ -55,6 +55,8 @@ namespace Messerli.MetaGenerator
             _builder.RegisterType<GlobalJsonManipulator>().As<IGlobalJsonManipulator>();
             _builder.RegisterType<StubbleBuilder>().AsSelf();
 
+            _builder.RegisterType<ExceptionFormatter>().As<IExceptionFormatter>().InstancePerLifetimeScope();
+
             _builder.RegisterType<ExecutingPluginAssemblyProvider>().As<IExecutingPluginAssemblyProvider>().InstancePerLifetimeScope();
 
             _builder.RegisterType<DotnetToolInstaller>().As<IDotnetToolInstaller>();
@@ -87,6 +89,13 @@ namespace Messerli.MetaGenerator
                 var assembly = loadContext.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(pluginDllPath)));
                 _ = _builder.RegisterAssemblyModules(assembly);
             }
+
+            return this;
+        }
+
+        public CompositionRoot RegisterGlobalOptions(bool verbose)
+        {
+            _builder.Register(_ => new GlobalOptions(verbose)).As<IGlobalOptions>().SingleInstance();
 
             return this;
         }
