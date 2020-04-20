@@ -24,7 +24,7 @@ namespace Messerli.MetaGenerator
             _consoleWriter.WriteLine($"Exception in module: {Module()}");
             _consoleWriter.WriteLine(exception.Message.Pastel(Color.OrangeRed));
 
-            if (_globalOptions.Verbose && exception.StackTrace != null)
+            if (_globalOptions.Verbose && exception.StackTrace is { })
             {
                 _consoleWriter.WriteLine(exception.StackTrace);
             }
