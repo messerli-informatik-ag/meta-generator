@@ -21,12 +21,22 @@ namespace Messerli.MetaGenerator
 
         public void FormatException(Exception exception)
         {
-            _consoleWriter.WriteLine($"Exception in module: {Module()}");
-            _consoleWriter.WriteLine(exception.Message.Pastel(Color.OrangeRed));
-
-            if (_globalOptions.Verbose && exception.StackTrace != null)
+            if (exception is AggregateException aggregateException)
             {
-                _consoleWriter.WriteLine(exception.StackTrace);
+                foreach (var innerException in aggregateException.InnerExceptions)
+                {
+                    FormatException(innerException);
+                }
+            }
+            else
+            {
+                _consoleWriter.WriteLine($"Exception in module: {Module()}".Pastel(Color.LightGoldenrodYellow));
+                _consoleWriter.WriteLine(exception.Message.Pastel(Color.OrangeRed));
+
+                if (_globalOptions.Verbose && exception.StackTrace != null)
+                {
+                    _consoleWriter.WriteLine(exception.StackTrace);
+                }
             }
         }
 

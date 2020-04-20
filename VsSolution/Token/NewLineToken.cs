@@ -2,7 +2,7 @@
 
 namespace Messerli.VsSolution.Token
 {
-    internal class NewLineToken : IToken
+    internal class NewLineToken : IToken, ILineBreakToken
     {
         public override string ToString()
         {

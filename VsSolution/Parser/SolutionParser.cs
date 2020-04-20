@@ -28,8 +28,8 @@ namespace Messerli.VsSolution.Parser
         {
             // Create the object tree without DI Framework
             var lexerRules = new LexerRules();
-            var tokenizer = new Tokenizer(lexerRules, s => new LexerReader(s));
-            var tokenWalker = new TokenWalker(tokenizer, () => new EpsilonToken());
+            var tokenizer = new Tokenizer(lexerRules, s => new LexerReader(s), l => new LinePositionCalculator(l));
+            var tokenWalker = new TokenWalker(tokenizer, () => new EpsilonToken(), l => new LinePositionCalculator(l));
             var variableParser = new VariableParser();
             var headerParser = new HeaderParser(variableParser);
             var projectParser = new ProjectParser();
