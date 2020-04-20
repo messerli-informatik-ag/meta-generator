@@ -21,7 +21,7 @@ namespace Messerli.MetaGenerator
 
         public void FormatException(Exception exception)
         {
-            _consoleWriter.WriteLine($"Exception in plugin: {Plugin()}");
+            _consoleWriter.WriteLine($"Exception in module: {Module()}");
             _consoleWriter.WriteLine(exception.Message.Pastel(Color.OrangeRed));
 
             if (_globalOptions.Verbose && exception.StackTrace != null)
@@ -30,11 +30,11 @@ namespace Messerli.MetaGenerator
             }
         }
 
-        private string Plugin()
+        private string Module()
         {
             return _executingPluginAssemblyProvider.HasPluginContext
                 ? _executingPluginAssemblyProvider.PluginAssembly.GetName().Name!
-                : "MetaGenerator.exe";
+                : "MetaGenerator";
         }
     }
 }
