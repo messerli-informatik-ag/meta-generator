@@ -14,9 +14,9 @@ namespace Messerli.MetaGenerator
 
         public int Run(string[] args)
         {
-            var rootCommand = _rootCommandBuilder.Build();
-
-            return rootCommand.Invoke(args);
+            return _rootCommandBuilder
+                .Build()
+                .Invoke(args);
         }
     }
 }

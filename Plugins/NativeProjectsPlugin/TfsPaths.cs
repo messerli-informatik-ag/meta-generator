@@ -25,6 +25,6 @@ namespace Messerli.NativeProjectsPlugin
         public string BranchRootPath() => Path.Combine(TfsRootPath(), TfsBase);
 
         private string TfsRootPath() => Environment.GetEnvironmentVariable(TfsRootVariable)
-                                        ?? throw new Exception($"Mising environment variable '{TfsRootVariable}'");
+                                        ?? throw new Exception($"Missing environment variable '{TfsRootVariable}'");
     }
 }

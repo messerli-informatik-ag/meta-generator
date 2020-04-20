@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Linq;
@@ -31,8 +32,10 @@ namespace Messerli.MetaGenerator
         {
             var root = new RootCommand("The Messerli meta-generator is a versatile generator which can create files, projects, repositories with the right plugins!")
             {
-                Handler = CommandHandler.Create<InvocationContext>(context => { context.ResultCode = _pluginSelection.StartPluginInteractive(context); }),
+                Handler = CommandHandler.Create<InvocationContext>(HandleContext),
             };
+
+            root.AddGlobalOption(VerboseOption());
 
             RegisterPluginCommands(root);
 
@@ -41,20 +44,47 @@ namespace Messerli.MetaGenerator
             return root;
         }
 
+        private void HandleContext(InvocationContext context)
+        {
+            context.ResultCode = _pluginSelection.StartPluginInteractive(context);
+        }
+
+        private Option VerboseOption()
+        {
+            var option = new Option<bool>("--verbose", "More verbose output, including stack traces");
+
+            option.AddAlias("-v");
+
+            return option;
+        }
+
         private void RegisterPluginCommands(Command root)
         {
             _generators
                 .Select(CreateCommandInLifeTimeScope)
-                .Each(root.AddCommand);
+                .Each(o => o.AndThen(c => root.Add(c)));
         }
 
-        private Command CreateCommandInLifeTimeScope(IMetaGenerator generator)
+        private Funcky.Monads.Option<Command> CreateCommandInLifeTimeScope(IMetaGenerator generator)
         {
             using var scope = _programScope.BeginLifetimeScope();
 
-            return scope
-                .Resolve<IGeneratorCommandBuilder>()
-                .Build(generator.Name);
+            try
+            {
+                var result = scope
+                    .Resolve<IGeneratorCommandBuilder>()
+                    .Build(generator.Name);
+
+                return Funcky.Monads.Option.Some(result);
+            }
+            catch (Exception exception)
+            {
+                scope
+                    .Resolve<IExceptionFormatter>()
+                    .FormatException(exception);
+
+                return Funcky.Monads.Option<Command>.None();
+            }
         }
 
         private Command CreatePluginManagerCommands()
