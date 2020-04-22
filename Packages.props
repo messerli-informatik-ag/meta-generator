@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<ItemGroup>
-		<PackageReference Update="apophis.Lexer" Version="[1.3, 2)" />
+		<PackageReference Update="apophis.Lexer" Version="[1.4.1, 2)" />
 		<PackageReference Update="Autofac" Version="[5.1.2, 6)" />
 		<PackageReference Update="Funcky" Version="[1.5.1, 2)" />
 		<PackageReference Update="JetBrains.Annotations" Version="[2019.1.3]" />
@@ -9,9 +9,9 @@
 		<PackageReference Update="Moq" Version="[4.13.1, 5)" />
 		<PackageReference Update="Pastel" Version="[1.3.1, 2)" />
 		<PackageReference Update="Soltys.ChangeCase" Version="[1.6, 2)" />
-		<PackageReference Update="Stubble.Core" Version="[1.6.3, 2)" />
+		<PackageReference Update="Stubble.Core" Version="[1.7.2, 2)" />
 		<PackageReference Update="System.CommandLine" Version="[2.0.0-beta1.20104.2, 3)" />
-		<PackageReference Update="Microsoft.NET.Test.Sdk" Version="[16.1.1, 17)" />
+		<PackageReference Update="Microsoft.NET.Test.Sdk" Version="[16.5.0, 17)" />
 		<PackageReference Update="xunit" Version="[2.4.1, 3)" />
 		<PackageReference Update="xunit.runner.visualstudio" Version="[2.4.1, 3)" />
 		<PackageReference Update="Messerli.CodeStyle" Version="1.0.1" />
@@ -20,7 +20,7 @@
 		<PackageReference Update="Messerli.Test.Utility" Version="[0.8.0, 0.9)" />
 		<PackageReference Update="Newtonsoft.Json" Version="[12.0.3, 13)" />
 		<PackageReference Update="DotNet.Glob" Version="[3.0.9, 4)" />
-		<PackageReference Update="NuGet.Commands" Version="[5.5.0, 6)" />
+		<PackageReference Update="NuGet.Commands" Version="[5.5.1, 6)" />
 		<PackageReference Update="Microsoft.Build" Version="[16.5.0, 17)" />
 		<PackageReference Update="Microsoft.Build.Locator" Version="[1.2.6, 2)" />
 	</ItemGroup>

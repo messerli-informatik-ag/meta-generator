@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using Funcky;
 using Messerli.CommandLineAbstractions;
 using Messerli.MetaGeneratorAbstractions;
 using Pastel;
@@ -21,12 +22,32 @@ namespace Messerli.MetaGenerator
 
         public void FormatException(Exception exception)
         {
-            _consoleWriter.WriteLine($"Exception in module: {Module()}");
+            if (exception is AggregateException aggregateException)
+            {
+                FlattenException(aggregateException);
+            }
+            else
+            {
+                FormatSingleException(exception);
+            }
+        }
+
+        private void FormatSingleException(Exception exception)
+        {
+            _consoleWriter.WriteLine($"Exception in module: {Module()}".Pastel(Color.LightGoldenrodYellow));
             _consoleWriter.WriteLine(exception.Message.Pastel(Color.OrangeRed));
 
-            if (_globalOptions.Verbose && exception.StackTrace is { })
+            if (_globalOptions.Verbose && exception.StackTrace is { } stackTrace)
             {
-                _consoleWriter.WriteLine(exception.StackTrace);
+                _consoleWriter.WriteLine(stackTrace);
+            }
+        }
+
+        private void FlattenException(AggregateException aggregateException)
+        {
+            foreach (var innerException in aggregateException.InnerExceptions)
+            {
+                FormatException(innerException);
             }
         }
 
