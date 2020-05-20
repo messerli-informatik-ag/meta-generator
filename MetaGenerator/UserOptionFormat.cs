@@ -2,7 +2,7 @@
 
 namespace Messerli.MetaGenerator
 {
-    internal static class UserUptionFormat
+    internal static class UserOptionFormat
     {
         public static string ToUserOption(string userInputVariableName)
         {
