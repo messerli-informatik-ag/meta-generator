@@ -4,9 +4,9 @@
     ".NETCoreApp,Version=v3.1": {
       "Autofac": {
         "type": "Direct",
-        "requested": "[5.1.2, 6.0.0)",
-        "resolved": "5.1.2",
-        "contentHash": "iGEx5Cm6Uor6/bZkgCHHjJO8cEQvDSOxgzNmHGJgGOnLDCe0b8NpOlhotsqx8dFvBDCsEX/V3YGRR30sRQLsxw=="
+        "requested": "[5.2.0, 6.0.0)",
+        "resolved": "5.2.0",
+        "contentHash": "V8dBH0dsv75uDzl7Sw+HkhKDPUw2eXnlMjcSVMH+tLo2s67MpTKGyDj1pDcpR+IF2u4YRs0s3/x7R88YJzIWvg=="
       },
       "DotNet.Glob": {
         "type": "Direct",
@@ -25,19 +25,19 @@
       },
       "Messerli.CodeStyle": {
         "type": "Direct",
-        "requested": "[1.0.1, )",
-        "resolved": "1.0.1",
-        "contentHash": "dCHURSod9erZ3RWlM+yKiMJg5rFWP8leTOAIRlooQA0PjUkSzE494lDR1bluihwJZm1/9ET/bJGpS1e0FZYkxQ==",
+        "requested": "[1.2.0, )",
+        "resolved": "1.2.0",
+        "contentHash": "rekKus+Vd4Xw5DKkWJOCsN5/CE+g+j+/KVUHh5v9zQn/TkZEgB7KT7EhRvfIWXQyhGiRQd5Lx0AlrT/ltugalQ==",
         "dependencies": {
-          "IDisposableAnalyzers": "3.2.0",
-          "StyleCop.Analyzers": "1.2.0-beta.113"
+          "IDisposableAnalyzers": "3.3.8",
+          "StyleCop.Analyzers": "1.2.0-beta.164"
         }
       },
       "Pastel": {
         "type": "Direct",
-        "requested": "[1.3.1, 2.0.0)",
-        "resolved": "1.3.1",
-        "contentHash": "QAGMh/TXWkg19eA7HI4kVxSvGWpkpSkhjKYI4zcDYM6nEEETcPmqJpet8STe+YvTs4YG3CpTGSYTRAlRt2PNtA=="
+        "requested": "[1.3.2, 2.0.0)",
+        "resolved": "1.3.2",
+        "contentHash": "7ilzsXdnzkHAZA8+F5E6cr7OLlQDui2x23Mon6AvkS/Z/yQo6R/rEkta1CWcwMNWfvHbwcloRCjj6RsLCfE4Dw=="
       },
       "Soltys.ChangeCase": {
         "type": "Direct",
@@ -47,9 +47,9 @@
       },
       "Stubble.Core": {
         "type": "Direct",
-        "requested": "[1.7.2, 2.0.0)",
-        "resolved": "1.7.2",
-        "contentHash": "slsRi8BAxoKa6XrEXVxrftpf6BgwB2nmRDg17SW96AUOIVBB0hS6bOhk0SBXgiOOYBnDco9Yg1Tekf9GucOedw==",
+        "requested": "[1.8.4, 2.0.0)",
+        "resolved": "1.8.4",
+        "contentHash": "yYGQiYNRWULZyFtELXhp2XX/loduCKjZxT82z2iblnurrr2LbMjwRDTBGMx0+yDTxFvmUC7+1zRGmPR1ra/3qg==",
         "dependencies": {
           "Microsoft.CSharp": "4.5.0",
           "System.Collections.Immutable": "1.5.0",
@@ -58,9 +58,9 @@
       },
       "System.CommandLine": {
         "type": "Direct",
-        "requested": "[2.0.0-beta1.20104.2, 3.0.0)",
-        "resolved": "2.0.0-beta1.20104.2",
-        "contentHash": "41xMZaxXYJnHeoDeQGj3JUIZUvxF/+t3n2Y/pbUMOL6lvEUWaL2ze+DgAzo4TvrIwHNy7DOhFKQy1CujhUxJHA==",
+        "requested": "[2.0.0-beta1.20253.1, 3.0.0)",
+        "resolved": "2.0.0-beta1.20253.1",
+        "contentHash": "Ig+OUi1IXF3OX+S3e1+mjqK9J6ro0eoUokYRUbTjBGpL0lrgXxsBic66THXHD8K2Fb9c0Gk85ESzPgZ9Cz9Wvg==",
         "dependencies": {
           "Microsoft.CSharp": "4.4.1",
           "system.memory": "4.5.3"
@@ -76,8 +76,8 @@
       },
       "IDisposableAnalyzers": {
         "type": "Transitive",
-        "resolved": "3.2.0",
-        "contentHash": "9UelxQG7Kni25Cg63W1RTK3wfJaKdbGcZgCoD7ofgItTtpFQmUkZSk8hpXXnEZftOGPIJdGdMUaqoXyfMAy8Tw=="
+        "resolved": "3.3.8",
+        "contentHash": "tVRKdXrQ2kUjzCA1JSYcaYX9PLBC8iYRZbIKhtqYjqlo3WfxdCXza6UWZCTSl2WFzXR66gaIGf6U9cnmrTlROQ=="
       },
       "Messerli.FileSystem": {
         "type": "Transitive",
@@ -267,16 +267,16 @@
       },
       "StyleCop.Analyzers": {
         "type": "Transitive",
-        "resolved": "1.2.0-beta.113",
-        "contentHash": "MUwtTDGd8Cgb1YAyAL88U1cpH3hlrS0CS/dcxp/deqVa7Gh6V4U1XJZ9sZkfjGeL+Cbhq4KV8mo98d9wJ4RVsA==",
+        "resolved": "1.2.0-beta.164",
+        "contentHash": "IWMH8RyJGDu8ZrYFKIwjfcuXizpJnjnMGE8tDRnZ36AIAQeFDjeUPH2EUEMwj4+63oQBu/KkzRe9clSW9s5mdA==",
         "dependencies": {
-          "StyleCop.Analyzers.Unstable": "1.2.0.113"
+          "StyleCop.Analyzers.Unstable": "1.2.0.164"
         }
       },
       "StyleCop.Analyzers.Unstable": {
         "type": "Transitive",
-        "resolved": "1.2.0.113",
-        "contentHash": "/RIaSRC+5YFK0ZGxHVTK+UaFp8H0k7oIVWpz2NmjRl5oeMo/j+C8Jitfh3QZY6rQ70CGkOyPtS8UlUDua2pMVA=="
+        "resolved": "1.2.0.164",
+        "contentHash": "3WJ5JvRP9QjdrwspeLFjwD2AZw2CcDmYLQ7x8oofxvOzXvboZdFlPsSV8h56hLyK0lnMFvtpb48nxz7oQ4RgCQ=="
       },
       "System.Collections": {
         "type": "Transitive",
@@ -789,7 +789,7 @@
       "commandline": {
         "type": "Project",
         "dependencies": {
-          "Autofac": "[5.1.2, 6.0.0)",
+          "Autofac": "[5.2.0, 6.0.0)",
           "CommandLineAbstractions": "1.0.0",
           "Funcky": "[1.5.1, 2.0.0)"
         }
@@ -803,7 +803,7 @@
       "Messerli.FileManipulator": {
         "type": "Project",
         "dependencies": {
-          "Autofac": "[5.1.2, 6.0.0)",
+          "Autofac": "[5.2.0, 6.0.0)",
           "Funcky": "[1.5.1, 2.0.0)",
           "Messerli.FileManipulatorAbstractions": "1.0.0",
           "Messerli.FileSystem": "[0.1.2, 0.2.0)",
@@ -829,7 +829,7 @@
       "toolloader": {
         "type": "Project",
         "dependencies": {
-          "Autofac": "[5.1.2, 6.0.0)",
+          "Autofac": "[5.2.0, 6.0.0)",
           "CommandLineAbstractions": "1.0.0",
           "MetaGeneratorAbstractions": "1.0.0",
           "ToolLoaderAbstractions": "1.0.0"
@@ -841,7 +841,7 @@
       "vssolution": {
         "type": "Project",
         "dependencies": {
-          "Autofac": "[5.1.2, 6.0.0)",
+          "Autofac": "[5.2.0, 6.0.0)",
           "Funcky": "[1.5.1, 2.0.0)",
           "apophis.Lexer": "[1.4.1, 2.0.0)"
         }
