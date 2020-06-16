@@ -3,6 +3,7 @@
 	<PropertyGroup>
 		<RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
 		<DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+		<NoWarn>$(NoWarn);NU5104</NoWarn><!-- A stable release of a package should not have a prerelease dependency. -->
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Messerli.CodeStyle" PrivateAssets="all" />

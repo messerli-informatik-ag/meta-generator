@@ -111,7 +111,7 @@ namespace Messerli.NativeProjectsPlugin
                 _fileGenerator.FromTemplate(ReleasePropertyTemplate, _projectInformation.PropertyPath($"{projectName}Release.props"), Encoding.UTF8),
                 _fileGenerator.FromTemplate(UsePropertyTemplate, _projectInformation.PropertyPath($"Use{projectName}.props"), Encoding.UTF8),
 
-                _fileManipulator.AddProjectsToSolution(GetSolutionInfoBuilder().Build(), GetProjectInfoBuilder().Build().Yield()),
+                _fileManipulator.AddProjectsToSolution(GetSolutionInfoBuilder().Build(), GetProjectInfoBuilder().Build().ToEnumerable()),
             };
 
             tasks.AddRange(SignFileLists().Select(s => _fileManipulator.AppendTemplate(SignListTemplate, s)));

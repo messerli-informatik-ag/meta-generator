@@ -62,7 +62,7 @@ namespace Messerli.MetaGenerator
         {
             _generators
                 .Select(CreateCommandInLifeTimeScope)
-                .Each(o => o.AndThen(c => root.Add(c)));
+                .ForEach(o => o.AndThen(c => root.Add(c)));
         }
 
         private Funcky.Monads.Option<Command> CreateCommandInLifeTimeScope(IMetaGenerator generator)
