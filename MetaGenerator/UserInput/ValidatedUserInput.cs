@@ -21,9 +21,8 @@ namespace Messerli.MetaGenerator.UserInput
 
         public Option<string> ValidateArgument(IUserInputDescription variable, Option<string> userArgument, IEnumerable<IValidation> requesterValidations)
         {
-            return userArgument.Match(
-                none: Option<string>.None,
-                some: argument =>
+            return userArgument.SelectMany(
+                argument =>
                 {
                     _consoleWriter.WriteLine();
                     _consoleWriter.WriteLine($"{variable.VariableName}*: {argument}");
