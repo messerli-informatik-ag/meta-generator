@@ -32,7 +32,7 @@ namespace Messerli.MetaGenerator.UserInput
         {
             return ValidatedUserInput
                 .GetValidatedValue(variable, Enumerable.Empty<IValidation>())
-                .Match(none: () => QueryValueFromUser(variable), some: Option.Some);
+                .OrElse(() => QueryValueFromUser(variable));
         }
     }
 }

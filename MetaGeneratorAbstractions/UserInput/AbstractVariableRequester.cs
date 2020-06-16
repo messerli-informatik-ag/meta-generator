@@ -16,7 +16,7 @@ namespace Messerli.MetaGeneratorAbstractions.UserInput
         public string RequestValue(IUserInputDescription variable, Option<string> userArgument)
         {
             return ValidatedUserInput.ValidateArgument(variable, userArgument, RequesterValidations(variable))
-                .Match(() => InteractiveQuery(variable), Functional.Identity);
+                .OrElse(() => InteractiveQuery(variable));
         }
 
         protected abstract string InteractiveQuery(IUserInputDescription variable);
