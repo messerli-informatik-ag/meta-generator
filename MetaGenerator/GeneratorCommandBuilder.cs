@@ -60,7 +60,7 @@ namespace Messerli.MetaGenerator
 
         private static Option CreateOption(IUserInputDescription userInput)
         {
-            var option = new Option(UserUptionFormat.ToUserOption(userInput.VariableName), userInput.VariableDescription)
+            var option = new Option(UserOptionFormat.ToUserOption(userInput.VariableName), userInput.VariableDescription)
             {
                 Argument = new Argument<string>(),
             };

@@ -69,7 +69,7 @@ namespace Messerli.MetaGenerator
 
             foreach (var variable in _userInputProvider.GetVariableValues())
             {
-                if (context.ParseResult.ValueForOption(UserUptionFormat.ToUserOption(variable.Key)) is string userValue)
+                if (context.ParseResult.ValueForOption(UserOptionFormat.ToUserOption(variable.Key)) is string userValue)
                 {
                     userArguments.Add(variable.Key, userValue);
                 }
