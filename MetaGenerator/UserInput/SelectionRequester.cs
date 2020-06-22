@@ -6,6 +6,7 @@ using Funcky.Extensions;
 using Funcky.Monads;
 using Messerli.CommandLineAbstractions;
 using Messerli.MetaGeneratorAbstractions.UserInput;
+using static Messerli.MetaGenerator.UserInput.Utility;
 
 namespace Messerli.MetaGenerator.UserInput
 {
@@ -21,7 +22,7 @@ namespace Messerli.MetaGenerator.UserInput
 
         protected override IEnumerable<IValidation> RequesterValidations(IUserInputDescription variable)
         {
-            yield return new SimpleValidation(input => IsValuePossible(variable, input), $"Please select from the possible options between 1 and {ToHumandIndex(variable.VariableSelectionValues.Count - 1)}");
+            yield return new SimpleValidation(input => IsValuePossible(variable, input), $"Please select from the possible options between 1 and {ToHumanIndex(variable.VariableSelectionValues.Count - 1)}");
         }
 
         protected override string InteractiveQuery(IUserInputDescription variable)
@@ -31,8 +32,7 @@ namespace Messerli.MetaGenerator.UserInput
             ValidatedUserInput.WriteQuestion(variable, "Please select one of the given values for '{0}':");
             WriteOptions(variable);
 
-            return QueryValueFromUser(variable).GetOrElse(
-                () => throw new NotImplementedException("cannot not happen"));
+            return Retry(() => QueryValueFromUser(variable));
         }
 
         private static void CheckForMissingOptions(IUserInputDescription variable)
@@ -44,17 +44,15 @@ namespace Messerli.MetaGenerator.UserInput
         }
 
         private Option<string> QueryValueFromUser(IUserInputDescription variable)
-        {
-            return ValidatedUserInput
-                .GetValidatedValue(variable, RequesterValidations(variable))
-                .Match(none: () => QueryValueFromUser(variable), some: input => IndexToValue(input, variable));
-        }
+            => ValidatedUserInput
+                   .GetValidatedValue(variable, RequesterValidations(variable))
+                   .SelectMany(input => IndexToValue(input, variable));
 
-        private Option<string> IndexToValue(string input, IUserInputDescription variable)
+        private static Option<string> IndexToValue(string input, IUserInputDescription variable)
         {
             var index = int.Parse(input);
 
-            return Option.Some(variable.VariableSelectionValues[FromHumandIndex(index)].Value!);
+            return Option.Some(variable.VariableSelectionValues[FromHumanIndex(index)].Value!);
         }
 
         private static bool IsValuePossible(IUserInputDescription variable, string input)
@@ -72,12 +70,12 @@ namespace Messerli.MetaGenerator.UserInput
             foreach (var (selectionValue, index) in variable.VariableSelectionValues.Select((selectionValue, index) =>
                 (selectionValue, index)))
             {
-                _consoleWriter.WriteLine($"{ToHumandIndex(index)}.) {selectionValue.Description}");
+                _consoleWriter.WriteLine($"{ToHumanIndex(index)}.) {selectionValue.Description}");
             }
         }
 
-        private static int ToHumandIndex(int index) => index + 1;
+        private static int ToHumanIndex(int index) => index + 1;
 
-        private static int FromHumandIndex(int index) => index - 1;
+        private static int FromHumanIndex(int index) => index - 1;
     }
 }

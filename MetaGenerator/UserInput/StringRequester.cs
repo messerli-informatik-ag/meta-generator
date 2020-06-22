@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Funcky;
 using Funcky.Monads;
 using Messerli.MetaGeneratorAbstractions.UserInput;
+using static Messerli.MetaGenerator.UserInput.Utility;
 
 namespace Messerli.MetaGenerator.UserInput
 {
@@ -22,15 +23,10 @@ namespace Messerli.MetaGenerator.UserInput
         {
             ValidatedUserInput.WriteQuestion(variable, "Please enter a value for '{0}':");
 
-            return QueryValueFromUser(variable).GetOrElse(
-                () => throw new NotImplementedException("cannot not happen"));
+            return Retry(() => QueryValueFromUser(variable));
         }
 
         private Option<string> QueryValueFromUser(IUserInputDescription variable)
-        {
-            return ValidatedUserInput
-                .GetValidatedValue(variable, RequesterValidations(variable))
-                .OrElse(() => QueryValueFromUser(variable));
-        }
+            => ValidatedUserInput.GetValidatedValue(variable, RequesterValidations(variable));
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Funcky.Monads;
 using Messerli.MetaGeneratorAbstractions.UserInput;
+using static Messerli.MetaGenerator.UserInput.Utility;
 
 namespace Messerli.MetaGenerator.UserInput
 {
@@ -19,8 +20,7 @@ namespace Messerli.MetaGenerator.UserInput
         {
             ValidatedUserInput.WriteQuestion(variable, "Please enter true or false for '{0}':");
 
-            return QueryValueFromUser(variable).Select(value => value.ToString()).GetOrElse(
-                () => throw new NotImplementedException("cannot not happen"));
+            return Retry(() => QueryValueFromUser(variable)).ToString();
         }
 
         protected override IEnumerable<IValidation> RequesterValidations(IUserInputDescription variable)
@@ -29,25 +29,19 @@ namespace Messerli.MetaGenerator.UserInput
         }
 
         private Option<bool> QueryValueFromUser(IUserInputDescription variable)
-        {
-            return ValidatedUserInput
-                .GetValidatedValue(variable, RequesterValidations(variable))
-                .Match(none: () => QueryValueFromUser(variable), some: ToBool);
-        }
+            => ValidatedUserInput
+                   .GetValidatedValue(variable, RequesterValidations(variable))
+                   .SelectMany(ToBool);
 
         private static bool IsValidInput(string input)
-        {
-            return ValidTrueStrings.Contains(input) || ValidFalseStrings.Contains(input);
-        }
+            => ValidTrueStrings.Contains(input) || ValidFalseStrings.Contains(input);
 
         private static Option<bool> ToBool(string validatedBoolString)
-        {
-            return validatedBoolString switch
+            => validatedBoolString switch
             {
                 _ when ValidTrueStrings.Contains(validatedBoolString) => Option.Some(true),
                 _ when ValidFalseStrings.Contains(validatedBoolString) => Option.Some(false),
                 _ => Option<bool>.None(),
             };
-        }
     }
 }

@@ -8,6 +8,7 @@ using Funcky.Monads;
 using Messerli.MetaGeneratorAbstractions;
 using Messerli.MetaGeneratorAbstractions.Json;
 using Messerli.MetaGeneratorAbstractions.UserInput;
+using static Funcky.Functional;
 
 namespace Messerli.MetaGenerator.UserInput
 {
@@ -110,7 +111,7 @@ namespace Messerli.MetaGenerator.UserInput
                 .TryGetValue(key: variableName)
                 .Match(
                     none: () => NoValue(variableName),
-                    some: userInput => userInput);
+                    some: Identity);
         }
 
         private static IUserInputDescription NoValue(in string variableName)
