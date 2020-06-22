@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Funcky;
 using Funcky.Monads;
 
@@ -16,7 +16,7 @@ namespace Messerli.MetaGeneratorAbstractions.UserInput
         public string RequestValue(IUserInputDescription variable, Option<string> userArgument)
         {
             return ValidatedUserInput.ValidateArgument(variable, userArgument, RequesterValidations(variable))
-                .OrElse(() => InteractiveQuery(variable));
+                .GetOrElse(() => InteractiveQuery(variable));
         }
 
         protected abstract string InteractiveQuery(IUserInputDescription variable);
