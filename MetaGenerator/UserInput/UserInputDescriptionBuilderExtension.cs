@@ -58,7 +58,7 @@ namespace Messerli.MetaGenerator.UserInput
         {
             return FindGlobalValidation(validationName)
                 .OrElse(() => FindPluginValidations(validationName, pluginAssembly))
-                .OrElse(new Func<IValidation>(() => throw new NotImplementedException($"Validation '{validationName}' not found")));
+                .GetOrElse(() => throw new NotImplementedException($"Validation '{validationName}' not found"));
         }
 
         private static Option<IValidation> FindGlobalValidation(ValidationName validationName)

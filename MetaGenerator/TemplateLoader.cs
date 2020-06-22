@@ -21,9 +21,8 @@ namespace Messerli.MetaGenerator
         {
             if (_assemblyProvider.PluginAssembly.GetManifestResourceNames().Contains(templateName))
             {
-                return FindTemplate(templateName).Match(
-                    () => throw new NotImplementedException(),
-                    s => s);
+                return FindTemplate(templateName).GetOrElse(
+                    () => throw new NotImplementedException());
             }
 
             throw new Exception($"There is no template resource with the name {templateName}");

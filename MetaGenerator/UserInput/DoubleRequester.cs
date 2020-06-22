@@ -23,10 +23,11 @@ namespace Messerli.MetaGenerator.UserInput
         {
             ValidatedUserInput.WriteQuestion(variable, "Please enter a valid double number for '{0}':");
 
-            return QueryValueFromUser(variable).Match(
-                none: () => throw new NotImplementedException("cannot happen"),
-                some: intValue => intValue.ToString(CultureInfo.InvariantCulture));
+            return QueryValueFromUser(variable).Select(DoubleToString).GetOrElse(
+                () => throw new NotImplementedException("cannot happen"));
         }
+
+        private static string DoubleToString(double value) => value.ToString(CultureInfo.InvariantCulture);
 
         private Option<double> QueryValueFromUser(IUserInputDescription variable)
         {

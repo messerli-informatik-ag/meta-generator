@@ -19,9 +19,8 @@ namespace Messerli.MetaGenerator.UserInput
         {
             ValidatedUserInput.WriteQuestion(variable, "Please enter true or false for '{0}':");
 
-            return QueryValueFromUser(variable).Match(
-                none: () => throw new NotImplementedException("cannot not happen"),
-                some: boolValue => boolValue.ToString());
+            return QueryValueFromUser(variable).Select(value => value.ToString()).GetOrElse(
+                () => throw new NotImplementedException("cannot not happen"));
         }
 
         protected override IEnumerable<IValidation> RequesterValidations(IUserInputDescription variable)

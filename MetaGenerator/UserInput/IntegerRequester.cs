@@ -22,10 +22,11 @@ namespace Messerli.MetaGenerator.UserInput
         {
             ValidatedUserInput.WriteQuestion(variable, "Please enter a valid integer for '{0}':");
 
-            return QueryValueFromUser(variable).Match(
-                none: () => throw new NotImplementedException("cannot not happen"),
-                some: intValue => intValue.ToString());
+            return QueryValueFromUser(variable).Select(IntegerToString).GetOrElse(
+                () => throw new NotImplementedException("cannot not happen"));
         }
+
+        private static string IntegerToString(int value) => value.ToString();
 
         private Option<int> QueryValueFromUser(IUserInputDescription variable)
         {

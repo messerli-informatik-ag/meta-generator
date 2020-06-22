@@ -31,9 +31,8 @@ namespace Messerli.MetaGenerator.UserInput
             ValidatedUserInput.WriteQuestion(variable, "Please select one of the given values for '{0}':");
             WriteOptions(variable);
 
-            return QueryValueFromUser(variable).Match(
-                none: () => throw new NotImplementedException("cannot not happen"),
-                some: Functional.Identity);
+            return QueryValueFromUser(variable).GetOrElse(
+                () => throw new NotImplementedException("cannot not happen"));
         }
 
         private static void CheckForMissingOptions(IUserInputDescription variable)

@@ -23,9 +23,8 @@ namespace Messerli.MetaGenerator.UserInput
         {
             ValidatedUserInput.WriteQuestion(variable, "Please enter a valid path for '{0}':");
 
-            return QueryValueFromUser(variable).Match(
-                none: () => throw new NotImplementedException("cannot not happen"),
-                some: Functional.Identity);
+            return QueryValueFromUser(variable).GetOrElse(
+                () => throw new NotImplementedException("cannot not happen"));
         }
 
         private Option<string> QueryValueFromUser(IUserInputDescription variable)
