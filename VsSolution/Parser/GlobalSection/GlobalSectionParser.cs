@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using apophis.Lexer;
 using Messerli.VsSolution.Model;
 using Messerli.VsSolution.Token;

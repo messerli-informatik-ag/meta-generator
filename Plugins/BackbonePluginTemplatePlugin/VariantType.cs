@@ -1,4 +1,4 @@
-﻿namespace Messerli.BackbonePluginTemplatePlugin
+namespace Messerli.BackbonePluginTemplatePlugin
 {
     public enum VariantType
     {

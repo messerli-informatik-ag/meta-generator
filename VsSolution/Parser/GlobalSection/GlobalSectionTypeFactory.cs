@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Messerli.VsSolution.Model;
 
 namespace Messerli.VsSolution.Parser.GlobalSection

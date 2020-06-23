@@ -1,4 +1,4 @@
-﻿using Messerli.CommandLineAbstractions;
+using Messerli.CommandLineAbstractions;
 
 namespace Messerli.CommandLine
 {

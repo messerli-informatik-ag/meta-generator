@@ -1,4 +1,4 @@
-﻿namespace Messerli.ManagedWrapperProjectsPlugin
+namespace Messerli.ManagedWrapperProjectsPlugin
 {
     public static class EnvironmentVariable
     {

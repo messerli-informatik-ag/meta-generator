@@ -1,4 +1,4 @@
-﻿using Autofac;
+using Autofac;
 using Messerli.FileManipulator.Project;
 using Messerli.FileManipulatorAbstractions;
 using Messerli.FileManipulatorAbstractions.Project;

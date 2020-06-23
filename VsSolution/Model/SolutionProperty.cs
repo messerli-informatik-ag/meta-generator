@@ -1,4 +1,4 @@
-﻿namespace Messerli.VsSolution.Model
+namespace Messerli.VsSolution.Model
 {
     public class SolutionProperty
     {

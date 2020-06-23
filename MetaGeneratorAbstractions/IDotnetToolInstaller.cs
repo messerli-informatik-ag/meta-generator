@@ -1,4 +1,4 @@
-﻿namespace Messerli.MetaGeneratorAbstractions
+namespace Messerli.MetaGeneratorAbstractions
 {
     public interface IDotnetToolInstaller
     {

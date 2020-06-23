@@ -1,4 +1,4 @@
-﻿using apophis.Lexer.Tokens;
+using apophis.Lexer.Tokens;
 
 namespace Messerli.VsSolution.Token
 {
