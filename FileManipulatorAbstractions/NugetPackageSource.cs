@@ -1,4 +1,4 @@
-﻿namespace Messerli.FileManipulatorAbstractions
+namespace Messerli.FileManipulatorAbstractions
 {
     public sealed class NugetPackageSource
     {

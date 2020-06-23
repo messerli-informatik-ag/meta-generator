@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Messerli.VsSolution.Model;
 
 namespace Messerli.VsSolution.Parser.GlobalSection
@@ -15,7 +15,7 @@ namespace Messerli.VsSolution.Parser.GlobalSection
                 GlobalSectionType.NestedProjects => new NestedProjectsSection(),
                 GlobalSectionType.ExtensibilityGlobals => new ExtensibilityGlobalsSection(),
                 GlobalSectionType.TeamFoundationVersionControl => new TeamFoundationVersionControlSection(),
-                _ => throw new Exception($"Unknown global section type : {sectionType}")
+                _ => throw new Exception($"Unknown global section type : {sectionType}"),
             };
         }
     }

@@ -1,4 +1,4 @@
-﻿using Messerli.CommandLineAbstractions;
+using Messerli.CommandLineAbstractions;
 using Messerli.MetaGeneratorAbstractions;
 
 namespace Messerli.MetaGenerator

@@ -1,4 +1,4 @@
-﻿namespace Messerli.BackbonePluginTemplatePlugin
+namespace Messerli.BackbonePluginTemplatePlugin
 {
     internal static class VariableConstant
     {

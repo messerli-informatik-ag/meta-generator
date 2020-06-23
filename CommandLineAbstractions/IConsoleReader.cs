@@ -1,4 +1,4 @@
-﻿using Funcky.Monads;
+using Funcky.Monads;
 
 namespace Messerli.CommandLineAbstractions
 {

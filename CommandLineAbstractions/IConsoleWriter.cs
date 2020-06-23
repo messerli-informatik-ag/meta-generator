@@ -1,4 +1,4 @@
-﻿namespace Messerli.CommandLineAbstractions
+namespace Messerli.CommandLineAbstractions
 {
     public interface IConsoleWriter
     {

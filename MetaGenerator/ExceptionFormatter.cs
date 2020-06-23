@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.Drawing;
-using Funcky;
 using Messerli.CommandLineAbstractions;
 using Messerli.MetaGeneratorAbstractions;
 using Pastel;

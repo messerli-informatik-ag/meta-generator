@@ -1,4 +1,4 @@
-﻿namespace Messerli.MetaGenerator
+namespace Messerli.MetaGenerator
 {
     public class GlobalOptions : IGlobalOptions
     {

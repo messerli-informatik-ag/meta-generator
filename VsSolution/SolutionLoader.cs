@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Threading.Tasks;
 using Messerli.VsSolution.Model;
 using Messerli.VsSolution.Parser;

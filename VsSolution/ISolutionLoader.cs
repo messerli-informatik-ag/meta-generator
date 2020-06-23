@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Messerli.VsSolution.Model;
 
 namespace Messerli.VsSolution

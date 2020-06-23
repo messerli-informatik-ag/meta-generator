@@ -1,4 +1,4 @@
-﻿namespace Messerli.MetaGeneratorAbstractions.UserInput
+namespace Messerli.MetaGeneratorAbstractions.UserInput
 {
     public enum VariableType
     {

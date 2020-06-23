@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using Messerli.MetaGeneratorAbstractions.UserInput;
 
 namespace Messerli.MetaGeneratorProjectPlugin
