@@ -47,7 +47,7 @@ namespace Messerli.MetaGenerator.UserInput
             {
                 _ when ValidTrueStrings.Contains(validatedBoolString) => Option.Some(true),
                 _ when ValidFalseStrings.Contains(validatedBoolString) => Option.Some(false),
-                _ => Option<bool>.None()
+                _ => Option<bool>.None(),
             };
         }
     }
