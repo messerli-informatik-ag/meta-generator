@@ -1,4 +1,4 @@
-﻿namespace Messerli.MesserliOneRepositoryPlugin
+namespace Messerli.MesserliOneRepositoryPlugin
 {
     internal static class Template
     {

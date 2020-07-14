@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Messerli.FileManipulatorAbstractions.Project;
 using MsBuildProject = Microsoft.Build.Evaluation.Project;
 

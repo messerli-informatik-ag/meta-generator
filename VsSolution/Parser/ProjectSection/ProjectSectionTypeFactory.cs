@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Messerli.VsSolution.Parser.ProjectSection
 {
@@ -10,7 +10,7 @@ namespace Messerli.VsSolution.Parser.ProjectSection
             {
                 ProjectSectionType.SolutionItems => new SolutionItemsSection(),
                 ProjectSectionType.ProjectDependencies => new ProjectDependenciesSection(),
-                _ => throw new Exception($"Unknown project section type : {sectionType}")
+                _ => throw new Exception($"Unknown project section type : {sectionType}"),
             };
         }
     }

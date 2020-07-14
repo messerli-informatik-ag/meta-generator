@@ -1,4 +1,4 @@
-﻿using Messerli.FileManipulatorAbstractions.Project;
+using Messerli.FileManipulatorAbstractions.Project;
 using MsBuildProject = Microsoft.Build.Evaluation.Project;
 
 namespace Messerli.FileManipulator.Project.MsBuild

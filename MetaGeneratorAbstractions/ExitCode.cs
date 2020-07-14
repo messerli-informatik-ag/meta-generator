@@ -1,4 +1,4 @@
-﻿namespace Messerli.MetaGeneratorAbstractions
+namespace Messerli.MetaGeneratorAbstractions
 {
     public static class ExitCode
     {

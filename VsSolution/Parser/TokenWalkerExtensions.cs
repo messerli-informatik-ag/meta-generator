@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using apophis.Lexer;
 using Messerli.VsSolution.Token;
@@ -41,7 +41,7 @@ namespace Messerli.VsSolution.Parser
             return lexem.Token switch
             {
                 NumberToken number => number.Number,
-                _ => throw new ParseException($"Next token to be expected a Number but it was: {lexem.Token}")
+                _ => throw new ParseException($"Next token to be expected a Number but it was: {lexem.Token}"),
             };
         }
 
@@ -54,7 +54,7 @@ namespace Messerli.VsSolution.Parser
             {
                 WordToken word => word.Word,
                 StringToken quotedString => quotedString.String,
-                _ => throw new ParseException($"Next token to be expected a \" or string but it was: {lexem.Token}")
+                _ => throw new ParseException($"Next token to be expected a \" or string but it was: {lexem.Token}"),
             };
         }
 
@@ -79,7 +79,7 @@ namespace Messerli.VsSolution.Parser
             {
                 StringToken guid => Guid.Parse(guid.String),
                 WordToken guid => Guid.Parse(guid.Word),
-                _ => throw new ParseException($"Next token to be expected a \" or Guid  but it was: {lexem.Token}")
+                _ => throw new ParseException($"Next token to be expected a \" or Guid  but it was: {lexem.Token}"),
             };
         }
 

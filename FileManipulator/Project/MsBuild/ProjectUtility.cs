@@ -1,4 +1,4 @@
-﻿using Microsoft.Build.Construction;
+using Microsoft.Build.Construction;
 using Microsoft.Build.Evaluation;
 using MsBuildProject = Microsoft.Build.Evaluation.Project;
 

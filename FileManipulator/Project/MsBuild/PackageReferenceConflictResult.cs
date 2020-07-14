@@ -1,4 +1,4 @@
-﻿namespace Messerli.FileManipulator.Project.MsBuild
+namespace Messerli.FileManipulator.Project.MsBuild
 {
     internal abstract class PackageReferenceConflictResult
     {

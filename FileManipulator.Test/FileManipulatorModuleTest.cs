@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Autofac;
 using Messerli.CompositionRoot;
 using Messerli.FileManipulatorAbstractions;

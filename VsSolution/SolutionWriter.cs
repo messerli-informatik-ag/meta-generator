@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using Messerli.VsSolution.Model;
 using Messerli.VsSolution.Parser.GlobalSection;
 using Messerli.VsSolution.Parser.ProjectSection;

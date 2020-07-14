@@ -1,4 +1,4 @@
-﻿namespace Messerli.NativeProjectsPlugin
+namespace Messerli.NativeProjectsPlugin
 {
     internal interface IProjectInformation
     {

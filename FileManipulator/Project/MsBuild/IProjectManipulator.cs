@@ -1,4 +1,4 @@
-﻿using Messerli.FileManipulatorAbstractions.Project;
+using Messerli.FileManipulatorAbstractions.Project;
 
 namespace Messerli.FileManipulator.Project.MsBuild
 {

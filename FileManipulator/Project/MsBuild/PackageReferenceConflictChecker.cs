@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Messerli.FileManipulatorAbstractions.Project;
 using Microsoft.Build.Evaluation;

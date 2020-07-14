@@ -1,4 +1,4 @@
-﻿namespace Messerli.FileManipulatorAbstractions.Project
+namespace Messerli.FileManipulatorAbstractions.Project
 {
     /// <summary>
     /// This class can be constructed using a <see cref="PackageReferenceBuilder"/>.

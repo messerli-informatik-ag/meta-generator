@@ -1,4 +1,4 @@
-﻿using Funcky.Extensions;
+using Funcky.Extensions;
 using Funcky.Monads;
 using Messerli.CommandLineAbstractions;
 

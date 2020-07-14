@@ -1,4 +1,4 @@
-﻿using Microsoft.Build.Locator;
+using Microsoft.Build.Locator;
 
 namespace Messerli.FileManipulator.Project.MsBuild
 {

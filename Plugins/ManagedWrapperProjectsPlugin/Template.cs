@@ -1,4 +1,4 @@
-﻿namespace Messerli.ManagedWrapperProjectsPlugin
+namespace Messerli.ManagedWrapperProjectsPlugin
 {
     internal static class Template
     {

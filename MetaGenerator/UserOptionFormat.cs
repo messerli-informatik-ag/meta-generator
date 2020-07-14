@@ -1,4 +1,4 @@
-﻿using Soltys.ChangeCase;
+using Soltys.ChangeCase;
 
 namespace Messerli.MetaGenerator
 {
