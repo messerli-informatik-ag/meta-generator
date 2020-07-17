@@ -67,7 +67,7 @@ namespace Messerli.MetaGeneratorProjectPlugin
             var tasks = new[]
             {
                 _fileGenerator.FromTemplateGlob("templates/**/*.mustache", GetPluginPath(), fileNameTemplateValues),
-                _fileManipulator.AddProjectsToSolution(GetSolutionInfoBuilder().Build(), GetProjectInfoBuilder().Build().Yield()),
+                _fileManipulator.AddProjectsToSolution(GetSolutionInfoBuilder().Build(), GetProjectInfoBuilder().Build().ToEnumerable()),
             };
 
             Task.WaitAll(tasks);

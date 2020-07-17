@@ -51,12 +51,12 @@ namespace Messerli.MetaGenerator
             var solution = await _solutionLoader.Load(solutionInfo.Path);
 
             projectInfos
-                .Each(projectInfo => solution.AddProject(projectInfo.Name, projectInfo.Path, projectInfo.Type, projectInfo.Guid));
+                .ForEach(projectInfo => solution.AddProject(projectInfo.Name, projectInfo.Path, projectInfo.Type, projectInfo.Guid));
 
             if (solutionInfo.FilterFolder != null)
             {
                 projectInfos
-                    .Each(projectInfo => solution.AddNestedProject(solutionInfo.FilterFolder, projectInfo.Name));
+                    .ForEach(projectInfo => solution.AddNestedProject(solutionInfo.FilterFolder, projectInfo.Name));
             }
 
             await _solutionLoader.Store(solutionInfo.Path, solution);

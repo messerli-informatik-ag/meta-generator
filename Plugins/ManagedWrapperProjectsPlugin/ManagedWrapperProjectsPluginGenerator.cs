@@ -111,7 +111,7 @@ namespace Messerli.ManagedWrapperProjectsPlugin
 
                 _fileManipulator.AppendTemplate(Template.FilesToSign, Path.Combine(_pathProvider.GetBuildStepSignDirectory(), "FileList_Win32.txt")),
                 _fileManipulator.AppendTemplate(Template.FilesToSign, Path.Combine(_pathProvider.GetBuildStepSignDirectory(), "FileList_x64.txt")),
-                _fileManipulator.AddProjectsToSolution(GetSolutionInfoBuilder().Build(), GetProjectInfoBuilder().Build().Yield()),
+                _fileManipulator.AddProjectsToSolution(GetSolutionInfoBuilder().Build(), GetProjectInfoBuilder().Build().ToEnumerable()),
             };
 
             Task.WaitAll(tasks.ToArray());

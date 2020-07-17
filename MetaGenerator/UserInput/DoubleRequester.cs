@@ -1,8 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Funcky.Monads;
 using Messerli.MetaGeneratorAbstractions.UserInput;
+using static Messerli.MetaGenerator.UserInput.Utility;
 
 namespace Messerli.MetaGenerator.UserInput
 {
@@ -23,21 +23,15 @@ namespace Messerli.MetaGenerator.UserInput
         {
             ValidatedUserInput.WriteQuestion(variable, "Please enter a valid double number for '{0}':");
 
-            return QueryValueFromUser(variable).Match(
-                none: () => throw new NotImplementedException("cannot happen"),
-                some: intValue => intValue.ToString(CultureInfo.InvariantCulture));
+            return Retry(() => QueryValueFromUser(variable)).ToString(CultureInfo.InvariantCulture);
         }
 
         private Option<double> QueryValueFromUser(IUserInputDescription variable)
-        {
-            return ValidatedUserInput
-                .GetValidatedValue(variable, RequesterValidations(variable))
-                .Match(none: () => QueryValueFromUser(variable), some: ToDouble);
-        }
+            => ValidatedUserInput
+                   .GetValidatedValue(variable, RequesterValidations(variable))
+                   .SelectMany(ToDouble);
 
         private static Option<double> ToDouble(string validatedDoubleString)
-        {
-            return Option.Some(double.Parse(validatedDoubleString));
-        }
+            => Option.Some(double.Parse(validatedDoubleString));
     }
 }

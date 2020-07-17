@@ -8,6 +8,7 @@ using Funcky.Monads;
 using Messerli.MetaGeneratorAbstractions;
 using Messerli.MetaGeneratorAbstractions.Json;
 using Messerli.MetaGeneratorAbstractions.UserInput;
+using static Funcky.Functional;
 
 namespace Messerli.MetaGenerator.UserInput
 {
@@ -69,16 +70,15 @@ namespace Messerli.MetaGenerator.UserInput
         {
             return _knownUserInputs
                 .Select(kv => kv.Value)
-                .ToDictionary(v => v.VariableName, v => v.Value.OrElse("BAD VALUE!"));
+                .ToDictionary(v => v.VariableName, v => v.Value.GetOrElse("BAD VALUE!"));
         }
 
         public string Value(string variableName)
         {
             return _knownUserInputs
                 .TryGetValue(key: variableName)
-                .Match(
-                    none: () => throw new Exception($"Variable '{variableName}' is not a registered user input."),
-                    some: userInput => userInput.Value).OrElse("should not happen");
+                .SelectMany(userInput => userInput.Value)
+                .GetOrElse(() => throw new Exception($"Variable '{variableName}' is not a registered user input."));
         }
 
         private List<Variable> GetVariablesFromTemplate(string templateName)
@@ -111,7 +111,7 @@ namespace Messerli.MetaGenerator.UserInput
                 .TryGetValue(key: variableName)
                 .Match(
                     none: () => NoValue(variableName),
-                    some: userInput => userInput);
+                    some: Identity);
         }
 
         private static IUserInputDescription NoValue(in string variableName)

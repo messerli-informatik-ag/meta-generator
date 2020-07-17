@@ -39,7 +39,7 @@ namespace Messerli.MetaGenerator
                 Handler = CommandHandler.Create<InvocationContext>(context => { HandleContext(context, generator); }),
             };
 
-            _userInputProvider.GetUserInputDescriptions().Each(variable => command.AddOption(CreateOption(variable)));
+            _userInputProvider.GetUserInputDescriptions().ForEach(variable => command.AddOption(CreateOption(variable)));
 
             return command;
         }

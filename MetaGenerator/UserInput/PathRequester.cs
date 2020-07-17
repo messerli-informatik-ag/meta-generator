@@ -4,6 +4,7 @@ using System.Linq;
 using Funcky;
 using Funcky.Monads;
 using Messerli.MetaGeneratorAbstractions.UserInput;
+using static Messerli.MetaGenerator.UserInput.Utility;
 
 namespace Messerli.MetaGenerator.UserInput
 {
@@ -23,16 +24,10 @@ namespace Messerli.MetaGenerator.UserInput
         {
             ValidatedUserInput.WriteQuestion(variable, "Please enter a valid path for '{0}':");
 
-            return QueryValueFromUser(variable).Match(
-                none: () => throw new NotImplementedException("cannot not happen"),
-                some: Functional.Identity);
+            return Retry(() => QueryValueFromUser(variable));
         }
 
         private Option<string> QueryValueFromUser(IUserInputDescription variable)
-        {
-            return ValidatedUserInput
-                .GetValidatedValue(variable, Enumerable.Empty<IValidation>())
-                .Match(none: () => QueryValueFromUser(variable), some: Option.Some);
-        }
+            => ValidatedUserInput.GetValidatedValue(variable, Enumerable.Empty<IValidation>());
     }
 }

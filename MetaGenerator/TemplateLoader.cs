@@ -21,9 +21,8 @@ namespace Messerli.MetaGenerator
         {
             if (_assemblyProvider.PluginAssembly.GetManifestResourceNames().Contains(templateName))
             {
-                return FindTemplate(templateName).Match(
-                    () => throw new NotImplementedException(),
-                    s => s);
+                return FindTemplate(templateName).GetOrElse(
+                    () => throw new NotImplementedException());
             }
 
             throw new Exception($"There is no template resource with the name {templateName}");
@@ -51,10 +50,7 @@ namespace Messerli.MetaGenerator
         private Option<string> FindTemplate(string templateName)
         {
             using var templateStream = GetTemplateStream(templateName);
-
-            return templateStream != null
-                ? Option.Some(ReadTemplate(templateStream))
-                : Option<string>.None();
+            return Option.FromNullable(templateStream).Select(ReadTemplate);
         }
 
         private string ReadTemplate(Stream templateStream)

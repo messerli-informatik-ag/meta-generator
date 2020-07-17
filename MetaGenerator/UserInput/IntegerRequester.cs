@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Funcky.Monads;
 using Messerli.MetaGeneratorAbstractions.UserInput;
+using static Messerli.MetaGenerator.UserInput.Utility;
 
 namespace Messerli.MetaGenerator.UserInput
 {
@@ -22,21 +23,15 @@ namespace Messerli.MetaGenerator.UserInput
         {
             ValidatedUserInput.WriteQuestion(variable, "Please enter a valid integer for '{0}':");
 
-            return QueryValueFromUser(variable).Match(
-                none: () => throw new NotImplementedException("cannot not happen"),
-                some: intValue => intValue.ToString());
+            return Retry(() => QueryValueFromUser(variable)).ToString();
         }
 
         private Option<int> QueryValueFromUser(IUserInputDescription variable)
-        {
-            return ValidatedUserInput
-                .GetValidatedValue(variable, RequesterValidations(variable))
-                .Match(none: () => QueryValueFromUser(variable), some: ToInteger);
-        }
+            => ValidatedUserInput
+                   .GetValidatedValue(variable, RequesterValidations(variable))
+                   .SelectMany(ToInteger);
 
         private static Option<int> ToInteger(string validatedIntegerString)
-        {
-            return Option.Some(int.Parse(validatedIntegerString));
-        }
+            => Option.Some(int.Parse(validatedIntegerString));
     }
 }
