@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Funcky.Monads;
 using Messerli.MetaGeneratorAbstractions.UserInput;
-using static Messerli.MetaGenerator.UserInput.Utility;
+using static Funcky.Functional;
 
 namespace Messerli.MetaGenerator.UserInput
 {
