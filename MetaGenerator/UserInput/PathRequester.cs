@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Funcky;
 using Funcky.Monads;
 using Messerli.MetaGeneratorAbstractions.UserInput;
-using static Messerli.MetaGenerator.UserInput.Utility;
+using static Funcky.Functional;
 
 namespace Messerli.MetaGenerator.UserInput
 {
