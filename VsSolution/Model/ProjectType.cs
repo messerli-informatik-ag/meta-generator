@@ -48,7 +48,7 @@ namespace Messerli.VsSolution.Model
             [Identifier.MonoAndroid] = Guid.Parse("EFBA0AD7-5A72-4C68-AF49-83D382785DCF"),
             [Identifier.MonoTouch] = Guid.Parse("6BC8ED88-2882-458C-8E55-DFD12B67127B"),
             [Identifier.MonoTouchBinding] = Guid.Parse("F5B4F3BC-B597-4E2B-B552-EF5D8A32436F"),
-            [Identifier.OfficeSharePoint] =  Guid.Parse("C1CDDADD-2546-481F-9697-4EA41081F2FC"),
+            [Identifier.OfficeSharePoint] = Guid.Parse("C1CDDADD-2546-481F-9697-4EA41081F2FC"),
             [Identifier.PortableClassLibrary] = Guid.Parse("786C830F-07A1-408B-BD7F-6EE04809D6DB"),
             [Identifier.ProjectFolders] = Guid.Parse("66A26720-8FB5-11D2-AA7E-00C04F688DDE"),
 
