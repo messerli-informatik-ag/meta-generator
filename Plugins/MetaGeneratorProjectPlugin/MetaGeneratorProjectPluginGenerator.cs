@@ -60,8 +60,8 @@ namespace Messerli.MetaGeneratorProjectPlugin
             _consoleWriter.WriteLine($"Creating the plugin '{_userInputProvider.Value(GeneratorName)}' for the project generator.");
             var fileNameTemplateValues = new Dictionary<string, string>
             {
-                { "fileExtension", "cs" },
-                { "generatorName", _userInputProvider.Value(GeneratorName) },
+                ["fileExtension"] = "cs",
+                ["generatorName"] = _userInputProvider.Value(GeneratorName),
             };
 
             var tasks = new[]
