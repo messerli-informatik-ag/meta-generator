@@ -300,9 +300,9 @@ namespace Messerli.BackbonePluginTemplatePlugin
             var glob = $"templates/{templateName}/**/*";
             var templateNameValues = new Dictionary<string, string>
             {
-                { "fileExtension", "cs" },
-                { "templateFileExtension", "mustache" },
-                { "pluginName", PluginName },
+                ["fileExtension"] = "cs",
+                ["templateFileExtension"] = "mustache",
+                ["pluginName"] = PluginName,
             };
             return _fileGenerator.FromTemplateGlob(glob, SolutionDirectory, templateNameValues);
         }
