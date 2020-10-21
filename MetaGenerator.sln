@@ -41,13 +41,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ManagedWrapperProjectsPlugi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackbonePluginTemplatePlugin", "Plugins\BackbonePluginTemplatePlugin\BackbonePluginTemplatePlugin.csproj", "{C9B0494F-5F2F-4C22-B4DE-4EBDF46D8B9C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileManipulator", "FileManipulator\FileManipulator.csproj", "{1E03BF1E-C0B4-4317-A5F6-C88F9C24EA93}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileManipulator", "FileManipulator\FileManipulator.csproj", "{1E03BF1E-C0B4-4317-A5F6-C88F9C24EA93}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileManipulatorAbstractions", "FileManipulatorAbstractions\FileManipulatorAbstractions.csproj", "{2CE393CD-227E-4C53-9216-FAFED37FED45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileManipulatorAbstractions", "FileManipulatorAbstractions\FileManipulatorAbstractions.csproj", "{2CE393CD-227E-4C53-9216-FAFED37FED45}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileManipulator.Test", "FileManipulator.Test\FileManipulator.Test.csproj", "{B8477F9B-EBBF-40B0-ADFC-A43F6B080617}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileManipulator.Test", "FileManipulator.Test\FileManipulator.Test.csproj", "{B8477F9B-EBBF-40B0-ADFC-A43F6B080617}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CppPropsReferencePlugin", "Plugins\CppPropsReferencePlugin\CppPropsReferencePlugin.csproj", "{F90A9C67-5076-42DD-A7D8-AFFB145547DE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CppProjectTools", "CppProjectTools", "{160EB7F0-B994-4BFC-8DE3-9C960B3A4D17}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VcxprojReader", "CppProjectTools\VcxprojReader\VcxprojReader.csproj", "{1FDF4A56-8C58-4FD2-8B24-E367E1FC174D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropsReader", "CppProjectTools\PropsReader\PropsReader.csproj", "{D578EC8D-AAF6-42A5-BBF6-8DDA329330BB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropsWriter", "CppProjectTools\PropsWriter\PropsWriter.csproj", "{FB8FDC32-DC20-40DE-9656-EA63BE139F3C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -123,6 +131,18 @@ Global
 		{F90A9C67-5076-42DD-A7D8-AFFB145547DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F90A9C67-5076-42DD-A7D8-AFFB145547DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F90A9C67-5076-42DD-A7D8-AFFB145547DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FDF4A56-8C58-4FD2-8B24-E367E1FC174D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FDF4A56-8C58-4FD2-8B24-E367E1FC174D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FDF4A56-8C58-4FD2-8B24-E367E1FC174D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FDF4A56-8C58-4FD2-8B24-E367E1FC174D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D578EC8D-AAF6-42A5-BBF6-8DDA329330BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D578EC8D-AAF6-42A5-BBF6-8DDA329330BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D578EC8D-AAF6-42A5-BBF6-8DDA329330BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D578EC8D-AAF6-42A5-BBF6-8DDA329330BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB8FDC32-DC20-40DE-9656-EA63BE139F3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB8FDC32-DC20-40DE-9656-EA63BE139F3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB8FDC32-DC20-40DE-9656-EA63BE139F3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB8FDC32-DC20-40DE-9656-EA63BE139F3C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -134,6 +154,9 @@ Global
 		{DB3EF7E4-220A-405F-82CC-9F1E9B7B71A9} = {20C9369F-5188-445E-9A81-837709067EA5}
 		{C9B0494F-5F2F-4C22-B4DE-4EBDF46D8B9C} = {20C9369F-5188-445E-9A81-837709067EA5}
 		{F90A9C67-5076-42DD-A7D8-AFFB145547DE} = {20C9369F-5188-445E-9A81-837709067EA5}
+		{1FDF4A56-8C58-4FD2-8B24-E367E1FC174D} = {160EB7F0-B994-4BFC-8DE3-9C960B3A4D17}
+		{D578EC8D-AAF6-42A5-BBF6-8DDA329330BB} = {160EB7F0-B994-4BFC-8DE3-9C960B3A4D17}
+		{FB8FDC32-DC20-40DE-9656-EA63BE139F3C} = {160EB7F0-B994-4BFC-8DE3-9C960B3A4D17}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E1DAC9D9-5C44-443C-9697-0BC57D1F0914}
