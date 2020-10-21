@@ -1,7 +1,17 @@
-﻿[
-  {
-    "Question": "Enter the name of the file generator name:",
-    "Name": "GeneratorName",
-    "Type": "String"
-  }
+[
+    {
+        "Question": "Please enter the full path of the .vcxproj file you want to modify. (Target project)",
+        "Name": "TargetProjectPath",
+        "Type": "ExistingPath"
+    },
+    {
+        "Question": "Please enter the full path of the .vcxproj file you want to reference to.",
+        "Name": "ReferencedProjectPath",
+        "Type": "ExistingPath"
+    },
+    {
+        "Question": "Please enter the API makro name. If ommitted one will be generated ([projectname]_API). If makro already exists input will be ignored.",
+        "Name": "ApiMakroName",
+        "Type": "String"
+    }
 ]

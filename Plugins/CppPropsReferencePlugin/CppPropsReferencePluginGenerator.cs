@@ -8,8 +8,7 @@ namespace Messerli.CppPropsReferencePlugin
 {
     public class CppPropsReferencePluginGenerator : IMetaGenerator
     {
-        private const string VariableDeclarations = "Messerli.CppPropsReferencePlugin.templates.VariableDeclarations.json";
-        private const string GeneratorName = "GeneratorName";
+        private const string GeneratorName = "Cpp props reference plugin generator";
 
         private readonly IConsoleWriter _consoleWriter;
         private readonly IFileGenerator _fileGenerator;
@@ -28,9 +27,15 @@ namespace Messerli.CppPropsReferencePlugin
 
         public string Name => "cpp-props-reference-plugin";
 
+        private string TargetProjectPath => _userInputProvider.Value(VariableConstant.TargetProjectPath);
+
+        private string ReferencedProjectPath => _userInputProvider.Value(VariableConstant.ReferencedProjectPath);
+
+        private string ApiMakroName => _userInputProvider.Value(VariableConstant.ApiMakroName);
+
         public void Register()
         {
-            _userInputProvider.RegisterVariablesFromTemplate(VariableDeclarations);
+            _userInputProvider.RegisterVariablesFromTemplate(Template.VariableDeclarations);
         }
 
         public void Prepare()
