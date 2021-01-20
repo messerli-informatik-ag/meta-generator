@@ -3,5 +3,15 @@
 		<BackbonePluginsTargetDir Condition="'$(BackbonePluginsTargetDir)' == ''">$(MSBuildThisFileDirectory)MetaGenerator\bin\$(Configuration)\$(TargetFramework)\plugins</BackbonePluginsTargetDir>
 	</PropertyGroup>
 
+	<PropertyGroup>
+		<_PluginTargetDir>$(BackbonePluginsTargetDir)\$(AssemblyName)</_PluginTargetDir>
+	</PropertyGroup>
 
+	<Target Name="CopyPlugin" AfterTargets="PostBuildEvent" DependsOnTargets="$(_PublishPluginAfterBuild)">
+		<Error Text="Plugins must be publishable" Condition="$(IsPublishable) != 'true'" />
+
+		<Delete Files="@(_ExistingPluginFiles)" Condition="Exists('$(_PluginTargetDir)')" />
+		<Copy SourceFiles="@(_PluginFiles)" DestinationFolder="$(_PluginTargetDir)\%(RecursiveDir)" ContinueOnError="false" />
+		<Message Importance="High" Text="$(MSBuildProjectName) -&gt; $([System.IO.Path]::GetFullPath('$(_PluginTargetDir)'))" />
+	</Target>
 </Project>
