@@ -1,8 +1,9 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using Funcky;
 using Funcky.Extensions;
 using Messerli.CommandLineAbstractions;
 using Messerli.MetaGeneratorAbstractions;
@@ -111,7 +112,7 @@ namespace Messerli.ManagedWrapperProjectsPlugin
 
                 _fileManipulator.AppendTemplate(Template.FilesToSign, Path.Combine(_pathProvider.GetBuildStepSignDirectory(), "FileList_Win32.txt")),
                 _fileManipulator.AppendTemplate(Template.FilesToSign, Path.Combine(_pathProvider.GetBuildStepSignDirectory(), "FileList_x64.txt")),
-                _fileManipulator.AddProjectsToSolution(GetSolutionInfoBuilder().Build(), GetProjectInfoBuilder().Build().ToEnumerable()),
+                _fileManipulator.AddProjectsToSolution(GetSolutionInfoBuilder().Build(), Sequence.FromNullable(GetProjectInfoBuilder().Build())),
             };
 
             Task.WaitAll(tasks.ToArray());

@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk; Microsoft.Build.CentralPackageVersions">
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>Messerli.FileManipulatorAbstractions</AssemblyName>
     <RootNamespace>Messerli.FileManipulatorAbstractions</RootNamespace>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
     <NullableContextOptions>enable</NullableContextOptions>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Messerli.MetaGeneratorAbstractions.UserInput;
@@ -23,6 +23,9 @@ namespace Messerli.MetaGeneratorAbstractions.Json
         [DataMember]
         public List<string> Validations { get; set; } = new List<string>();
 
-        public VariableType GetVariableType() => Enum.Parse<VariableType>(Type);
+        public VariableType GetVariableType()
+            => Type is null
+            ? throw new Exception("Type is null")
+            : Enum.Parse<VariableType>(Type);
     }
 }

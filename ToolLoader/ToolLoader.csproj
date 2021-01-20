@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk; Microsoft.Build.CentralPackageVersions">
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>Messerli.ToolLoader</RootNamespace>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
     <NullableContextOptions>enable</NullableContextOptions>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

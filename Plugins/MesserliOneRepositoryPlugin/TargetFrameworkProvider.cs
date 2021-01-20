@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -9,6 +9,7 @@ using Messerli.MetaGeneratorAbstractions;
 using Messerli.MetaGeneratorAbstractions.Json;
 using Messerli.ToolLoaderAbstractions;
 using Pastel;
+using static Funcky.Functional;
 
 namespace Messerli.MesserliOneRepositoryPlugin
 {
@@ -108,8 +109,15 @@ namespace Messerli.MesserliOneRepositoryPlugin
         {
             using var stream = _templateLoader.GetTemplateStream(DotNetSdkResource);
 
-            return (List<DotNetSdk>)_jsonSerializer
-                .ReadObject(stream);
+            var list = Option
+                .FromNullable(stream)
+                .Match(
+                    none: () => throw new Exception("no stream"),
+                    some: s => Option.FromNullable((List<DotNetSdk>?)_jsonSerializer.ReadObject(s)));
+
+            return list.Match(
+                none: () => throw new Exception("read object failed"),
+                some: Identity<List<DotNetSdk>>);
         }
 
         private IEnumerable<string> GetInstalledSdks()

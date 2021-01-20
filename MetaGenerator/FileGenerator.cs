@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -132,7 +132,7 @@ namespace Messerli.MetaGenerator
         {
             var folder = Path.GetDirectoryName(path);
 
-            if (Directory.Exists(folder) == false)
+            if (folder is not null && Directory.Exists(folder) == false)
             {
                 Directory.CreateDirectory(folder);
             }

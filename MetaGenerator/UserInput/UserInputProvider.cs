@@ -1,8 +1,9 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization.Json;
 using Autofac.Features.Indexed;
+using Funcky;
 using Funcky.Extensions;
 using Funcky.Monads;
 using Messerli.MetaGeneratorAbstractions;
@@ -84,9 +85,15 @@ namespace Messerli.MetaGenerator.UserInput
         private List<Variable> GetVariablesFromTemplate(string templateName)
         {
             using var stream = _templateLoader.GetTemplateStream(templateName);
+            var list = Option
+                .FromNullable(stream)
+                .Match(
+                    none: () => throw new Exception("no stream"),
+                    some: s => Option.FromNullable((List<Variable>?)_jsonSerializer.ReadObject(s)));
 
-            return (List<Variable>)_jsonSerializer
-                .ReadObject(stream);
+            return list.Match(
+                none: () => throw new Exception("read object failed"),
+                some: Identity<List<Variable>>);
         }
 
         private void RegisterVariablesFromJson(Variable variable)

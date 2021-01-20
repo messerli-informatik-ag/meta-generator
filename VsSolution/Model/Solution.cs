@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,6 +10,7 @@ namespace Messerli.VsSolution.Model
         private const int CurrentFormatVersion = 12;
         private const string ActiveConfiguration = "ActiveCfg";
         private const string BuildZero = "Build.0";
+        private const string DefaultPlatform = "Any CPU";
 
         public Solution(string solutionPath)
         {
@@ -80,29 +81,21 @@ namespace Messerli.VsSolution.Model
         {
             var solutionDirectory = Path.GetDirectoryName(SolutionPath);
 
-            return Path.GetRelativePath(solutionDirectory, projectPath);
+            return string.IsNullOrEmpty(solutionDirectory)
+                ? throw new Exception("solutionDirectory is null or empty")
+                : Path.GetRelativePath(solutionDirectory, projectPath);
         }
 
         private static PlatformConfiguration Configuration(string configuration)
-        {
-            var platform = "Any CPU";
-
-            return new PlatformConfiguration(ConfigurationPlatform(configuration, platform), ConfigurationPlatform(configuration, platform));
-        }
+            => new PlatformConfiguration(ConfigurationPlatform(configuration, DefaultPlatform), ConfigurationPlatform(configuration, DefaultPlatform));
 
         private static string ConfigurationPlatform(string configuration, string platform)
-        {
-            return $"{configuration}|{platform}";
-        }
+            => $"{configuration}|{platform}";
 
         private static Version CurrentMinimumVisualStudioVersion()
-        {
-            return new Version(10, 0, 40219, 1);
-        }
+            => new Version(10, 0, 40219, 1);
 
         private static Version VisualStudio2019()
-        {
-            return new Version(16, 0, 29709, 97);
-        }
+            => new Version(16, 0, 29709, 97);
     }
 }

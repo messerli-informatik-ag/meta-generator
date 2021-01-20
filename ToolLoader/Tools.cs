@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -37,9 +37,10 @@ namespace Messerli.ToolLoader
 
         private string UniqueName(string name) => $"{PluginContext()}::{name}";
 
-        private string PluginContext() => _executingPluginAssembly.HasPluginContext
-            ? _executingPluginAssembly.PluginAssembly.GetName().Name
-            : "GLOBAL";
+        private string PluginContext()
+            => _executingPluginAssembly.HasPluginContext
+                ? _executingPluginAssembly.PluginAssembly.GetName().Name ?? throw new Exception("Missing assembly name?")
+                : "GLOBAL";
 
         private string ToKey(Tuple<string, Func<ITool>> tuple) => tuple.Item1;
 
