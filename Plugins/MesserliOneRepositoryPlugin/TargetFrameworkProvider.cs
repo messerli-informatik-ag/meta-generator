@@ -51,7 +51,7 @@ namespace Messerli.MesserliOneRepositoryPlugin
 
         private SelectionValue ToSelectionValue(DotNetSdk sdk)
         {
-            return new SelectionValue
+            return new ()
             {
                 Description = $".NET SDK {sdk.SdkVersion} ({Eol(sdk)})[{InstalledSdk(sdk)}]{Lts(sdk)} [Released: {sdk.Released}]",
                 Value = sdk.SdkVersion,
@@ -75,7 +75,7 @@ namespace Messerli.MesserliOneRepositoryPlugin
 
         private bool IsEol(DotNetSdk sdk)
         {
-            return sdk.EndOfLife != null
+            return sdk.EndOfLife is not null
                    && sdk.EndOfLife != "TBA"
                    && ToDate(sdk.EndOfLife)
                        .Match(false, eol => eol < DateTime.Now);
@@ -117,7 +117,7 @@ namespace Messerli.MesserliOneRepositoryPlugin
 
             return list.Match(
                 none: () => throw new Exception("read object failed"),
-                some: Identity<List<DotNetSdk>>);
+                some: Identity);
         }
 
         private IEnumerable<string> GetInstalledSdks()

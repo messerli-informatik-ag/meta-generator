@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -53,11 +53,9 @@ namespace Messerli.MetaGenerator
             projectInfos
                 .ForEach(projectInfo => solution.AddProject(projectInfo.Name, projectInfo.Path, projectInfo.Type, projectInfo.Guid));
 
-            if (solutionInfo.FilterFolder != null)
-            {
-                projectInfos
-                    .ForEach(projectInfo => solution.AddNestedProject(solutionInfo.FilterFolder, projectInfo.Name));
-            }
+            solutionInfo.FilterFolder.AndThen(ff
+                => projectInfos.ForEach(projectInfo
+                    => solution.AddNestedProject(ff, projectInfo.Name)));
 
             await _solutionLoader.Store(solutionInfo.Path, solution);
         }
@@ -78,7 +76,7 @@ namespace Messerli.MetaGenerator
 
         private static RenderSettings TemplateRenderSettings()
         {
-            return new RenderSettings
+            return new ()
             {
                 ThrowOnDataMiss = true,
                 SkipHtmlEncoding = true,

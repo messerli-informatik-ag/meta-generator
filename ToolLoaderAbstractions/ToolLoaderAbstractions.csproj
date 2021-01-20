@@ -10,5 +10,7 @@
     <WarningsAsErrors />
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
-
+  <ItemGroup>
+      <PackageReference Include="Funcky" />
+  </ItemGroup>
 </Project>

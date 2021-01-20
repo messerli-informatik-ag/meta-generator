@@ -12,7 +12,7 @@ namespace Messerli.ToolLoader
     {
         private readonly IConsoleWriter _consoleWriter;
         private readonly string _path;
-        private readonly StringBuilder _stringBuilder = new StringBuilder();
+        private readonly StringBuilder _stringBuilder = new ();
 
         public Tool(IConsoleWriter consoleWriter, string path)
         {

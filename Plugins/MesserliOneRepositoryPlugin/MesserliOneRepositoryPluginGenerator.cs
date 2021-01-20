@@ -1,9 +1,10 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Funcky.Monads;
 using LibGit2Sharp;
 using Messerli.CommandLineAbstractions;
 using Messerli.MetaGeneratorAbstractions;
@@ -128,7 +129,7 @@ namespace Messerli.MesserliOneRepositoryPlugin
 
         private static Signature Author()
         {
-            return new Signature("Meta Generator", "meta-generator@messerli.ch", DateTime.Now);
+            return new ("Meta Generator", "meta-generator@messerli.ch", DateTime.Now);
         }
 
         private string RepositoryName()
@@ -148,23 +149,23 @@ namespace Messerli.MesserliOneRepositoryPlugin
 
             AddSolutionFolder(solution);
 
-            solution.AddProject(RepositoryName(), Path.Combine(RepositoryPath(), RepositoryName(), $"{RepositoryName()}.csproj"), ProjectType.Identifier.CSharpSdk, null);
+            solution.AddProject(RepositoryName(), Path.Combine(RepositoryPath(), RepositoryName(), $"{RepositoryName()}.csproj"), ProjectType.Identifier.CSharpSdk);
 
             await _solutionLoader.Store(solutionPath, solution);
         }
 
         private void AddSolutionFolder(Solution solution)
         {
-            solution.AddProject(SolutionItems, Path.Combine(RepositoryPath(), RepositoryName(), $"{RepositoryName()}.csproj"), ProjectType.Identifier.SolutionFolder, null);
+            solution.AddProject(SolutionItems, Path.Combine(RepositoryPath(), RepositoryName(), $"{RepositoryName()}.csproj"), ProjectType.Identifier.SolutionFolder);
             var project = solution.Projects.First();
 
             AddSolutionItemToProject(project, ".gitignore");
             AddSolutionItemToProject(project, "paket.dependencies");
         }
 
-        private static void AddSolutionItemToProject(Project project, string item, string? alias = null)
+        private static void AddSolutionItemToProject(Project project, string item, Option<string> alias = default)
         {
-            project.SolutionItems.Add(new SolutionItem(item, alias ?? item));
+            project.SolutionItems.Add(new SolutionItem(item, alias.GetOrElse(item)));
         }
     }
 }

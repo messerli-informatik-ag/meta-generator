@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Reflection;
+using Funcky.Extensions;
 using Funcky.Monads;
 using Messerli.MetaGeneratorAbstractions.Json;
 using Messerli.MetaGeneratorAbstractions.UserInput;
@@ -9,24 +10,14 @@ namespace Messerli.MetaGenerator.UserInput
 {
     internal static class UserInputDescriptionBuilderExtension
     {
-        public static UserInputDescriptionBuilder RegisterVariableName(this UserInputDescriptionBuilder builder, string? variableName)
+        public static UserInputDescriptionBuilder RegisterVariableName(this UserInputDescriptionBuilder builder, string variableName)
         {
-            if (variableName == null)
-            {
-                throw new Exception("A variable must have a name.");
-            }
-
-            builder.SetVariableName(variableName);
-
-            return builder;
+            return builder.SetVariableName(variableName);
         }
 
-        public static UserInputDescriptionBuilder RegisterVariableQuestion(this UserInputDescriptionBuilder builder, string? variableQuestion)
+        public static UserInputDescriptionBuilder RegisterVariableQuestion(this UserInputDescriptionBuilder builder, Option<string> variableQuestion)
         {
-            if (variableQuestion != null)
-            {
-                builder.SetVariableQuestion(variableQuestion);
-            }
+            _ = variableQuestion.AndThen(question => builder.SetVariableQuestion(question));
 
             return builder;
         }
@@ -43,12 +34,9 @@ namespace Messerli.MetaGenerator.UserInput
 
         public static UserInputDescriptionBuilder RegisterVariableValidations(this UserInputDescriptionBuilder builder, Variable variable, Assembly pluginAssembly)
         {
-            if (variable.Validations != null)
+            foreach (var validation in variable.Validations)
             {
-                foreach (var validation in variable.Validations)
-                {
-                    builder.SetValidation(FindValidationFunction(new ValidationName(validation), pluginAssembly));
-                }
+                builder.SetValidation(FindValidationFunction(new ValidationName(validation), pluginAssembly));
             }
 
             return builder;
@@ -62,35 +50,36 @@ namespace Messerli.MetaGenerator.UserInput
         }
 
         private static Option<IValidation> FindGlobalValidation(ValidationName validationName)
-        {
-            return validationName.Class == nameof(Validations) && FindValidationOnType(validationName, typeof(Validations)) is IValidation validation
-                ? Option.Some(validation)
+            => validationName.Class == nameof(Validations)
+                ? FindValidationOnType(validationName, typeof(Validations)).AndThen(ToValidation)
                 : Option<IValidation>.None();
-        }
 
-        private static object? FindValidationOnType(ValidationName validationName, Type type)
+        private static Option<object> FindValidationOnType(ValidationName validationName, Type type)
         {
             return type
                 .GetProperties()
                 .Where(p => p.Name == validationName.Property)
                 .Select(p => p.GetValue(null))
-                .FirstOrDefault();
+                .WhereNotNull()
+                .FirstOrNone();
         }
 
         private static Option<IValidation> FindPluginValidations(ValidationName validationName, Assembly pluginAssembly)
         {
-            return FindValidationOnType(validationName, FindPluginValidationType(validationName.Class, pluginAssembly)) is IValidation validation
-                ? Option.Some(validation)
-                : Option<IValidation>.None();
+            return FindValidationOnType(validationName, FindPluginValidationType(validationName.Class, pluginAssembly))
+                .AndThen(ToValidation);
         }
+
+        private static IValidation ToValidation(object v)
+            => (IValidation)v;
 
         private static Type FindPluginValidationType(string className, Assembly pluginAssembly)
         {
             return pluginAssembly
                 .GetTypes()
                 .Where(t => t.Name == className)
-                .FirstOrDefault()
-                ?? throw new TypeLoadException($"A class with the given name '{className}' was not found in the plugin '{pluginAssembly.GetName()}'");
+                .FirstOrNone()
+                .GetOrElse(() => throw new TypeLoadException($"A class with the given name '{className}' was not found in the plugin '{pluginAssembly.GetName()}'"));
         }
     }
 }

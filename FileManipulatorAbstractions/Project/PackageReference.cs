@@ -1,3 +1,5 @@
+﻿using Funcky.Monads;
+
 namespace Messerli.FileManipulatorAbstractions.Project
 {
     /// <summary>
@@ -8,9 +10,9 @@ namespace Messerli.FileManipulatorAbstractions.Project
         internal PackageReference(
             string name,
             string version,
-            DependencyAssets? privateAssets = null,
-            DependencyAssets? excludeAssets = null,
-            DependencyAssets? includeAssets = null)
+            Option<DependencyAssets> privateAssets = default,
+            Option<DependencyAssets> excludeAssets = default,
+            Option<DependencyAssets> includeAssets = default)
         {
             Name = name;
             Version = version;
@@ -23,10 +25,10 @@ namespace Messerli.FileManipulatorAbstractions.Project
 
         public string Version { get; }
 
-        public DependencyAssets? PrivateAssets { get; }
+        public Option<DependencyAssets> PrivateAssets { get; }
 
-        public DependencyAssets? ExcludeAssets { get; }
+        public Option<DependencyAssets> ExcludeAssets { get; }
 
-        public DependencyAssets? IncludeAssets { get; }
+        public Option<DependencyAssets> IncludeAssets { get; }
     }
 }

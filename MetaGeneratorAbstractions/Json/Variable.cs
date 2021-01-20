@@ -21,7 +21,7 @@ namespace Messerli.MetaGeneratorAbstractions.Json
         public List<SelectionValue>? SelectionValues { get; set; }
 
         [DataMember]
-        public List<string> Validations { get; set; } = new List<string>();
+        public List<string> Validations { get; set; } = new ();
 
         public VariableType GetVariableType()
             => Type is null

@@ -1,3 +1,4 @@
+using System;
 using Messerli.CommandLineAbstractions;
 
 namespace Messerli.CommandLine
@@ -6,17 +7,17 @@ namespace Messerli.CommandLine
     {
         public void WriteLine(string line)
         {
-            System.Console.WriteLine(line);
+            Console.WriteLine(line);
         }
 
         public void WriteLine()
         {
-            System.Console.WriteLine();
+            Console.WriteLine();
         }
 
         public void Write(string value)
         {
-            System.Console.Write(value);
+            Console.Write(value);
         }
     }
 }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Messerli.MetaGeneratorAbstractions;
@@ -10,7 +10,7 @@ namespace Messerli.MetaGenerator
     {
         private readonly IUserInputProvider _userInputProvider;
 
-        private readonly Dictionary<string, string> _variables = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> _variables = new ();
 
         public VariableProvider(IUserInputProvider userInputProvider)
         {

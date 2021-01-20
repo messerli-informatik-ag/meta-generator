@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Funcky.Monads;
 using Messerli.MetaGeneratorAbstractions.Json;
@@ -8,7 +8,7 @@ namespace Messerli.MetaGenerator.UserInput
 {
     internal class UserInputDescription : IUserInputDescription
     {
-        internal UserInputDescription(string variableName, string? variableQuestion, string? variableDescription, VariableType variableType, Func<bool> isNeededPredicate, List<SelectionValue>? variableSelectionValues, List<IValidation> validations)
+        internal UserInputDescription(string variableName, Option<string> variableQuestion, Option<string> variableDescription, VariableType variableType, Func<bool> isNeededPredicate, Option<List<SelectionValue>> variableSelectionValues, List<IValidation> validations)
         {
             VariableName = variableName;
             VariableQuestion = variableQuestion;
@@ -16,7 +16,7 @@ namespace Messerli.MetaGenerator.UserInput
             VariableType = variableType;
             VariableName = variableName;
             IsNeeded = new Lazy<bool>(isNeededPredicate);
-            VariableSelectionValues = variableSelectionValues ?? new List<SelectionValue>();
+            VariableSelectionValues = variableSelectionValues.GetOrElse(new List<SelectionValue>());
             Validations = validations;
         }
 
@@ -24,9 +24,9 @@ namespace Messerli.MetaGenerator.UserInput
 
         public string VariableName { get; }
 
-        public string? VariableQuestion { get; }
+        public Option<string> VariableQuestion { get; }
 
-        public string? VariableDescription { get; }
+        public Option<string> VariableDescription { get; }
 
         public VariableType VariableType { get; }
 

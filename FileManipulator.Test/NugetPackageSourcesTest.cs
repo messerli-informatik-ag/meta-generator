@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.IO;
+using Funcky.Monads;
 using Messerli.FileManipulatorAbstractions;
 using Messerli.Test.Utility;
 using Moq;
@@ -79,15 +80,15 @@ namespace Messerli.FileManipulator.Test
             "</configuration>" + $"{NewLine}";
 
         private static readonly NugetPackageSource ExamplePackageSource =
-            new NugetPackageSource(ExamplePackageName, "https://nuget.example.ch/v3/index.json");
+            new (ExamplePackageName, "https://nuget.example.ch/v3/index.json");
 
         private static readonly NugetPackageSource PasswordExamplePackageSource =
-            new NugetPackageSource(
+            new (
                 ExamplePackageName,
                 "https://nuget.example.ch/v3/index.json",
                 "Username",
                 "Password",
-                null,
+                Option<string>.None(),
                 true);
 
         [Theory]
@@ -99,7 +100,7 @@ namespace Messerli.FileManipulator.Test
                 (packageSources, configFile) => packageSources.Add(configFile, packageSource));
 
         public static TheoryData<string, string, NugetPackageSource> AddsPackageSourceData()
-            => new TheoryData<string, string, NugetPackageSource>
+            => new ()
             {
                 { MinimalNugetConfig, NugetConfigWithExample, ExamplePackageSource },
                 { string.Empty, NugetConfigWithExample, ExamplePackageSource },
@@ -115,7 +116,7 @@ namespace Messerli.FileManipulator.Test
                 (packageSources, configFile) => packageSources.Update(configFile, packageSource));
 
         public static TheoryData<string, string, NugetPackageSource> UpdatesPackageSourceData()
-            => new TheoryData<string, string, NugetPackageSource>
+            => new ()
             {
                 { NugetConfigWithExample, NugetConfigWithPasswordExample, PasswordExamplePackageSource },
             };
@@ -129,7 +130,7 @@ namespace Messerli.FileManipulator.Test
                 (packageSources, configFile) => packageSources.Remove(configFile, packageName));
 
         public static TheoryData<string, string, string> RemovesPackageSourceData()
-            => new TheoryData<string, string, string>
+            => new ()
             {
                 { NugetConfigWithClearAndNugetOrgAndExample, NugetConfigWithClearAndNugetOrg, ExamplePackageName },
                 { NugetConfigWithPasswordExample, MinimalNugetConfig, PasswordExamplePackageName },
@@ -144,7 +145,7 @@ namespace Messerli.FileManipulator.Test
                 (packageSources, configFile) => packageSources.Enable(configFile, packageName));
 
         public static TheoryData<string, string, string> EnablePackageSourceData()
-            => new TheoryData<string, string, string>
+            => new ()
             {
                 { NugetConfigWithDisabledExample, NugetConfigWithExample, ExamplePackageName },
                 { NugetConfigWithExample, NugetConfigWithExample, ExamplePackageName },
@@ -159,7 +160,7 @@ namespace Messerli.FileManipulator.Test
                 (packageSources, configFile) => packageSources.Disable(configFile, packageName));
 
         public static TheoryData<string, string, string> DisablePackageSourceData()
-            => new TheoryData<string, string, string>
+            => new ()
             {
                 { NugetConfigWithExample, NugetConfigWithDisabledExample, ExamplePackageName },
             };
@@ -178,8 +179,8 @@ namespace Messerli.FileManipulator.Test
             Assert.Equal(expectedFileContent, ReadNugetTestFile(testEnvironment));
         }
 
-        private static INugetPackageSourceManipulator CreateNugetPackageSources(ILogger? logger = null)
-            => new NugetPackageSourceManipulator(() => logger ?? new Mock<ILogger>().Object);
+        private static INugetPackageSourceManipulator CreateNugetPackageSources(Option<ILogger> logger = default)
+            => new NugetPackageSourceManipulator(() => logger.GetOrElse(() => new Mock<ILogger>().Object));
 
         private static string GetNugetFilePath(TestEnvironmentProvider testEnvironmentProvider)
             => Path.Combine(testEnvironmentProvider.RootDirectory, "nuget.config");

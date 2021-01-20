@@ -122,7 +122,7 @@ namespace Messerli.MetaGenerator
             => settings.SetIgnoreCaseOnKeyLookup(false);
 
         private static RenderSettings TemplateRenderSettings()
-            => new RenderSettings
+            => new ()
             {
                 ThrowOnDataMiss = true,
                 SkipHtmlEncoding = true,

@@ -1,4 +1,4 @@
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.Diagnostics.Contracts;
 
 namespace Messerli.FileManipulatorAbstractions
@@ -50,11 +50,11 @@ namespace Messerli.FileManipulatorAbstractions
 
         [Pure]
         public NugetConfigurationModification Build()
-            => new NugetConfigurationModification(_packageSourceManipulations);
+            => new (_packageSourceManipulations);
 
         private NugetConfigurationModificationBuilder ShallowClone(
             IImmutableList<NugetPackageSourceManipulationAction>? packageSourceManipulations = null)
-            => new NugetConfigurationModificationBuilder(
+            => new (
                 _nugetPackageSourceManipulator,
                 packageSourceManipulations ?? _packageSourceManipulations);
     }

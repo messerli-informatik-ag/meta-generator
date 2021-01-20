@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,7 +12,7 @@ namespace Messerli.NativeProjectsPlugin
 
         private const string TfsBase = "RmiProd";
 
-        private readonly List<string> _nonBranches = new List<string> { "BuildProcessTemplates", "RDDs", "Settings", "TeamProjectConfig", "VersInfo" };
+        private readonly List<string> _nonBranches = new () { "BuildProcessTemplates", "RDDs", "Settings", "TeamProjectConfig", "VersInfo" };
 
         public IEnumerable<SelectionValue> Branches()
         {

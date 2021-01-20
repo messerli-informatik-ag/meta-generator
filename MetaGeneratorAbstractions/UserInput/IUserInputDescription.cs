@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Funcky.Monads;
 using Messerli.MetaGeneratorAbstractions.Json;
@@ -11,9 +11,9 @@ namespace Messerli.MetaGeneratorAbstractions.UserInput
 
         string VariableName { get; }
 
-        string? VariableQuestion { get; }
+        Option<string> VariableQuestion { get; }
 
-        string? VariableDescription { get; }
+        Option<string> VariableDescription { get; }
 
         VariableType VariableType { get; }
 

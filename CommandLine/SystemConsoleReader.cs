@@ -11,6 +11,6 @@ namespace Messerli.CommandLine
             => ReadLine().TryParseInt();
 
         public string ReadLine()
-            => Option.FromNullable(System.Console.ReadLine()).GetOrElse(() => throw new Exception("unreachable"));
+            => Option.FromNullable(Console.ReadLine()).GetOrElse(() => throw new Exception("unreachable"));
     }
 }

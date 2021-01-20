@@ -1,11 +1,11 @@
-using System;
+﻿using System;
 
 namespace Messerli.MetaGeneratorAbstractions
 {
     public class NullMetaGenerator : IMetaGenerator
     {
         private static readonly Lazy<NullMetaGenerator> LazyInstance =
-            new Lazy<NullMetaGenerator>(() => new NullMetaGenerator());
+            new (() => new NullMetaGenerator());
 
         public string Description { get; } = string.Empty;
 

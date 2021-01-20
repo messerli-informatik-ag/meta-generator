@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using apophis.Lexer;
 using Messerli.VsSolution.Token;
@@ -7,8 +7,8 @@ namespace Messerli.VsSolution.Parser
 {
     public static class TokenWalkerExtensions
     {
-        private static readonly HashSet<Type> WhiteSpaceTypes = new HashSet<Type> { typeof(SpaceToken), typeof(TabToken), typeof(NewLineToken) };
-        private static readonly HashSet<Type> BareStringEndCharacters = new HashSet<Type> { typeof(AssignToken), typeof(NewLineToken) };
+        private static readonly HashSet<Type> WhiteSpaceTypes = new () { typeof(SpaceToken), typeof(TabToken), typeof(NewLineToken) };
+        private static readonly HashSet<Type> BareStringEndCharacters = new () { typeof(AssignToken), typeof(NewLineToken) };
 
         public static string ConsumeWord(this TokenWalker tokenWalker)
         {

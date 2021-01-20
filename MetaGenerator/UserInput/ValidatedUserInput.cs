@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Funcky.Monads;
@@ -41,7 +41,7 @@ namespace Messerli.MetaGenerator.UserInput
 
         public void WriteQuestion(IUserInputDescription variable, string defaultQuestion)
         {
-            var question = variable.VariableQuestion ?? defaultQuestion;
+            var question = variable.VariableQuestion.GetOrElse(defaultQuestion);
 
             _consoleWriter.WriteLine();
             _consoleWriter.WriteLine(FormatWithVariableName(question, variable.VariableName));

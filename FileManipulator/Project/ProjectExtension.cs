@@ -1,5 +1,7 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Funcky.Extensions;
+using Funcky.Monads;
 using Microsoft.Build.Construction;
 using MsBuildProject = Microsoft.Build.Evaluation.Project;
 
@@ -8,11 +10,13 @@ namespace Messerli.FileManipulator.Project
     public static class ProjectExtension
     {
         public static ProjectItemGroupElement GetItemGroupWithItemOfTypeOrCreateNew(this MsBuildProject project, string itemType)
-            => project.GetFirstItemGroupWithItemOfType(itemType) ?? project.CreateItemGroup();
+            => project
+                .GetFirstItemGroupWithItemOfType(itemType)
+                .GetOrElse(() => project.CreateItemGroup());
 
-        public static ProjectItemGroupElement? GetFirstItemGroupWithItemOfType(this MsBuildProject project, string itemType)
+        public static Option<ProjectItemGroupElement> GetFirstItemGroupWithItemOfType(this MsBuildProject project, string itemType)
             => GetItemGroups(project)
-                .FirstOrDefault(itemGroupElement => itemGroupElement.Items.Any(item => item.ItemType == itemType));
+                .FirstOrNone(itemGroupElement => itemGroupElement.Items.Any(item => item.ItemType == itemType));
 
         private static IEnumerable<ProjectItemGroupElement> GetItemGroups(MsBuildProject project)
             => project

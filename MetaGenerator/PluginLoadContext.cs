@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Reflection;
 using System.Runtime.Loader;
 
@@ -24,21 +24,19 @@ namespace Messerli.MetaGenerator
             {
                 var assemblyPath = _resolver.ResolveAssemblyToPath(assemblyName);
 
-                return assemblyPath != null
-                    ? LoadFromAssemblyPath(assemblyPath)
-                    : null;
+                return assemblyPath is null
+                    ? null
+                    : LoadFromAssemblyPath(assemblyPath);
             }
         }
 
         protected override IntPtr LoadUnmanagedDll(string unmanagedDllName)
         {
             var libraryPath = _resolver.ResolveUnmanagedDllToPath(unmanagedDllName);
-            if (libraryPath != null)
-            {
-                return LoadUnmanagedDllFromPath(libraryPath);
-            }
 
-            return IntPtr.Zero;
+            return libraryPath is null
+                ? IntPtr.Zero
+                : LoadUnmanagedDllFromPath(libraryPath);
         }
     }
 }

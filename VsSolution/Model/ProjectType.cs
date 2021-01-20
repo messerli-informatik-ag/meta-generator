@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,7 +8,7 @@ namespace Messerli.VsSolution.Model
     {
         // https://www.codeproject.com/Reference/720512/List-of-Visual-Studio-Project-Type-GUIDs
         // https://stackoverflow.com/questions/10802198/visual-studio-project-type-guids/10802387
-        private readonly Dictionary<Identifier, Guid> _typeGuids = new Dictionary<Identifier, Guid>
+        private readonly Dictionary<Identifier, Guid> _typeGuids = new ()
         {
             // https://github.com/dotnet/project-system/issues/1821
             [Identifier.CSharpSdk] = Guid.Parse("9A19103F-16F7-4668-BE54-9A1E7A4F7556"),

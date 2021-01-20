@@ -1,7 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Funcky;
+using Funcky.Monads;
 using Messerli.FileManipulatorAbstractions.Project;
 using Microsoft.Build.Construction;
 using Microsoft.Build.Evaluation;
@@ -105,13 +106,8 @@ namespace Messerli.FileManipulator.Project.MsBuild
         private static void AddAssetsListMetadataToPackageReference(
             ProjectItemElement item,
             string attributeName,
-            DependencyAssets? assetList)
-        {
-            if (assetList is { })
-            {
-                item.AddMetadataAsAttribute(attributeName, MapDependencyAssetsToString(assetList));
-            }
-        }
+            Option<DependencyAssets> assetList)
+            => assetList.AndThen(list => item.AddMetadataAsAttribute(attributeName, MapDependencyAssetsToString(list)));
 
         private static string MapDependencyAssetsToString(DependencyAssets dependencyAssets)
             => dependencyAssets switch

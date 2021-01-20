@@ -1,7 +1,7 @@
-using Autofac;
+﻿using Autofac;
 using Messerli.FileManipulator.Project;
+using Messerli.FileManipulator.Project.MsBuild;
 using Messerli.FileManipulatorAbstractions;
-using Messerli.FileManipulatorAbstractions.Project;
 using Messerli.FileSystem;
 using NuGet.Common;
 
@@ -17,11 +17,11 @@ namespace Messerli.FileManipulator
             builder.RegisterType<NugetPackageSourceManipulator>().As<INugetPackageSourceManipulator>();
             builder.RegisterType<NullLogger>().As<ILogger>();
             builder.RegisterType<MsBuildProjectManipulatorFacade>().As<IProjectManipulator>();
-            builder.RegisterType<Project.MsBuild.MicrosoftBuildAssemblyLoader>().As<Project.MsBuild.IMicrosoftBuildAssemblyLoader>();
-            builder.RegisterType<Project.MsBuild.ProjectManipulator>().As<Project.MsBuild.IProjectManipulator>();
-            builder.RegisterType<Project.MsBuild.ProjectSdkManipulator>().As<Project.MsBuild.IProjectSdkManipulator>();
-            builder.RegisterType<Project.MsBuild.CentralPackageVersionsManipulator>().As<Project.MsBuild.ICentralPackageVersionsManipulator>();
-            builder.RegisterType<Project.MsBuild.PackageReferenceConflictChecker>().As<Project.MsBuild.IPackageReferenceConflictChecker>();
+            builder.RegisterType<MicrosoftBuildAssemblyLoader>().As<IMicrosoftBuildAssemblyLoader>();
+            builder.RegisterType<ProjectManipulator>().As<Project.MsBuild.IProjectManipulator>();
+            builder.RegisterType<ProjectSdkManipulator>().As<IProjectSdkManipulator>();
+            builder.RegisterType<CentralPackageVersionsManipulator>().As<ICentralPackageVersionsManipulator>();
+            builder.RegisterType<PackageReferenceConflictChecker>().As<IPackageReferenceConflictChecker>();
         }
     }
 }

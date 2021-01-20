@@ -1,30 +1,31 @@
-using System;
+﻿using System;
 using System.Diagnostics.Contracts;
+using Funcky.Monads;
 
 namespace Messerli.FileManipulatorAbstractions.Project
 {
     public sealed class PackageReferenceBuilder
     {
-        private readonly string? _name;
+        private readonly Option<string> _name;
 
-        private readonly string? _version;
+        private readonly Option<string> _version;
 
-        private readonly DependencyAssets? _privateAssets;
+        private readonly Option<DependencyAssets> _privateAssets;
 
-        private readonly DependencyAssets? _excludeAssets;
+        private readonly Option<DependencyAssets> _excludeAssets;
 
-        private readonly DependencyAssets? _includeAssets;
+        private readonly Option<DependencyAssets> _includeAssets;
 
         public PackageReferenceBuilder()
         {
         }
 
         private PackageReferenceBuilder(
-            string? name,
-            string? version,
-            DependencyAssets? privateAssets,
-            DependencyAssets? excludeAssets,
-            DependencyAssets? includeAssets)
+            Option<string> name,
+            Option<string> version,
+            Option<DependencyAssets> privateAssets,
+            Option<DependencyAssets> excludeAssets,
+            Option<DependencyAssets> includeAssets)
         {
             _name = name;
             _version = version;
@@ -35,9 +36,9 @@ namespace Messerli.FileManipulatorAbstractions.Project
 
         [Pure]
         public PackageReference Build()
-            => new PackageReference(
-                _name ?? throw new InvalidOperationException($"{nameof(Name)} is required, did you forget to call .{nameof(Name)}()?"),
-                _version ?? throw new InvalidOperationException($"{nameof(Version)} is required, did you forget to call .{nameof(Version)}()?"),
+            => new (
+                _name.GetOrElse(() => throw new InvalidOperationException($"{nameof(Name)} is required, did you forget to call .{nameof(Name)}()?")),
+                _version.GetOrElse(() => throw new InvalidOperationException($"{nameof(Version)} is required, did you forget to call .{nameof(Version)}()?")),
                 _privateAssets,
                 _excludeAssets,
                 _includeAssets);
@@ -63,16 +64,16 @@ namespace Messerli.FileManipulatorAbstractions.Project
             => ShallowClone(excludeAssets: excludeAssets);
 
         private PackageReferenceBuilder ShallowClone(
-            string? name = null,
-            string? version = null,
-            DependencyAssets? privateAssets = null,
-            DependencyAssets? excludeAssets = null,
-            DependencyAssets? includeAssets = null)
-            => new PackageReferenceBuilder(
-                name ?? _name,
-                version ?? _version,
-                privateAssets ?? _privateAssets,
-                excludeAssets ?? _excludeAssets,
-                includeAssets ?? _includeAssets);
+            Option<string> name = default,
+            Option<string> version = default,
+            Option<DependencyAssets> privateAssets = default,
+            Option<DependencyAssets> excludeAssets = default,
+            Option<DependencyAssets> includeAssets = default)
+            => new (
+                name.OrElse(_name),
+                version.OrElse(_version),
+                privateAssets.OrElse(_privateAssets),
+                excludeAssets.OrElse(_excludeAssets),
+                includeAssets.OrElse(_includeAssets));
     }
 }
