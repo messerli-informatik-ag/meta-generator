@@ -115,9 +115,7 @@ namespace Messerli.MesserliOneRepositoryPlugin
                     none: () => throw new Exception("no stream"),
                     some: s => Option.FromNullable((List<DotNetSdk>?)_jsonSerializer.ReadObject(s)));
 
-            return list.Match(
-                none: () => throw new Exception("read object failed"),
-                some: Identity);
+            return list.GetOrElse(() => throw new Exception("read object failed"));
         }
 
         private IEnumerable<string> GetInstalledSdks()
