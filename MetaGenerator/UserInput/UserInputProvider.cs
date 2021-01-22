@@ -17,7 +17,7 @@ namespace Messerli.MetaGenerator.UserInput
         private readonly ITemplateLoader _templateLoader;
         private readonly IExecutingPluginAssemblyProvider _executingPluginAssemblyProvider;
         private readonly IIndex<VariableType, AbstractVariableRequester> _variableRequesters;
-        private readonly Dictionary<string, IUserInputDescription> _knownUserInputs = new ();
+        private readonly Dictionary<string, IUserInputDescription> _knownUserInputs = new();
         private readonly Func<UserInputDescriptionBuilder> _newInputDescriptionBuilder;
         private readonly DataContractJsonSerializer _jsonSerializer;
 

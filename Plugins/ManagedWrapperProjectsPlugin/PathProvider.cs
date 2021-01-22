@@ -12,7 +12,7 @@ namespace Messerli.ManagedWrapperProjectsPlugin
     {
         private readonly IUserInputProvider _userInputProvider;
         private readonly ITools _tools;
-        private static readonly HashSet<string> NoBranch = new () { "RDDs", "BuildProcessTemplates", "Settings", "TeamProjectConfig", "VersInfo" };
+        private static readonly HashSet<string> NoBranch = new() { "RDDs", "BuildProcessTemplates", "Settings", "TeamProjectConfig", "VersInfo" };
 
         public PathProvider(IUserInputProvider userInputProvider, ITools tools)
         {

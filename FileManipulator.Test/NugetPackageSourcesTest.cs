@@ -80,10 +80,10 @@ namespace Messerli.FileManipulator.Test
             "</configuration>" + $"{NewLine}";
 
         private static readonly NugetPackageSource ExamplePackageSource =
-            new (ExamplePackageName, "https://nuget.example.ch/v3/index.json");
+            new(ExamplePackageName, "https://nuget.example.ch/v3/index.json");
 
         private static readonly NugetPackageSource PasswordExamplePackageSource =
-            new (
+            new(
                 ExamplePackageName,
                 "https://nuget.example.ch/v3/index.json",
                 "Username",
@@ -100,7 +100,7 @@ namespace Messerli.FileManipulator.Test
                 (packageSources, configFile) => packageSources.Add(configFile, packageSource));
 
         public static TheoryData<string, string, NugetPackageSource> AddsPackageSourceData()
-            => new ()
+            => new()
             {
                 { MinimalNugetConfig, NugetConfigWithExample, ExamplePackageSource },
                 { string.Empty, NugetConfigWithExample, ExamplePackageSource },
@@ -116,7 +116,7 @@ namespace Messerli.FileManipulator.Test
                 (packageSources, configFile) => packageSources.Update(configFile, packageSource));
 
         public static TheoryData<string, string, NugetPackageSource> UpdatesPackageSourceData()
-            => new ()
+            => new()
             {
                 { NugetConfigWithExample, NugetConfigWithPasswordExample, PasswordExamplePackageSource },
             };
@@ -130,7 +130,7 @@ namespace Messerli.FileManipulator.Test
                 (packageSources, configFile) => packageSources.Remove(configFile, packageName));
 
         public static TheoryData<string, string, string> RemovesPackageSourceData()
-            => new ()
+            => new()
             {
                 { NugetConfigWithClearAndNugetOrgAndExample, NugetConfigWithClearAndNugetOrg, ExamplePackageName },
                 { NugetConfigWithPasswordExample, MinimalNugetConfig, PasswordExamplePackageName },
@@ -145,7 +145,7 @@ namespace Messerli.FileManipulator.Test
                 (packageSources, configFile) => packageSources.Enable(configFile, packageName));
 
         public static TheoryData<string, string, string> EnablePackageSourceData()
-            => new ()
+            => new()
             {
                 { NugetConfigWithDisabledExample, NugetConfigWithExample, ExamplePackageName },
                 { NugetConfigWithExample, NugetConfigWithExample, ExamplePackageName },
@@ -160,7 +160,7 @@ namespace Messerli.FileManipulator.Test
                 (packageSources, configFile) => packageSources.Disable(configFile, packageName));
 
         public static TheoryData<string, string, string> DisablePackageSourceData()
-            => new ()
+            => new()
             {
                 { NugetConfigWithExample, NugetConfigWithDisabledExample, ExamplePackageName },
             };

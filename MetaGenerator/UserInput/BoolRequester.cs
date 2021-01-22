@@ -8,8 +8,8 @@ namespace Messerli.MetaGenerator.UserInput
 {
     internal class BoolRequester : AbstractVariableRequester
     {
-        private static readonly HashSet<string> ValidTrueStrings = new (StringComparer.OrdinalIgnoreCase) { "true", "1", "yes", "y" };
-        private static readonly HashSet<string> ValidFalseStrings = new (StringComparer.OrdinalIgnoreCase) { "false", "0", "no", "n" };
+        private static readonly HashSet<string> ValidTrueStrings = new(StringComparer.OrdinalIgnoreCase) { "true", "1", "yes", "y" };
+        private static readonly HashSet<string> ValidFalseStrings = new(StringComparer.OrdinalIgnoreCase) { "false", "0", "no", "n" };
 
         public BoolRequester(IValidatedUserInput validatedUserInput)
             : base(validatedUserInput)

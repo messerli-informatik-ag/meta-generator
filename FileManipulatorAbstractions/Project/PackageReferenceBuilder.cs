@@ -36,7 +36,7 @@ namespace Messerli.FileManipulatorAbstractions.Project
 
         [Pure]
         public PackageReference Build()
-            => new (
+            => new(
                 _name.GetOrElse(() => throw new InvalidOperationException($"{nameof(Name)} is required, did you forget to call .{nameof(Name)}()?")),
                 _version.GetOrElse(() => throw new InvalidOperationException($"{nameof(Version)} is required, did you forget to call .{nameof(Version)}()?")),
                 _privateAssets,
@@ -69,7 +69,7 @@ namespace Messerli.FileManipulatorAbstractions.Project
             Option<DependencyAssets> privateAssets = default,
             Option<DependencyAssets> excludeAssets = default,
             Option<DependencyAssets> includeAssets = default)
-            => new (
+            => new(
                 name.OrElse(_name),
                 version.OrElse(_version),
                 privateAssets.OrElse(_privateAssets),

@@ -14,7 +14,7 @@ namespace Messerli.MetaGenerator.UserInput
         private VariableType _variableType;
         private Func<bool> _isNeededPredicate;
         private Option<List<SelectionValue>> _variableSelectionValues;
-        private List<IValidation> _validations = new ();
+        private List<IValidation> _validations = new();
 
         public UserInputDescriptionBuilder()
         {

@@ -66,7 +66,7 @@ namespace Messerli.MetaGenerator
 
         private Dictionary<string, string> UserArguments(InvocationContext context)
         {
-            Dictionary<string, string> userArguments = new ();
+            Dictionary<string, string> userArguments = new();
 
             foreach (var variable in _userInputProvider.GetVariableValues())
             {

@@ -26,10 +26,10 @@ namespace Messerli.FileManipulatorAbstractions
 
         [Pure]
         public GlobalJsonModification Build()
-            => new (_msBuildSdksToAdd);
+            => new(_msBuildSdksToAdd);
 
         private GlobalJsonModificationBuilder ShallowClone(
             Option<IImmutableList<MsBuildSdk>> sdksToAdd = default)
-            => new (sdksToAdd.GetOrElse(_msBuildSdksToAdd));
+            => new(sdksToAdd.GetOrElse(_msBuildSdksToAdd));
     }
 }

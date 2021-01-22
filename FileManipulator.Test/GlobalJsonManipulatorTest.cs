@@ -92,7 +92,7 @@ namespace Messerli.FileManipulator.Test
         }
 
         public static TheoryData<string, string, GlobalJsonModification> GetModificationsToExistingFile()
-            => new ()
+            => new()
             {
                 {
                     $"{{{NewLine}" +
@@ -128,7 +128,7 @@ namespace Messerli.FileManipulator.Test
             };
 
         public static TheoryData<string, GlobalJsonModification> GetModificationsToNewFile()
-            => new ()
+            => new()
             {
                 {
                     $"{{{NewLine}" +

@@ -25,7 +25,7 @@ namespace Messerli.FileManipulatorAbstractions.Project
 
         [Pure]
         public ProjectModification Build()
-            => new (_packageReferencesToAdd, _sdksToAdd);
+            => new(_packageReferencesToAdd, _sdksToAdd);
 
         [Pure]
         public ProjectModificationBuilder AddPackageReference(PackageReference packageReference)
@@ -42,7 +42,7 @@ namespace Messerli.FileManipulatorAbstractions.Project
         private ProjectModificationBuilder ShallowClone(
             IImmutableList<PackageReference>? packageReferencesToAdd = null,
             IImmutableList<string>? sdksToAdd = null)
-            => new (
+            => new(
                 packageReferencesToAdd ?? _packageReferencesToAdd,
                 sdksToAdd ?? _sdksToAdd);
     }

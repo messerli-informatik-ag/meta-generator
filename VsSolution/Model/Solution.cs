@@ -22,21 +22,21 @@ namespace Messerli.VsSolution.Model
 
         public int FormatVersion { get; set; }
 
-        public Version VisualStudioVersion { get; set; } = new ();
+        public Version VisualStudioVersion { get; set; } = new();
 
-        public Version MinimumVisualStudioVersion { get; set; } = new ();
+        public Version MinimumVisualStudioVersion { get; set; } = new();
 
         public Guid Guid { get; set; }
 
-        public List<Project> Projects { get; } = new ();
+        public List<Project> Projects { get; } = new();
 
-        public List<PlatformConfiguration> Platforms { get; } = new ();
+        public List<PlatformConfiguration> Platforms { get; } = new();
 
-        public List<SolutionProperty> Properties { get; } = new ();
+        public List<SolutionProperty> Properties { get; } = new();
 
-        public List<NestedProject> ProjectNesting { get; } = new ();
+        public List<NestedProject> ProjectNesting { get; } = new();
 
-        public List<TfsControlProperty> TfsControlProperties { get; } = new ();
+        public List<TfsControlProperty> TfsControlProperties { get; } = new();
 
         public static Solution NewSolution(string solutionPath)
         {
@@ -62,8 +62,8 @@ namespace Messerli.VsSolution.Model
             {
                 project.Configuration[platform] = new List<PlatformConfiguration>
                 {
-                    new (ActiveConfiguration, platform.Config),
-                    new (BuildZero, platform.Config),
+                    new(ActiveConfiguration, platform.Config),
+                    new(BuildZero, platform.Config),
                 };
             }
 
@@ -88,15 +88,15 @@ namespace Messerli.VsSolution.Model
         }
 
         private static PlatformConfiguration Configuration(string configuration)
-            => new (ConfigurationPlatform(configuration, DefaultPlatform), ConfigurationPlatform(configuration, DefaultPlatform));
+            => new(ConfigurationPlatform(configuration, DefaultPlatform), ConfigurationPlatform(configuration, DefaultPlatform));
 
         private static string ConfigurationPlatform(string configuration, string platform)
             => $"{configuration}|{platform}";
 
         private static Version CurrentMinimumVisualStudioVersion()
-            => new (10, 0, 40219, 1);
+            => new(10, 0, 40219, 1);
 
         private static Version VisualStudio2019()
-            => new (16, 0, 29709, 97);
+            => new(16, 0, 29709, 97);
     }
 }

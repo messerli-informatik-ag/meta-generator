@@ -9,7 +9,7 @@ namespace Messerli.VsSolution
     {
         public static SolutionWriter Create()
         {
-            return new ();
+            return new();
         }
 
         internal string Serialize(Solution solution)

@@ -13,8 +13,8 @@ namespace Messerli.ToolLoader
     {
         private readonly Tool.Factory _toolFactory;
         private readonly IExecutingPluginAssemblyProvider _executingPluginAssembly;
-        private readonly List<Tuple<string, Func<ITool>>> _findTools = new ();
-        private Dictionary<string, ITool> _tools = new ();
+        private readonly List<Tuple<string, Func<ITool>>> _findTools = new();
+        private Dictionary<string, ITool> _tools = new();
 
         public Tools(Tool.Factory toolFactory, IExecutingPluginAssemblyProvider executingPluginAssembly)
         {

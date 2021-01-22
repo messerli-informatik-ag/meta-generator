@@ -22,7 +22,7 @@ namespace Messerli.VsSolution.Model
             ProjectGuid = projectGuid;
         }
 
-        public List<SolutionItem> SolutionItems { get; } = new ();
+        public List<SolutionItem> SolutionItems { get; } = new();
 
         public string ProjectName { get; }
 
@@ -32,8 +32,8 @@ namespace Messerli.VsSolution.Model
 
         public ProjectType ProjectType { get; }
 
-        public Dictionary<PlatformConfiguration, List<PlatformConfiguration>> Configuration { get; } = new ();
+        public Dictionary<PlatformConfiguration, List<PlatformConfiguration>> Configuration { get; } = new();
 
-        public List<Dependency> Dependencies { get; } = new ();
+        public List<Dependency> Dependencies { get; } = new();
     }
 }

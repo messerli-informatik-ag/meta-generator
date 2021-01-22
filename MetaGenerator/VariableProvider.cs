@@ -10,7 +10,7 @@ namespace Messerli.MetaGenerator
     {
         private readonly IUserInputProvider _userInputProvider;
 
-        private readonly Dictionary<string, string> _variables = new ();
+        private readonly Dictionary<string, string> _variables = new();
 
         public VariableProvider(IUserInputProvider userInputProvider)
         {

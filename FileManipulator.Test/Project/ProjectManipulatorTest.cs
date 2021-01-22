@@ -64,7 +64,7 @@ namespace Messerli.FileManipulator.Test.Project
         }
 
         public static TheoryData<string, string, ProjectModification> GetModifications()
-            => new ()
+            => new()
             {
                 {
                     $"<Project Sdk=\"Microsoft.NET.Sdk\">{NewLine}" +
@@ -199,7 +199,7 @@ namespace Messerli.FileManipulator.Test.Project
         }
 
         public static TheoryData<string, string, string, string, ProjectModification> GetModificationsForProjectWithCentralPackageVersionsSdk()
-            => new ()
+            => new()
             {
                 {
                     $"<Project Sdk=\"Microsoft.NET.Sdk; {CentralPackageVersionsSdk}\">{NewLine}" +

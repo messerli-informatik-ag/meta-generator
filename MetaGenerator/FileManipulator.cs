@@ -76,7 +76,7 @@ namespace Messerli.MetaGenerator
 
         private static RenderSettings TemplateRenderSettings()
         {
-            return new ()
+            return new()
             {
                 ThrowOnDataMiss = true,
                 SkipHtmlEncoding = true,

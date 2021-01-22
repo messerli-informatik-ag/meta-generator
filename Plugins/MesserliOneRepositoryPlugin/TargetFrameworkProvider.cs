@@ -51,7 +51,7 @@ namespace Messerli.MesserliOneRepositoryPlugin
 
         private SelectionValue ToSelectionValue(DotNetSdk sdk)
         {
-            return new ()
+            return new()
             {
                 Description = $".NET SDK {sdk.SdkVersion} ({Eol(sdk)})[{InstalledSdk(sdk)}]{Lts(sdk)} [Released: {sdk.Released}]",
                 Value = sdk.SdkVersion,

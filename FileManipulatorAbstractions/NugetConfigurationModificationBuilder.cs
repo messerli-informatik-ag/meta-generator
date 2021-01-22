@@ -50,11 +50,11 @@ namespace Messerli.FileManipulatorAbstractions
 
         [Pure]
         public NugetConfigurationModification Build()
-            => new (_packageSourceManipulations);
+            => new(_packageSourceManipulations);
 
         private NugetConfigurationModificationBuilder ShallowClone(
             IImmutableList<NugetPackageSourceManipulationAction>? packageSourceManipulations = null)
-            => new (
+            => new(
                 _nugetPackageSourceManipulator,
                 packageSourceManipulations ?? _packageSourceManipulations);
     }

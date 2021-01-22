@@ -129,7 +129,7 @@ namespace Messerli.MesserliOneRepositoryPlugin
 
         private static Signature Author()
         {
-            return new ("Meta Generator", "meta-generator@messerli.ch", DateTime.Now);
+            return new("Meta Generator", "meta-generator@messerli.ch", DateTime.Now);
         }
 
         private string RepositoryName()
