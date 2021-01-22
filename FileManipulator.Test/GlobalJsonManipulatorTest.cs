@@ -76,7 +76,7 @@ namespace Messerli.FileManipulator.Test
         {
             var existingConfig = $"{{{NewLine}" +
                                        $"    \"msbuild-sdks\": [1, 2, 3]" +
-                                       $"}";
+                                       $"}}";
 
             using var testEnvironment = new TestEnvironmentProvider();
             var filePath = Path.Combine(testEnvironment.RootDirectory, FileName);
@@ -103,7 +103,7 @@ namespace Messerli.FileManipulator.Test
                     $"    \"msbuild-sdks\": {{{NewLine}" +
                     $"        \"{MsBuildSdkNugetPackageId}\": \"{MsBuildSdkVersion}\"{NewLine}" +
                     $"    }}{NewLine}" +
-                    $"}",
+                    $"}}",
                     $"{{{NewLine}" +
                     $"    \"sdk\": {{{NewLine}" +
                     $"        \"version\": \"3.1.200\"{NewLine}" +
@@ -117,7 +117,7 @@ namespace Messerli.FileManipulator.Test
                     $"    \"msbuild-sdks\": {{{NewLine}" +
                     $"        \"{MsBuildSdkNugetPackageId}\": \"{MsBuildSdkVersion}\"{NewLine}" +
                     $"    }}{NewLine}" +
-                    $"}",
+                    $"}}",
                     $"{{{NewLine}" +
                     $"    \"msbuild-sdks\": {{{NewLine}" +
                     $"        \"{MsBuildSdkNugetPackageId}\": \"{MsBuildSdkVersion}\"{NewLine}" +
@@ -135,7 +135,7 @@ namespace Messerli.FileManipulator.Test
                     $"    \"msbuild-sdks\": {{{NewLine}" +
                     $"        \"{MsBuildSdkNugetPackageId}\": \"{MsBuildSdkVersion}\"{NewLine}" +
                     $"    }}{NewLine}" +
-                    $"}",
+                    $"}}",
                     ModificationThatAddsAnMsBuildSdk
                 },
                 {
@@ -144,7 +144,7 @@ namespace Messerli.FileManipulator.Test
                     $"        \"A.Build\": \"1.0.0\",{NewLine}" +
                     $"        \"B.Build\": \"1.5.0\"{NewLine}" +
                     $"    }}{NewLine}" +
-                    $"}",
+                    $"}}",
                     new GlobalJsonModificationBuilder()
                         .AddMsBuildSdk(new MsBuildSdk("A.Build", "1.0.0"))
                         .AddMsBuildSdk(new MsBuildSdk("B.Build", "1.5.0"))
