@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -9,6 +9,7 @@ using Messerli.MetaGeneratorAbstractions;
 using Messerli.MetaGeneratorAbstractions.Json;
 using Messerli.ToolLoaderAbstractions;
 using Pastel;
+using static Funcky.Functional;
 
 namespace Messerli.MesserliOneRepositoryPlugin
 {
@@ -50,7 +51,7 @@ namespace Messerli.MesserliOneRepositoryPlugin
 
         private SelectionValue ToSelectionValue(DotNetSdk sdk)
         {
-            return new SelectionValue
+            return new()
             {
                 Description = $".NET SDK {sdk.SdkVersion} ({Eol(sdk)})[{InstalledSdk(sdk)}]{Lts(sdk)} [Released: {sdk.Released}]",
                 Value = sdk.SdkVersion,
@@ -74,7 +75,7 @@ namespace Messerli.MesserliOneRepositoryPlugin
 
         private bool IsEol(DotNetSdk sdk)
         {
-            return sdk.EndOfLife != null
+            return sdk.EndOfLife is not null
                    && sdk.EndOfLife != "TBA"
                    && ToDate(sdk.EndOfLife)
                        .Match(false, eol => eol < DateTime.Now);
@@ -108,8 +109,13 @@ namespace Messerli.MesserliOneRepositoryPlugin
         {
             using var stream = _templateLoader.GetTemplateStream(DotNetSdkResource);
 
-            return (List<DotNetSdk>)_jsonSerializer
-                .ReadObject(stream);
+            var list = Option
+                .FromNullable(stream)
+                .Match(
+                    none: () => throw new Exception("no stream"),
+                    some: s => Option.FromNullable((List<DotNetSdk>?)_jsonSerializer.ReadObject(s)));
+
+            return list.GetOrElse(() => throw new Exception("read object failed"));
         }
 
         private IEnumerable<string> GetInstalledSdks()

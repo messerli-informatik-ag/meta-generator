@@ -1,5 +1,7 @@
-using System;
+﻿using System;
 using System.Linq;
+using Funcky.Extensions;
+using Funcky.Monads;
 using Messerli.FileManipulatorAbstractions.Project;
 using Microsoft.Build.Evaluation;
 using static Messerli.FileManipulator.Project.MsBuild.Constant;
@@ -10,15 +12,16 @@ namespace Messerli.FileManipulator.Project.MsBuild
     internal sealed class PackageReferenceConflictChecker : IPackageReferenceConflictChecker
     {
         public PackageReferenceConflictResult CheckForConflict(MsBuildProject project, PackageReference packageReference)
-            => GetExistingItem(project, packageReference) is { } item
-                ? ValidateExistingPackageReference(packageReference, item)
-                : new PackageReferenceConflictResult.NoExisting();
+            => GetExistingItem(project, packageReference)
+                .Match(
+                    none: new PackageReferenceConflictResult.NoExisting(),
+                    some: item => ValidateExistingPackageReference(packageReference, item));
 
-        private static ProjectItem GetExistingItem(MsBuildProject project, PackageReference packageReference)
+        private static Option<ProjectItem> GetExistingItem(MsBuildProject project, PackageReference packageReference)
             => project
                 .Items
                 .Where(item => item.ItemType == PackageReferenceTypeTag)
-                .SingleOrDefault(item => item.EvaluatedInclude == packageReference.Name);
+                .SingleOrNone(item => item.EvaluatedInclude == packageReference.Name);
 
         private static PackageReferenceConflictResult ValidateExistingPackageReference(PackageReference packageReference, ProjectItem item)
         {

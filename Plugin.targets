@@ -4,25 +4,11 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<_PublishTargets>
-			PrepareForPublish;
-			ComputeAndCopyFilesToPublishDirectory;
-			GeneratePublishDependencyFile;
-			BundlePublishDirectory;
-		</_PublishTargets>
 		<_PluginTargetDir>$(BackbonePluginsTargetDir)\$(AssemblyName)</_PluginTargetDir>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<_ExistingPluginFiles Include="$(_PluginTargetDir)/**/*"></_ExistingPluginFiles>
-	</ItemGroup>
-
-	<Target Name="CopyPlugin" AfterTargets="PostBuildEvent" DependsOnTargets="$(_PublishTargets)">
+	<Target Name="CopyPlugin" AfterTargets="PostBuildEvent" DependsOnTargets="$(_PublishPluginAfterBuild)">
 		<Error Text="Plugins must be publishable" Condition="$(IsPublishable) != 'true'" />
-
-		<CreateItem Include="$(PublishDir)/**/*" Exclude="$(PublishDir)/Messerli.Backbone.PluginAbstractions.V0.*">
-			<Output TaskParameter="Include" ItemName="_PluginFiles"/>
-		</CreateItem>
 
 		<Delete Files="@(_ExistingPluginFiles)" Condition="Exists('$(_PluginTargetDir)')" />
 		<Copy SourceFiles="@(_PluginFiles)" DestinationFolder="$(_PluginTargetDir)\%(RecursiveDir)" ContinueOnError="false" />

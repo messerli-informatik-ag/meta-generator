@@ -1,3 +1,4 @@
+﻿using System;
 using Funcky.Extensions;
 using Funcky.Monads;
 using Messerli.CommandLineAbstractions;
@@ -7,13 +8,9 @@ namespace Messerli.CommandLine
     public class SystemConsoleReader : IConsoleReader
     {
         public Option<int> ReadInt()
-        {
-            return ReadLine().TryParseInt();
-        }
+            => ReadLine().TryParseInt();
 
         public string ReadLine()
-        {
-            return System.Console.ReadLine();
-        }
+            => Option.FromNullable(Console.ReadLine()).GetOrElse(() => throw new Exception("unreachable"));
     }
 }

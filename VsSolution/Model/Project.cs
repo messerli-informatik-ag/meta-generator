@@ -1,16 +1,17 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Funcky.Monads;
 
 namespace Messerli.VsSolution.Model
 {
     public class Project
     {
-        public Project(string projectName, string projectPath, ProjectType.Identifier projectType, Guid? projectGuid)
+        public Project(string projectName, string projectPath, ProjectType.Identifier projectType, Option<Guid> projectGuid = default)
         {
             ProjectName = projectName;
             ProjectPath = projectPath;
             ProjectType = new ProjectType(projectType);
-            ProjectGuid = projectGuid ?? Guid.NewGuid();
+            ProjectGuid = projectGuid.GetOrElse(Guid.NewGuid);
         }
 
         public Project(string projectName, string projectPath, Guid typeGuid, Guid projectGuid)
@@ -21,7 +22,7 @@ namespace Messerli.VsSolution.Model
             ProjectGuid = projectGuid;
         }
 
-        public List<SolutionItem> SolutionItems { get; } = new List<SolutionItem>();
+        public List<SolutionItem> SolutionItems { get; } = new();
 
         public string ProjectName { get; }
 
@@ -31,8 +32,8 @@ namespace Messerli.VsSolution.Model
 
         public ProjectType ProjectType { get; }
 
-        public Dictionary<PlatformConfiguration, List<PlatformConfiguration>> Configuration { get; } = new Dictionary<PlatformConfiguration, List<PlatformConfiguration>>();
+        public Dictionary<PlatformConfiguration, List<PlatformConfiguration>> Configuration { get; } = new();
 
-        public List<Dependency> Dependencies { get; } = new List<Dependency>();
+        public List<Dependency> Dependencies { get; } = new();
     }
 }

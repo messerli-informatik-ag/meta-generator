@@ -1,10 +1,11 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Funcky.Monads;
 
 namespace Messerli.ToolLoaderAbstractions
 {
     public interface ITools
     {
-        void RegisterTool(string name, string executable, string? specificPath = null);
+        void RegisterTool(string name, string executable, Option<string> specificPath = default);
 
         IEnumerable<KeyValuePair<string, ITool>> VerifyTools();
 

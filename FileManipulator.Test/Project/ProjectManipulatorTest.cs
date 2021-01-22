@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
 using Messerli.FileManipulator.Project;
 using Messerli.FileManipulator.Project.MsBuild;
@@ -64,7 +64,7 @@ namespace Messerli.FileManipulator.Test.Project
         }
 
         public static TheoryData<string, string, ProjectModification> GetModifications()
-            => new TheoryData<string, string, ProjectModification>
+            => new()
             {
                 {
                     $"<Project Sdk=\"Microsoft.NET.Sdk\">{NewLine}" +
@@ -199,7 +199,7 @@ namespace Messerli.FileManipulator.Test.Project
         }
 
         public static TheoryData<string, string, string, string, ProjectModification> GetModificationsForProjectWithCentralPackageVersionsSdk()
-            => new TheoryData<string, string, string, string, ProjectModification>
+            => new()
             {
                 {
                     $"<Project Sdk=\"Microsoft.NET.Sdk; {CentralPackageVersionsSdk}\">{NewLine}" +

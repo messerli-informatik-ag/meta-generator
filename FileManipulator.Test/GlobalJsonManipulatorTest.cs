@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Threading.Tasks;
 using Messerli.FileManipulatorAbstractions;
@@ -92,7 +92,7 @@ namespace Messerli.FileManipulator.Test
         }
 
         public static TheoryData<string, string, GlobalJsonModification> GetModificationsToExistingFile()
-            => new TheoryData<string, string, GlobalJsonModification>
+            => new()
             {
                 {
                     $"{{{NewLine}" +
@@ -128,7 +128,7 @@ namespace Messerli.FileManipulator.Test
             };
 
         public static TheoryData<string, GlobalJsonModification> GetModificationsToNewFile()
-            => new TheoryData<string, GlobalJsonModification>
+            => new()
             {
                 {
                     $"{{{NewLine}" +

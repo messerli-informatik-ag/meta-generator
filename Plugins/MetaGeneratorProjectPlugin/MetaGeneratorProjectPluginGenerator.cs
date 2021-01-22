@@ -1,6 +1,7 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Funcky;
 using Funcky.Extensions;
 using LibGit2Sharp;
 using Messerli.CommandLineAbstractions;
@@ -67,7 +68,7 @@ namespace Messerli.MetaGeneratorProjectPlugin
             var tasks = new[]
             {
                 _fileGenerator.FromTemplateGlob("templates/**/*.mustache", GetPluginPath(), fileNameTemplateValues),
-                _fileManipulator.AddProjectsToSolution(GetSolutionInfoBuilder().Build(), GetProjectInfoBuilder().Build().ToEnumerable()),
+                _fileManipulator.AddProjectsToSolution(GetSolutionInfoBuilder().Build(), Sequence.FromNullable(GetProjectInfoBuilder().Build())),
             };
 
             Task.WaitAll(tasks);

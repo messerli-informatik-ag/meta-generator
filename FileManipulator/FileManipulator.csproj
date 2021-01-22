@@ -3,16 +3,14 @@
     <PropertyGroup>
         <RootNamespace>Messerli.FileManipulator</RootNamespace>
         <AssemblyName>Messerli.FileManipulator</AssemblyName>
-    </PropertyGroup>
-    <PropertyGroup>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
-        <LangVersion>8.0</LangVersion>
+        <TargetFramework>net5.0</TargetFramework>
+        <LangVersion>9.0</LangVersion>
         <Nullable>enable</Nullable>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
     <ItemGroup>
-        <ProjectReference Include="..\FileManipulatorAbstractions\FileManipulatorAbstractions.csproj" />
+        <InternalsVisibleTo Include="$(AssemblyName).Test" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Autofac" />
@@ -23,5 +21,8 @@
         <PackageReference Include="Microsoft.Build" ExcludeAssets="runtime" />
         <PackageReference Include="Microsoft.Build.Locator" />
         <PackageReference Include="Funcky" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\FileManipulatorAbstractions\FileManipulatorAbstractions.csproj" />
     </ItemGroup>
 </Project>

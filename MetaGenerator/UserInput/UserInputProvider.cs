@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization.Json;
@@ -17,7 +17,7 @@ namespace Messerli.MetaGenerator.UserInput
         private readonly ITemplateLoader _templateLoader;
         private readonly IExecutingPluginAssemblyProvider _executingPluginAssemblyProvider;
         private readonly IIndex<VariableType, AbstractVariableRequester> _variableRequesters;
-        private readonly Dictionary<string, IUserInputDescription> _knownUserInputs = new Dictionary<string, IUserInputDescription>();
+        private readonly Dictionary<string, IUserInputDescription> _knownUserInputs = new();
         private readonly Func<UserInputDescriptionBuilder> _newInputDescriptionBuilder;
         private readonly DataContractJsonSerializer _jsonSerializer;
 
@@ -84,9 +84,13 @@ namespace Messerli.MetaGenerator.UserInput
         private List<Variable> GetVariablesFromTemplate(string templateName)
         {
             using var stream = _templateLoader.GetTemplateStream(templateName);
+            var list = Option
+                .FromNullable(stream)
+                .Match(
+                    none: () => throw new Exception("no stream"),
+                    some: s => Option.FromNullable((List<Variable>?)_jsonSerializer.ReadObject(s)));
 
-            return (List<Variable>)_jsonSerializer
-                .ReadObject(stream);
+            return list.GetOrElse(() => throw new Exception("read object failed"));
         }
 
         private void RegisterVariablesFromJson(Variable variable)
@@ -97,8 +101,8 @@ namespace Messerli.MetaGenerator.UserInput
         private UserInputDescription BuildUserInput(Variable variable)
         {
             return _newInputDescriptionBuilder()
-                .RegisterVariableName(variable.Name)
-                .RegisterVariableQuestion(variable.Question)
+                .RegisterVariableName(variable.Name ?? throw new Exception("Variable name cannot be empty!"))
+                .RegisterVariableQuestion(Option.FromNullable(variable.Question))
                 .SetVariableType(variable.GetVariableType())
                 .RegisterSelectionValues(variable)
                 .RegisterVariableValidations(variable, _executingPluginAssemblyProvider.PluginAssembly)
@@ -129,17 +133,17 @@ namespace Messerli.MetaGenerator.UserInput
 
         private static void VerifyVariable(IUserInputDescription variable)
         {
-            if (variable.VariableType == VariableType.Selection && (variable.VariableSelectionValues == null || variable.VariableSelectionValues.Count == 0))
+            if (variable.VariableType == VariableType.Selection && (variable.VariableSelectionValues is null || variable.VariableSelectionValues.Count == 0))
             {
                 throw new Exception("If the variable type is selection, there must be at least one selection value.");
             }
 
-            if (variable.VariableType != VariableType.Selection && variable.VariableSelectionValues != null && variable.VariableSelectionValues.Count > 0)
+            if (variable.VariableType != VariableType.Selection && variable.VariableSelectionValues is not null && variable.VariableSelectionValues.Count > 0)
             {
                 throw new Exception("You have specified values for a selection, but the type is not a selection.");
             }
 
-            if (variable.VariableSelectionValues != null && variable.VariableSelectionValues.Any(selectionValue => string.IsNullOrEmpty(selectionValue.Value)))
+            if (variable.VariableSelectionValues is not null && variable.VariableSelectionValues.Any(selectionValue => string.IsNullOrEmpty(selectionValue.Value)))
             {
                 throw new Exception("All selections value must have a valid string value!");
             }

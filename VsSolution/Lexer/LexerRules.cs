@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using apophis.Lexer;
@@ -10,7 +10,7 @@ namespace Messerli.VsSolution.Lexer
 {
     internal class LexerRules : ILexerRules
     {
-        private readonly HashSet<char> _guidCharacters = new HashSet<char> { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'A', 'B', 'C', 'D', 'E', 'F', '{', '}', '-' };
+        private readonly HashSet<char> _guidCharacters = new() { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'A', 'B', 'C', 'D', 'E', 'F', '{', '}', '-' };
         private bool _inSection;
         private bool _inContext;
 

@@ -1,6 +1,7 @@
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
+using Funcky.Monads;
 
 namespace Messerli.FileManipulatorAbstractions
 {
@@ -21,14 +22,14 @@ namespace Messerli.FileManipulatorAbstractions
 
         [Pure]
         public GlobalJsonModificationBuilder AddMsBuildSdk(MsBuildSdk sdk)
-            => ShallowClone(sdksToAdd: _msBuildSdksToAdd.Add(sdk));
+            => ShallowClone(sdksToAdd: Option.Some(_msBuildSdksToAdd.Add(sdk)));
 
         [Pure]
         public GlobalJsonModification Build()
-            => new GlobalJsonModification(_msBuildSdksToAdd);
+            => new(_msBuildSdksToAdd);
 
         private GlobalJsonModificationBuilder ShallowClone(
-            IImmutableList<MsBuildSdk>? sdksToAdd = null)
-            => new GlobalJsonModificationBuilder(sdksToAdd ?? _msBuildSdksToAdd);
+            Option<IImmutableList<MsBuildSdk>> sdksToAdd = default)
+            => new(sdksToAdd.GetOrElse(_msBuildSdksToAdd));
     }
 }

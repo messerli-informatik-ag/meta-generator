@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Funcky.Monads;
 using Messerli.MetaGeneratorAbstractions.UserInput;
 
 namespace Messerli.MetaGeneratorAbstractions.Json
@@ -21,8 +22,12 @@ namespace Messerli.MetaGeneratorAbstractions.Json
         public List<SelectionValue>? SelectionValues { get; set; }
 
         [DataMember]
-        public List<string> Validations { get; set; } = new List<string>();
+        public List<string> Validations { get; set; } = new();
 
-        public VariableType GetVariableType() => Enum.Parse<VariableType>(Type);
+        public VariableType GetVariableType()
+            => Option
+                .FromNullable(Type)
+                .AndThen(Enum.Parse<VariableType>)
+                .GetOrElse(() => throw new Exception("Type is null"));
     }
 }

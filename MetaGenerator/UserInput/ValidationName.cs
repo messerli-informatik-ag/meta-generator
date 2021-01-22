@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace Messerli.MetaGenerator.UserInput
 {
@@ -24,8 +24,6 @@ namespace Messerli.MetaGenerator.UserInput
         public string Property { get; }
 
         public override string ToString()
-        {
-            return $"{Class}.{Property}";
-        }
+            => $"{Class}.{Property}";
     }
 }

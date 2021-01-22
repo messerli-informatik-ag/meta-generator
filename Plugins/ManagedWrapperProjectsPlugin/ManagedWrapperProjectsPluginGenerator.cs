@@ -1,9 +1,10 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using Funcky.Extensions;
+using Funcky;
+using Funcky.Monads;
 using Messerli.CommandLineAbstractions;
 using Messerli.MetaGeneratorAbstractions;
 using Messerli.MetaGeneratorAbstractions.UserInput;
@@ -27,7 +28,7 @@ namespace Messerli.ManagedWrapperProjectsPlugin
         private readonly IVariableProvider _variableProvider;
         private readonly IPathProvider _pathProvider;
         private readonly ITools _tools;
-        private Guid? _projectGuid;
+        private Option<Guid> _projectGuid;
 
         public ManagedWrapperProjectsPluginGenerator(
             IConsoleWriter consoleWriter,
@@ -92,7 +93,7 @@ namespace Messerli.ManagedWrapperProjectsPlugin
 
         public void Generate()
         {
-            _consoleWriter.WriteLine($"Creating a C++/clr project for RmiProd");
+            _consoleWriter.WriteLine("Creating a C++/clr project for RmiProd");
             var projectName = _userInputProvider.Value(Variable.ProjectName);
 
             var tasks = new List<Task>
@@ -111,7 +112,7 @@ namespace Messerli.ManagedWrapperProjectsPlugin
 
                 _fileManipulator.AppendTemplate(Template.FilesToSign, Path.Combine(_pathProvider.GetBuildStepSignDirectory(), "FileList_Win32.txt")),
                 _fileManipulator.AppendTemplate(Template.FilesToSign, Path.Combine(_pathProvider.GetBuildStepSignDirectory(), "FileList_x64.txt")),
-                _fileManipulator.AddProjectsToSolution(GetSolutionInfoBuilder().Build(), GetProjectInfoBuilder().Build().ToEnumerable()),
+                _fileManipulator.AddProjectsToSolution(GetSolutionInfoBuilder().Build(), Sequence.FromNullable(GetProjectInfoBuilder().Build())),
             };
 
             Task.WaitAll(tasks.ToArray());

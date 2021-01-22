@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Linq;
@@ -60,7 +60,7 @@ namespace Messerli.MetaGenerator
 
         private static Option CreateOption(IUserInputDescription userInput)
         {
-            var option = new Option(UserOptionFormat.ToUserOption(userInput.VariableName), userInput.VariableDescription)
+            var option = new Option(UserOptionFormat.ToUserOption(userInput.VariableName), userInput.VariableDescription.GetOrElse(string.Empty))
             {
                 Argument = new Argument<string>(),
             };

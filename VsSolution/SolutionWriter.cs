@@ -1,4 +1,4 @@
-using System.Text;
+﻿using System.Text;
 using Messerli.VsSolution.Model;
 using Messerli.VsSolution.Parser.GlobalSection;
 using Messerli.VsSolution.Parser.ProjectSection;
@@ -9,7 +9,7 @@ namespace Messerli.VsSolution
     {
         public static SolutionWriter Create()
         {
-            return new SolutionWriter();
+            return new();
         }
 
         internal string Serialize(Solution solution)

@@ -1,7 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Funcky.Monads;
 
 namespace Messerli.VsSolution.Model
 {
@@ -10,6 +11,7 @@ namespace Messerli.VsSolution.Model
         private const int CurrentFormatVersion = 12;
         private const string ActiveConfiguration = "ActiveCfg";
         private const string BuildZero = "Build.0";
+        private const string DefaultPlatform = "Any CPU";
 
         public Solution(string solutionPath)
         {
@@ -20,21 +22,21 @@ namespace Messerli.VsSolution.Model
 
         public int FormatVersion { get; set; }
 
-        public Version VisualStudioVersion { get; set; } = new Version();
+        public Version VisualStudioVersion { get; set; } = new();
 
-        public Version MinimumVisualStudioVersion { get; set; } = new Version();
+        public Version MinimumVisualStudioVersion { get; set; } = new();
 
         public Guid Guid { get; set; }
 
-        public List<Project> Projects { get; } = new List<Project>();
+        public List<Project> Projects { get; } = new();
 
-        public List<PlatformConfiguration> Platforms { get; } = new List<PlatformConfiguration>();
+        public List<PlatformConfiguration> Platforms { get; } = new();
 
-        public List<SolutionProperty> Properties { get; } = new List<SolutionProperty>();
+        public List<SolutionProperty> Properties { get; } = new();
 
-        public List<NestedProject> ProjectNesting { get; } = new List<NestedProject>();
+        public List<NestedProject> ProjectNesting { get; } = new();
 
-        public List<TfsControlProperty> TfsControlProperties { get; } = new List<TfsControlProperty>();
+        public List<TfsControlProperty> TfsControlProperties { get; } = new();
 
         public static Solution NewSolution(string solutionPath)
         {
@@ -52,7 +54,7 @@ namespace Messerli.VsSolution.Model
             return result;
         }
 
-        public void AddProject(string projectName, string projectPath, ProjectType.Identifier projectType, Guid? projectGuid)
+        public void AddProject(string projectName, string projectPath, ProjectType.Identifier projectType, Option<Guid> projectGuid = default)
         {
             var project = new Project(projectName, PathRelativeToSolution(projectPath), projectType, projectGuid);
 
@@ -60,8 +62,8 @@ namespace Messerli.VsSolution.Model
             {
                 project.Configuration[platform] = new List<PlatformConfiguration>
                 {
-                    new PlatformConfiguration(ActiveConfiguration, platform.Config),
-                    new PlatformConfiguration(BuildZero, platform.Config),
+                    new(ActiveConfiguration, platform.Config),
+                    new(BuildZero, platform.Config),
                 };
             }
 
@@ -80,29 +82,21 @@ namespace Messerli.VsSolution.Model
         {
             var solutionDirectory = Path.GetDirectoryName(SolutionPath);
 
-            return Path.GetRelativePath(solutionDirectory, projectPath);
+            return string.IsNullOrEmpty(solutionDirectory)
+                ? throw new Exception("solutionDirectory is null or empty")
+                : Path.GetRelativePath(solutionDirectory, projectPath);
         }
 
         private static PlatformConfiguration Configuration(string configuration)
-        {
-            var platform = "Any CPU";
-
-            return new PlatformConfiguration(ConfigurationPlatform(configuration, platform), ConfigurationPlatform(configuration, platform));
-        }
+            => new(ConfigurationPlatform(configuration, DefaultPlatform), ConfigurationPlatform(configuration, DefaultPlatform));
 
         private static string ConfigurationPlatform(string configuration, string platform)
-        {
-            return $"{configuration}|{platform}";
-        }
+            => $"{configuration}|{platform}";
 
         private static Version CurrentMinimumVisualStudioVersion()
-        {
-            return new Version(10, 0, 40219, 1);
-        }
+            => new(10, 0, 40219, 1);
 
         private static Version VisualStudio2019()
-        {
-            return new Version(16, 0, 29709, 97);
-        }
+            => new(16, 0, 29709, 97);
     }
 }

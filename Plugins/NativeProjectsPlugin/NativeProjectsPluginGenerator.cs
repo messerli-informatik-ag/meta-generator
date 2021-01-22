@@ -1,10 +1,10 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Funcky.Extensions;
+using Funcky;
 using Messerli.CommandLineAbstractions;
 using Messerli.MetaGeneratorAbstractions;
 using Messerli.MetaGeneratorAbstractions.UserInput;
@@ -111,7 +111,7 @@ namespace Messerli.NativeProjectsPlugin
                 _fileGenerator.FromTemplate(ReleasePropertyTemplate, _projectInformation.PropertyPath($"{projectName}Release.props"), Encoding.UTF8),
                 _fileGenerator.FromTemplate(UsePropertyTemplate, _projectInformation.PropertyPath($"Use{projectName}.props"), Encoding.UTF8),
 
-                _fileManipulator.AddProjectsToSolution(GetSolutionInfoBuilder().Build(), GetProjectInfoBuilder().Build().ToEnumerable()),
+                _fileManipulator.AddProjectsToSolution(GetSolutionInfoBuilder().Build(), Sequence.FromNullable(GetProjectInfoBuilder().Build())),
             };
 
             tasks.AddRange(SignFileLists().Select(s => _fileManipulator.AppendTemplate(SignListTemplate, s)));

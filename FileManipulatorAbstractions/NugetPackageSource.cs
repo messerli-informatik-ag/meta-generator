@@ -1,3 +1,5 @@
+﻿using Funcky.Monads;
+
 namespace Messerli.FileManipulatorAbstractions
 {
     public sealed class NugetPackageSource
@@ -5,28 +7,28 @@ namespace Messerli.FileManipulatorAbstractions
         public NugetPackageSource(
             string name,
             string source,
-            string? username = null,
-            string? password = null,
-            string? validAuthenticationTypes = null,
-            bool? storePasswordInClearText = null)
+            Option<string> username = default,
+            Option<string> password = default,
+            Option<string> validAuthenticationTypes = default,
+            Option<bool> storePasswordInClearText = default)
         {
             Name = name;
             Source = source;
             Username = username;
             Password = password;
             ValidAuthenticationTypes = validAuthenticationTypes;
-            StorePasswordInClearText = storePasswordInClearText ?? false;
+            StorePasswordInClearText = storePasswordInClearText.GetOrElse(false);
         }
 
         public string Name { get; }
 
         public string Source { get; }
 
-        public string? Username { get; }
+        public Option<string> Username { get; }
 
-        public string? Password { get; }
+        public Option<string> Password { get; }
 
-        public string? ValidAuthenticationTypes { get; }
+        public Option<string> ValidAuthenticationTypes { get; }
 
         public bool StorePasswordInClearText { get; }
     }

@@ -83,7 +83,7 @@ namespace Messerli.FileManipulator
         private async Task<JObject> ParseExistingJsonFile(string path)
         {
             await using var stream = _fileOpeningBuilder
-                .Read(true)
+                .Read()
                 .Open(path);
             using var streamReader = new StreamReader(stream);
             using var textReader = new JsonTextReader(streamReader);
@@ -93,9 +93,9 @@ namespace Messerli.FileManipulator
         private async Task WriteJsonFile(string path, JToken document)
         {
             await using var stream = _fileOpeningBuilder
-                .Write(true)
-                .Create(true)
-                .Truncate(true)
+                .Write()
+                .Create()
+                .Truncate()
                 .Open(path);
             await using var streamWriter = new StreamWriter(stream);
             using var jsonTextWriter = new JsonTextWriter(streamWriter)

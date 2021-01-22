@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using System.Reflection;
 using Autofac;
 using Messerli.CommandLine;
@@ -16,7 +16,7 @@ namespace Messerli.MetaGenerator
 {
     internal class CompositionRoot
     {
-        private readonly ContainerBuilder _builder = new ContainerBuilder();
+        private readonly ContainerBuilder _builder = new();
 
         private CompositionRoot()
         {
@@ -24,7 +24,7 @@ namespace Messerli.MetaGenerator
 
         public static CompositionRoot Create()
         {
-            return new CompositionRoot();
+            return new();
         }
 
         public IContainer Build()

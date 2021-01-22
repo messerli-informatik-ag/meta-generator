@@ -1,7 +1,9 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Funcky;
+using Funcky.Extensions;
+using Funcky.Monads;
 using Messerli.FileManipulatorAbstractions.Project;
 using Microsoft.Build.Construction;
 using Microsoft.Build.Evaluation;
@@ -45,9 +47,10 @@ namespace Messerli.FileManipulator.Project.MsBuild
         }
 
         private static PackageReferenceConflictResult CheckForConflict(MsBuildProject project, PackageReference packageReference)
-            => GetExistingPackageReference(project, packageReference) is { } existing
-                  ? ValidateExistingPackageReference(existing, packageReference)
-                  : new PackageReferenceConflictResult.NoExisting();
+            => GetExistingPackageReference(project, packageReference)
+            .Match(
+                none: () => new PackageReferenceConflictResult.NoExisting(),
+                some: existing => ValidateExistingPackageReference(existing, packageReference));
 
         private static PackageReferenceConflictResult ValidateExistingPackageReference(ProjectItemElement item, PackageReference packageReference)
         {
@@ -65,19 +68,19 @@ namespace Messerli.FileManipulator.Project.MsBuild
             centralPackageItem.AddMetadataAsAttribute(VersionMetadataAttribute, packageReference.Version);
         }
 
-        private static ProjectItemElement? GetExistingPackageReference(MsBuildProject project, PackageReference packageReference)
+        private static Option<ProjectItemElement> GetExistingPackageReference(MsBuildProject project, PackageReference packageReference)
             => project
                 .Xml
                 .Items
                 .Where(item => item.ItemType == PackageReferenceTypeTag)
-                .FirstOrDefault(item => item.Update == packageReference.Name);
+                .FirstOrNone(item => item.Update == packageReference.Name);
 
         private static string GetVersionFromMetadata(ProjectItemElement item)
             => item.Metadata
                 .Where(m => m.Name == VersionMetadataAttribute)
                 .Select(m => m.Value)
-                .FirstOrDefault()
-                    ?? throw new InvalidOperationException($"Package reference '{item.Update}' is missing a version");
+                .FirstOrNone()
+                .GetOrElse(() => throw new InvalidOperationException($"Package reference '{item.Update}' is missing a version"));
 
         private static bool HasCentralPackageVersionsEnabled(MsBuildProject project)
             => project.GetPropertyValue(EnableCentralPackageVersionsProperty) != FalseAsString;

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using Messerli.FileManipulatorAbstractions;
 using NuGet.Commands;
@@ -29,10 +29,10 @@ namespace Messerli.FileManipulator
                 Configfile = configFile,
 
                 Name = packageSource.Name,
-                Password = packageSource.Password,
+                Password = packageSource.Password.GetOrElse(string.Empty),
                 Source = packageSource.Source,
-                Username = packageSource.Username,
-                ValidAuthenticationTypes = packageSource.ValidAuthenticationTypes,
+                Username = packageSource.Username.GetOrElse(string.Empty),
+                ValidAuthenticationTypes = packageSource.ValidAuthenticationTypes.GetOrElse(string.Empty),
                 StorePasswordInClearText = packageSource.StorePasswordInClearText,
             };
 
@@ -47,10 +47,10 @@ namespace Messerli.FileManipulator
                 Configfile = configFile,
 
                 Name = packageSource.Name,
-                Password = packageSource.Password,
+                Password = packageSource.Password.GetOrElse(string.Empty),
                 Source = packageSource.Source,
-                Username = packageSource.Username,
-                ValidAuthenticationTypes = packageSource.ValidAuthenticationTypes,
+                Username = packageSource.Username.GetOrElse(string.Empty),
+                ValidAuthenticationTypes = packageSource.ValidAuthenticationTypes.GetOrElse(string.Empty),
                 StorePasswordInClearText = packageSource.StorePasswordInClearText,
             };
 

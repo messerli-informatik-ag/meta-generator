@@ -1,8 +1,8 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
+using Funcky.Extensions;
 using Messerli.CommandLineAbstractions;
 using Messerli.FileManipulatorAbstractions;
 using Messerli.FileManipulatorAbstractions.Project;
@@ -28,9 +28,9 @@ namespace Messerli.BackbonePluginTemplatePlugin
         private readonly IProjectManipulator _projectManipulator;
         private readonly IDotnetToolInstaller _dotnetToolInstaller;
 
-        private static readonly MsBuildSdk BackbonePluginSdk = new MsBuildSdk("Messerli.Backbone.PluginSdk", "0.4.1");
-        private static readonly MsBuildSdk CentralPackageVersionsSdk = new MsBuildSdk(CentralPackageVersionsSdkName, "2.0.52");
-        private static readonly NugetPackageSource InternalNugetServer = new NugetPackageSource("Internal Nuget Server", "https://nuget.messerli.ch/v3/index.json");
+        private static readonly MsBuildSdk BackbonePluginSdk = new("Messerli.Backbone.PluginSdk", "0.4.1");
+        private static readonly MsBuildSdk CentralPackageVersionsSdk = new(CentralPackageVersionsSdkName, "2.0.52");
+        private static readonly NugetPackageSource InternalNugetServer = new("Internal Nuget Server", "https://nuget.messerli.ch/v3/index.json");
 
         private static readonly PackageReference AutofacPackageReference =
             new PackageReferenceBuilder()
@@ -308,9 +308,12 @@ namespace Messerli.BackbonePluginTemplatePlugin
         }
 
         private SolutionInfo GetSolutionInfo()
-            => new SolutionInfo.Builder()
-                .WithPath(Directory.GetFiles(SolutionDirectory, $"*.{SolutionFileExtension}").FirstOrDefault())
-                .Build();
+            => Directory
+                .GetFiles(SolutionDirectory, $"*.{SolutionFileExtension}")
+                .FirstOrNone()
+                .Match(
+                    none: () => throw new Exception("GetFiles returned an empty list"),
+                    some: path => new SolutionInfo.Builder().WithPath(path).Build());
 
         private ProjectInfo GetProjectInfo()
         {

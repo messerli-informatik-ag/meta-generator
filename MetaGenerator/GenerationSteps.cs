@@ -1,3 +1,4 @@
+﻿using System;
 using System.Collections.Generic;
 using System.CommandLine.Invocation;
 using System.Drawing;
@@ -54,7 +55,7 @@ namespace Messerli.MetaGenerator
 
                 _timeKeeper.Print();
             }
-            catch (System.Exception exception)
+            catch (Exception exception)
             {
                 _exceptionFormatter.FormatException(exception);
                 result = ExitCode.ExceptionOccured;
@@ -65,7 +66,7 @@ namespace Messerli.MetaGenerator
 
         private Dictionary<string, string> UserArguments(InvocationContext context)
         {
-            Dictionary<string, string> userArguments = new Dictionary<string, string>();
+            Dictionary<string, string> userArguments = new();
 
             foreach (var variable in _userInputProvider.GetVariableValues())
             {

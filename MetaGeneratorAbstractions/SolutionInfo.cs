@@ -1,10 +1,11 @@
-using System;
+﻿using System;
+using Funcky.Monads;
 
 namespace Messerli.MetaGeneratorAbstractions
 {
     public class SolutionInfo
     {
-        private SolutionInfo(string path, string? filterFolder)
+        private SolutionInfo(string path, Option<string> filterFolder)
         {
             Path = path;
             FilterFolder = filterFolder;
@@ -12,16 +13,12 @@ namespace Messerli.MetaGeneratorAbstractions
 
         public string Path { get; }
 
-        public string? FilterFolder { get; }
+        public Option<string> FilterFolder { get; }
 
         public class Builder
         {
             private string _path = string.Empty;
-            private string? _filterFolder = null;
-
-            public Builder()
-            {
-            }
+            private Option<string> _filterFolder;
 
             public Builder WithPath(string path)
             {

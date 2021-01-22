@@ -1,12 +1,13 @@
-using System;
+﻿using System;
 using System.IO;
+using Funcky.Monads;
 using Messerli.VsSolution.Model;
 
 namespace Messerli.MetaGeneratorAbstractions
 {
     public class ProjectInfo
     {
-        private ProjectInfo(string name, string path, Guid? guid, ProjectType.Identifier type)
+        private ProjectInfo(string name, string path, Option<Guid> guid, ProjectType.Identifier type)
         {
             Name = name;
             Path = path;
@@ -18,7 +19,7 @@ namespace Messerli.MetaGeneratorAbstractions
 
         public string Path { get; }
 
-        public Guid? Guid { get; }
+        public Option<Guid> Guid { get; }
 
         public ProjectType.Identifier Type { get; }
 
@@ -26,12 +27,8 @@ namespace Messerli.MetaGeneratorAbstractions
         {
             private string _name = string.Empty;
             private string _path = string.Empty;
-            private Guid? _guid = null;
+            private Option<Guid> _guid;
             private ProjectType.Identifier _type = ProjectType.Identifier.CSharpSdk;
-
-            public Builder()
-            {
-            }
 
             public ProjectInfo Build()
             {
@@ -60,7 +57,7 @@ namespace Messerli.MetaGeneratorAbstractions
                 return this;
             }
 
-            public Builder WithGuid(Guid? guid)
+            public Builder WithGuid(Option<Guid> guid)
             {
                 _guid = guid;
                 return this;

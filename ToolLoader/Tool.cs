@@ -1,7 +1,8 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using Funcky.Monads;
 using Messerli.CommandLineAbstractions;
 using Messerli.ToolLoaderAbstractions;
 
@@ -11,7 +12,7 @@ namespace Messerli.ToolLoader
     {
         private readonly IConsoleWriter _consoleWriter;
         private readonly string _path;
-        private readonly StringBuilder _stringBuilder = new StringBuilder();
+        private readonly StringBuilder _stringBuilder = new();
 
         public Tool(IConsoleWriter consoleWriter, string path)
         {
@@ -31,7 +32,9 @@ namespace Messerli.ToolLoader
 
             using var process = Process.Start(CreateProcessStartInfo(arguments, workingDirectory));
 
-            RecursiveRead(process, _stringBuilder);
+            Option
+                .FromNullable(process)
+                .AndThen(p => RecursiveRead(p, _stringBuilder));
         }
 
         public bool IsAvailable()

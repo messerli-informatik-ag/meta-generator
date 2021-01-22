@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Funcky.Monads;
 using Messerli.MetaGeneratorAbstractions.Json;
 using Messerli.MetaGeneratorAbstractions.UserInput;
 
@@ -7,13 +8,13 @@ namespace Messerli.MetaGenerator.UserInput
 {
     internal class UserInputDescriptionBuilder
     {
-        private string? _variableName;
-        private string? _variableQuestion;
-        private string? _variableDescription;
+        private Option<string> _variableName;
+        private Option<string> _variableQuestion;
+        private Option<string> _variableDescription;
         private VariableType _variableType;
         private Func<bool> _isNeededPredicate;
-        private List<SelectionValue>? _variableSelectionValues;
-        private List<IValidation> _validations = new List<IValidation>();
+        private Option<List<SelectionValue>> _variableSelectionValues;
+        private List<IValidation> _validations = new();
 
         public UserInputDescriptionBuilder()
         {
@@ -22,9 +23,10 @@ namespace Messerli.MetaGenerator.UserInput
 
         public UserInputDescription Build()
         {
-            return _variableName == null
-                ? throw new Exception("Variable Name needs to be set with SetVariableName before building!")
-                : new UserInputDescription(_variableName, _variableQuestion, _variableDescription, _variableType, _isNeededPredicate, _variableSelectionValues, _validations);
+            return _variableName
+                .Match(
+                none: () => throw new Exception("Variable Name needs to be set with SetVariableName before building!"),
+                some: name => new UserInputDescription(name, _variableQuestion, _variableDescription, _variableType, _isNeededPredicate, _variableSelectionValues, _validations));
         }
 
         public UserInputDescriptionBuilder SetIsNeededPredicate(Func<bool> isNeededPredicate)
