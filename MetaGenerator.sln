@@ -21,6 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 		.gitmodules = .gitmodules
 		Directory.Build.props = Directory.Build.props
+		.github\workflows\dotnetcore.yml = .github\workflows\dotnetcore.yml
 		global.json = global.json
 		Packages.props = Packages.props
 		Plugin.targets = Plugin.targets
@@ -41,11 +42,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ManagedWrapperProjectsPlugi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackbonePluginTemplatePlugin", "Plugins\BackbonePluginTemplatePlugin\BackbonePluginTemplatePlugin.csproj", "{C9B0494F-5F2F-4C22-B4DE-4EBDF46D8B9C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileManipulator", "FileManipulator\FileManipulator.csproj", "{1E03BF1E-C0B4-4317-A5F6-C88F9C24EA93}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileManipulator", "FileManipulator\FileManipulator.csproj", "{1E03BF1E-C0B4-4317-A5F6-C88F9C24EA93}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileManipulatorAbstractions", "FileManipulatorAbstractions\FileManipulatorAbstractions.csproj", "{2CE393CD-227E-4C53-9216-FAFED37FED45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileManipulatorAbstractions", "FileManipulatorAbstractions\FileManipulatorAbstractions.csproj", "{2CE393CD-227E-4C53-9216-FAFED37FED45}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileManipulator.Test", "FileManipulator.Test\FileManipulator.Test.csproj", "{B8477F9B-EBBF-40B0-ADFC-A43F6B080617}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileManipulator.Test", "FileManipulator.Test\FileManipulator.Test.csproj", "{B8477F9B-EBBF-40B0-ADFC-A43F6B080617}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
