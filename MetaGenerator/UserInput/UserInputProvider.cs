@@ -90,9 +90,7 @@ namespace Messerli.MetaGenerator.UserInput
                     none: () => throw new Exception("no stream"),
                     some: s => Option.FromNullable((List<Variable>?)_jsonSerializer.ReadObject(s)));
 
-            return list.Match(
-                none: () => throw new Exception("read object failed"),
-                some: Identity);
+            return list.GetOrElse(() => throw new Exception("read object failed"));
         }
 
         private void RegisterVariablesFromJson(Variable variable)
