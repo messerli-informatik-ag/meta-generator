@@ -10,9 +10,7 @@
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
     <ItemGroup>
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-            <_Parameter1>$(AssemblyName).Test</_Parameter1>
-        </AssemblyAttribute>
+        <InternalsVisibleTo Include="$(AssemblyName).Test" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Autofac" />
