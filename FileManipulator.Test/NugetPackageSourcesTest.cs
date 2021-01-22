@@ -180,7 +180,7 @@ namespace Messerli.FileManipulator.Test
         }
 
         private static INugetPackageSourceManipulator CreateNugetPackageSources(Option<ILogger> logger = default)
-            => new NugetPackageSourceManipulator(() => logger.GetOrElse(() => new Mock<ILogger>().Object));
+            => new NugetPackageSourceManipulator(() => logger.GetOrElse(() => Mock.Of<ILogger>()));
 
         private static string GetNugetFilePath(TestEnvironmentProvider testEnvironmentProvider)
             => Path.Combine(testEnvironmentProvider.RootDirectory, "nuget.config");
