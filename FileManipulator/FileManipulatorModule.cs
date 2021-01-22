@@ -16,7 +16,7 @@ namespace Messerli.FileManipulator
             builder.RegisterType<NugetConfigurationManipulator>().As<INugetConfigurationManipulator>();
             builder.RegisterType<NugetPackageSourceManipulator>().As<INugetPackageSourceManipulator>();
             builder.RegisterType<NullLogger>().As<ILogger>();
-            builder.RegisterType<MsBuildProjectManipulatorFacade>().As<IProjectManipulator>();
+            builder.RegisterType<MsBuildProjectManipulatorFacade>().As<FileManipulatorAbstractions.Project.IProjectManipulator>();
             builder.RegisterType<MicrosoftBuildAssemblyLoader>().As<IMicrosoftBuildAssemblyLoader>();
             builder.RegisterType<ProjectManipulator>().As<Project.MsBuild.IProjectManipulator>();
             builder.RegisterType<ProjectSdkManipulator>().As<IProjectSdkManipulator>();
