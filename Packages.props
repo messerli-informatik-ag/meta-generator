@@ -10,7 +10,7 @@
 		<PackageReference Update="Messerli.FileSystem" Version="[0.1.7, 2)" />
 		<PackageReference Update="Messerli.Test.Utility" Version="[0.8.4, 0.9)" />
 		<PackageReference Update="Microsoft.Build" Version="[16.8.0, 17)" />
-		<PackageReference Update="Microsoft.Build.Locator" Version="[1.3.2, 2)" />
+		<PackageReference Update="Microsoft.Build.Locator" Version="[1.4.1, 2)" />
 		<PackageReference Update="Microsoft.NET.Test.Sdk" Version="[16.8.3, 17)" />
 		<PackageReference Update="Moq" Version="[4.13.1, 5)" />
 		<PackageReference Update="Newtonsoft.Json" Version="[12.0.3, 13)" />
