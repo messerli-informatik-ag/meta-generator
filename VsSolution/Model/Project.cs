@@ -11,7 +11,7 @@ namespace Messerli.VsSolution.Model
             ProjectName = projectName;
             ProjectPath = projectPath;
             ProjectType = new ProjectType(projectType);
-            ProjectGuid = projectGuid.GetOrElse(Guid.NewGuid());
+            ProjectGuid = projectGuid.GetOrElse(Guid.NewGuid);
         }
 
         public Project(string projectName, string projectPath, Guid typeGuid, Guid projectGuid)
