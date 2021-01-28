@@ -1,3 +1,5 @@
+﻿using System.Threading.Tasks;
+
 namespace Messerli.MetaGenerator
 {
     public interface IPluginManager
@@ -5,5 +7,7 @@ namespace Messerli.MetaGenerator
         int Install(string pluginName);
 
         int Uninstall(string pluginName);
+
+        Task<int> Search();
     }
 }

@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Runtime.Loader;
 
-namespace Messerli.MetaGenerator
+namespace Messerli.MetaGenerator.PluginManagement
 {
     internal class PluginLoadContext : AssemblyLoadContext
     {

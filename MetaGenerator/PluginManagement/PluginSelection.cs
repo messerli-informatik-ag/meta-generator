@@ -1,8 +1,10 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.CommandLine.Invocation;
 using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
+using Funcky.Extensions;
 using Funcky.Monads;
 using Messerli.CommandLineAbstractions;
 using Messerli.MetaGenerator.UserInput;
@@ -11,7 +13,7 @@ using Messerli.MetaGeneratorAbstractions.Json;
 using Messerli.MetaGeneratorAbstractions.UserInput;
 using Pastel;
 
-namespace Messerli.MetaGenerator
+namespace Messerli.MetaGenerator.PluginManagement
 {
     internal class PluginSelection : IPluginSelection
     {
@@ -22,22 +24,25 @@ namespace Messerli.MetaGenerator
         private readonly IEnumerable<IMetaGenerator> _generators;
         private readonly SelectionRequester _selectionRequester;
         private readonly Func<UserInputDescriptionBuilder> _newUserInputDescriptionBuilder;
+        private readonly IPluginRepository _pluginRepository;
 
         public PluginSelection(
             IConsoleWriter consoleWriter,
             IGenerationSteps generationSteps,
             IEnumerable<IMetaGenerator> generators,
             SelectionRequester selectionRequester,
-            Func<UserInputDescriptionBuilder> newUserInputDescriptionBuilder)
+            Func<UserInputDescriptionBuilder> newUserInputDescriptionBuilder,
+            IPluginRepository pluginRepository)
         {
             _consoleWriter = consoleWriter;
             _generationSteps = generationSteps;
             _generators = generators;
             _selectionRequester = selectionRequester;
             _newUserInputDescriptionBuilder = newUserInputDescriptionBuilder;
+            _pluginRepository = pluginRepository;
         }
 
-        public int StartPluginInteractive(InvocationContext context)
+        public async Task<int> StartPluginInteractive(InvocationContext context)
         {
             try
             {
@@ -50,7 +55,7 @@ namespace Messerli.MetaGenerator
             {
                 if (argumentOutOfRange.ParamName == "variable")
                 {
-                    return PrintPluginNotFound();
+                    return await PrintPluginNotFound();
                 }
 
                 throw;
@@ -58,34 +63,33 @@ namespace Messerli.MetaGenerator
         }
 
         public int StartPlugin(InvocationContext context, string generatorName)
-        {
-            return _generationSteps.Execute(_generators.First(generator => generator.Name == generatorName), context);
-        }
+            => _generationSteps.Execute(_generators.First(generator => generator.Name == generatorName), context);
 
-        private int PrintPluginNotFound()
+        private async Task<int> PrintPluginNotFound()
         {
             _consoleWriter.WriteLine("No plugins found!".Pastel(Color.OrangeRed));
-            _consoleWriter.WriteLine("<TODO> give help");
+            _consoleWriter.WriteLine("--- available plugins ---");
+
+            var plugins = await _pluginRepository
+                .Plugins();
+
+            plugins.ForEach(Console.WriteLine);
 
             return NoPluginsFound;
         }
 
         private IUserInputDescription ToSelection(IEnumerable<IMetaGenerator> metaGenerators)
-        {
-            return _newUserInputDescriptionBuilder()
+            => _newUserInputDescriptionBuilder()
                 .SetVariableName("GeneratorType")
                 .SetVariableDescription("What do you want to generate?")
                 .SetVariableType(VariableType.Selection)
                 .SetVariableQuestion("What do you want to generate? Please select from the following options.")
                 .SetSelectionValues(ToSelectionValues(metaGenerators))
                 .Build();
-        }
 
         private List<SelectionValue> ToSelectionValues(IEnumerable<IMetaGenerator> metaGenerators)
-        {
-            return metaGenerators
+            => metaGenerators
                 .Select(metaGenerator => new SelectionValue { Value = metaGenerator.Name, Description = $"{metaGenerator.Description} ({metaGenerator.Name})" })
                 .ToList();
-        }
     }
 }

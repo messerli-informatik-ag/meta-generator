@@ -8,13 +8,13 @@ namespace Messerli.MetaGenerator.UserInput
 {
     internal class UserInputDescriptionBuilder
     {
+        private readonly List<IValidation> _validations = new();
         private Option<string> _variableName;
         private Option<string> _variableQuestion;
         private Option<string> _variableDescription;
         private VariableType _variableType;
         private Func<bool> _isNeededPredicate;
         private Option<List<SelectionValue>> _variableSelectionValues;
-        private List<IValidation> _validations = new();
 
         public UserInputDescriptionBuilder()
         {

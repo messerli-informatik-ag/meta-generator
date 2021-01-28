@@ -1,10 +1,12 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Linq;
+using System.Threading.Tasks;
 using Autofac;
 using Funcky.Extensions;
+using Messerli.MetaGenerator.PluginManagement;
 using Messerli.MetaGeneratorAbstractions;
 
 namespace Messerli.MetaGenerator
@@ -44,9 +46,9 @@ namespace Messerli.MetaGenerator
             return root;
         }
 
-        private void HandleContext(InvocationContext context)
+        private async Task HandleContext(InvocationContext context)
         {
-            context.ResultCode = _pluginSelection.StartPluginInteractive(context);
+            context.ResultCode = await _pluginSelection.StartPluginInteractive(context);
         }
 
         private Option VerboseOption()
@@ -93,6 +95,7 @@ namespace Messerli.MetaGenerator
 
             pluginCommand.AddCommand(CreateInstallPluginCommand());
             pluginCommand.AddCommand(CreateUninstallPluginCommand());
+            pluginCommand.AddCommand(CreateSearchPluginCommand());
 
             return pluginCommand;
         }
@@ -119,6 +122,16 @@ namespace Messerli.MetaGenerator
             uninstallCommand.AddArgument(new Argument { Arity = new ArgumentArity(1, 1), Name = "pluginName", Description = "The name of the plugin you want to uninstall." });
 
             return uninstallCommand;
+        }
+
+        private Command CreateSearchPluginCommand()
+        {
+            var searchCommand = new Command("search", "Install a plugin from the plugin repository")
+            {
+                Handler = CommandHandler.Create(_pluginManager.Search),
+            };
+
+            return searchCommand;
         }
     }
 }

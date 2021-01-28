@@ -1,4 +1,4 @@
-using System.CommandLine;
+﻿using System.CommandLine;
 using Messerli.MetaGeneratorAbstractions;
 
 namespace Messerli.MetaGenerator
@@ -8,15 +8,11 @@ namespace Messerli.MetaGenerator
         private readonly IRootCommandBuilder _rootCommandBuilder;
 
         public Application(IRootCommandBuilder rootCommandBuilder)
-        {
-            _rootCommandBuilder = rootCommandBuilder;
-        }
+            => _rootCommandBuilder = rootCommandBuilder;
 
         public int Run(string[] args)
-        {
-            return _rootCommandBuilder
+            => _rootCommandBuilder
                 .Build()
                 .Invoke(args);
-        }
     }
 }

@@ -1,9 +1,12 @@
 ﻿using System.IO;
+using System.Linq.Expressions;
 using System.Reflection;
 using Autofac;
+using Funcky;
 using Messerli.CommandLine;
 using Messerli.FileManipulator;
 using Messerli.FileManipulatorAbstractions;
+using Messerli.MetaGenerator.PluginManagement;
 using Messerli.MetaGenerator.UserInput;
 using Messerli.MetaGeneratorAbstractions;
 using Messerli.MetaGeneratorAbstractions.UserInput;
@@ -23,14 +26,10 @@ namespace Messerli.MetaGenerator
         }
 
         public static CompositionRoot Create()
-        {
-            return new();
-        }
+            => new();
 
         public IContainer Build()
-        {
-            return _builder.Build();
-        }
+            => _builder.Build();
 
         public CompositionRoot RegisterGenerator()
         {
@@ -39,6 +38,7 @@ namespace Messerli.MetaGenerator
             _builder.RegisterType<GeneratorCommandBuilder>().As<IGeneratorCommandBuilder>();
             _builder.RegisterType<PluginSelection>().As<IPluginSelection>().SingleInstance();
             _builder.RegisterType<PluginManager>().As<IPluginManager>();
+            _builder.RegisterType<NugetPluginRepository>().As<IPluginRepository>();
 
             _builder.RegisterType<GenerationSteps>().As<IGenerationSteps>();
             _builder.RegisterType<ValidatedUserInput>().As<IValidatedUserInput>();
@@ -99,7 +99,7 @@ namespace Messerli.MetaGenerator
             return this;
         }
 
-        private string CreateFolderWhenNecessary(string pluginsPath)
+        private static string CreateFolderWhenNecessary(string pluginsPath)
         {
             if (Directory.Exists(pluginsPath) == false)
             {
