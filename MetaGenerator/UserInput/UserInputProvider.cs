@@ -55,9 +55,9 @@ namespace Messerli.MetaGenerator.UserInput
 
             foreach (var variable in _knownUserInputs.Select(v => v.Value).Where(v => v.IsNeeded.Value))
             {
-                var variableRequster = _variableRequesters[variable.VariableType];
+                var variableRequester = _variableRequesters[variable.VariableType];
 
-                variable.Value = Option.Some(variableRequster.RequestValue(variable, userArguments.TryGetValue(key: variable.VariableName)));
+                variable.Value = Option.Some(variableRequester.RequestValue(variable, userArguments.GetValueOrNone(key: variable.VariableName)));
             }
         }
 
@@ -76,7 +76,7 @@ namespace Messerli.MetaGenerator.UserInput
         public string Value(string variableName)
         {
             return _knownUserInputs
-                .TryGetValue(key: variableName)
+                .GetValueOrNone(key: variableName)
                 .SelectMany(userInput => userInput.Value)
                 .GetOrElse(() => throw new Exception($"Variable '{variableName}' is not a registered user input."));
         }
@@ -112,7 +112,7 @@ namespace Messerli.MetaGenerator.UserInput
         private IUserInputDescription GetUserInputDescription(string variableName)
         {
             return _knownUserInputs
-                .TryGetValue(key: variableName)
+                .GetValueOrNone(key: variableName)
                 .Match(
                     none: () => NoValue(variableName),
                     some: Identity);

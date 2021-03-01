@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Funcky.Extensions;
@@ -56,7 +56,7 @@ namespace Messerli.MetaGenerator.UserInput
 
         private static bool IsValuePossible(IUserInputDescription variable, string input)
         {
-            var maybeValue = input.TryParseInt();
+            var maybeValue = input.ParseIntOrNone();
 
             return maybeValue.Match(
                 false,
