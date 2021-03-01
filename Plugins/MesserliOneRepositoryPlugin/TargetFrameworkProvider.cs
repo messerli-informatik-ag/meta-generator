@@ -9,7 +9,6 @@ using Messerli.MetaGeneratorAbstractions;
 using Messerli.MetaGeneratorAbstractions.Json;
 using Messerli.ToolLoaderAbstractions;
 using Pastel;
-using static Funcky.Functional;
 
 namespace Messerli.MesserliOneRepositoryPlugin
 {
