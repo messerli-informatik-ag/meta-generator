@@ -84,16 +84,13 @@ namespace Messerli.MesserliOneRepositoryPlugin
         private Option<DateTime> ToDate(string sdkEndOfLife)
         {
             var dateParts = sdkEndOfLife.Split('-');
-            Option<int> d = dateParts[0].ParseIntOrNone();
-            if (dateParts.Length == 3)
-            {
-                return from year in dateParts[0].ParseIntOrNone()
-                       from month in dateParts[1].ParseIntOrNone()
-                       from day in dateParts[2].ParseIntOrNone()
-                       select new DateTime(year, month, day);
-            }
 
-            return Option<DateTime>.None();
+            return dateParts.Length == 3
+                ? from year in dateParts[0].ParseIntOrNone()
+                  from month in dateParts[1].ParseIntOrNone()
+                  from day in dateParts[2].ParseIntOrNone()
+                  select new DateTime(year, month, day)
+                : Option<DateTime>.None();
         }
 
         private string InstalledSdk(DotNetSdk sdk)
