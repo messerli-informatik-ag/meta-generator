@@ -9,7 +9,6 @@ using Messerli.MetaGeneratorAbstractions;
 using Messerli.MetaGeneratorAbstractions.Json;
 using Messerli.ToolLoaderAbstractions;
 using Pastel;
-using static Funcky.Functional;
 
 namespace Messerli.MesserliOneRepositoryPlugin
 {
@@ -85,15 +84,12 @@ namespace Messerli.MesserliOneRepositoryPlugin
         {
             var dateParts = sdkEndOfLife.Split('-');
 
-            if (dateParts.Length == 3)
-            {
-                return from year in dateParts[0].TryParseInt()
-                       from month in dateParts[1].TryParseInt()
-                       from day in dateParts[2].TryParseInt()
-                       select new DateTime(year, month, day);
-            }
-
-            return Option<DateTime>.None();
+            return dateParts.Length == 3
+                ? from year in dateParts[0].ParseIntOrNone()
+                  from month in dateParts[1].ParseIntOrNone()
+                  from day in dateParts[2].ParseIntOrNone()
+                  select new DateTime(year, month, day)
+                : Option<DateTime>.None();
         }
 
         private string InstalledSdk(DotNetSdk sdk)

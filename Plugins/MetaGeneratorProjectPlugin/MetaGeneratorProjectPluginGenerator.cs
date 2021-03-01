@@ -52,7 +52,7 @@ namespace Messerli.MetaGeneratorProjectPlugin
         {
             _variableProvider
                 .GetVariableValues()
-                .TryGetValue(key: GeneratorName)
+                .GetValueOrNone(key: GeneratorName)
                 .AndThen(name => _variableProvider.RegisterValue(KebabGeneratorName, name.ParamCase()));
         }
 

@@ -8,7 +8,7 @@ namespace Messerli.CommandLine
     public class SystemConsoleReader : IConsoleReader
     {
         public Option<int> ReadInt()
-            => ReadLine().TryParseInt();
+            => ReadLine().ParseIntOrNone();
 
         public string ReadLine()
             => Option.FromNullable(Console.ReadLine()).GetOrElse(() => throw new Exception("unreachable"));
