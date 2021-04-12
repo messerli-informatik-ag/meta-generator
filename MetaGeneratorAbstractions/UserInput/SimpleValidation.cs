@@ -1,10 +1,10 @@
-using System;
+﻿using System;
 
 namespace Messerli.MetaGeneratorAbstractions.UserInput
 {
     public class SimpleValidation : IValidation
     {
-        public SimpleValidation(Predicate<string> validation, string message)
+        private SimpleValidation(Predicate<string> validation, string message)
         {
             Validation = validation;
             Message = message;
@@ -13,5 +13,8 @@ namespace Messerli.MetaGeneratorAbstractions.UserInput
         public Predicate<string> Validation { get; }
 
         public string Message { get; }
+
+        public static IValidation Create(Predicate<string> isValidInput, string message)
+            => new SimpleValidation(isValidInput, message);
     }
 }

@@ -1,5 +1,6 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
+using Funcky;
 using Funcky.Monads;
 using Messerli.MetaGeneratorAbstractions.UserInput;
 using static Funcky.Functional;
@@ -14,9 +15,7 @@ namespace Messerli.MetaGenerator.UserInput
         }
 
         protected override IEnumerable<IValidation> RequesterValidations(IUserInputDescription variable)
-        {
-            yield return new SimpleValidation(PathExists, "The path you have given does not exists, please enter an existing path:");
-        }
+            => Sequence.Return(SimpleValidation.Create(PathExists, "The path you have given does not exists, please enter an existing path:"));
 
         protected override string InteractiveQuery(IUserInputDescription variable)
         {

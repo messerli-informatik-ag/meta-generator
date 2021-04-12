@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Funcky;
 using Funcky.Monads;
 using Messerli.MetaGeneratorAbstractions.UserInput;
 using static Funcky.Functional;
@@ -24,9 +25,7 @@ namespace Messerli.MetaGenerator.UserInput
         }
 
         protected override IEnumerable<IValidation> RequesterValidations(IUserInputDescription variable)
-        {
-            yield return new SimpleValidation(IsValidInput, "Please enter a valid 'yes' or 'no' value.");
-        }
+            => Sequence.Return(SimpleValidation.Create(IsValidInput, "Please enter a valid 'yes' or 'no' value."));
 
         private Option<bool> QueryValueFromUser(IUserInputDescription variable)
             => ValidatedUserInput

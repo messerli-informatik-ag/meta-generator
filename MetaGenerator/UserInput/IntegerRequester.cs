@@ -1,4 +1,6 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Funcky;
+using Funcky.Extensions;
 using Funcky.Monads;
 using Messerli.MetaGeneratorAbstractions.UserInput;
 using static Funcky.Functional;
@@ -13,10 +15,7 @@ namespace Messerli.MetaGenerator.UserInput
         }
 
         protected override IEnumerable<IValidation> RequesterValidations(IUserInputDescription variable)
-        {
-            var dummy = 0;
-            yield return new SimpleValidation(input => int.TryParse(input, out dummy), "Please enter true or false (no numeric input allowed).");
-        }
+            => Sequence.Return(SimpleValidation.Create(IsValidInput, "Please enter a valid integer value."));
 
         protected override string InteractiveQuery(IUserInputDescription variable)
         {
@@ -24,6 +23,9 @@ namespace Messerli.MetaGenerator.UserInput
 
             return Retry(() => QueryValueFromUser(variable)).ToString();
         }
+
+        private bool IsValidInput(string input)
+            => input.ParseIntOrNone().Match(none: false, some: True);
 
         private Option<int> QueryValueFromUser(IUserInputDescription variable)
             => ValidatedUserInput

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Funcky;
 using Funcky.Extensions;
 using Funcky.Monads;
 using Messerli.CommandLineAbstractions;
+using Messerli.MetaGeneratorAbstractions.Json;
 using Messerli.MetaGeneratorAbstractions.UserInput;
 using static Funcky.Functional;
 
@@ -20,13 +22,11 @@ namespace Messerli.MetaGenerator.UserInput
         }
 
         protected override IEnumerable<IValidation> RequesterValidations(IUserInputDescription variable)
-        {
-            yield return new SimpleValidation(input => IsValuePossible(variable, input), $"Please select from the possible options between 1 and {ToHumanIndex(variable.VariableSelectionValues.Count - 1)}");
-        }
+            => Sequence.Return(SimpleValidation.Create(IsValuePossible(variable), $"Please select from the possible options between 1 and {ToHumanIndex(variable.VariableSelectionValues.Count - 1)}"));
 
         protected override string InteractiveQuery(IUserInputDescription variable)
         {
-            CheckForMissingOptions(variable);
+            AtLeastOneValueAvailable(variable);
 
             ValidatedUserInput.WriteQuestion(variable, "Please select one of the given values for '{0}':");
             WriteOptions(variable);
@@ -34,7 +34,7 @@ namespace Messerli.MetaGenerator.UserInput
             return Retry(() => QueryValueFromUser(variable));
         }
 
-        private static void CheckForMissingOptions(IUserInputDescription variable)
+        private static void AtLeastOneValueAvailable(IUserInputDescription variable)
         {
             if (variable.VariableSelectionValues.Any() == false)
             {
@@ -54,24 +54,26 @@ namespace Messerli.MetaGenerator.UserInput
             return Option.Some(variable.VariableSelectionValues[FromHumanIndex(index)].Value!);
         }
 
-        private static bool IsValuePossible(IUserInputDescription variable, string input)
-        {
-            var maybeValue = input.ParseIntOrNone();
+        private static Predicate<string> IsValuePossible(IUserInputDescription variable)
+            => input
+                =>
+                {
+                    var maybeValue = input.ParseIntOrNone();
 
-            return maybeValue.Match(
-                false,
-                value => value > 0
-                         && value <= variable.VariableSelectionValues.Count);
-        }
+                    return maybeValue.Match(
+                        false,
+                        value => value > 0
+                                 && value <= variable.VariableSelectionValues.Count);
+                };
 
         private void WriteOptions(IUserInputDescription variable)
-        {
-            foreach (var (selectionValue, index) in variable.VariableSelectionValues.Select((selectionValue, index) =>
-                (selectionValue, index)))
-            {
-                _consoleWriter.WriteLine($"{ToHumanIndex(index)}.) {selectionValue.Description}");
-            }
-        }
+            => variable
+                .VariableSelectionValues
+                .WithIndex()
+                .ForEach(WriteOption);
+
+        private void WriteOption(ValueWithIndex<SelectionValue> selection)
+            => _consoleWriter.WriteLine($"{ToHumanIndex(selection.Index)}.) {selection.Value.Description}");
 
         private static int ToHumanIndex(int index) => index + 1;
 

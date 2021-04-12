@@ -35,4 +35,7 @@
     <PackageReference Include="Soltys.ChangeCase" />
     <PackageReference Include="DotNet.Glob" />
   </ItemGroup>
+    <ItemGroup>
+        <InternalsVisibleTo Include="MetaGenerator.Test" />
+    </ItemGroup>
 </Project>

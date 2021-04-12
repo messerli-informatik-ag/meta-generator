@@ -1,4 +1,4 @@
-using System.CommandLine;
+﻿using System.CommandLine;
 using Messerli.MetaGeneratorAbstractions;
 
 namespace Messerli.MetaGenerator
@@ -13,10 +13,8 @@ namespace Messerli.MetaGenerator
         }
 
         public int Run(string[] args)
-        {
-            return _rootCommandBuilder
+            => _rootCommandBuilder
                 .Build()
                 .Invoke(args);
-        }
     }
 }

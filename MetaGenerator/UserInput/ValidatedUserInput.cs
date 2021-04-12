@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Funcky.Monads;
@@ -20,16 +21,8 @@ namespace Messerli.MetaGenerator.UserInput
         }
 
         public Option<string> ValidateArgument(IUserInputDescription variable, Option<string> userArgument, IEnumerable<IValidation> requesterValidations)
-        {
-            return userArgument.SelectMany(
-                argument =>
-                {
-                    _consoleWriter.WriteLine();
-                    _consoleWriter.WriteLine($"{variable.VariableName}*: {argument}");
-
-                    return Validate(variable, argument, requesterValidations);
-                });
-        }
+            => userArgument
+                .SelectMany(EchoAndValidate(variable, requesterValidations));
 
         public Option<string> GetValidatedValue(IUserInputDescription variable, IEnumerable<IValidation> requesterValidations)
         {
@@ -47,14 +40,22 @@ namespace Messerli.MetaGenerator.UserInput
             _consoleWriter.WriteLine(FormatWithVariableName(question, variable.VariableName));
         }
 
+        private Func<string, Option<string>> EchoAndValidate(IUserInputDescription variable, IEnumerable<IValidation> requesterValidations)
+            => argument
+                =>
+            {
+                _consoleWriter.WriteLine();
+                _consoleWriter.WriteLine($"{variable.VariableName}*: {argument}");
+
+                return Validate(variable, argument, requesterValidations);
+            };
+
         private Option<string> Validate(IUserInputDescription variable, string userInput, IEnumerable<IValidation> requesterValidations)
-        {
-            return variable
+            => variable
                 .Validations
                 .Concat(requesterValidations)
                 .Where(validation => validation.Validation(userInput) == false)
                 .Aggregate(Option.Some(userInput), (_, validation) => AggregateValidationErrors(validation, variable.VariableName));
-        }
 
         private Option<string> AggregateValidationErrors(IValidation validation, string variableName)
         {
@@ -64,10 +65,8 @@ namespace Messerli.MetaGenerator.UserInput
         }
 
         private static string FormatWithVariableName(string format, string variableName)
-        {
-            return format.Contains("{0}")
+            => format.Contains("{0}")
                 ? string.Format(format, variableName)
                 : format;
-        }
     }
 }

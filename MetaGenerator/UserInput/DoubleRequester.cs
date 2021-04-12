@@ -1,5 +1,7 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
+using Funcky;
+using Funcky.Extensions;
 using Funcky.Monads;
 using Messerli.MetaGeneratorAbstractions.UserInput;
 using static Funcky.Functional;
@@ -14,10 +16,7 @@ namespace Messerli.MetaGenerator.UserInput
         }
 
         protected override IEnumerable<IValidation> RequesterValidations(IUserInputDescription variable)
-        {
-            var dummy = 0.0;
-            yield return new SimpleValidation(input => double.TryParse(input, out dummy), "Please enter true or false (no numeric input allowed).");
-        }
+            => Sequence.Return(SimpleValidation.Create(IsValidInput, "Please enter a valid double value."));
 
         protected override string InteractiveQuery(IUserInputDescription variable)
         {
@@ -25,6 +24,9 @@ namespace Messerli.MetaGenerator.UserInput
 
             return Retry(() => QueryValueFromUser(variable)).ToString(CultureInfo.InvariantCulture);
         }
+
+        private bool IsValidInput(string input)
+            => input.ParseDoubleOrNone().Match(none: false, some: True);
 
         private Option<double> QueryValueFromUser(IUserInputDescription variable)
             => ValidatedUserInput
