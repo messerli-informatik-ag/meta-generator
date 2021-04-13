@@ -91,6 +91,6 @@ namespace Messerli.FileManipulator.Project.MsBuild
                 .GetPropertyValue(CentralPackagesFileProperty);
 
         private static bool IsCentralPackageVersionsSdkImport(ResolvedImport import)
-            => import.SdkResult is { } sdk && sdk.SdkReference.Name == CentralPackageVersionsSdk;
+            => import.SdkResult is { SdkReference: { Name: CentralPackageVersionsSdk } };
     }
 }
