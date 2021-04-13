@@ -15,7 +15,7 @@ namespace Messerli.MetaGenerator.UserInput
         }
 
         protected override IEnumerable<IValidation> RequesterValidations(IUserInputDescription variable)
-            => Sequence.Return(SimpleValidation.Create(PathExists, "The path you have given does not exists, please enter an existing path:"));
+            => Sequence.Return(SimpleValidation.Create(PathExists, "The path you have given does not exists, please enter an existing path."));
 
         protected override string InteractiveQuery(IUserInputDescription variable)
         {
