@@ -60,13 +60,15 @@ namespace Messerli.MetaGenerator
 
         private long TotalTime()
             => _measurements
-            .Select(m => m.ElapsedMilliseconds).Sum();
+                .Select(m => m.ElapsedMilliseconds)
+                .Sum();
 
         private int EventNameColumnWidth()
             => _measurements
-            .Aggregate(0, (max, m) => Max(max, m.EventName.Length)) + 1;
+                .Aggregate(0, (max, m) => Max(max, m.EventName.Length)) + 1;
 
         private int ElapsedColumnWidth()
-            => _measurements.Aggregate(0, (max, m) => Max(max, m.ElapsedMilliseconds.ToString().Length)) + 1;
+            => _measurements
+                .Aggregate(0, (max, m) => Max(max, m.ElapsedMilliseconds.ToString().Length)) + 1;
     }
 }
