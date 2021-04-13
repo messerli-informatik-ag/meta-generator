@@ -8,7 +8,7 @@ namespace Messerli.MetaGeneratorProjectPlugin
         private const string MetaGeneratorSolution = "MetaGenerator.sln";
 
         public static IValidation MetaGeneratorSolutionExists
-            => SimpleValidation.Create(MetaGeneratorSolutionInPath, "No MetaGenerator.sln found at given location.");
+            => SimpleValidation.Create(MetaGeneratorSolutionInPath, $"No {MetaGeneratorSolution} found at given location.");
 
         private static bool MetaGeneratorSolutionInPath(string path)
             => File.Exists(AppendSolution(path));
