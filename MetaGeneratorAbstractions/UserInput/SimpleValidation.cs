@@ -4,17 +4,17 @@ namespace Messerli.MetaGeneratorAbstractions.UserInput
 {
     public class SimpleValidation : IValidation
     {
-        private SimpleValidation(Predicate<string> validation, string message)
+        private SimpleValidation(Func<string, bool> validation, string message)
         {
             Validation = validation;
             Message = message;
         }
 
-        public Predicate<string> Validation { get; }
+        public Func<string, bool> Validation { get; }
 
         public string Message { get; }
 
-        public static IValidation Create(Predicate<string> isValidInput, string message)
+        public static IValidation Create(Func<string, bool> isValidInput, string message)
             => new SimpleValidation(isValidInput, message);
     }
 }

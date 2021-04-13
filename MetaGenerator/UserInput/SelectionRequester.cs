@@ -54,7 +54,7 @@ namespace Messerli.MetaGenerator.UserInput
             return Option.Some(variable.VariableSelectionValues[FromHumanIndex(index)].Value!);
         }
 
-        private static Predicate<string> IsValuePossible(IUserInputDescription variable)
+        private static Func<string, bool> IsValuePossible(IUserInputDescription variable)
             => input
                 =>
                 {

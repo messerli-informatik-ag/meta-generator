@@ -1,10 +1,10 @@
-using System;
+﻿using System;
 
 namespace Messerli.MetaGeneratorAbstractions.UserInput
 {
     public interface IValidation
     {
-        Predicate<string> Validation { get; }
+        Func<string, bool> Validation { get; }
 
         string Message { get; }
     }
