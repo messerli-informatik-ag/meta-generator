@@ -22,14 +22,15 @@ namespace Messerli.MetaGenerator.UserInput
 
         public Option<string> ValidateArgument(IUserInputDescription variable, Option<string> userArgument, IEnumerable<IValidation> requesterValidations)
             => userArgument
-                .SelectMany(EchoAndValidate(variable, requesterValidations));
+                .Inspect(EchoVariable(variable))
+                .SelectMany(Validate(variable, requesterValidations));
 
         public Option<string> GetValidatedValue(IUserInputDescription variable, IEnumerable<IValidation> requesterValidations)
         {
             _consoleWriter.WriteLine();
             _consoleWriter.Write($"{variable.VariableName}: ");
 
-            return Validate(variable, _consoleReader.ReadLine(), requesterValidations);
+            return Validate(variable, requesterValidations)(_consoleReader.ReadLine());
         }
 
         public void WriteQuestion(IUserInputDescription variable, string defaultQuestion)
@@ -40,22 +41,21 @@ namespace Messerli.MetaGenerator.UserInput
             _consoleWriter.WriteLine(FormatWithVariableName(question, variable.VariableName));
         }
 
-        private Func<string, Option<string>> EchoAndValidate(IUserInputDescription variable, IEnumerable<IValidation> requesterValidations)
+        private Action<string> EchoVariable(IUserInputDescription variable)
             => argument
                 =>
-            {
-                _consoleWriter.WriteLine();
-                _consoleWriter.WriteLine($"{variable.VariableName}*: {argument}");
+                {
+                    _consoleWriter.WriteLine();
+                    _consoleWriter.WriteLine($"{variable.VariableName}*: {argument}");
+                };
 
-                return Validate(variable, argument, requesterValidations);
-            };
-
-        private Option<string> Validate(IUserInputDescription variable, string userInput, IEnumerable<IValidation> requesterValidations)
-            => variable
-                .Validations
-                .Concat(requesterValidations)
-                .Where(validation => validation.Validation(userInput) == false)
-                .Aggregate(Option.Some(userInput), (_, validation) => AggregateValidationErrors(validation, variable.VariableName));
+        private Func<string, Option<string>> Validate(IUserInputDescription variable, IEnumerable<IValidation> requesterValidations)
+            => userInput
+                => variable
+                    .Validations
+                    .Concat(requesterValidations)
+                    .Where(validation => validation.Validation(userInput) == false)
+                    .Aggregate(Option.Some(userInput), (_, validation) => AggregateValidationErrors(validation, variable.VariableName));
 
         private Option<string> AggregateValidationErrors(IValidation validation, string variableName)
         {
