@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using Funcky.Monads;
 using Messerli.CommandLineAbstractions;
 using Messerli.MetaGenerator.UserInput;
@@ -12,14 +11,11 @@ namespace Messerli.MetaGenerator.Test.UserInput
 {
     public class DateTimeRequesterTest
     {
-        public DateTimeRequesterTest()
-        {
-            CultureInfo.CurrentCulture = new CultureInfo("de-CH", false);
-        }
-
         [Fact]
         public void ReadingADateTimeFromConsoleReturnsADate()
         {
+            using var cultureSwitch = new TemporaryCultureSwitch("de-CH");
+
             static bool IsNeeded() => true;
 
             var reader = new Mock<IConsoleReader>();
