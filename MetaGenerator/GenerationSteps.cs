@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.CommandLine.Invocation;
 using System.Drawing;
 using System.Linq;
+using Funcky.Extensions;
 using Messerli.CommandLineAbstractions;
 using Messerli.MetaGeneratorAbstractions;
 using Messerli.MetaGeneratorAbstractions.UserInput;
@@ -80,15 +81,17 @@ namespace Messerli.MetaGenerator
         }
 
         private bool VerifyTools()
-        {
-            var unavailableTools = _tools.VerifyTools().ToList();
+            => _tools
+                .VerifyTools()
+                .Select(ToolName)
+                .Inspect(ToolIsNecessaryMessage)
+                .None();
 
-            foreach (var (toolName, tool) in unavailableTools)
-            {
-                _consoleWriter.WriteLine($"Tool '{toolName}' is necessary for this plugin and has not been found on your machine.".Pastel(Color.OrangeRed));
-            }
+        private static string ToolName(KeyValuePair<string, ITool> tool)
+            => tool.Key;
 
-            return unavailableTools.Any() == false;
-        }
+        private void ToolIsNecessaryMessage(string toolName)
+            => _consoleWriter
+                .WriteLine($"The Tool '{toolName}' is necessary for this plugin and has not been found on your machine.".Pastel(Color.OrangeRed));
     }
 }

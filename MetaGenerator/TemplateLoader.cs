@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -50,6 +50,7 @@ namespace Messerli.MetaGenerator
         private Option<string> FindTemplate(string templateName)
         {
             using var templateStream = GetTemplateStream(templateName);
+
             return Option.FromNullable(templateStream).Select(ReadTemplate);
         }
 

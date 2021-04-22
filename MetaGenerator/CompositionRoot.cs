@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Reflection;
 using Autofac;
+using Funcky.Extensions;
 using Messerli.CommandLine;
 using Messerli.FileManipulator;
 using Messerli.FileManipulatorAbstractions;
@@ -79,15 +80,9 @@ namespace Messerli.MetaGenerator
         {
             var pluginsPath = CreateFolderWhenNecessary(Path.Combine(GetExecutableDirectory(), "plugins"));
 
-            foreach (var pluginPath in Directory.GetDirectories(pluginsPath, "*"))
-            {
-                var pluginName = Path.GetRelativePath(pluginsPath, pluginPath);
-                var pluginDllPath = Path.Combine(pluginPath, $"{pluginName}.dll");
-                var loadContext = new PluginLoadContext(pluginDllPath);
-
-                var assembly = loadContext.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(pluginDllPath)));
-                _ = _builder.RegisterAssemblyModules(assembly);
-            }
+            Directory
+                .GetDirectories(pluginsPath, "*")
+                .ForEach(pluginPath => RegisterPlugin(pluginsPath, pluginPath));
 
             return this;
         }
@@ -97,6 +92,16 @@ namespace Messerli.MetaGenerator
             _builder.Register(_ => new GlobalOptions(verbose)).As<IGlobalOptions>().SingleInstance();
 
             return this;
+        }
+
+        private void RegisterPlugin(string pluginsPath, string pluginPath)
+        {
+            var pluginName = Path.GetRelativePath(pluginsPath, pluginPath);
+            var pluginDllPath = Path.Combine(pluginPath, $"{pluginName}.dll");
+            var loadContext = new PluginLoadContext(pluginDllPath);
+
+            var assembly = loadContext.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(pluginDllPath)));
+            _ = _builder.RegisterAssemblyModules(assembly);
         }
 
         private string CreateFolderWhenNecessary(string pluginsPath)

@@ -28,11 +28,9 @@ namespace Messerli.MetaGenerator
         }
 
         public Dictionary<string, string> GetVariableValues()
-        {
-            return _userInputProvider
+            => _userInputProvider
                 .GetVariableValues()
                 .Concat(_variables)
                 .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-        }
     }
 }

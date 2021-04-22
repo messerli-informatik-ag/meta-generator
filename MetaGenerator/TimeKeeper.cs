@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -59,18 +59,16 @@ namespace Messerli.MetaGenerator
         }
 
         private long TotalTime()
-        {
-            return _measurements.Select(m => m.ElapsedMilliseconds).Sum();
-        }
+            => _measurements
+                .Select(m => m.ElapsedMilliseconds)
+                .Sum();
 
         private int EventNameColumnWidth()
-        {
-            return _measurements.Aggregate(0, (max, m) => Max(max, m.EventName.Length)) + 1;
-        }
+            => _measurements
+                .Aggregate(0, (max, m) => Max(max, m.EventName.Length)) + 1;
 
         private int ElapsedColumnWidth()
-        {
-            return _measurements.Aggregate(0, (max, m) => Max(max, m.ElapsedMilliseconds.ToString().Length)) + 1;
-        }
+            => _measurements
+                .Aggregate(0, (max, m) => Max(max, m.ElapsedMilliseconds.ToString().Length)) + 1;
     }
 }

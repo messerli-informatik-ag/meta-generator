@@ -22,12 +22,10 @@ namespace Messerli.MetaGenerator.UserInput
         }
 
         public UserInputDescription Build()
-        {
-            return _variableName
+            => _variableName
                 .Match(
                 none: () => throw new Exception("Variable Name needs to be set with SetVariableName before building!"),
                 some: name => new UserInputDescription(name, _variableQuestion, _variableDescription, _variableType, _isNeededPredicate, _variableSelectionValues, _validations));
-        }
 
         public UserInputDescriptionBuilder SetIsNeededPredicate(Func<bool> isNeededPredicate)
         {

@@ -37,17 +37,11 @@ namespace Messerli.MetaGenerator.UserInput
         public IUserInputDescription this[string key] => GetUserInputDescription(key);
 
         public void RegisterVariable(UserInputDescription description)
-        {
-            _knownUserInputs.Add(description.VariableName, description);
-        }
+            => _knownUserInputs.Add(description.VariableName, description);
 
         public void RegisterVariablesFromTemplate(string templateName)
-        {
-            foreach (var variable in GetVariablesFromTemplate(templateName))
-            {
-                RegisterVariablesFromJson(variable);
-            }
-        }
+            => GetVariablesFromTemplate(templateName)
+                .ForEach(RegisterVariablesFromJson);
 
         public void AskUser(Dictionary<string, string> userArguments)
         {
@@ -62,24 +56,18 @@ namespace Messerli.MetaGenerator.UserInput
         }
 
         public IEnumerable<IUserInputDescription> GetUserInputDescriptions()
-        {
-            return _knownUserInputs.Values;
-        }
+            => _knownUserInputs.Values;
 
         public Dictionary<string, string> GetVariableValues()
-        {
-            return _knownUserInputs
+            => _knownUserInputs
                 .Select(kv => kv.Value)
                 .ToDictionary(v => v.VariableName, v => v.Value.GetOrElse("BAD VALUE!"));
-        }
 
         public string Value(string variableName)
-        {
-            return _knownUserInputs
+            => _knownUserInputs
                 .GetValueOrNone(key: variableName)
                 .SelectMany(userInput => userInput.Value)
                 .GetOrElse(() => throw new Exception($"Variable '{variableName}' is not a registered user input."));
-        }
 
         private List<Variable> GetVariablesFromTemplate(string templateName)
         {
@@ -94,42 +82,31 @@ namespace Messerli.MetaGenerator.UserInput
         }
 
         private void RegisterVariablesFromJson(Variable variable)
-        {
-            RegisterVariable(BuildUserInput(variable));
-        }
+            => RegisterVariable(BuildUserInput(variable));
 
         private UserInputDescription BuildUserInput(Variable variable)
-        {
-            return _newInputDescriptionBuilder()
+            => _newInputDescriptionBuilder()
                 .RegisterVariableName(variable.Name ?? throw new Exception("Variable name cannot be empty!"))
                 .RegisterVariableQuestion(Option.FromNullable(variable.Question))
                 .SetVariableType(variable.GetVariableType())
                 .RegisterSelectionValues(variable)
                 .RegisterVariableValidations(variable, _executingPluginAssemblyProvider.PluginAssembly)
                 .Build();
-        }
 
         private IUserInputDescription GetUserInputDescription(string variableName)
-        {
-            return _knownUserInputs
+            => _knownUserInputs
                 .GetValueOrNone(key: variableName)
                 .Match(
                     none: () => NoValue(variableName),
                     some: Identity);
-        }
 
         private static IUserInputDescription NoValue(in string variableName)
-        {
-            throw new Exception($"No value known for '{variableName}'");
-        }
+            => throw new Exception($"No value known for '{variableName}'");
 
         private void VerifyUserInputs()
-        {
-            foreach (var (key, variable) in _knownUserInputs)
-            {
-                VerifyVariable(variable);
-            }
-        }
+            => _knownUserInputs
+                .Select(v => v.Value)
+                .ForEach(VerifyVariable);
 
         private static void VerifyVariable(IUserInputDescription variable)
         {

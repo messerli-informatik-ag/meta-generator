@@ -83,13 +83,14 @@ namespace Messerli.FileManipulator.Project.MsBuild
                 .GetOrElse(() => throw new InvalidOperationException($"Package reference '{item.Update}' is missing a version"));
 
         private static bool HasCentralPackageVersionsEnabled(MsBuildProject project)
-            => project.GetPropertyValue(EnableCentralPackageVersionsProperty) != FalseAsString;
+            => project
+                .GetPropertyValue(EnableCentralPackageVersionsProperty) != FalseAsString;
 
         private static string GetCentralPackagesFile(MsBuildProject project)
-            => project.GetPropertyValue(CentralPackagesFileProperty);
+            => project
+                .GetPropertyValue(CentralPackagesFileProperty);
 
         private static bool IsCentralPackageVersionsSdkImport(ResolvedImport import)
-            => import.SdkResult is { } sdk &&
-               sdk.SdkReference.Name == CentralPackageVersionsSdk;
+            => import.SdkResult is { SdkReference: { Name: CentralPackageVersionsSdk } };
     }
 }

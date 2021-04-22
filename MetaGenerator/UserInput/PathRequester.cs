@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Funcky.Monads;
 using Messerli.MetaGeneratorAbstractions.UserInput;
@@ -14,9 +14,7 @@ namespace Messerli.MetaGenerator.UserInput
         }
 
         protected override IEnumerable<IValidation> RequesterValidations(IUserInputDescription variable)
-        {
-            yield break;
-        }
+            => Enumerable.Empty<IValidation>();
 
         protected override string InteractiveQuery(IUserInputDescription variable)
         {

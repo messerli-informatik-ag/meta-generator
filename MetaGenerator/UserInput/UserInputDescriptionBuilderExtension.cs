@@ -11,9 +11,7 @@ namespace Messerli.MetaGenerator.UserInput
     internal static class UserInputDescriptionBuilderExtension
     {
         public static UserInputDescriptionBuilder RegisterVariableName(this UserInputDescriptionBuilder builder, string variableName)
-        {
-            return builder.SetVariableName(variableName);
-        }
+            => builder.SetVariableName(variableName);
 
         public static UserInputDescriptionBuilder RegisterVariableQuestion(this UserInputDescriptionBuilder builder, Option<string> variableQuestion)
         {
@@ -43,11 +41,9 @@ namespace Messerli.MetaGenerator.UserInput
         }
 
         private static IValidation FindValidationFunction(ValidationName validationName, Assembly pluginAssembly)
-        {
-            return FindGlobalValidation(validationName)
+            => FindGlobalValidation(validationName)
                 .OrElse(() => FindPluginValidations(validationName, pluginAssembly))
                 .GetOrElse(() => throw new NotImplementedException($"Validation '{validationName}' not found"));
-        }
 
         private static Option<IValidation> FindGlobalValidation(ValidationName validationName)
             => validationName.Class == nameof(Validations)
@@ -55,31 +51,25 @@ namespace Messerli.MetaGenerator.UserInput
                 : Option<IValidation>.None();
 
         private static Option<object> FindValidationOnType(ValidationName validationName, Type type)
-        {
-            return type
+            => type
                 .GetProperties()
                 .Where(p => p.Name == validationName.Property)
                 .Select(p => p.GetValue(null))
                 .WhereNotNull()
                 .FirstOrNone();
-        }
 
         private static Option<IValidation> FindPluginValidations(ValidationName validationName, Assembly pluginAssembly)
-        {
-            return FindValidationOnType(validationName, FindPluginValidationType(validationName.Class, pluginAssembly))
+            => FindValidationOnType(validationName, FindPluginValidationType(validationName.Class, pluginAssembly))
                 .AndThen(ToValidation);
-        }
 
         private static IValidation ToValidation(object v)
             => (IValidation)v;
 
         private static Type FindPluginValidationType(string className, Assembly pluginAssembly)
-        {
-            return pluginAssembly
+            => pluginAssembly
                 .GetTypes()
                 .Where(t => t.Name == className)
                 .FirstOrNone()
                 .GetOrElse(() => throw new TypeLoadException($"A class with the given name '{className}' was not found in the plugin '{pluginAssembly.GetName()}'"));
-        }
     }
 }
