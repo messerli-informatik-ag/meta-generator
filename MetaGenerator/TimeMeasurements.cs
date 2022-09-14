@@ -1,15 +1,14 @@
-namespace Messerli.MetaGenerator
+﻿namespace Messerli.MetaGenerator;
+
+internal class TimeMeasurements
 {
-    internal class TimeMeasurements
+    public TimeMeasurements(string eventName, long elapsedMilliseconds)
     {
-        public TimeMeasurements(string eventName, long elapsedMilliseconds)
-        {
-            EventName = eventName;
-            ElapsedMilliseconds = elapsedMilliseconds;
-        }
-
-        public string EventName { get; }
-
-        public long ElapsedMilliseconds { get; }
+        EventName = eventName;
+        ElapsedMilliseconds = elapsedMilliseconds;
     }
+
+    public string EventName { get; }
+
+    public long ElapsedMilliseconds { get; }
 }

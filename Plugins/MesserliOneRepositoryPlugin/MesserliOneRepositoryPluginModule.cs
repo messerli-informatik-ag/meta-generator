@@ -1,14 +1,13 @@
-using Autofac;
+﻿using Autofac;
 using Messerli.MetaGeneratorAbstractions;
 
-namespace Messerli.MesserliOneRepositoryPlugin
+namespace Messerli.MesserliOneRepositoryPlugin;
+
+public class MesserliOneRepositoryPluginModule : Module
 {
-    public class MesserliOneRepositoryPluginModule : Module
+    protected override void Load(ContainerBuilder builder)
     {
-        protected override void Load(ContainerBuilder builder)
-        {
-            builder.RegisterType<MesserliOneRepositoryPluginGenerator>().As<IMetaGenerator>().InstancePerLifetimeScope();
-            builder.RegisterType<TargetFrameworkProvider>().As<ITargetFrameworkProvider>().InstancePerLifetimeScope();
-        }
+        builder.RegisterType<MesserliOneRepositoryPluginGenerator>().As<IMetaGenerator>().InstancePerLifetimeScope();
+        builder.RegisterType<TargetFrameworkProvider>().As<ITargetFrameworkProvider>().InstancePerLifetimeScope();
     }
 }

@@ -6,59 +6,58 @@ using DotNet.Globbing;
 using Funcky.Monads;
 using Messerli.MetaGeneratorAbstractions;
 
-namespace Messerli.MetaGenerator
+namespace Messerli.MetaGenerator;
+
+internal class TemplateLoader : ITemplateLoader
 {
-    internal class TemplateLoader : ITemplateLoader
+    private readonly IExecutingPluginAssemblyProvider _assemblyProvider;
+
+    public TemplateLoader(IExecutingPluginAssemblyProvider assemblyProvider)
     {
-        private readonly IExecutingPluginAssemblyProvider _assemblyProvider;
+        _assemblyProvider = assemblyProvider;
+    }
 
-        public TemplateLoader(IExecutingPluginAssemblyProvider assemblyProvider)
+    public string GetTemplate(string templateName)
+    {
+        if (_assemblyProvider.PluginAssembly.GetManifestResourceNames().Contains(templateName))
         {
-            _assemblyProvider = assemblyProvider;
+            return FindTemplate(templateName).GetOrElse(
+                () => throw new NotImplementedException());
         }
 
-        public string GetTemplate(string templateName)
-        {
-            if (_assemblyProvider.PluginAssembly.GetManifestResourceNames().Contains(templateName))
-            {
-                return FindTemplate(templateName).GetOrElse(
-                    () => throw new NotImplementedException());
-            }
+        throw new Exception($"There is no template resource with the name {templateName}");
+    }
 
-            throw new Exception($"There is no template resource with the name {templateName}");
+    public IEnumerable<Template> GetTemplatesFromGlob(string glob)
+    {
+        var globMatcher = Glob.Parse(glob);
+        return _assemblyProvider.PluginAssembly
+            .GetManifestResourceNames()
+            .Where(resourceName => globMatcher.IsMatch(resourceName))
+            .Select(templateName => new Template(templateName, GetTemplate(templateName)));
+    }
+
+    public Stream? GetTemplateStream(string templateName)
+    {
+        if (_assemblyProvider.PluginAssembly.GetManifestResourceNames().Contains(templateName))
+        {
+            return _assemblyProvider.PluginAssembly.GetManifestResourceStream(templateName);
         }
 
-        public IEnumerable<Template> GetTemplatesFromGlob(string glob)
-        {
-            var globMatcher = Glob.Parse(glob);
-            return _assemblyProvider.PluginAssembly
-                .GetManifestResourceNames()
-                .Where(resourceName => globMatcher.IsMatch(resourceName))
-                .Select(templateName => new Template(templateName, GetTemplate(templateName)));
-        }
+        throw new Exception($"There is no template resource with the name {templateName}");
+    }
 
-        public Stream? GetTemplateStream(string templateName)
-        {
-            if (_assemblyProvider.PluginAssembly.GetManifestResourceNames().Contains(templateName))
-            {
-                return _assemblyProvider.PluginAssembly.GetManifestResourceStream(templateName);
-            }
+    private Option<string> FindTemplate(string templateName)
+    {
+        using var templateStream = GetTemplateStream(templateName);
 
-            throw new Exception($"There is no template resource with the name {templateName}");
-        }
+        return Option.FromNullable(templateStream).Select(ReadTemplate);
+    }
 
-        private Option<string> FindTemplate(string templateName)
-        {
-            using var templateStream = GetTemplateStream(templateName);
+    private string ReadTemplate(Stream templateStream)
+    {
+        using var reader = new StreamReader(templateStream);
 
-            return Option.FromNullable(templateStream).Select(ReadTemplate);
-        }
-
-        private string ReadTemplate(Stream templateStream)
-        {
-            using var reader = new StreamReader(templateStream);
-
-            return reader.ReadToEnd();
-        }
+        return reader.ReadToEnd();
     }
 }

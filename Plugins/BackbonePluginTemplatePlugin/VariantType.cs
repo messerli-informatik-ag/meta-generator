@@ -1,9 +1,8 @@
-namespace Messerli.BackbonePluginTemplatePlugin
+﻿namespace Messerli.BackbonePluginTemplatePlugin;
+
+public enum VariantType
 {
-    public enum VariantType
-    {
-        MinimalPlugin = 1,
-        ViewPlugin,
-        DatabaseAccessPlugin,
-    }
+    MinimalPlugin = 1,
+    ViewPlugin,
+    DatabaseAccessPlugin,
 }

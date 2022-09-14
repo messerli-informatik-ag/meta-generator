@@ -1,19 +1,18 @@
-using apophis.Lexer.Tokens;
+﻿using Messerli.Lexer.Tokens;
 
-namespace Messerli.VsSolution.Token
+namespace Messerli.VsSolution.Token;
+
+internal class WordToken : IToken
 {
-    internal class WordToken : IToken
+    public WordToken(string word)
     {
-        public WordToken(string word)
-        {
-            Word = word;
-        }
+        Word = word;
+    }
 
-        public string Word { get; }
+    public string Word { get; }
 
-        public override string ToString()
-        {
-            return Word;
-        }
+    public override string ToString()
+    {
+        return Word;
     }
 }

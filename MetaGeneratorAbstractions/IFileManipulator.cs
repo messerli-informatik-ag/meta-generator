@@ -1,12 +1,11 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Messerli.MetaGeneratorAbstractions
-{
-    public interface IFileManipulator
-    {
-        Task AppendTemplate(string templatename, string filePath);
+namespace Messerli.MetaGeneratorAbstractions;
 
-        Task AddProjectsToSolution(SolutionInfo solutionInfo, IEnumerable<ProjectInfo> projectInfo);
-    }
+public interface IFileManipulator
+{
+    Task AppendTemplate(string templatename, string filePath);
+
+    Task AddProjectsToSolution(SolutionInfo solutionInfo, IEnumerable<ProjectInfo> projectInfo);
 }

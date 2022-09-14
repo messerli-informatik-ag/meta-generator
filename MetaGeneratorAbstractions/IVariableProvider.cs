@@ -1,11 +1,10 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace Messerli.MetaGeneratorAbstractions
+namespace Messerli.MetaGeneratorAbstractions;
+
+public interface IVariableProvider
 {
-    public interface IVariableProvider
-    {
-        void RegisterValue(string variable, string value);
+    void RegisterValue(string variable, string value);
 
-        Dictionary<string, string> GetVariableValues();
-    }
+    Dictionary<string, string> GetVariableValues();
 }

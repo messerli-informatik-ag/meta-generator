@@ -1,11 +1,10 @@
-namespace Messerli.CommandLineAbstractions
+﻿namespace Messerli.CommandLineAbstractions;
+
+public interface IConsoleWriter
 {
-    public interface IConsoleWriter
-    {
-        void WriteLine(string line);
+    void WriteLine(string line);
 
-        void WriteLine();
+    void WriteLine();
 
-        void Write(string value);
-    }
+    void Write(string value);
 }

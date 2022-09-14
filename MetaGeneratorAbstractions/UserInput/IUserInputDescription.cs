@@ -3,24 +3,23 @@ using System.Collections.Generic;
 using Funcky.Monads;
 using Messerli.MetaGeneratorAbstractions.Json;
 
-namespace Messerli.MetaGeneratorAbstractions.UserInput
+namespace Messerli.MetaGeneratorAbstractions.UserInput;
+
+public interface IUserInputDescription
 {
-    public interface IUserInputDescription
-    {
-        List<SelectionValue> VariableSelectionValues { get; set; }
+    List<SelectionValue> VariableSelectionValues { get; set; }
 
-        string VariableName { get; }
+    string VariableName { get; }
 
-        Option<string> VariableQuestion { get; }
+    Option<string> VariableQuestion { get; }
 
-        Option<string> VariableDescription { get; }
+    Option<string> VariableDescription { get; }
 
-        VariableType VariableType { get; }
+    VariableType VariableType { get; }
 
-        Option<string> Value { get; set; }
+    Option<string> Value { get; set; }
 
-        Lazy<bool> IsNeeded { get; }
+    Lazy<bool> IsNeeded { get; }
 
-        List<IValidation> Validations { get; }
-    }
+    List<IValidation> Validations { get; }
 }

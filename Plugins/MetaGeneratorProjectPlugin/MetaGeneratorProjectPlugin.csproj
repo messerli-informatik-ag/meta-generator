@@ -1,29 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk; Microsoft.Build.CentralPackageVersions">
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>Messerli.MetaGeneratorProjectPlugin</RootNamespace>
-    <LangVersion>9.0</LangVersion>
-    <Nullable>enable</Nullable>
-    <NullableContextOptions>enable</NullableContextOptions>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageOutputPath>../../nupkg</PackageOutputPath>
-    <Version>1.0.0</Version>
-  </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\CommandLineAbstractions\CommandLineAbstractions.csproj" />
-    <ProjectReference Include="..\..\MetaGeneratorAbstractions\MetaGeneratorAbstractions.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="templates\**\*" LogicalName="%(Identity)" />
-  </ItemGroup>
-  <Import Project="..\..\Plugin.targets" />
-  <ItemGroup>
-    <PackageReference Include="Autofac" />
-    <PackageReference Include="LibGit2Sharp" />
-    <PackageReference Include="Funcky" />
-    <PackageReference Include="Soltys.ChangeCase" />
-  </ItemGroup>
+    <PropertyGroup>
+        <RootNamespace>Messerli.MetaGeneratorProjectPlugin</RootNamespace>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageOutputPath>../../nupkg</PackageOutputPath>
+        <Version>1.0.0</Version>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\CommandLineAbstractions\CommandLineAbstractions.csproj" />
+        <ProjectReference Include="..\..\MetaGeneratorAbstractions\MetaGeneratorAbstractions.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="templates\**\*" LogicalName="%(Identity)" />
+    </ItemGroup>
+    <Import Project="..\..\Plugin.targets" />
+    <ItemGroup>
+        <PackageReference Include="Autofac" />
+        <PackageReference Include="LibGit2Sharp" />
+        <PackageReference Include="Funcky" />
+        <PackageReference Include="Soltys.ChangeCase" />
+    </ItemGroup>
 </Project>

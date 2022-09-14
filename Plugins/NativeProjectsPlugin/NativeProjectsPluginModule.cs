@@ -1,15 +1,14 @@
-using Autofac;
+﻿using Autofac;
 using Messerli.MetaGeneratorAbstractions;
 
-namespace Messerli.NativeProjectsPlugin
+namespace Messerli.NativeProjectsPlugin;
+
+internal class NativeProjectsPluginModule : Module
 {
-    internal class NativeProjectsPluginModule : Module
+    protected override void Load(ContainerBuilder builder)
     {
-        protected override void Load(ContainerBuilder builder)
-        {
-            builder.RegisterType<NativeProjectsPluginGenerator>().As<IMetaGenerator>().InstancePerLifetimeScope();
-            builder.RegisterType<TfsPaths>().As<ITfsPaths>();
-            builder.RegisterType<ProjectInformation>().As<IProjectInformation>().SingleInstance();
-        }
+        builder.RegisterType<NativeProjectsPluginGenerator>().As<IMetaGenerator>().InstancePerLifetimeScope();
+        builder.RegisterType<TfsPaths>().As<ITfsPaths>();
+        builder.RegisterType<ProjectInformation>().As<IProjectInformation>().SingleInstance();
     }
 }

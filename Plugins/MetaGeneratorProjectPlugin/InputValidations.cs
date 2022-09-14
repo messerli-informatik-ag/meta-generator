@@ -1,19 +1,18 @@
 ﻿using System.IO;
 using Messerli.MetaGeneratorAbstractions.UserInput;
 
-namespace Messerli.MetaGeneratorProjectPlugin
+namespace Messerli.MetaGeneratorProjectPlugin;
+
+internal static class InputValidations
 {
-    internal static class InputValidations
-    {
-        private const string MetaGeneratorSolution = "MetaGenerator.sln";
+    private const string MetaGeneratorSolution = "MetaGenerator.sln";
 
-        public static IValidation MetaGeneratorSolutionExists
-            => SimpleValidation.Create(MetaGeneratorSolutionInPath, $"No {MetaGeneratorSolution} found at given location.");
+    public static IValidation MetaGeneratorSolutionExists
+        => SimpleValidation.Create(MetaGeneratorSolutionInPath, $"No {MetaGeneratorSolution} found at given location.");
 
-        private static bool MetaGeneratorSolutionInPath(string path)
-            => File.Exists(AppendSolution(path));
+    private static bool MetaGeneratorSolutionInPath(string path)
+        => File.Exists(AppendSolution(path));
 
-        private static string AppendSolution(string path)
-            => Path.Combine(path, MetaGeneratorSolution);
-    }
+    private static string AppendSolution(string path)
+        => Path.Combine(path, MetaGeneratorSolution);
 }

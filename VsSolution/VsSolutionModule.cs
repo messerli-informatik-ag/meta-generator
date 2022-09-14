@@ -1,12 +1,11 @@
-using Autofac;
+﻿using Autofac;
 
-namespace Messerli.VsSolution
+namespace Messerli.VsSolution;
+
+public class VsSolutionModule : Module
 {
-    public class VsSolutionModule : Module
+    protected override void Load(ContainerBuilder builder)
     {
-        protected override void Load(ContainerBuilder builder)
-        {
-            builder.RegisterType<SolutionLoader>().As<ISolutionLoader>();
-        }
+        builder.RegisterType<SolutionLoader>().As<ISolutionLoader>();
     }
 }

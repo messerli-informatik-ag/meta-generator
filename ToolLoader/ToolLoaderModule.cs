@@ -1,14 +1,13 @@
-using Autofac;
+﻿using Autofac;
 using Messerli.ToolLoaderAbstractions;
 
-namespace Messerli.ToolLoader
+namespace Messerli.ToolLoader;
+
+public class ToolLoaderModule : Module
 {
-    public class ToolLoaderModule : Module
+    protected override void Load(ContainerBuilder builder)
     {
-        protected override void Load(ContainerBuilder builder)
-        {
-            builder.RegisterType<Tools>().As<ITools>().InstancePerLifetimeScope();
-            builder.RegisterType<Tool>().As<Tool>();
-        }
+        builder.RegisterType<Tools>().As<ITools>().InstancePerLifetimeScope();
+        builder.RegisterType<Tool>().As<Tool>();
     }
 }

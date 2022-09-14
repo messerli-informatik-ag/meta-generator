@@ -1,19 +1,18 @@
-using apophis.Lexer.Tokens;
+﻿using Messerli.Lexer.Tokens;
 
-namespace Messerli.VsSolution.Token
+namespace Messerli.VsSolution.Token;
+
+internal class StringToken : IToken
 {
-    internal class StringToken : IToken
+    public StringToken(string quotedString)
     {
-        public StringToken(string quotedString)
-        {
-            String = quotedString.Trim('"');
-        }
+        String = quotedString.Trim('"');
+    }
 
-        public string String { get; }
+    public string String { get; }
 
-        public override string ToString()
-        {
-            return String;
-        }
+    public override string ToString()
+    {
+        return String;
     }
 }

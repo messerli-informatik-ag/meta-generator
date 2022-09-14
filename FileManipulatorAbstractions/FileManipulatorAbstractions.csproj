@@ -1,16 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk; Microsoft.Build.CentralPackageVersions">
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <AssemblyName>Messerli.FileManipulatorAbstractions</AssemblyName>
-    <RootNamespace>Messerli.FileManipulatorAbstractions</RootNamespace>
-    <LangVersion>9.0</LangVersion>
-    <Nullable>enable</Nullable>
-    <NullableContextOptions>enable</NullableContextOptions>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="System.Collections.Immutable" />
-    <PackageReference Include="Funcky" />
-  </ItemGroup>
+    <PropertyGroup>
+        <AssemblyName>Messerli.FileManipulatorAbstractions</AssemblyName>
+        <RootNamespace>Messerli.FileManipulatorAbstractions</RootNamespace>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="System.Collections.Immutable" />
+        <PackageReference Include="Funcky" />
+    </ItemGroup>
 </Project>

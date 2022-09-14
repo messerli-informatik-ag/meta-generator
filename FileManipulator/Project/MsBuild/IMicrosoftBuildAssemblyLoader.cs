@@ -1,7 +1,6 @@
-namespace Messerli.FileManipulator.Project.MsBuild
+﻿namespace Messerli.FileManipulator.Project.MsBuild;
+
+internal interface IMicrosoftBuildAssemblyLoader
 {
-    internal interface IMicrosoftBuildAssemblyLoader
-    {
-        void LoadMicrosoftBuildIfNecessary();
-    }
+    void LoadMicrosoftBuildIfNecessary();
 }

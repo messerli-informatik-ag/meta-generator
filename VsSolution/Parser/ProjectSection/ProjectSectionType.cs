@@ -1,8 +1,7 @@
-namespace Messerli.VsSolution.Parser.ProjectSection
+﻿namespace Messerli.VsSolution.Parser.ProjectSection;
+
+public enum ProjectSectionType
 {
-    public enum ProjectSectionType
-    {
-        SolutionItems,
-        ProjectDependencies,
-    }
+    SolutionItems,
+    ProjectDependencies,
 }

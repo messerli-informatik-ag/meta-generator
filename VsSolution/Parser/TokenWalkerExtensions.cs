@@ -1,94 +1,93 @@
 ﻿using System;
 using System.Collections.Generic;
-using apophis.Lexer;
+using Messerli.Lexer;
 using Messerli.VsSolution.Token;
 
-namespace Messerli.VsSolution.Parser
+namespace Messerli.VsSolution.Parser;
+
+public static class TokenWalkerExtensions
 {
-    public static class TokenWalkerExtensions
+    private static readonly HashSet<Type> WhiteSpaceTypes = new() { typeof(SpaceToken), typeof(TabToken), typeof(NewLineToken) };
+    private static readonly HashSet<Type> BareStringEndCharacters = new() { typeof(AssignToken), typeof(NewLineToken) };
+
+    public static string ConsumeWord(this TokenWalker tokenWalker)
     {
-        private static readonly HashSet<Type> WhiteSpaceTypes = new() { typeof(SpaceToken), typeof(TabToken), typeof(NewLineToken) };
-        private static readonly HashSet<Type> BareStringEndCharacters = new() { typeof(AssignToken), typeof(NewLineToken) };
+        var lexem = tokenWalker.Pop();
 
-        public static string ConsumeWord(this TokenWalker tokenWalker)
+        if (lexem.Token is WordToken word)
         {
-            var lexem = tokenWalker.Pop();
-
-            if (lexem.Token is WordToken word)
-            {
-                return word.Word;
-            }
-
-            throw new ParseException($"Next token to be expected a Word but it was: {lexem.Token}");
+            return word.Word;
         }
 
-        public static void ConsumeWord(this TokenWalker tokenWalker, string expectedWord)
-        {
-            tokenWalker.ConsumeAllWhiteSpace();
-            var lexem = tokenWalker.Pop();
+        throw new ParseException($"Next token to be expected a Word but it was: {lexem.Token}");
+    }
 
-            if (!(lexem.Token is WordToken word) || word.Word != expectedWord)
-            {
-                throw new ParseException($"Next token to be expected a Word({expectedWord}) but it was: {lexem.Token}");
-            }
+    public static void ConsumeWord(this TokenWalker tokenWalker, string expectedWord)
+    {
+        tokenWalker.ConsumeAllWhiteSpace();
+        var lexem = tokenWalker.Pop();
+
+        if (!(lexem.Token is WordToken word) || word.Word != expectedWord)
+        {
+            throw new ParseException($"Next token to be expected a Word({expectedWord}) but it was: {lexem.Token}");
         }
+    }
 
-        public static int ConsumeNumber(this TokenWalker tokenWalker)
+    public static int ConsumeNumber(this TokenWalker tokenWalker)
+    {
+        tokenWalker.ConsumeAllWhiteSpace();
+        var lexem = tokenWalker.Pop();
+
+        return lexem.Token switch
         {
-            tokenWalker.ConsumeAllWhiteSpace();
-            var lexem = tokenWalker.Pop();
+            NumberToken number => number.Number,
+            _ => throw new ParseException($"Next token to be expected a Number but it was: {lexem.Token}"),
+        };
+    }
 
-            return lexem.Token switch
-            {
-                NumberToken number => number.Number,
-                _ => throw new ParseException($"Next token to be expected a Number but it was: {lexem.Token}"),
-            };
-        }
+    public static string ConsumeString(this TokenWalker tokenWalker)
+    {
+        tokenWalker.ConsumeAllWhiteSpace();
+        var lexem = tokenWalker.Pop();
 
-        public static string ConsumeString(this TokenWalker tokenWalker)
+        return lexem.Token switch
         {
-            tokenWalker.ConsumeAllWhiteSpace();
-            var lexem = tokenWalker.Pop();
+            WordToken word => word.Word,
+            StringToken quotedString => quotedString.String,
+            _ => throw new ParseException($"Next token to be expected a \" or string but it was: {lexem.Token}"),
+        };
+    }
 
-            return lexem.Token switch
-            {
-                WordToken word => word.Word,
-                StringToken quotedString => quotedString.String,
-                _ => throw new ParseException($"Next token to be expected a \" or string but it was: {lexem.Token}"),
-            };
-        }
+    public static KeyValuePair<string, string> ConsumeVariable(this TokenWalker tokenWalker)
+    {
+        tokenWalker.ConsumeAllWhiteSpace();
+        var key = tokenWalker.ConsumeWord();
+        tokenWalker.Consume<AssignToken>();
+        tokenWalker.ConsumeAllWhiteSpace();
+        var value = tokenWalker.ConsumeWord();
+        tokenWalker.ConsumeAllWhiteSpace();
 
-        public static KeyValuePair<string, string> ConsumeVariable(this TokenWalker tokenWalker)
+        return new KeyValuePair<string, string>(key, value);
+    }
+
+    public static Guid ConsumeGuid(this TokenWalker tokenWalker)
+    {
+        tokenWalker.ConsumeAllWhiteSpace();
+        var lexem = tokenWalker.Pop();
+
+        return lexem.Token switch
         {
-            tokenWalker.ConsumeAllWhiteSpace();
-            var key = tokenWalker.ConsumeWord();
-            tokenWalker.Consume<AssignToken>();
-            tokenWalker.ConsumeAllWhiteSpace();
-            var value = tokenWalker.ConsumeWord();
-            tokenWalker.ConsumeAllWhiteSpace();
+            StringToken guid => Guid.Parse(guid.String),
+            WordToken guid => Guid.Parse(guid.Word),
+            _ => throw new ParseException($"Next token to be expected a \" or Guid  but it was: {lexem.Token}"),
+        };
+    }
 
-            return new KeyValuePair<string, string>(key, value);
-        }
-
-        public static Guid ConsumeGuid(this TokenWalker tokenWalker)
+    public static void ConsumeAllWhiteSpace(this TokenWalker tokenWalker)
+    {
+        while (WhiteSpaceTypes.Contains(tokenWalker.Peek().Token.GetType()))
         {
-            tokenWalker.ConsumeAllWhiteSpace();
-            var lexem = tokenWalker.Pop();
-
-            return lexem.Token switch
-            {
-                StringToken guid => Guid.Parse(guid.String),
-                WordToken guid => Guid.Parse(guid.Word),
-                _ => throw new ParseException($"Next token to be expected a \" or Guid  but it was: {lexem.Token}"),
-            };
-        }
-
-        public static void ConsumeAllWhiteSpace(this TokenWalker tokenWalker)
-        {
-            while (WhiteSpaceTypes.Contains(tokenWalker.Peek().Token.GetType()))
-            {
-                tokenWalker.Pop();
-            }
+            tokenWalker.Pop();
         }
     }
 }

@@ -1,14 +1,13 @@
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
-namespace Messerli.MetaGeneratorAbstractions.Json
+namespace Messerli.MetaGeneratorAbstractions.Json;
+
+[DataContract]
+public class SelectionValue
 {
-    [DataContract]
-    public class SelectionValue
-    {
-        [DataMember]
-        public string? Value { get; set; }
+    [DataMember]
+    public string? Value { get; set; }
 
-        [DataMember]
-        public string? Description { get; set; }
-    }
+    [DataMember]
+    public string? Description { get; set; }
 }

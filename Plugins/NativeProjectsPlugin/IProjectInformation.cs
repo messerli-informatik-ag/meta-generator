@@ -1,17 +1,16 @@
-namespace Messerli.NativeProjectsPlugin
+﻿namespace Messerli.NativeProjectsPlugin;
+
+internal interface IProjectInformation
 {
-    internal interface IProjectInformation
-    {
-        string ProjectGuid { get; }
+    string ProjectGuid { get; }
 
-        string ProjectPath();
+    string ProjectPath();
 
-        string ProjectPath(string fileName);
+    string ProjectPath(string fileName);
 
-        string SourcePath(string fileName);
+    string SourcePath(string fileName);
 
-        string HeaderPath(string fileName);
+    string HeaderPath(string fileName);
 
-        string PropertyPath(string fileName);
-    }
+    string PropertyPath(string fileName);
 }

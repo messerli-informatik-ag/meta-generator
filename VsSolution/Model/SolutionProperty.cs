@@ -1,15 +1,14 @@
-namespace Messerli.VsSolution.Model
+﻿namespace Messerli.VsSolution.Model;
+
+public class SolutionProperty
 {
-    public class SolutionProperty
+    public SolutionProperty(string property, string propertyValue)
     {
-        public SolutionProperty(string property, string propertyValue)
-        {
-            Property = property;
-            PropertyValue = propertyValue;
-        }
-
-        public string Property { get; }
-
-        public string PropertyValue { get; }
+        Property = property;
+        PropertyValue = propertyValue;
     }
+
+    public string Property { get; }
+
+    public string PropertyValue { get; }
 }

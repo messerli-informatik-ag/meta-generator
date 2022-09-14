@@ -1,12 +1,11 @@
-using apophis.Lexer.Tokens;
+﻿using Messerli.Lexer.Tokens;
 
-namespace Messerli.VsSolution.Token
+namespace Messerli.VsSolution.Token;
+
+internal class BeginProjectToken : IToken
 {
-    internal class BeginProjectToken : IToken
+    public override string ToString()
     {
-        public override string ToString()
-        {
-            return "Project";
-        }
+        return "Project";
     }
 }

@@ -1,19 +1,18 @@
-using apophis.Lexer.Tokens;
+﻿using Messerli.Lexer.Tokens;
 
-namespace Messerli.VsSolution.Token
+namespace Messerli.VsSolution.Token;
+
+internal class NumberToken : IToken
 {
-    internal class NumberToken : IToken
+    public NumberToken(int number)
     {
-        public NumberToken(int number)
-        {
-            Number = number;
-        }
+        Number = number;
+    }
 
-        public int Number { get; }
+    public int Number { get; }
 
-        public override string ToString()
-        {
-            return $"{Number}";
-        }
+    public override string ToString()
+    {
+        return $"{Number}";
     }
 }

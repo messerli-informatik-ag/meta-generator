@@ -1,15 +1,14 @@
-using System.Text;
-using apophis.Lexer;
+﻿using System.Text;
+using Messerli.Lexer;
 using Messerli.VsSolution.Model;
 
-namespace Messerli.VsSolution.Parser.GlobalSection
+namespace Messerli.VsSolution.Parser.GlobalSection;
+
+internal interface IGlobalSection
 {
-    internal interface IGlobalSection
-    {
-        void Parse(TokenWalker tokenWalker, Solution solution);
+    void Parse(TokenWalker tokenWalker, Solution solution);
 
-        void Serialize(Solution solution, StringBuilder result);
+    void Serialize(Solution solution, StringBuilder result);
 
-        bool Exists(Solution solution);
-    }
+    bool Exists(Solution solution);
 }

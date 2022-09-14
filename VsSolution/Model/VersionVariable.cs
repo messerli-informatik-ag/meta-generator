@@ -1,17 +1,16 @@
-using System;
+﻿using System;
 
-namespace Messerli.VsSolution.Model
+namespace Messerli.VsSolution.Model;
+
+internal class VersionVariable
 {
-    internal class VersionVariable
+    public VersionVariable(string name, Version value)
     {
-        public VersionVariable(string name, Version value)
-        {
-            Name = name;
-            Value = value;
-        }
-
-        public string Name { get; }
-
-        public Version Value { get; }
+        Name = name;
+        Value = value;
     }
+
+    public string Name { get; }
+
+    public Version Value { get; }
 }

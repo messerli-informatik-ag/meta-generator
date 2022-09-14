@@ -1,9 +1,8 @@
-using System;
+﻿using System;
 
-namespace Messerli.MetaGeneratorAbstractions
+namespace Messerli.MetaGeneratorAbstractions;
+
+public interface IExceptionFormatter
 {
-    public interface IExceptionFormatter
-    {
-        void FormatException(Exception exception);
-    }
+    void FormatException(Exception exception);
 }

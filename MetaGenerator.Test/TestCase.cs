@@ -1,12 +1,11 @@
-using Xunit;
+﻿using Xunit;
 
-namespace Messerli.MetaGenerator.Test
+namespace Messerli.MetaGenerator.Test;
+
+public class TestCase
 {
-    public class TestCase
+    [Fact]
+    public void SomeTest()
     {
-        [Fact]
-        public void SomeTest()
-        {
-        }
     }
 }

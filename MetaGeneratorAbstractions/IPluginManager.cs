@@ -1,9 +1,8 @@
-namespace Messerli.MetaGenerator
-{
-    public interface IPluginManager
-    {
-        int Install(string pluginName);
+﻿namespace Messerli.MetaGenerator;
 
-        int Uninstall(string pluginName);
-    }
+public interface IPluginManager
+{
+    int Install(string pluginName);
+
+    int Uninstall(string pluginName);
 }

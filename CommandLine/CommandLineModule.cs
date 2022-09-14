@@ -1,14 +1,13 @@
-using Autofac;
+﻿using Autofac;
 using Messerli.CommandLineAbstractions;
 
-namespace Messerli.CommandLine
+namespace Messerli.CommandLine;
+
+public class CommandLineModule : Module
 {
-    public class CommandLineModule : Module
+    protected override void Load(ContainerBuilder builder)
     {
-        protected override void Load(ContainerBuilder builder)
-        {
-            builder.RegisterType<SystemConsoleWriter>().As<IConsoleWriter>();
-            builder.RegisterType<SystemConsoleReader>().As<IConsoleReader>();
-        }
+        builder.RegisterType<SystemConsoleWriter>().As<IConsoleWriter>();
+        builder.RegisterType<SystemConsoleReader>().As<IConsoleReader>();
     }
 }

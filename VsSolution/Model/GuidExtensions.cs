@@ -1,12 +1,11 @@
-using System;
+﻿using System;
 
-namespace Messerli.VsSolution.Model
+namespace Messerli.VsSolution.Model;
+
+public static class GuidExtensions
 {
-    public static class GuidExtensions
+    public static string SolutionFormat(this Guid guid)
     {
-        public static string SolutionFormat(this Guid guid)
-        {
-            return $"{{{guid.ToString().ToUpper()}}}";
-        }
+        return $"{{{guid.ToString().ToUpper()}}}";
     }
 }

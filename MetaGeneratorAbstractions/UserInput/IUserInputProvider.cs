@@ -1,19 +1,18 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace Messerli.MetaGeneratorAbstractions.UserInput
+namespace Messerli.MetaGeneratorAbstractions.UserInput;
+
+public interface IUserInputProvider
 {
-    public interface IUserInputProvider
-    {
-        IUserInputDescription this[string variableName] { get; }
+    IUserInputDescription this[string variableName] { get; }
 
-        string Value(string variableName);
+    string Value(string variableName);
 
-        Dictionary<string, string> GetVariableValues();
+    Dictionary<string, string> GetVariableValues();
 
-        void RegisterVariablesFromTemplate(string templateName);
+    void RegisterVariablesFromTemplate(string templateName);
 
-        void AskUser(Dictionary<string, string> userArguments);
+    void AskUser(Dictionary<string, string> userArguments);
 
-        IEnumerable<IUserInputDescription> GetUserInputDescriptions();
-    }
+    IEnumerable<IUserInputDescription> GetUserInputDescriptions();
 }

@@ -1,12 +1,11 @@
-using apophis.Lexer.Tokens;
+﻿using Messerli.Lexer.Tokens;
 
-namespace Messerli.VsSolution.Token
+namespace Messerli.VsSolution.Token;
+
+internal class BeginGlobalSectionToken : IToken
 {
-    internal class BeginGlobalSectionToken : IToken
+    public override string ToString()
     {
-        public override string ToString()
-        {
-            return "GlobalSection";
-        }
+        return "GlobalSection";
     }
 }

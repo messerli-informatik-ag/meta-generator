@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk; Microsoft.Build.CentralPackageVersions">
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>Messerli.VsSolution</RootNamespace>
-    <LangVersion>9.0</LangVersion>
-    <Nullable>enable</Nullable>
-    <NullableContextOptions>enable</NullableContextOptions>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Autofac" />
-    <PackageReference Include="apophis.Lexer" />
-    <PackageReference Include="Funcky"/>
-  </ItemGroup>
+    <PropertyGroup>
+        <RootNamespace>Messerli.VsSolution</RootNamespace>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Autofac" />
+        <PackageReference Include="Messerli.Lexer" />
+        <PackageReference Include="Funcky"/>
+    </ItemGroup>
 </Project>

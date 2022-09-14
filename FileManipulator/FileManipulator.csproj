@@ -3,11 +3,6 @@
     <PropertyGroup>
         <RootNamespace>Messerli.FileManipulator</RootNamespace>
         <AssemblyName>Messerli.FileManipulator</AssemblyName>
-        <TargetFramework>net5.0</TargetFramework>
-        <LangVersion>9.0</LangVersion>
-        <Nullable>enable</Nullable>
-        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
     <ItemGroup>
         <InternalsVisibleTo Include="$(AssemblyName).Test" />
@@ -23,6 +18,6 @@
         <PackageReference Include="Funcky" />
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\FileManipulatorAbstractions\FileManipulatorAbstractions.csproj" />
+        <ProjectReference Include="..\FileManipulatorAbstractions\FileManipulatorAbstractions.csproj" />
     </ItemGroup>
 </Project>

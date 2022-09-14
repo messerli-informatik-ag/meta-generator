@@ -1,19 +1,18 @@
-using System;
+﻿using System;
 
-namespace Messerli.FileManipulatorAbstractions
+namespace Messerli.FileManipulatorAbstractions;
+
+public sealed class ConflictingMsBuildSdkException : Exception
 {
-    public sealed class ConflictingMsBuildSdkException : Exception
+    public ConflictingMsBuildSdkException(MsBuildSdk sdk, string currentVersion)
     {
-        public ConflictingMsBuildSdkException(MsBuildSdk sdk, string currentVersion)
-        {
-            Sdk = sdk;
-            CurrentVersion = currentVersion;
-        }
-
-        public MsBuildSdk Sdk { get; }
-
-        public string CurrentVersion { get; }
-
-        public override string Message => $"MSBuild SDK '{Sdk.NuGetPackageId}' already exists with conflicting version '{CurrentVersion}'";
+        Sdk = sdk;
+        CurrentVersion = currentVersion;
     }
+
+    public MsBuildSdk Sdk { get; }
+
+    public string CurrentVersion { get; }
+
+    public override string Message => $"MSBuild SDK '{Sdk.NuGetPackageId}' already exists with conflicting version '{CurrentVersion}'";
 }

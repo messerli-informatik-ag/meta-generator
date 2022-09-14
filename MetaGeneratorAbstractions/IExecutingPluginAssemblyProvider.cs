@@ -1,11 +1,10 @@
-using System.Reflection;
+﻿using System.Reflection;
 
-namespace Messerli.MetaGeneratorAbstractions
+namespace Messerli.MetaGeneratorAbstractions;
+
+public interface IExecutingPluginAssemblyProvider
 {
-    public interface IExecutingPluginAssemblyProvider
-    {
-        bool HasPluginContext { get; }
+    bool HasPluginContext { get; }
 
-        Assembly PluginAssembly { get; set; }
-    }
+    Assembly PluginAssembly { get; set; }
 }

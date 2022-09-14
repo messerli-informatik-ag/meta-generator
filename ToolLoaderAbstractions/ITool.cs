@@ -1,13 +1,12 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace Messerli.ToolLoaderAbstractions
+namespace Messerli.ToolLoaderAbstractions;
+
+public interface ITool
 {
-    public interface ITool
-    {
-        string StandardOutput { get; }
+    string StandardOutput { get; }
 
-        void Execute(IEnumerable<string> arguments, string workingDirectory);
+    void Execute(IEnumerable<string> arguments, string workingDirectory);
 
-        bool IsAvailable();
-    }
+    bool IsAvailable();
 }

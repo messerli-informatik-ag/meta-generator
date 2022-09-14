@@ -1,15 +1,14 @@
-using Microsoft.Build.Locator;
+﻿using Microsoft.Build.Locator;
 
-namespace Messerli.FileManipulator.Project.MsBuild
+namespace Messerli.FileManipulator.Project.MsBuild;
+
+internal sealed class MicrosoftBuildAssemblyLoader : IMicrosoftBuildAssemblyLoader
 {
-    internal sealed class MicrosoftBuildAssemblyLoader : IMicrosoftBuildAssemblyLoader
+    public void LoadMicrosoftBuildIfNecessary()
     {
-        public void LoadMicrosoftBuildIfNecessary()
+        if (MSBuildLocator.CanRegister)
         {
-            if (MSBuildLocator.CanRegister)
-            {
-                MSBuildLocator.RegisterDefaults();
-            }
+            MSBuildLocator.RegisterDefaults();
         }
     }
 }

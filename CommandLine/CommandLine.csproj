@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk; Microsoft.Build.CentralPackageVersions">
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>Messerli.CommandLine</RootNamespace>
-    <LangVersion>9.0</LangVersion>
-    <Nullable>enable</Nullable>
-    <NullableContextOptions>enable</NullableContextOptions>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-  </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CommandLineAbstractions\CommandLineAbstractions.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Autofac" />
-    <PackageReference Include="Funcky" />
-  </ItemGroup>
+    <PropertyGroup>
+        <RootNamespace>Messerli.CommandLine</RootNamespace>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\CommandLineAbstractions\CommandLineAbstractions.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Autofac" />
+        <PackageReference Include="Funcky" />
+    </ItemGroup>
 </Project>

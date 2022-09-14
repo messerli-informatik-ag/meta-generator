@@ -1,32 +1,31 @@
 ﻿using System;
 
-namespace Messerli.MetaGeneratorAbstractions
+namespace Messerli.MetaGeneratorAbstractions;
+
+public class NullMetaGenerator : IMetaGenerator
 {
-    public class NullMetaGenerator : IMetaGenerator
+    private static readonly Lazy<NullMetaGenerator> LazyInstance =
+        new(() => new NullMetaGenerator());
+
+    public string Description { get; } = string.Empty;
+
+    public string Name { get; } = string.Empty;
+
+    public static NullMetaGenerator Instance => LazyInstance.Value;
+
+    public void Register()
     {
-        private static readonly Lazy<NullMetaGenerator> LazyInstance =
-            new(() => new NullMetaGenerator());
+    }
 
-        public string Description { get; } = string.Empty;
+    public void Prepare()
+    {
+    }
 
-        public string Name { get; } = string.Empty;
+    public void Generate()
+    {
+    }
 
-        public static NullMetaGenerator Instance => LazyInstance.Value;
-
-        public void Register()
-        {
-        }
-
-        public void Prepare()
-        {
-        }
-
-        public void Generate()
-        {
-        }
-
-        public void TearDown()
-        {
-        }
+    public void TearDown()
+    {
     }
 }

@@ -1,17 +1,16 @@
-using System;
+﻿using System;
 
-namespace Messerli.VsSolution.Model
+namespace Messerli.VsSolution.Model;
+
+public class NestedProject
 {
-    public class NestedProject
+    public NestedProject(Guid parent, Guid child)
     {
-        public NestedProject(Guid parent, Guid child)
-        {
-            Parent = parent;
-            Child = child;
-        }
-
-        public Guid Parent { get; }
-
-        public Guid Child { get; }
+        Parent = parent;
+        Child = child;
     }
+
+    public Guid Parent { get; }
+
+    public Guid Child { get; }
 }

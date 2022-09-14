@@ -1,10 +1,9 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Messerli.MetaGeneratorAbstractions.Json;
 
-namespace Messerli.MesserliOneRepositoryPlugin
+namespace Messerli.MesserliOneRepositoryPlugin;
+
+public interface ITargetFrameworkProvider
 {
-    public interface ITargetFrameworkProvider
-    {
-        IEnumerable<SelectionValue> GetSelection();
-    }
+    IEnumerable<SelectionValue> GetSelection();
 }

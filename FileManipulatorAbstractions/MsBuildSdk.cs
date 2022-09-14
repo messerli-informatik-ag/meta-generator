@@ -1,15 +1,14 @@
-namespace Messerli.FileManipulatorAbstractions
+﻿namespace Messerli.FileManipulatorAbstractions;
+
+public class MsBuildSdk
 {
-    public class MsBuildSdk
+    public MsBuildSdk(string nugetPackageId, string version)
     {
-        public MsBuildSdk(string nugetPackageId, string version)
-        {
-            NuGetPackageId = nugetPackageId;
-            Version = version;
-        }
-
-        public string NuGetPackageId { get; }
-
-        public string Version { get; }
+        NuGetPackageId = nugetPackageId;
+        Version = version;
     }
+
+    public string NuGetPackageId { get; }
+
+    public string Version { get; }
 }

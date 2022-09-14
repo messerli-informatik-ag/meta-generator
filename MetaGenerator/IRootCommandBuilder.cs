@@ -1,9 +1,8 @@
-using System.CommandLine;
+﻿using System.CommandLine;
 
-namespace Messerli.MetaGenerator
+namespace Messerli.MetaGenerator;
+
+public interface IRootCommandBuilder
 {
-    public interface IRootCommandBuilder
-    {
-        RootCommand Build();
-    }
+    RootCommand Build();
 }

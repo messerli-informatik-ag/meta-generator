@@ -1,7 +1,6 @@
-namespace Messerli.MetaGeneratorAbstractions
+﻿namespace Messerli.MetaGeneratorAbstractions;
+
+public interface IApplication
 {
-    public interface IApplication
-    {
-        int Run(string[] args);
-    }
+    int Run(string[] args);
 }
