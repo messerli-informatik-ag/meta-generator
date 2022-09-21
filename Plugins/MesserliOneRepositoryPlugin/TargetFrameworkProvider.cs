@@ -128,7 +128,7 @@ public class TargetFrameworkProvider : ITargetFrameworkProvider
 
     private static HashSet<string> ParseSdks(string sdkOutput)
         => sdkOutput
-            .Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None)
+            .SplitLines()
             .Where(s => s.Trim().Length != 0)
             .Select(s => s.Substring(0, s.IndexOf(' ')))
             .ToHashSet();
