@@ -1,32 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk; Microsoft.Build.CentralPackageVersions">
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>Messerli.BackbonePluginTemplatePlugin</RootNamespace>
-    <LangVersion>9.0</LangVersion>
-    <Nullable>enable</Nullable>
-    <NullableContextOptions>enable</NullableContextOptions>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-  </PropertyGroup>
-  <ItemGroup>
-    <None Remove="templates\**\*.template" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="templates\**\*.mustache" LogicalName="%(Identity)" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\CommandLineAbstractions\CommandLineAbstractions.csproj" />
-    <ProjectReference Include="..\..\FileManipulatorAbstractions\FileManipulatorAbstractions.csproj" />
-    <ProjectReference Include="..\..\MetaGeneratorAbstractions\MetaGeneratorAbstractions.csproj" />
-    <ProjectReference Include="..\..\ToolLoaderAbstractions\ToolLoaderAbstractions.csproj" />
-    <ProjectReference Include="..\..\VsSolution\VsSolution.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="templates\VariableDeclarations.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Autofac" />
-  </ItemGroup>
-  <Import Project="..\..\Plugin.targets" />
+    <PropertyGroup>
+        <RootNamespace>Messerli.BackbonePluginTemplatePlugin</RootNamespace>
+    </PropertyGroup>
+    <ItemGroup>
+        <None Remove="templates\**\*.template" />
+    </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="templates\**\*.mustache" LogicalName="%(Identity)" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\CommandLineAbstractions\CommandLineAbstractions.csproj" />
+        <ProjectReference Include="..\..\FileManipulatorAbstractions\FileManipulatorAbstractions.csproj" />
+        <ProjectReference Include="..\..\MetaGeneratorAbstractions\MetaGeneratorAbstractions.csproj" />
+        <ProjectReference Include="..\..\ToolLoaderAbstractions\ToolLoaderAbstractions.csproj" />
+        <ProjectReference Include="..\..\VsSolution\VsSolution.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="templates\VariableDeclarations.json" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Autofac" />
+    </ItemGroup>
+    <Import Project="..\..\Plugin.targets" />
 </Project>

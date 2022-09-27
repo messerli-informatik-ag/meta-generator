@@ -1,29 +1,28 @@
-using System;
-using apophis.Lexer;
+﻿using System;
+using Messerli.Lexer;
 using Messerli.VsSolution.Model;
 using Messerli.VsSolution.Token;
 
-namespace Messerli.VsSolution.Parser
+namespace Messerli.VsSolution.Parser;
+
+internal class VariableParser
 {
-    internal class VariableParser
+    public VersionVariable ParseVersion(TokenWalker tokenWalker)
     {
-        public VersionVariable ParseVersion(TokenWalker tokenWalker)
-        {
-            var variableName = tokenWalker.ConsumeWord();
+        var variableName = tokenWalker.ConsumeWord();
 
-            tokenWalker.ConsumeAllWhiteSpace();
-            tokenWalker.Consume<AssignToken>();
+        tokenWalker.ConsumeAllWhiteSpace();
+        tokenWalker.Consume<AssignToken>();
 
-            var major = tokenWalker.ConsumeNumber();
-            tokenWalker.Consume<DotToken>();
-            var minor = tokenWalker.ConsumeNumber();
-            tokenWalker.Consume<DotToken>();
-            var build = tokenWalker.ConsumeNumber();
-            tokenWalker.Consume<DotToken>();
-            var revision = tokenWalker.ConsumeNumber();
-            tokenWalker.Consume<NewLineToken>();
+        var major = tokenWalker.ConsumeNumber();
+        tokenWalker.Consume<DotToken>();
+        var minor = tokenWalker.ConsumeNumber();
+        tokenWalker.Consume<DotToken>();
+        var build = tokenWalker.ConsumeNumber();
+        tokenWalker.Consume<DotToken>();
+        var revision = tokenWalker.ConsumeNumber();
+        tokenWalker.Consume<NewLineToken>();
 
-            return new VersionVariable(variableName, new Version(major, minor, build, revision));
-        }
+        return new VersionVariable(variableName, new Version(major, minor, build, revision));
     }
 }

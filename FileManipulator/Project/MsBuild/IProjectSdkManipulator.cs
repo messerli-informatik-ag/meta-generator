@@ -1,10 +1,9 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using MsBuildProject = Microsoft.Build.Evaluation.Project;
 
-namespace Messerli.FileManipulator.Project.MsBuild
+namespace Messerli.FileManipulator.Project.MsBuild;
+
+internal interface IProjectSdkManipulator
 {
-    internal interface IProjectSdkManipulator
-    {
-        void AddSdksToProject(MsBuildProject project, IEnumerable<string> sdks);
-    }
+    void AddSdksToProject(MsBuildProject project, IEnumerable<string> sdks);
 }

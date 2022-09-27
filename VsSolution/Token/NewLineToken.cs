@@ -1,12 +1,11 @@
-using apophis.Lexer.Tokens;
+﻿using Messerli.Lexer.Tokens;
 
-namespace Messerli.VsSolution.Token
+namespace Messerli.VsSolution.Token;
+
+internal class NewLineToken : IToken, ILineBreakToken
 {
-    internal class NewLineToken : IToken, ILineBreakToken
+    public override string ToString()
     {
-        public override string ToString()
-        {
-            return "\r\n";
-        }
+        return "\r\n";
     }
 }

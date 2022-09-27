@@ -1,11 +1,10 @@
-using Funcky.Monads;
+﻿using Funcky.Monads;
 
-namespace Messerli.CommandLineAbstractions
+namespace Messerli.CommandLineAbstractions;
+
+public interface IConsoleReader
 {
-    public interface IConsoleReader
-    {
-        Option<int> ReadInt();
+    Option<int> ReadInt();
 
-        string ReadLine();
-    }
+    string ReadLine();
 }

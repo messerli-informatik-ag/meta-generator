@@ -1,12 +1,11 @@
-using System;
+﻿using System;
 
-namespace Messerli.FileManipulatorAbstractions
+namespace Messerli.FileManipulatorAbstractions;
+
+public sealed class MalformedGlobalJsonException : Exception
 {
-    public sealed class MalformedGlobalJsonException : Exception
+    public MalformedGlobalJsonException(string message)
+        : base(message)
     {
-        public MalformedGlobalJsonException(string message)
-            : base(message)
-        {
-        }
     }
 }

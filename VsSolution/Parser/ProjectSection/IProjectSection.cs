@@ -1,15 +1,14 @@
-using System.Text;
-using apophis.Lexer;
+﻿using System.Text;
+using Messerli.Lexer;
 using Messerli.VsSolution.Model;
 
-namespace Messerli.VsSolution.Parser.ProjectSection
+namespace Messerli.VsSolution.Parser.ProjectSection;
+
+internal interface IProjectSection
 {
-    internal interface IProjectSection
-    {
-        void Parse(TokenWalker tokenWalker, Project project);
+    void Parse(TokenWalker tokenWalker, Project project);
 
-        void Serialize(Project project, StringBuilder result);
+    void Serialize(Project project, StringBuilder result);
 
-        bool Exists(Project project);
-    }
+    bool Exists(Project project);
 }

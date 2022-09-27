@@ -1,16 +1,15 @@
-namespace Messerli.MetaGeneratorAbstractions.UserInput
+﻿namespace Messerli.MetaGeneratorAbstractions.UserInput;
+
+public enum VariableType
 {
-    public enum VariableType
-    {
-        String,
-        Bool,
-        Integer,
-        Double,
-        Selection,
-        Path,
-        ExistingPath,
-        Date,
-        DateTime,
-        Time,
-    }
+    String,
+    Bool,
+    Integer,
+    Double,
+    Selection,
+    Path,
+    ExistingPath,
+    Date,
+    DateTime,
+    Time,
 }

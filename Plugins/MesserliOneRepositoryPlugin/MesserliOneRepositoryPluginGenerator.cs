@@ -13,159 +13,158 @@ using Messerli.ToolLoaderAbstractions;
 using Messerli.VsSolution;
 using Messerli.VsSolution.Model;
 
-namespace Messerli.MesserliOneRepositoryPlugin
+namespace Messerli.MesserliOneRepositoryPlugin;
+
+public class MesserliOneRepositoryPluginGenerator : IMetaGenerator
 {
-    public class MesserliOneRepositoryPluginGenerator : IMetaGenerator
+    private const string RepositoryNameVariable = "RepositoryName";
+    private const string BasePath = "BasePath";
+    private const string SolutionItems = "SolutionItems";
+    private const string TargetFramework = "TargetFramework";
+
+    private readonly IConsoleWriter _consoleWriter;
+    private readonly IFileGenerator _fileGenerator;
+    private readonly IUserInputProvider _userInputProvider;
+    private readonly ISolutionLoader _solutionLoader;
+    private readonly ITools _tools;
+    private readonly ITargetFrameworkProvider _targetFrameworkProvider;
+
+    public MesserliOneRepositoryPluginGenerator(
+        IConsoleWriter consoleWriter,
+        IFileGenerator fileGenerator,
+        IUserInputProvider userInputProvider,
+        ISolutionLoader solutionLoader,
+        ITargetFrameworkProvider targetFrameworkProvider,
+        ITools tools)
     {
-        private const string RepositoryNameVariable = "RepositoryName";
-        private const string BasePath = "BasePath";
-        private const string SolutionItems = "SolutionItems";
-        private const string TargetFramework = "TargetFramework";
+        _consoleWriter = consoleWriter;
+        _fileGenerator = fileGenerator;
+        _userInputProvider = userInputProvider;
+        _solutionLoader = solutionLoader;
+        _targetFrameworkProvider = targetFrameworkProvider;
+        _tools = tools;
+    }
 
-        private readonly IConsoleWriter _consoleWriter;
-        private readonly IFileGenerator _fileGenerator;
-        private readonly IUserInputProvider _userInputProvider;
-        private readonly ISolutionLoader _solutionLoader;
-        private readonly ITools _tools;
-        private readonly ITargetFrameworkProvider _targetFrameworkProvider;
+    public string Description => "This will generate a git repository with a new .NET Core Solution according to the Messerli One Standards";
 
-        public MesserliOneRepositoryPluginGenerator(
-            IConsoleWriter consoleWriter,
-            IFileGenerator fileGenerator,
-            IUserInputProvider userInputProvider,
-            ISolutionLoader solutionLoader,
-            ITargetFrameworkProvider targetFrameworkProvider,
-            ITools tools)
+    public string Name => "messerli-one-repository";
+
+    public void Register()
+    {
+        _tools.RegisterTool("dotnet", "dotnet.exe");
+
+        _userInputProvider.RegisterVariablesFromTemplate(Template.VariableDeclarations);
+
+        _tools.VerifyTools();
+        _userInputProvider[TargetFramework].VariableSelectionValues.AddRange(_targetFrameworkProvider.GetSelection());
+    }
+
+    public void Prepare()
+    {
+    }
+
+    public void Generate()
+    {
+        _consoleWriter.WriteLine($"Creating Repository: {RepositoryName()}");
+
+        var tasks = new List<Task>
         {
-            _consoleWriter = consoleWriter;
-            _fileGenerator = fileGenerator;
-            _userInputProvider = userInputProvider;
-            _solutionLoader = solutionLoader;
-            _targetFrameworkProvider = targetFrameworkProvider;
-            _tools = tools;
-        }
+            _fileGenerator.FromTemplate(Template.DirectoryBuildTargets, Path.Combine(RepositoryPath(), "Directory.Build.targets"), Encoding.UTF8),
+            _fileGenerator.FromTemplate(Template.GitIgnore, Path.Combine(RepositoryPath(), ".gitignore"), Encoding.UTF8),
+            _fileGenerator.FromTemplate(Template.PublishScript, Path.Combine(RepositoryPath(), "publish.ps1"), Encoding.UTF8),
+            _fileGenerator.FromTemplate(Template.ProjectFile, Path.Combine(RepositoryPath(), RepositoryName(), $"{RepositoryName()}.csproj"), Encoding.UTF8),
 
-        public string Description => "This will generate a git repository with a new .NET Core Solution according to the Messerli One Standards";
+            _fileGenerator.FromTemplate(Template.ProgramSource, Path.Combine(RepositoryPath(), RepositoryName(), "Program.cs"), Encoding.UTF8),
+            _fileGenerator.FromTemplate(Template.ApplicationSource, Path.Combine(RepositoryPath(), RepositoryName(), "Application.cs"), Encoding.UTF8),
+            _fileGenerator.FromTemplate(Template.ApplicationInterfaceSource, Path.Combine(RepositoryPath(), RepositoryName(), "IApplication.cs"), Encoding.UTF8),
+            _fileGenerator.FromTemplate(Template.CompositionRootSource, Path.Combine(RepositoryPath(), RepositoryName(), "CompositionRoot.cs"), Encoding.UTF8),
+            _fileGenerator.FromTemplate(Template.GlobalJson, Path.Combine(RepositoryPath(), "global.json"), Encoding.UTF8),
+            _fileGenerator.FromTemplate(Template.PackagesProperties, Path.Combine(RepositoryPath(), "Packages.props"), Encoding.UTF8),
 
-        public string Name => "messerli-one-repository";
+            GenerateSolution(),
+        };
 
-        public void Register()
-        {
-            _tools.RegisterTool("dotnet", "dotnet.exe");
+        Task.WaitAll(tasks.ToArray());
+    }
 
-            _userInputProvider.RegisterVariablesFromTemplate(Template.VariableDeclarations);
+    public void TearDown()
+    {
+        Repository.Init(RepositoryPath());
 
-            _tools.VerifyTools();
-            _userInputProvider[TargetFramework].VariableSelectionValues.AddRange(_targetFrameworkProvider.GetSelection());
-        }
+        // Add created files to repository: git add --all <RepositoryPath>
+        using var repo = new Repository(RepositoryPath());
 
-        public void Prepare()
-        {
-        }
+        // Create an initial commit
+        CommitAll(repo, "Initial commit by the MetaGenerator");
 
-        public void Generate()
-        {
-            _consoleWriter.WriteLine($"Creating Repository: {RepositoryName()}");
+        var dotnet = _tools.GetTool("dotnet");
 
-            var tasks = new List<Task>
-            {
-                _fileGenerator.FromTemplate(Template.DirectoryBuildTargets, Path.Combine(RepositoryPath(), "Directory.Build.targets"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(Template.GitIgnore, Path.Combine(RepositoryPath(), ".gitignore"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(Template.PublishScript, Path.Combine(RepositoryPath(), "publish.ps1"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(Template.ProjectFile, Path.Combine(RepositoryPath(), RepositoryName(), $"{RepositoryName()}.csproj"), Encoding.UTF8),
+        dotnet.Execute(new[] { "restore" }, RepositoryPath());
+        CommitAll(repo, "dotnet restore");
 
-                _fileGenerator.FromTemplate(Template.ProgramSource, Path.Combine(RepositoryPath(), RepositoryName(), "Program.cs"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(Template.ApplicationSource, Path.Combine(RepositoryPath(), RepositoryName(), "Application.cs"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(Template.ApplicationInterfaceSource, Path.Combine(RepositoryPath(), RepositoryName(), "IApplication.cs"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(Template.CompositionRootSource, Path.Combine(RepositoryPath(), RepositoryName(), "CompositionRoot.cs"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(Template.GlobalJson, Path.Combine(RepositoryPath(), "global.json"), Encoding.UTF8),
-                _fileGenerator.FromTemplate(Template.PackagesProperties, Path.Combine(RepositoryPath(), "Packages.props"), Encoding.UTF8),
+        RunBuild();
+    }
 
-                GenerateSolution(),
-            };
+    private void CommitAll(Repository repository, string message)
+    {
+        Commands.Stage(repository, "*");
 
-            Task.WaitAll(tasks.ToArray());
-        }
+        // Create an initial commit
+        repository.Commit(message, Author(), Commiter(repository));
+    }
 
-        public void TearDown()
-        {
-            Repository.Init(RepositoryPath());
+    private void RunBuild()
+    {
+        var dotnet = _tools.GetTool("dotnet");
 
-            // Add created files to repository: git add --all <RepositoryPath>
-            using var repo = new Repository(RepositoryPath());
+        dotnet.Execute(new[] { "build" }, RepositoryPath());
+    }
 
-            // Create an initial commit
-            CommitAll(repo, "Initial commit by the MetaGenerator");
+    private static Signature Commiter(Repository repository)
+    {
+        var config = repository.Config;
 
-            var dotnet = _tools.GetTool("dotnet");
+        return config.BuildSignature(DateTimeOffset.Now) ?? Author();
+    }
 
-            dotnet.Execute(new[] { "restore" }, RepositoryPath());
-            CommitAll(repo, "dotnet restore");
+    private static Signature Author()
+    {
+        return new("Meta Generator", "meta-generator@messerli.ch", DateTime.Now);
+    }
 
-            RunBuild();
-        }
+    private string RepositoryName()
+    {
+        return _userInputProvider.Value(RepositoryNameVariable);
+    }
 
-        private void CommitAll(Repository repository, string message)
-        {
-            Commands.Stage(repository, "*");
+    private string RepositoryPath()
+    {
+        return Path.Combine(_userInputProvider.Value(BasePath), RepositoryName());
+    }
 
-            // Create an initial commit
-            repository.Commit(message, Author(), Commiter(repository));
-        }
+    private async Task GenerateSolution()
+    {
+        var solutionPath = Path.Combine(RepositoryPath(), $"{RepositoryName()}.sln");
+        var solution = Solution.NewSolution(solutionPath);
 
-        private void RunBuild()
-        {
-            var dotnet = _tools.GetTool("dotnet");
+        AddSolutionFolder(solution);
 
-            dotnet.Execute(new[] { "build" }, RepositoryPath());
-        }
+        solution.AddProject(RepositoryName(), Path.Combine(RepositoryPath(), RepositoryName(), $"{RepositoryName()}.csproj"), ProjectType.Identifier.CSharpSdk);
 
-        private static Signature Commiter(Repository repository)
-        {
-            var config = repository.Config;
+        await _solutionLoader.Store(solutionPath, solution);
+    }
 
-            return config.BuildSignature(DateTimeOffset.Now) ?? Author();
-        }
+    private void AddSolutionFolder(Solution solution)
+    {
+        solution.AddProject(SolutionItems, Path.Combine(RepositoryPath(), RepositoryName(), $"{RepositoryName()}.csproj"), ProjectType.Identifier.SolutionFolder);
+        var project = solution.Projects.First();
 
-        private static Signature Author()
-        {
-            return new("Meta Generator", "meta-generator@messerli.ch", DateTime.Now);
-        }
+        AddSolutionItemToProject(project, ".gitignore");
+        AddSolutionItemToProject(project, "paket.dependencies");
+    }
 
-        private string RepositoryName()
-        {
-            return _userInputProvider.Value(RepositoryNameVariable);
-        }
-
-        private string RepositoryPath()
-        {
-            return Path.Combine(_userInputProvider.Value(BasePath), RepositoryName());
-        }
-
-        private async Task GenerateSolution()
-        {
-            var solutionPath = Path.Combine(RepositoryPath(), $"{RepositoryName()}.sln");
-            var solution = Solution.NewSolution(solutionPath);
-
-            AddSolutionFolder(solution);
-
-            solution.AddProject(RepositoryName(), Path.Combine(RepositoryPath(), RepositoryName(), $"{RepositoryName()}.csproj"), ProjectType.Identifier.CSharpSdk);
-
-            await _solutionLoader.Store(solutionPath, solution);
-        }
-
-        private void AddSolutionFolder(Solution solution)
-        {
-            solution.AddProject(SolutionItems, Path.Combine(RepositoryPath(), RepositoryName(), $"{RepositoryName()}.csproj"), ProjectType.Identifier.SolutionFolder);
-            var project = solution.Projects.First();
-
-            AddSolutionItemToProject(project, ".gitignore");
-            AddSolutionItemToProject(project, "paket.dependencies");
-        }
-
-        private static void AddSolutionItemToProject(Project project, string item, Option<string> alias = default)
-        {
-            project.SolutionItems.Add(new SolutionItem(item, alias.GetOrElse(item)));
-        }
+    private static void AddSolutionItemToProject(Project project, string item, Option<string> alias = default)
+    {
+        project.SolutionItems.Add(new SolutionItem(item, alias.GetOrElse(item)));
     }
 }

@@ -1,35 +1,34 @@
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
-using apophis.Lexer;
+using Messerli.Lexer;
 using Messerli.VsSolution.Model;
 using Messerli.VsSolution.Token;
 
-namespace Messerli.VsSolution.Parser.ProjectSection
+namespace Messerli.VsSolution.Parser.ProjectSection;
+
+internal class SolutionItemsSection : IProjectSection
 {
-    internal class SolutionItemsSection : IProjectSection
+    public void Parse(TokenWalker tokenWalker, Project project)
     {
-        public void Parse(TokenWalker tokenWalker, Project project)
+        while (tokenWalker.NextIs<EndProjectSectionToken>() == false)
         {
-            while (tokenWalker.NextIs<EndProjectSectionToken>() == false)
-            {
-                var variable = tokenWalker.ConsumeVariable();
-                tokenWalker.ConsumeAllWhiteSpace();
+            var variable = tokenWalker.ConsumeVariable();
+            tokenWalker.ConsumeAllWhiteSpace();
 
-                project.SolutionItems.Add(new SolutionItem(variable.Key, variable.Value));
-            }
+            project.SolutionItems.Add(new SolutionItem(variable.Key, variable.Value));
         }
+    }
 
-        public void Serialize(Project project, StringBuilder result)
+    public void Serialize(Project project, StringBuilder result)
+    {
+        foreach (var solutionItem in project.SolutionItems)
         {
-            foreach (var solutionItem in project.SolutionItems)
-            {
-                result.AppendLine($"\t\t{solutionItem.Name} = {solutionItem.Value}");
-            }
+            result.AppendLine($"\t\t{solutionItem.Name} = {solutionItem.Value}");
         }
+    }
 
-        public bool Exists(Project project)
-        {
-            return project.SolutionItems.Any();
-        }
+    public bool Exists(Project project)
+    {
+        return project.SolutionItems.Any();
     }
 }

@@ -1,9 +1,8 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-namespace Messerli.FileManipulatorAbstractions
+namespace Messerli.FileManipulatorAbstractions;
+
+public interface INugetConfigurationManipulator
 {
-    public interface INugetConfigurationManipulator
-    {
-        Task ModifyNugetConfiguration(string filePath, NugetConfigurationModification modification);
-    }
+    Task ModifyNugetConfiguration(string filePath, NugetConfigurationModification modification);
 }

@@ -1,11 +1,10 @@
-using System.CommandLine.Invocation;
+﻿using System.CommandLine.Invocation;
 
-namespace Messerli.MetaGenerator
+namespace Messerli.MetaGenerator;
+
+internal interface IPluginSelection
 {
-    internal interface IPluginSelection
-    {
-        int StartPluginInteractive(InvocationContext context);
+    int StartPluginInteractive(InvocationContext context);
 
-        int StartPlugin(InvocationContext context, string generatorName);
-    }
+    int StartPlugin(InvocationContext context, string generatorName);
 }

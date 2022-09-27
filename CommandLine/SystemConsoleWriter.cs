@@ -1,17 +1,16 @@
 ﻿using System;
 using Messerli.CommandLineAbstractions;
 
-namespace Messerli.CommandLine
+namespace Messerli.CommandLine;
+
+public class SystemConsoleWriter : IConsoleWriter
 {
-    public class SystemConsoleWriter : IConsoleWriter
-    {
-        public void WriteLine(string line)
-            => Console.WriteLine(line);
+    public void WriteLine(string line)
+        => Console.WriteLine(line);
 
-        public void WriteLine()
-            => Console.WriteLine();
+    public void WriteLine()
+        => Console.WriteLine();
 
-        public void Write(string value)
-            => Console.Write(value);
-    }
+    public void Write(string value)
+        => Console.Write(value);
 }

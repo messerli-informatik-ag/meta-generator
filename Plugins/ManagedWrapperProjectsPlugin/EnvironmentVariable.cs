@@ -1,7 +1,6 @@
-namespace Messerli.ManagedWrapperProjectsPlugin
+﻿namespace Messerli.ManagedWrapperProjectsPlugin;
+
+public static class EnvironmentVariable
 {
-    public static class EnvironmentVariable
-    {
-        public const string TfsProjectRoot = "TfsProjRoot";
-    }
+    public const string TfsProjectRoot = "TfsProjRoot";
 }

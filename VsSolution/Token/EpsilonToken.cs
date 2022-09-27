@@ -1,8 +1,7 @@
-using apophis.Lexer.Tokens;
+﻿using Messerli.Lexer.Tokens;
 
-namespace Messerli.VsSolution.Token
+namespace Messerli.VsSolution.Token;
+
+internal class EpsilonToken : IToken
 {
-    internal class EpsilonToken : IToken
-    {
-    }
 }

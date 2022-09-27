@@ -1,7 +1,6 @@
-namespace Messerli.MetaGenerator
+﻿namespace Messerli.MetaGenerator;
+
+public interface IGlobalOptions
 {
-    public interface IGlobalOptions
-    {
-        bool Verbose { get; }
-    }
+    bool Verbose { get; }
 }

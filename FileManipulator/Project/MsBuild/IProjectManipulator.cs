@@ -1,9 +1,8 @@
-using Messerli.FileManipulatorAbstractions.Project;
+﻿using Messerli.FileManipulatorAbstractions.Project;
 
-namespace Messerli.FileManipulator.Project.MsBuild
+namespace Messerli.FileManipulator.Project.MsBuild;
+
+internal interface IProjectManipulator
 {
-    internal interface IProjectManipulator
-    {
-        void ManipulateProject(string projectFilePath, ProjectModification modification);
-    }
+    void ManipulateProject(string projectFilePath, ProjectModification modification);
 }

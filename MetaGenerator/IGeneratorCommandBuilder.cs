@@ -1,9 +1,8 @@
-using System.CommandLine;
+﻿using System.CommandLine;
 
-namespace Messerli.MetaGenerator
+namespace Messerli.MetaGenerator;
+
+internal interface IGeneratorCommandBuilder
 {
-    internal interface IGeneratorCommandBuilder
-    {
-        Command Build(string name);
-    }
+    Command Build(string name);
 }

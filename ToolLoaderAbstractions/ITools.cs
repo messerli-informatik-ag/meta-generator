@@ -1,16 +1,15 @@
 ﻿using System.Collections.Generic;
 using Funcky.Monads;
 
-namespace Messerli.ToolLoaderAbstractions
+namespace Messerli.ToolLoaderAbstractions;
+
+public interface ITools
 {
-    public interface ITools
-    {
-        void RegisterTool(string name, string executable, Option<string> specificPath = default);
+    void RegisterTool(string name, string executable, Option<string> specificPath = default);
 
-        IEnumerable<KeyValuePair<string, ITool>> VerifyTools();
+    IEnumerable<KeyValuePair<string, ITool>> VerifyTools();
 
-        public ITool GetTool(string name);
+    ITool GetTool(string name);
 
-        ITool CreateToolFromPath(string path);
-    }
+    ITool CreateToolFromPath(string path);
 }

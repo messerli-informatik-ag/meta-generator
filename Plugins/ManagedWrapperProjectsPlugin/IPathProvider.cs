@@ -1,22 +1,21 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Messerli.MetaGeneratorAbstractions.Json;
 
-namespace Messerli.ManagedWrapperProjectsPlugin
+namespace Messerli.ManagedWrapperProjectsPlugin;
+
+internal interface IPathProvider
 {
-    internal interface IPathProvider
-    {
-        IEnumerable<SelectionValue> GetBranches();
+    IEnumerable<SelectionValue> GetBranches();
 
-        string GetTfsProjectRoot();
+    string GetTfsProjectRoot();
 
-        string GetProjectPath();
+    string GetProjectPath();
 
-        string GetVersionInfoPath();
+    string GetVersionInfoPath();
 
-        string GetSolutionDirectory();
+    string GetSolutionDirectory();
 
-        string GetBuildStepSignDirectory();
+    string GetBuildStepSignDirectory();
 
-        string GetVisualStudioToolDirectory();
-    }
+    string GetVisualStudioToolDirectory();
 }

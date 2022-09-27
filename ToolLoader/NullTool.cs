@@ -1,30 +1,29 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Messerli.ToolLoaderAbstractions;
 
-namespace Messerli.ToolLoader
+namespace Messerli.ToolLoader;
+
+internal class NullTool : ITool
 {
-    internal class NullTool : ITool
+    private NullTool()
     {
-        private NullTool()
-        {
-        }
+    }
 
-        public string StandardOutput => string.Empty;
+    public string StandardOutput => string.Empty;
 
-        public static ITool Create()
-        {
-            return new NullTool();
-        }
+    public static ITool Create()
+    {
+        return new NullTool();
+    }
 
-        public void Execute(IEnumerable<string> arguments, string workingDirectory)
-        {
-            throw new NotImplementedException();
-        }
+    public void Execute(IEnumerable<string> arguments, string workingDirectory)
+    {
+        throw new NotImplementedException();
+    }
 
-        public bool IsAvailable()
-        {
-            return false;
-        }
+    public bool IsAvailable()
+    {
+        return false;
     }
 }

@@ -1,11 +1,10 @@
-using System;
+﻿using System;
 
-namespace Messerli.MetaGeneratorAbstractions
+namespace Messerli.MetaGeneratorAbstractions;
+
+public interface ITimeKeeper
 {
-    public interface ITimeKeeper
-    {
-        void MeasureTime(Action action, string eventName);
+    void MeasureTime(Action action, string eventName);
 
-        void Print();
-    }
+    void Print();
 }

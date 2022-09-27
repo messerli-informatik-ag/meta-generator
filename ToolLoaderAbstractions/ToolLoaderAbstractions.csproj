@@ -1,15 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk; Microsoft.Build.CentralPackageVersions">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>Messerli.ToolLoaderAbstractions</RootNamespace>
-    <LangVersion>9.0</LangVersion>
-    <Nullable>enable</Nullable>
-    <NullableContextOptions>enable</NullableContextOptions>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-  </PropertyGroup>
-  <ItemGroup>
-      <PackageReference Include="Funcky" />
-  </ItemGroup>
+    <PropertyGroup>
+        <RootNamespace>Messerli.ToolLoaderAbstractions</RootNamespace>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Funcky" />
+    </ItemGroup>
 </Project>

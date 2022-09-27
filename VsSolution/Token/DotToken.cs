@@ -1,12 +1,11 @@
-using apophis.Lexer.Tokens;
+﻿using Messerli.Lexer.Tokens;
 
-namespace Messerli.VsSolution.Token
+namespace Messerli.VsSolution.Token;
+
+internal class DotToken : IToken
 {
-    internal class DotToken : IToken
+    public override string ToString()
     {
-        public override string ToString()
-        {
-            return ".";
-        }
+        return ".";
     }
 }

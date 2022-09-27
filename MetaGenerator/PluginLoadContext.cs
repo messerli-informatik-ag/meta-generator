@@ -2,41 +2,40 @@
 using System.Reflection;
 using System.Runtime.Loader;
 
-namespace Messerli.MetaGenerator
+namespace Messerli.MetaGenerator;
+
+internal class PluginLoadContext : AssemblyLoadContext
 {
-    internal class PluginLoadContext : AssemblyLoadContext
+    private readonly AssemblyDependencyResolver _resolver;
+
+    public PluginLoadContext(string pluginDllPath)
     {
-        private readonly AssemblyDependencyResolver _resolver;
+        _resolver = new AssemblyDependencyResolver(pluginDllPath);
+    }
 
-        public PluginLoadContext(string pluginDllPath)
+    protected override Assembly? Load(AssemblyName assemblyName)
+    {
+        try
         {
-            _resolver = new AssemblyDependencyResolver(pluginDllPath);
+            // We try to load common libraries from the Default loading context (avoid multiple loads of the same library i.e. Autofac)
+            return Default.LoadFromAssemblyName(assemblyName);
         }
-
-        protected override Assembly? Load(AssemblyName assemblyName)
+        catch (Exception)
         {
-            try
-            {
-                // We try to load common libraries from the Default loading context (avoid multiple loads of the same library i.e. Autofac)
-                return Default.LoadFromAssemblyName(assemblyName);
-            }
-            catch (Exception)
-            {
-                var assemblyPath = _resolver.ResolveAssemblyToPath(assemblyName);
+            var assemblyPath = _resolver.ResolveAssemblyToPath(assemblyName);
 
-                return assemblyPath is null
-                    ? null
-                    : LoadFromAssemblyPath(assemblyPath);
-            }
+            return assemblyPath is null
+                ? null
+                : LoadFromAssemblyPath(assemblyPath);
         }
+    }
 
-        protected override IntPtr LoadUnmanagedDll(string unmanagedDllName)
-        {
-            var libraryPath = _resolver.ResolveUnmanagedDllToPath(unmanagedDllName);
+    protected override IntPtr LoadUnmanagedDll(string unmanagedDllName)
+    {
+        var libraryPath = _resolver.ResolveUnmanagedDllToPath(unmanagedDllName);
 
-            return libraryPath is null
-                ? IntPtr.Zero
-                : LoadUnmanagedDllFromPath(libraryPath);
-        }
+        return libraryPath is null
+            ? IntPtr.Zero
+            : LoadUnmanagedDllFromPath(libraryPath);
     }
 }

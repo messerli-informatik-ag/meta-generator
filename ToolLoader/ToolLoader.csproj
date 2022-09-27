@@ -1,20 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk; Microsoft.Build.CentralPackageVersions">
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>Messerli.ToolLoader</RootNamespace>
-    <LangVersion>9.0</LangVersion>
-    <Nullable>enable</Nullable>
-    <NullableContextOptions>enable</NullableContextOptions>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-  </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CommandLineAbstractions\CommandLineAbstractions.csproj" />
-    <ProjectReference Include="..\MetaGeneratorAbstractions\MetaGeneratorAbstractions.csproj" />
-    <ProjectReference Include="..\ToolLoaderAbstractions\ToolLoaderAbstractions.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Autofac" />
-  </ItemGroup>
+    <PropertyGroup>
+        <RootNamespace>Messerli.ToolLoader</RootNamespace>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\CommandLineAbstractions\CommandLineAbstractions.csproj" />
+        <ProjectReference Include="..\MetaGeneratorAbstractions\MetaGeneratorAbstractions.csproj" />
+        <ProjectReference Include="..\ToolLoaderAbstractions\ToolLoaderAbstractions.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Autofac" />
+    </ItemGroup>
 </Project>

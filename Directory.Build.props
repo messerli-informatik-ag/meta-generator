@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<PropertyGroup>
-		<NoWarn>$(NoWarn);NU5104</NoWarn><!-- A stable release of a package should not have a prerelease dependency. -->
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+
+		<NoWarn>$(NoWarn);NU5104</NoWarn>
+		<!-- A stable release of a package should not have a prerelease dependency. -->
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Messerli.CodeStyle" PrivateAssets="all" />
 	</ItemGroup>
+
+
 </Project>
 

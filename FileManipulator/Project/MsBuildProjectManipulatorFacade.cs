@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Threading.Tasks;
 using Messerli.FileManipulator.Project.MsBuild;
@@ -6,43 +6,42 @@ using Messerli.FileManipulatorAbstractions.Project;
 using Microsoft.Build.Exceptions;
 using IProjectManipulator = Messerli.FileManipulatorAbstractions.Project.IProjectManipulator;
 
-namespace Messerli.FileManipulator.Project
+namespace Messerli.FileManipulator.Project;
+
+internal sealed class MsBuildProjectManipulatorFacade : IProjectManipulator
 {
-    internal sealed class MsBuildProjectManipulatorFacade : IProjectManipulator
+    private readonly IMicrosoftBuildAssemblyLoader _microsoftBuildAssemblyLoader;
+
+    private readonly MsBuild.IProjectManipulator _projectManipulator;
+
+    public MsBuildProjectManipulatorFacade(
+        IMicrosoftBuildAssemblyLoader microsoftBuildAssemblyLoader,
+        MsBuild.IProjectManipulator projectManipulator)
     {
-        private readonly IMicrosoftBuildAssemblyLoader _microsoftBuildAssemblyLoader;
+        _microsoftBuildAssemblyLoader = microsoftBuildAssemblyLoader;
+        _projectManipulator = projectManipulator;
+    }
 
-        private readonly MsBuild.IProjectManipulator _projectManipulator;
+    public Task ManipulateProject(string projectFilePath, ProjectModification modification)
+    {
+        _microsoftBuildAssemblyLoader.LoadMicrosoftBuildIfNecessary();
+        WrapExceptions(projectFilePath, () => _projectManipulator.ManipulateProject(projectFilePath, modification));
+        return Task.CompletedTask;
+    }
 
-        public MsBuildProjectManipulatorFacade(
-            IMicrosoftBuildAssemblyLoader microsoftBuildAssemblyLoader,
-            MsBuild.IProjectManipulator projectManipulator)
+    private static void WrapExceptions(string projectFilePath, Action action)
+    {
+        try
         {
-            _microsoftBuildAssemblyLoader = microsoftBuildAssemblyLoader;
-            _projectManipulator = projectManipulator;
+            action();
         }
-
-        public Task ManipulateProject(string projectFilePath, ProjectModification modification)
+        catch (InvalidProjectFileException exception) when (exception.InnerException is FileNotFoundException)
         {
-            _microsoftBuildAssemblyLoader.LoadMicrosoftBuildIfNecessary();
-            WrapExceptions(projectFilePath, () => _projectManipulator.ManipulateProject(projectFilePath, modification));
-            return Task.CompletedTask;
+            throw new ProjectManipulationException(exception.InnerException, projectFilePath);
         }
-
-        private static void WrapExceptions(string projectFilePath, Action action)
+        catch (Exception exception)
         {
-            try
-            {
-                action();
-            }
-            catch (InvalidProjectFileException exception) when (exception.InnerException is FileNotFoundException)
-            {
-                throw new ProjectManipulationException(exception.InnerException, projectFilePath);
-            }
-            catch (Exception exception)
-            {
-                throw new ProjectManipulationException(exception, projectFilePath);
-            }
+            throw new ProjectManipulationException(exception, projectFilePath);
         }
     }
 }

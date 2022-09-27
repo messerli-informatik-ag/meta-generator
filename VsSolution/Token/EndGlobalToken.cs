@@ -1,12 +1,11 @@
-using apophis.Lexer.Tokens;
+﻿using Messerli.Lexer.Tokens;
 
-namespace Messerli.VsSolution.Token
+namespace Messerli.VsSolution.Token;
+
+internal class EndGlobalToken : IToken
 {
-    internal class EndGlobalToken : IToken
+    public override string ToString()
     {
-        public override string ToString()
-        {
-            return "EndGlobal";
-        }
+        return "EndGlobal";
     }
 }

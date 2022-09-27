@@ -1,44 +1,43 @@
-using System;
-using apophis.Lexer;
+﻿using System;
+using Messerli.Lexer;
 using Messerli.VsSolution.Model;
 using Messerli.VsSolution.Token;
 
-namespace Messerli.VsSolution.Parser.GlobalSection
+namespace Messerli.VsSolution.Parser.GlobalSection;
+
+internal class GlobalSectionParser
 {
-    internal class GlobalSectionParser
+    public void Parse(TokenWalker tokenWalker, Solution solution)
     {
-        public void Parse(TokenWalker tokenWalker, Solution solution)
+        tokenWalker.Consume<BeginGlobalSectionToken>();
+        tokenWalker.Consume<OpenParenthesisToken>();
+        var sectionType = Enum.Parse<GlobalSectionType>(tokenWalker.ConsumeWord());
+        tokenWalker.Consume<ClosedParenthesisToken>();
+
+        tokenWalker.ConsumeAllWhiteSpace();
+        tokenWalker.Consume<AssignToken>();
+
+        tokenWalker.ConsumeAllWhiteSpace();
+        CheckLoadingOrder(tokenWalker.ConsumeWord());
+
+        ParseGlobalSection(sectionType, tokenWalker, solution);
+
+        tokenWalker.Consume<EndGlobalSectionToken>();
+        tokenWalker.ConsumeAllWhiteSpace();
+    }
+
+    private void CheckLoadingOrder(string loadingOrder)
+    {
+        if (LoadingOrders.IsValidSolutionLoadingOrder(loadingOrder) == false)
         {
-            tokenWalker.Consume<BeginGlobalSectionToken>();
-            tokenWalker.Consume<OpenParenthesisToken>();
-            var sectionType = Enum.Parse<GlobalSectionType>(tokenWalker.ConsumeWord());
-            tokenWalker.Consume<ClosedParenthesisToken>();
-
-            tokenWalker.ConsumeAllWhiteSpace();
-            tokenWalker.Consume<AssignToken>();
-
-            tokenWalker.ConsumeAllWhiteSpace();
-            CheckLoadingOrder(tokenWalker.ConsumeWord());
-
-            ParseGlobalSection(sectionType, tokenWalker, solution);
-
-            tokenWalker.Consume<EndGlobalSectionToken>();
-            tokenWalker.ConsumeAllWhiteSpace();
+            throw new ParseException($"Unknown loading Order '{loadingOrder}'");
         }
+    }
 
-        private void CheckLoadingOrder(string loadingOrder)
-        {
-            if (LoadingOrders.IsValidSolutionLoadingOrder(loadingOrder) == false)
-            {
-                throw new ParseException($"Unknown loading Order '{loadingOrder}'");
-            }
-        }
+    private void ParseGlobalSection(GlobalSectionType sectionType, TokenWalker tokenWalker, Solution solution)
+    {
+        var globalSection = GlobalSectionTypeFactory.Create(sectionType);
 
-        private void ParseGlobalSection(GlobalSectionType sectionType, TokenWalker tokenWalker, Solution solution)
-        {
-            var globalSection = GlobalSectionTypeFactory.Create(sectionType);
-
-            globalSection.Parse(tokenWalker, solution);
-        }
+        globalSection.Parse(tokenWalker, solution);
     }
 }

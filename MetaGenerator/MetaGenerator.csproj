@@ -1,40 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk; Microsoft.Build.CentralPackageVersions">
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>Messerli.MetaGenerator</RootNamespace>
-    <LangVersion>9.0</LangVersion>
-    <Nullable>enable</Nullable>
-    <NullableContextOptions>enable</NullableContextOptions>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageProjectUrl>https://github.com/messerli-informatik-ag/MetaGenerator</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/messerli-informatik-ag/MetaGenerator</RepositoryUrl>
-    <PackageTags>generator</PackageTags>
-    <PackAsTool>true</PackAsTool>
-    <ToolCommandName>meta-generator</ToolCommandName>
-    <PackageOutputPath>../nupkg</PackageOutputPath>
-    <Version>1.0.0</Version>
-  </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CommandLine\CommandLine.csproj" />
-    <ProjectReference Include="..\FileManipulatorAbstractions\FileManipulatorAbstractions.csproj" />
-    <ProjectReference Include="..\FileManipulator\FileManipulator.csproj" />
-    <ProjectReference Include="..\MetaGeneratorAbstractions\MetaGeneratorAbstractions.csproj" />
-    <ProjectReference Include="..\ToolLoader\ToolLoader.csproj" />
-    <ProjectReference Include="..\VsSolution\VsSolution.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Autofac" />
-    <PackageReference Include="Stubble.Core" />
-    <PackageReference Include="Pastel" />
-    <PackageReference Include="System.CommandLine" />
-    <PackageReference Include="Funcky" />
-    <PackageReference Include="Soltys.ChangeCase" />
-    <PackageReference Include="DotNet.Glob" />
-  </ItemGroup>
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <RootNamespace>Messerli.MetaGenerator</RootNamespace>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageProjectUrl>https://github.com/messerli-informatik-ag/MetaGenerator</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/messerli-informatik-ag/MetaGenerator</RepositoryUrl>
+        <PackageTags>generator</PackageTags>
+        <PackAsTool>true</PackAsTool>
+        <ToolCommandName>meta-generator</ToolCommandName>
+        <PackageOutputPath>../nupkg</PackageOutputPath>
+        <Version>1.0.0</Version>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\CommandLine\CommandLine.csproj" />
+        <ProjectReference Include="..\FileManipulatorAbstractions\FileManipulatorAbstractions.csproj" />
+        <ProjectReference Include="..\FileManipulator\FileManipulator.csproj" />
+        <ProjectReference Include="..\MetaGeneratorAbstractions\MetaGeneratorAbstractions.csproj" />
+        <ProjectReference Include="..\ToolLoader\ToolLoader.csproj" />
+        <ProjectReference Include="..\VsSolution\VsSolution.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Autofac" />
+        <PackageReference Include="Stubble.Core" />
+        <PackageReference Include="Pastel" />
+        <PackageReference Include="System.CommandLine" />
+        <PackageReference Include="Funcky" />
+        <PackageReference Include="Soltys.ChangeCase" />
+        <PackageReference Include="DotNet.Glob" />
+    </ItemGroup>
     <ItemGroup>
         <InternalsVisibleTo Include="MetaGenerator.Test" />
     </ItemGroup>

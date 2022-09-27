@@ -9,100 +9,99 @@ using Messerli.MetaGeneratorAbstractions;
 using Messerli.MetaGeneratorAbstractions.UserInput;
 using Soltys.ChangeCase;
 
-namespace Messerli.MetaGeneratorProjectPlugin
+namespace Messerli.MetaGeneratorProjectPlugin;
+
+internal class MetaGeneratorProjectPluginGenerator : IMetaGenerator
 {
-    internal class MetaGeneratorProjectPluginGenerator : IMetaGenerator
+    private const string VariableDeclarations = "templates\\VariableDeclarations.json";
+
+    private const string GeneratorName = "GeneratorName";
+    private const string KebabGeneratorName = "KebabGeneratorName";
+    private const string GeneratorPath = "GeneratorPath";
+
+    private readonly IConsoleWriter _consoleWriter;
+    private readonly IFileGenerator _fileGenerator;
+    private readonly IFileManipulator _fileManipulator;
+    private readonly IUserInputProvider _userInputProvider;
+    private readonly IVariableProvider _variableProvider;
+
+    public MetaGeneratorProjectPluginGenerator(
+        IConsoleWriter consoleWriter,
+        IFileGenerator fileGenerator,
+        IFileManipulator fileManipulator,
+        IUserInputProvider userInputProvider,
+        IVariableProvider variableProvider)
     {
-        private const string VariableDeclarations = "templates\\VariableDeclarations.json";
+        _consoleWriter = consoleWriter;
+        _fileGenerator = fileGenerator;
+        _fileManipulator = fileManipulator;
+        _userInputProvider = userInputProvider;
+        _variableProvider = variableProvider;
+    }
 
-        private const string GeneratorName = "GeneratorName";
-        private const string KebabGeneratorName = "KebabGeneratorName";
-        private const string GeneratorPath = "GeneratorPath";
+    public string Description => "Create a new plugin for this generator.";
 
-        private readonly IConsoleWriter _consoleWriter;
-        private readonly IFileGenerator _fileGenerator;
-        private readonly IFileManipulator _fileManipulator;
-        private readonly IUserInputProvider _userInputProvider;
-        private readonly IVariableProvider _variableProvider;
+    public string Name => "meta-generator-plugin";
 
-        public MetaGeneratorProjectPluginGenerator(
-            IConsoleWriter consoleWriter,
-            IFileGenerator fileGenerator,
-            IFileManipulator fileManipulator,
-            IUserInputProvider userInputProvider,
-            IVariableProvider variableProvider)
+    public void Register()
+    {
+        _userInputProvider.RegisterVariablesFromTemplate(VariableDeclarations);
+    }
+
+    public void Prepare()
+    {
+        _variableProvider
+            .GetVariableValues()
+            .GetValueOrNone(key: GeneratorName)
+            .AndThen(name => _variableProvider.RegisterValue(KebabGeneratorName, name.ParamCase()));
+    }
+
+    public void Generate()
+    {
+        _consoleWriter.WriteLine($"Creating the plugin '{_userInputProvider.Value(GeneratorName)}' for the project generator.");
+        var fileNameTemplateValues = new Dictionary<string, string>
         {
-            _consoleWriter = consoleWriter;
-            _fileGenerator = fileGenerator;
-            _fileManipulator = fileManipulator;
-            _userInputProvider = userInputProvider;
-            _variableProvider = variableProvider;
-        }
+            ["fileExtension"] = "cs",
+            ["generatorName"] = _userInputProvider.Value(GeneratorName),
+        };
 
-        public string Description => "Create a new plugin for this generator.";
-
-        public string Name => "meta-generator-plugin";
-
-        public void Register()
+        var tasks = new[]
         {
-            _userInputProvider.RegisterVariablesFromTemplate(VariableDeclarations);
-        }
+            _fileGenerator.FromTemplateGlob("templates/**/*.mustache", GetPluginPath(), fileNameTemplateValues),
+            _fileManipulator.AddProjectsToSolution(GetSolutionInfoBuilder().Build(), Sequence.FromNullable(GetProjectInfoBuilder().Build())),
+        };
 
-        public void Prepare()
-        {
-            _variableProvider
-                .GetVariableValues()
-                .GetValueOrNone(key: GeneratorName)
-                .AndThen(name => _variableProvider.RegisterValue(KebabGeneratorName, name.ParamCase()));
-        }
+        Task.WaitAll(tasks);
+    }
 
-        public void Generate()
-        {
-            _consoleWriter.WriteLine($"Creating the plugin '{_userInputProvider.Value(GeneratorName)}' for the project generator.");
-            var fileNameTemplateValues = new Dictionary<string, string>
-            {
-                ["fileExtension"] = "cs",
-                ["generatorName"] = _userInputProvider.Value(GeneratorName),
-            };
+    public void TearDown()
+    {
+        using var repo = new Repository(GetSolutionPath());
 
-            var tasks = new[]
-            {
-                _fileGenerator.FromTemplateGlob("templates/**/*.mustache", GetPluginPath(), fileNameTemplateValues),
-                _fileManipulator.AddProjectsToSolution(GetSolutionInfoBuilder().Build(), Sequence.FromNullable(GetProjectInfoBuilder().Build())),
-            };
+        Commands.Stage(repo, Path.Combine("Plugins", _userInputProvider.Value(GeneratorName), "*"));
+    }
 
-            Task.WaitAll(tasks);
-        }
+    private SolutionInfo.Builder GetSolutionInfoBuilder()
+    {
+        return new SolutionInfo.Builder()
+            .WithPath(Path.Combine(GetSolutionPath(), "MetaGenerator.sln"))
+            .WithFilterFolder("Plugins");
+    }
 
-        public void TearDown()
-        {
-            using var repo = new Repository(GetSolutionPath());
+    private ProjectInfo.Builder GetProjectInfoBuilder()
+    {
+        return new ProjectInfo.Builder()
+            .WithName(_userInputProvider.Value(GeneratorName))
+            .WithPath(Path.Combine(GetPluginPath(), $"{_userInputProvider.Value(GeneratorName)}.csproj"));
+    }
 
-            Commands.Stage(repo, Path.Combine("Plugins", _userInputProvider.Value(GeneratorName), "*"));
-        }
+    private string GetSolutionPath()
+    {
+        return _userInputProvider.Value(GeneratorPath);
+    }
 
-        private SolutionInfo.Builder GetSolutionInfoBuilder()
-        {
-            return new SolutionInfo.Builder()
-                .WithPath(Path.Combine(GetSolutionPath(), "MetaGenerator.sln"))
-                .WithFilterFolder("Plugins");
-        }
-
-        private ProjectInfo.Builder GetProjectInfoBuilder()
-        {
-            return new ProjectInfo.Builder()
-                .WithName(_userInputProvider.Value(GeneratorName))
-                .WithPath(Path.Combine(GetPluginPath(), $"{_userInputProvider.Value(GeneratorName)}.csproj"));
-        }
-
-        private string GetSolutionPath()
-        {
-            return _userInputProvider.Value(GeneratorPath);
-        }
-
-        private string GetPluginPath()
-        {
-            return Path.Combine(GetSolutionPath(), "Plugins", _userInputProvider.Value(GeneratorName));
-        }
+    private string GetPluginPath()
+    {
+        return Path.Combine(GetSolutionPath(), "Plugins", _userInputProvider.Value(GeneratorName));
     }
 }

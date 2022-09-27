@@ -4,74 +4,73 @@ using Funcky.Monads;
 using Messerli.MetaGeneratorAbstractions.Json;
 using Messerli.MetaGeneratorAbstractions.UserInput;
 
-namespace Messerli.MetaGenerator.UserInput
+namespace Messerli.MetaGenerator.UserInput;
+
+internal class UserInputDescriptionBuilder
 {
-    internal class UserInputDescriptionBuilder
+    private Option<string> _variableName;
+    private Option<string> _variableQuestion;
+    private Option<string> _variableDescription;
+    private VariableType _variableType;
+    private Func<bool> _isNeededPredicate;
+    private Option<List<SelectionValue>> _variableSelectionValues;
+    private List<IValidation> _validations = new();
+
+    public UserInputDescriptionBuilder()
     {
-        private Option<string> _variableName;
-        private Option<string> _variableQuestion;
-        private Option<string> _variableDescription;
-        private VariableType _variableType;
-        private Func<bool> _isNeededPredicate;
-        private Option<List<SelectionValue>> _variableSelectionValues;
-        private List<IValidation> _validations = new();
+        _isNeededPredicate = UserInputDescription.AlwaysNeeded;
+    }
 
-        public UserInputDescriptionBuilder()
-        {
-            _isNeededPredicate = UserInputDescription.AlwaysNeeded;
-        }
-
-        public UserInputDescription Build()
-            => _variableName
-                .Match(
+    public UserInputDescription Build()
+        => _variableName
+            .Match(
                 none: () => throw new Exception("Variable Name needs to be set with SetVariableName before building!"),
                 some: name => new UserInputDescription(name, _variableQuestion, _variableDescription, _variableType, _isNeededPredicate, _variableSelectionValues, _validations));
 
-        public UserInputDescriptionBuilder SetIsNeededPredicate(Func<bool> isNeededPredicate)
-        {
-            _isNeededPredicate = isNeededPredicate;
+    public UserInputDescriptionBuilder SetIsNeededPredicate(Func<bool> isNeededPredicate)
+    {
+        _isNeededPredicate = isNeededPredicate;
 
-            return this;
-        }
+        return this;
+    }
 
-        public UserInputDescriptionBuilder SetVariableName(string variableName)
-        {
-            _variableName = variableName;
+    public UserInputDescriptionBuilder SetVariableName(string variableName)
+    {
+        _variableName = variableName;
 
-            return this;
-        }
+        return this;
+    }
 
-        public UserInputDescriptionBuilder SetVariableDescription(string variableDescription)
-        {
-            _variableDescription = variableDescription;
+    public UserInputDescriptionBuilder SetVariableDescription(string variableDescription)
+    {
+        _variableDescription = variableDescription;
 
-            return this;
-        }
+        return this;
+    }
 
-        public UserInputDescriptionBuilder SetVariableQuestion(string variableQuestion)
-        {
-            _variableQuestion = variableQuestion;
+    public UserInputDescriptionBuilder SetVariableQuestion(string variableQuestion)
+    {
+        _variableQuestion = variableQuestion;
 
-            return this;
-        }
+        return this;
+    }
 
-        public void SetValidation(IValidation validation)
-        {
-            _validations.Add(validation);
-        }
+    public void SetValidation(IValidation validation)
+    {
+        _validations.Add(validation);
+    }
 
-        public UserInputDescriptionBuilder SetVariableType(VariableType variableType)
-        {
-            _variableType = variableType;
+    public UserInputDescriptionBuilder SetVariableType(VariableType variableType)
+    {
+        _variableType = variableType;
 
-            return this;
-        }
+        return this;
+    }
 
-        public UserInputDescriptionBuilder SetSelectionValues(List<SelectionValue> variableSelectionValues)
-        {
-            _variableSelectionValues = variableSelectionValues;
+    public UserInputDescriptionBuilder SetSelectionValues(List<SelectionValue> variableSelectionValues)
+    {
+        _variableSelectionValues = variableSelectionValues;
 
-            return this;
-        }
+        return this;
     }
 }

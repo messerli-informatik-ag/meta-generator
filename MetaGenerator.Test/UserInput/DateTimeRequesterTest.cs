@@ -7,29 +7,28 @@ using Messerli.MetaGeneratorAbstractions.UserInput;
 using Moq;
 using Xunit;
 
-namespace Messerli.MetaGenerator.Test.UserInput
+namespace Messerli.MetaGenerator.Test.UserInput;
+
+public class DateTimeRequesterTest
 {
-    public class DateTimeRequesterTest
+    [Fact]
+    public void ReadingADateTimeFromConsoleReturnsADate()
     {
-        [Fact]
-        public void ReadingADateTimeFromConsoleReturnsADate()
-        {
-            using var cultureSwitch = new TemporaryCultureSwitch("de-CH");
+        using var cultureSwitch = new TemporaryCultureSwitch("de-CH");
 
-            static bool IsNeeded() => true;
+        static bool IsNeeded() => true;
 
-            var reader = new Mock<IConsoleReader>();
-            var writer = new Mock<IConsoleWriter>();
-            reader.SetupSequence(r => r.ReadLine())
-                .Returns("none")
-                .Returns("24.1.2009 1:37:22");
+        var reader = new Mock<IConsoleReader>();
+        var writer = new Mock<IConsoleWriter>();
+        reader.SetupSequence(r => r.ReadLine())
+            .Returns("none")
+            .Returns("24.1.2009 1:37:22");
 
-            var dateRequester = new DateTimeRequester(new ValidatedUserInput(reader.Object, writer.Object));
-            var validations = new List<IValidation>();
-            var variableSelectionValues = Option<List<SelectionValue>>.None();
-            var valueDescription = new UserInputDescription("myDate", "question?", "description", VariableType.Date, IsNeeded, variableSelectionValues, validations);
+        var dateRequester = new DateTimeRequester(new ValidatedUserInput(reader.Object, writer.Object));
+        var validations = new List<IValidation>();
+        var variableSelectionValues = Option<List<SelectionValue>>.None;
+        var valueDescription = new UserInputDescription("myDate", "question?", "description", VariableType.Date, IsNeeded, variableSelectionValues, validations);
 
-            Assert.Equal("24.01.2009 01:37:22", dateRequester.RequestValue(valueDescription, Option<string>.None()));
-        }
+        Assert.Equal("24.01.2009 01:37:22", dateRequester.RequestValue(valueDescription, Option<string>.None));
     }
 }

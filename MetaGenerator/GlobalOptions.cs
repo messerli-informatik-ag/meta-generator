@@ -1,12 +1,11 @@
-namespace Messerli.MetaGenerator
-{
-    public class GlobalOptions : IGlobalOptions
-    {
-        public GlobalOptions(bool verbose)
-        {
-            Verbose = verbose;
-        }
+﻿namespace Messerli.MetaGenerator;
 
-        public bool Verbose { get; }
+public class GlobalOptions : IGlobalOptions
+{
+    public GlobalOptions(bool verbose)
+    {
+        Verbose = verbose;
     }
+
+    public bool Verbose { get; }
 }

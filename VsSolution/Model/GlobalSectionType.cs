@@ -1,12 +1,11 @@
-namespace Messerli.VsSolution.Model
+﻿namespace Messerli.VsSolution.Model;
+
+public enum GlobalSectionType
 {
-    public enum GlobalSectionType
-    {
-        SolutionConfigurationPlatforms,
-        ProjectConfigurationPlatforms,
-        SolutionProperties,
-        NestedProjects,
-        ExtensibilityGlobals,
-        TeamFoundationVersionControl,
-    }
+    SolutionConfigurationPlatforms,
+    ProjectConfigurationPlatforms,
+    SolutionProperties,
+    NestedProjects,
+    ExtensibilityGlobals,
+    TeamFoundationVersionControl,
 }
