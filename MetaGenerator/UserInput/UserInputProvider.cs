@@ -96,9 +96,7 @@ internal class UserInputProvider : IUserInputProvider
     private IUserInputDescription GetUserInputDescription(string variableName)
         => _knownUserInputs
             .GetValueOrNone(key: variableName)
-            .Match(
-                none: () => NoValue(variableName),
-                some: Identity);
+            .GetOrElse(() => NoValue(variableName));
 
     private static IUserInputDescription NoValue(in string variableName)
         => throw new Exception($"No value known for '{variableName}'");

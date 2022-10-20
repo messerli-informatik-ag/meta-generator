@@ -76,7 +76,7 @@ public class TargetFrameworkProvider : ITargetFrameworkProvider
         => sdk.EndOfLife is not null
            && sdk.EndOfLife is not "TBA"
            && ToDate(sdk.EndOfLife)
-               .Match(false, eol => eol < DateTime.Now);
+               .Match(none: false, some: eol => eol < DateTime.Now);
 
     private static Option<DateTime> ToDate(string sdkEndOfLife)
     {
