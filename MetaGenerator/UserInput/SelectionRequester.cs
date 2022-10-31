@@ -61,8 +61,8 @@ internal class SelectionRequester : AbstractVariableRequester
             var maybeValue = input.ParseInt32OrNone();
 
             return maybeValue.Match(
-                false,
-                value => value > 0
+                none: false,
+                some: value => value > 0
                          && value <= variable.VariableSelectionValues.Count);
         };
 

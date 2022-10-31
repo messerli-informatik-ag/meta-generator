@@ -10,8 +10,6 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Messerli.CodeStyle" PrivateAssets="all" />
+		<PackageReference Include="Funcky.Analyzers" PrivateAssets="all" />
 	</ItemGroup>
-
-
 </Project>
-
